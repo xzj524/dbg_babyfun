@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BabyFun</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="strPoint">小圆点</string>
+</resources>
