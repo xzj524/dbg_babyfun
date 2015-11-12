@@ -3,11 +3,17 @@ package com.xzj.babyfun;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -26,15 +32,32 @@ public class MainActivity extends Activity implements OnClickListener, OnPageCha
     private ImageView[] points;
     // 记录当前选中位置
     private int currentIndex;
+    
+    Button mStartButton;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = getApplicationContext();
+        mStartButton = (Button) findViewById(R.id.start);
+        mStartButton.setVisibility(View.INVISIBLE);
+        mStartButton.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                finish();
+                Intent intent = new Intent(mContext, SplashActivity.class);
+                startActivity(intent);
+                
+            }
+        });
         initView();
         initData();
     }
-    
+
     /**
      * 初始化组件
      */
@@ -46,23 +69,22 @@ public class MainActivity extends Activity implements OnClickListener, OnPageCha
         // 实例化ViewPager适配器
         mVpAdapter = new ViewPagerAdapter(mViews);
     }
-    
+
     /**
      * 初始化数据
      */
     private void initData() {
         // 定义一个布局并设置参数
-        LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
+        LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
 
         // 初始化引导图片列表
         for (int i = 0; i < pics.length; i++) {
             ImageView iv = new ImageView(this);
             iv.setLayoutParams(mParams);
-            //防止图片不能填满屏幕
+            // 防止图片不能填满屏幕
             iv.setScaleType(ScaleType.FIT_XY);
-            //加载图片资源
+            // 加载图片资源
             iv.setImageResource(pics[i]);
             mViews.add(iv);
         }
@@ -75,7 +97,7 @@ public class MainActivity extends Activity implements OnClickListener, OnPageCha
         // 初始化底部小点
         initPoint();
     }
-    
+
     /**
      * 初始化底部小点
      */
@@ -101,7 +123,7 @@ public class MainActivity extends Activity implements OnClickListener, OnPageCha
         // 设置为白色，即选中状态
         points[currentIndex].setEnabled(false);
     }
-    
+
     /**
      * 设置当前页面的位置
      */
@@ -141,12 +163,20 @@ public class MainActivity extends Activity implements OnClickListener, OnPageCha
     public void onPageSelected(int arg0) {
         // TODO Auto-generated method stub
         setCurDot(arg0);
+        Log.e("click", "click = " + arg0);
+        if (arg0 == 3) {
+            mStartButton.setVisibility(View.VISIBLE);
+        }else {
+            mStartButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
-        int position = (Integer)v.getTag();
+        int position = (Integer) v.getTag();
         setCurView(position);
+        Log.e("click", "click = " + position);
+      
     }
 }

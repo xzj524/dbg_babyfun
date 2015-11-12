@@ -4,4 +4,8 @@
     <string name="app_name">BabyFun</string>
     <string name="hello_world">Hello world!</string>
     <string name="strPoint">小圆点</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_baby_fun">BabyFunActivity</string>
+
 </resources>
