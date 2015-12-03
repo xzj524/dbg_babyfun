@@ -2,29 +2,73 @@ package com.xzj.babyfun;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 public class BabyFunActivity extends Activity {
-
+    BluetoothAdapter mAdapter;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
         
-        BluetoothAdapter mAdapter= BluetoothAdapter.getDefaultAdapter();
-        if(!mAdapter.isEnabled()){
-        	//弹出对话框提示用户是后打开
+        Intent enabler=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivityForResult(enabler,10);//鍚宻tartActivity(enabler);
+        
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReceiver, filter);
+
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(mReceiver, filter);
+        
+        mAdapter= BluetoothAdapter.getDefaultAdapter();
+      /*  if(!mAdapter.isEnabled()){
         	Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         	//startActivityForResult(enabler, REQUEST_ENABLE);
-        	      //不做提示，强行打开
         	      // mAdapter.enable();
-        	Toast.makeText(getApplicationContext(), "蓝牙不使能", Toast.LENGTH_SHORT).show();
+        	Toast.makeText(getApplicationContext(), "钃濈墮浣胯兘 ", Toast.LENGTH_SHORT).show();
         	}else {
-        		Toast.makeText(getApplicationContext(), "蓝牙使能", Toast.LENGTH_SHORT).show();
-			}
+        		Toast.makeText(getApplicationContext(), "钃濈墮绂佺敤", Toast.LENGTH_SHORT).show();
+			}*/
     }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10) {
+            Toast.makeText(getApplicationContext(), "resultcode = " + resultCode, Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    BroadcastReceiver mReceiver = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent
+                        .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED){
+                    Toast.makeText(getApplicationContext(), "find device:" + device.getName()
+                            + device.getAddress(), Toast.LENGTH_SHORT).show();
+    
+                }
+            }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                setTitle("鎼滅储瀹屾垚");
+           
+            }
+        }
+        
+    };
 }

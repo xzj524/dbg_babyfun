@@ -42,7 +42,7 @@ public class SplashActivity extends Activity {
                 SplashActivity.this.startActivity(mainIntent);
                 SplashActivity.this.finish();
             }
-        }, 2900); //2900 for release
+        }, 500); //2900 for release
     }
 
     @Override

@@ -7,5 +7,6 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_baby_fun">BabyFunActivity</string>
+    <string name="button_search_bluetooth">搜索蓝牙设备</string>
 
 </resources>

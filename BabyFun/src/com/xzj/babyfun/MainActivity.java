@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -51,11 +53,25 @@ public class MainActivity extends Activity implements OnClickListener, OnPageCha
                 finish();
                 Intent intent = new Intent(mContext, SplashActivity.class);
                 startActivity(intent);
-                
             }
         });
-        initView();
-        initData();
+        
+        SharedPreferences  preferences = getSharedPreferences("StartStatus", Context.MODE_PRIVATE);  
+        //判断是不是首次登录，  
+        if (preferences.getBoolean("firststart", true)) {  
+             Editor editor = preferences.edit();  
+             //将登录标志位设置为false，下次登录时不在显示首次登录界面  
+             editor.putBoolean("firststart", false);  
+             editor.commit();  
+             initView();
+             initData();
+        }else {
+            Intent intent = new Intent(mContext, SplashActivity.class);
+            startActivity(intent); 
+            finish(); 
+        }
+        
+       
     }
 
     /**
