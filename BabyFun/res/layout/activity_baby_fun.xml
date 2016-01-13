@@ -3,6 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}" >
+    
+    <fragment
+        android:id="@+id/routerStatusFragment"
+        android:name="com.xzj.babyfun.ui.component.main.RouterStatusFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.38" />
+
+    <ImageView
+        android:id="@+id/lineImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/line" />
 
 	<Button 
 	    android:id="@+id/findbtn"

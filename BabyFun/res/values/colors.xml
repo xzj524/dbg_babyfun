@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="blue">#4ba3ff</color>
+    <color name="text_default">#2c2c2c</color>
+    <color name="activity_bg_color">#fff6f6f7</color>
+    <color name="startup_checking_bg_color">#ff3a96fa</color>
+    <color name="guide_bg_color">#73000000</color>
+    <!-- 设置界面分隔线颜色 YQH 20130312 -->
+    <color name="view_bg_color">#ffffffff</color>
+    <color name="color_black">#ff010101</color>
+    <color name="color_gray">#ffb0b0b0</color>
+    <color name="color_gray_low">#aab0b0b0</color>
+    <color name="color_white">#ffffffff</color>
+    <color name="color_blue">#ff3995e3</color>
+    <color name="color_red">#ffde4125</color>
+    <color name="text_gray">#AAAAAA</color>
+    <color name="imagepager_title">#B5B5B5</color>
+    <color name="imagepager_bg_transparent">#00FFFFFF</color>
+    <color name="btn_pressed">#0070e8</color>
+    <color name="listview_divider_color">#f2f2f2</color>
+    <color name="transparent">#00000000</color>
+    <!-- tv dongle begin -->
+    <color name="tv_dongle_status_ok_color">#ff333333</color>
+    <color name="tv_dongle_status_fail_color">#ffd9d9d9</color>
+    <!-- tv dongle end -->
+    <!-- router download begin -->
+    <!-- router download end -->
+    <!-- login register -->
+    <color name="progress_blue">#06A7ED</color>
+    <color name="login_other_auth">#757575</color>
+    <!-- login register end -->
+    <!-- video player begin -->
+    <color name="text_default_color">#B5B5B5</color>
+    <color name="black_translucent">#88000000</color>
+    <color name="progressbar_bg">#5C5C5C</color>
+    <color name="progress_gray">#7F7F7F</color>
+    <color name="video_quality_btn_disable_color">#4e4e4e</color>
+    <color name="stop_dlna_text">#949495</color>
+    <color name="dlna_play_state_text">#777777</color>
+    <color name="dlna_play_media_name_text">#8d8d8d</color>
+    <color name="dlna_current_total_time_text">#b0b0b0</color>
+    <color name="remote_down_rotate_progress_color">#43b3fc</color>
+    <color name="remote_down_rotate_progress_circle_color">#d9dfe4</color>
+    <!-- 字颜色公共 -->
+    <color name="custom_tab_color_normal">#4ba3ff</color>
+    <color name="custom_tab_color_disable">#d9d9d9</color>
+    <color name="common_text_color">#333333</color>
+
+    <color name="common_text_color_normal">#333333</color>
+    <color name="common_text_color_normal_another">#666666</color>
+  	<color name="common_text_color_sub">#999999</color>
+  	<color name="common_text_color_blue">#4ba3ff</color>
+  	<color name="common_text_color_green">#ade077</color>
+  	
+  	<!-- 引导页 文字颜色 -->
+  	<color name="intro_text_color">#666666</color>
+
+    <!-- 下载界面资源 -->
+    <color name="title_bar_right_bg_color_normal">#FF767474</color>
+    <color name="title_bar_right_bg_color_pressed">#FF2287E1</color>
+    <color name="title_bar_right_bg_color_disabled">#66474747</color>
+    <!-- 设置界面文字颜色 -->
+    <color name="common_item_text_color">#ff333333</color>
+    <color name="common_item_sub_text_color">#ff999999</color>
+    <color name="setting_color_blue_text">#ff4ba3ff</color>
+    <color name="setting_color_gray_layout_bottom">#ffe9e9e9</color>
+
+    <!-- 文件管理 -->
+    <color name="router_file_edittext_normal">#ff474747</color>
+    <color name="router_file_edittext_press">#ff474747</color>
+    <color name="router_file_edittext_disable">#66474747</color>
+    <color name="router_file_operating_bg">#05000000</color>
+    <color name="router_file_activity_bg">#f8f8f8</color>
+
+    <!-- 云安全 -->
+    
+
+
+  	<!-- 网盘资源 -->
+  	<color name="netdisk_color_item_bg">#F8F8F8</color>
+  	<color name="netdisk_is_grid_deleting_bg">#55000000</color>
+  	<color name="netdisk_activity_view_bg">#f8f8f8</color>
+  	<color name="netdisk_color_list_background">#FFF8F8F8</color>
+  	<color name="netdisk_color_65percent_black">#A6010101</color>
+  	<color name="netdisk_color_file_type_list">#FFF3F3F3</color>
+  	<color name="netdisk_imagepager_bg">#252525</color>
+  	<!--百度电视云-->
+  	<color name="cloudtv_view_bg">#f8f8f8</color>
+  	<!-- admin登录界面 -->
+  	<color name="login_error_text_color">#fc2626</color>
+  	<!-- 蓝色可点击文字 -->
+  	<color name="link_blue_text_color_normal">#4ba3ff</color>
+  	<color name="link_blue_text_color_pressed">#AED3FD</color>
+   
+  	<!-- 云安全 -->
+  	<color name="cloudsec_img_bg_orange">#fa8a12</color>
+  	<color name="cloudsec_img_bg_blue">#4ba3ff</color>
+  	<color name="cloudsec_img_bg_red">#fb5c45</color>
+  	<color name="cloudsec_text_orange">#ff7e15</color>
+  	<color name="cloudsec_text_glod">#ffff00</color>
+  	<!-- 下拉刷新 -->
+    <color name="pull_to_refresh_textColor">#ff666666</color>
+    
+    <!-- 登录页 -->
+    <color name="startup_edit_hint">#ff66c2fd</color>
+    <color name="startup_edit_hint_focused">#ff66c2fd</color>
+    
+     <!-- 公共UI  progressbar -->
+    <color name="common_ui_progress_radius">#ffff00</color>
+    <!-- 底部背景 -->
+    <color name="common_ui_progressbar_backgroud_startcolor">#4ba3ff</color>
+    <color name="common_ui_progressbar_backgroud_centrecolor">#4ba3ff</color>
+    <color name="common_ui_progressbar_backgroud_endcolor">#4ba3ff</color>
+    <!-- progress -->
+    <color name="common_ui_progressbar_progress_startcolor">#99cbfe</color>
+    <color name="common_ui_progressbar_progress_centrecolor">#99cbfe</color>
+    <color name="common_ui_progressbar_progress_endcolor">#99cbfe</color>
+    <!-- 底部背景 点击态-->
+    <color name="common_ui_progressbar_backgroud_startcolor_pressed">#99cbfe</color>
+    <color name="common_ui_progressbar_backgroud_centrecolor_pressed">#99cbfe</color>
+    <color name="common_ui_progressbar_backgroud_endcolor_pressed">#99cbfe</color>
+    <!-- progress 点击态 -->
+    <color name="common_ui_progressbar_progress_startcolor_pressed">#99cbfe</color>
+    <color name="common_ui_progressbar_progress_centrecolor_pressed">#99cbfe</color>
+    <color name="common_ui_progressbar_progress_endcolor_pressed">#99cbfe</color>
+    <!-- 公共UI  progressbar 结束 -->
+    
+    <!-- 公共item layout 样式 -->  
+    <color name="common_item_layout_border">#e5e5e5</color> 
+    <color name="common_item_layout_pressed">#ffdfe1e3</color>
+    
+    <color name="line_gray">#e5e5e5</color>
+  	</resources>

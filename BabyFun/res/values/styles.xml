@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -14,7 +14,433 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowBackground">@color/activity_bg_color</item>
+        <item name="android:windowNoTitle">true</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowAnimationStyle">@style/CommonAnimationActivity</item>
+    </style>
+
+
+
+
+    <style name="NetDisk" />
+
+    <!-- TextAppearance -->
+    <style name="NetDisk.TextAppearance">
+        <item name="android:textColor">@color/text_default</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Huge">
+        <item name="android:textSize">20dip</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Large">
+        <item name="android:textSize">18dip</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Large.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Middle">
+        <item name="android:textSize">15dip</item>
+    </style>
+
+
+    <style name="NetDisk.TextAppearance.Middle.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Small">
+        <item name="android:textSize">12dip</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Content">
+        <item name="android:textSize">16dip</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Content.Gray">
+        <item name="android:textColor">@color/text_gray</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Content.White">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Content.Red">
+        <item name="android:textColor">@color/color_red</item>
+    </style>
+
+
+    <style name="NetDisk.TextAppearance.Content.Blue">
+        <item name="android:textColor">@color/progress_blue</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Content.loginOtherAuth">
+        <item name="android:textColor">@color/login_other_auth</item>
+        <item name="android:textSize">14dip</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Middle.EmptyInfo">
+        <item name="android:textColor">@color/text_gray</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Middle.TitleWhite">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Huge.TitleWhite">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- common样式 -->
+
+    
+    <style name="CommonEditTextAppearanceNoBackGround">
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+        <item name="android:textColor">@color/common_text_color_normal</item>
+        <item name="android:textColorHint">@color/common_text_color_sub</item>
+        <item name="android:paddingLeft">@dimen/common_edit_padding_left</item>
+        <item name="android:paddingRight">@dimen/common_edit_padding_right</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@null</item>
+    </style>
+    
+    <style name="CommonEditTextPwdAppearance">
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+        <item name="android:textColor">@color/common_text_color_normal</item>
+        <item name="android:textColorHint">@color/common_text_color_sub</item>
+        <item name="android:paddingLeft">@dimen/common_edit_padding_left</item>
+        <item name="android:paddingRight">@dimen/common_edit_padding_right</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:maxLength">64</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
+    
+
+    <style name="CommonTextAppearance">
+        <item name="android:textColor">@color/common_text_color_normal</item>
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+
+    <!-- 蓝色用于标题样式文字 -->
+    <style name="CommonTextAppearanceBlue" parent="CommonTextAppearance">
+        <item name="android:textColor">@color/common_text_color_blue</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    
+    <style name="CommonTextAppearanceSub" parent="CommonTextAppearance">
+        <item name="android:textColor">@color/common_text_color_sub</item>
+        <item name="android:textSize">@dimen/common_text_size_sub</item>
+    </style>
+    
+    <style name="CommonTextAppearanceNormalSubColor" parent="CommonTextAppearance">
+        <item name="android:textColor">@color/common_text_color_sub</item>
+    </style>
+    
+    <style name="CommonTextAppearanceNormalSubSize" parent="CommonTextAppearance">
+        <item name="android:textSize">@dimen/common_text_size_sub</item>
+    </style>
+    
+    <style name="CommonTextAppearanceNormalSmallSize" parent="CommonTextAppearance">
+        <item name="android:textSize">@dimen/common_text_size_normal_small</item>
+    </style>
+    
+    <style name="CommonTextAppearanceSubSmallSize" parent="CommonTextAppearanceSub">
+        <item name="android:textSize">@dimen/common_text_size_normal_small</item>
+    </style>
+    
+    <style name="CommonTextAppearanceMiddleBlack" parent="CommonTextAppearance">
+        <item name="android:textColor">@color/common_text_color_normal_another</item>
+    </style>
+    
+    <style name="CommonTextAppearanceLarge"  parent="CommonTextAppearance">
+        <item name="android:textSize">@dimen/common_text_size_large</item>
+    </style>
+    
+    <style name="CommonTextAppearanceLargeSub"  parent="CommonTextAppearance">
+        <item name="android:textColor">@color/common_text_color_sub</item>
+        <item name="android:textSize">@dimen/common_text_size_large</item>
+    </style>
+
+    <style name="CommonBtnAppearanceGray"  parent="CommonTextAppearance">
+        <item name="android:textColor">@color/common_item_sub_text_color</item>
+    </style>
+    <!-- 排序页面使用的checkbox -->
+
+
+    <style name="BaiduNetDiskDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!-- video player -->
+    <style name="NetDiskPlayerPlugin" />
+
+    <style name="NetDiskPlayerPlugin.TextAppearance">
+        <item name="android:textColor">@color/text_default_color</item>
+    </style>
+
+    <style name="NetDiskPlayerPlugin.TextAppearance.Content">
+        <item name="android:textSize">@dimen/common_text_size_large</item>
+    </style>
+
+    <style name="NetDiskPlayerPlugin.TextAppearance.Middle">
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+    </style>
+
+    <style name="NetDisk.Unified" />
+
+    <style name="NetDisk.Unified.AmazingLarge">
+        <item name="android:textSize">@dimen/text_size_amazing_large</item>
+    </style>
+
+    <style name="NetDisk.Unified.AmazingLarge.White">
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+ 
+
+    <!-- 设置界面 -->
+    <style name="CommonSettingTextAppearance" parent="CommonTextAppearance">
+        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+
+    <style name="CommonSettingSubBigTextAppearance">
+        <item name="android:textColor">@color/common_item_sub_text_color</item>
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+
+ 
+    
+
+    
+    <style name="CommonQosUpText">
+        <item name="android:textColor">@color/common_text_color_blue</item>
+        <item name="android:textSize">@dimen/common_text_size_sub</item>
+    </style>
+    
+    <style name="CommonQosDownText">
+        <item name="android:textColor">@color/common_text_color_green</item>
+        <item name="android:textSize">@dimen/common_text_size_sub</item>
+    </style>
+    
+    <style name="CommonBtnTextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    
+
+    
+
+    <!-- dialog样式 -->
+    <style name="CommonSettingDialogTitleAppearance">
+        <item name="android:textColor">@color/common_item_text_color</item>
+        <item name="android:textSize">@dimen/common_text_size_large</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+
+    <style name="CommonSettingDialogContentAppearance">
+        <item name="android:textColor">@color/common_item_text_color</item>
+        <item name="android:textSize">@dimen/common_text_size_large</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+
+    <style name="CommonSettingDialogBtnAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+    </style>
+
+    <style name="CommonSettingDialogBtnAppearanceGray">
+        <item name="android:textColor">@color/common_item_sub_text_color</item>
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+    </style>
+
+    <!-- dialog fragment样式 旧的-->
+    <style name="CommonCustomDialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+
+    <!-- setting -->
+    <style name="SettingDHCPDetailFontStyle" parent="CommonTextAppearance">
+        <item name="android:textColor">#ff999999</item>
+        <item name="android:textSize">@dimen/common_text_size_large</item>
+    </style>
+
+    <!-- PCS -->
+    <!-- 百度云标题栏样式（阴影）- 文字为 NetDisk.TextAppearance.Huge.TitleWhite -->
+    <style name="NetDisk.AppTitleBar" parent="NetDisk.TextAppearance.Huge.TitleWhite">
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">4</item>
+        <item name="android:shadowRadius">4</item>
+    </style>
+    <!-- 百度云标题栏样式（蓝色） -->
+    <style name="NetDisk.AppTitleBar.Blue">
+        <item name="android:shadowColor">#880b4a96</item>
+    </style>
+    <!-- 弹出对话框背景样式 -->
+    <style name="BaiduNetDiskDialogBackgroundstyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:minWidth">350dip</item>
+        <item name="android:layout_marginLeft">4dip</item>
+        <item name="android:layout_marginRight">4dip</item>
+    </style>
+
+    <style name="NetDisk.Unified.Tiny">
+        <item name="android:textSize">@dimen/netdisk_text_size_tiny</item>
+    </style>
+
+    <style name="NetDisk.Unified.Tiny.Gray">
+        <item name="android:textColor">@color/color_gray</item>
+    </style>
+
+    <style name="NetDisk.Unified.Middle">
+        <item name="android:textSize">@dimen/netdisk_text_size_middle</item>
+    </style>
+
+    <style name="NetDisk.Unified.Large">
+        <item name="android:textSize">@dimen/netdisk_text_size_large</item>
+    </style>
+
+    <style name="NetDisk.Unified.Middle.Black">
+        <item name="android:textColor">@color/color_black</item>
+    </style>
+
+    <style name="NetDisk.Unified.Middle.Blue">
+        <item name="android:textColor">@color/color_blue</item>
+    </style>
+
+    <style name="NetDisk.Unified.Large.White">
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
+    <style name="Netdisk.PopupMemu" parent="@android:style/Animation.Dialog"></style>
+
+    <style name="Netdisk.PopupMemu.category" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/alpha_03_10</item>
+        <item name="android:windowExitAnimation">@anim/alpha_10_00</item>
+    </style>
+
+    <style name="NetDisk.ListView" />
+
+    <style name="NetDisk.ListView.Item" />
+
+    <style name="NetDisk.ListView.Item.Icon">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
+
+    <style name="NetDisk.TextAppearance.Small.Gray">
+        <item name="android:textColor">@color/text_gray</item>
+    </style>
+
+
+    <style name="NetDisk.TextAppearance.Middle.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="PreViewDialogBackgroundstyle" parent="@android:style/Theme.Dialog">
+        <item name="android:layout_width">320dip</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:minWidth">320dip</item>
+        <item name="android:layout_marginLeft">16dip</item>
+        <item name="android:layout_marginRight">16dip</item>
+        <item name="android:padding">16dip</item>
+    </style>
+
+    <!-- status bar progress dialog -->
+
+    <!-- admin登录界面 -->
+    <style name="LoginErrorTextAppearance">
+        <item name="android:textColor">@color/login_error_text_color</item>
+        <item name="android:textSize">@dimen/common_text_size_sub</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+
+    <style name="GuideDialog" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowBackground">@color/guide_bg_color</item>
+    </style>
+
+    <!-- 扩展应用 -->
+    <style name="CommonListItemMainText">
+        <item name="android:textColor">@color/common_text_color_normal</item>
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+    </style>
+    
+    <style name="CommonListItemMainTextNoEnable">
+        <item name="android:textColor">@color/common_text_color_sub</item>
+        <item name="android:textSize">@dimen/common_text_size_normal</item>
+    </style>
+
+    <style name="CommonListItemSubText">
+        <item name="android:textColor">@color/common_text_color_sub</item>
+        <item name="android:textSize">@dimen/common_text_size_sub</item>
+    </style>
+
+    <style name="ExtAppsDetailSubText">
+        <item name="android:textColor">@color/common_text_color_normal_another</item>
+        <item name="android:textSize">@dimen/common_text_size_sub</item>
+    </style>
+
+
+    <!-- 文件管理POPUP WINDOW弹出和消失动画样式 -->
+
+    <style name="PopupMemu_category">
+        <item name="android:windowEnterAnimation">@anim/slide_from_top_to_down</item> <!-- 指定显示的动画xml -->
+
+        <item name="android:windowExitAnimation">@anim/slide_from_down_to_top</item> <!-- 指定消失的动画xml -->
+
+    </style>
+    <style name="dialogPopAnim" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_pop_anim</item>
+        <!--  item name="android:windowExitAnimation">@anim/dialog_exit_anim</item -->
+    </style>
+    
+    <style name="dialogSlideFromBottomAnim" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_slide_from_bottom_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit_slide_from_bottom_anim</item>
+    </style>
+    
+    <style name="dialogSlideFromTopAnim" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_slide_from_top_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit_slide_from_top_anim</item>
+    </style>
+    
+    <!-- 升级相关 -->
+    <style name="DialogSingleUpgradeText" parent="CommonTextAppearanceNormalSmallSize">
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:gravity">left</item>
+    </style>
+    
+    <style name="DialogBothUpgradeText" parent="CommonTextAppearanceNormalSmallSize">
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:gravity">left</item>
     </style>
 
 </resources>

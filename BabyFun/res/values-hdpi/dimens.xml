@@ -1,0 +1,70 @@
+<resources>
+    <!-- startup_get_default_binder_router_failed_fragment.xml -->
+    <dimen name="startup_undirect_unbind_error_width">225dp</dimen>
+    <dimen name="startup_undirect_unbind_error_height">242dp</dimen>   
+    
+    <!-- startup_undirect_no_internet_fragment.xml -->
+    <dimen name="startup_undirect_image_margin_top">8dp</dimen>
+    <dimen name="startup_undirect_layout_margin_top">16dp</dimen>
+    <dimen name="startup_undirect_btn_margin_top">16dp</dimen>
+    
+    <!-- 公共间距 -->
+    <dimen name="common_layout_margin_top_small">12dp</dimen>
+    <dimen name="common_layout_margin_top_super">48dp</dimen>
+    <dimen name="common_layout_margin_top_exsuper">64dp</dimen>
+    <dimen name="common_item_margin_exsuper">96dp</dimen>
+    <dimen name="common_item_margin_bigger">56dp</dimen>
+    <dimen name="common_item_margin_big">24dp</dimen>
+    <dimen name="common_item_margin_normal">12dp</dimen>
+    <dimen name="common_item_margin_small">6dp</dimen>
+    <dimen name="common_item_margin_tiny">3dp</dimen>
+    <dimen name="common_layout_margin_bottom_big">24dp</dimen>
+    <dimen name="main_connecting_status_top_margin">12dp</dimen>
+    <dimen name="main_function_info_top_margin">0dp</dimen>
+    <dimen name="main_function_bottom_text_padding">1dp</dimen>
+    
+    <!-- checking fragment登陆页 -->
+    <dimen name="startup_account_margintop">48dp</dimen>
+    <dimen name="startup_progress_margintop">128dp</dimen>
+    <dimen name="startup_edit_pwd_icon_margin_right">2dp</dimen>
+    <dimen name="startup_edit_layout_margin_left">22dp</dimen>
+    
+    
+    <!-- 下拉刷新库 -->
+    <dimen name="header_footer_top_bottom_padding">6dp</dimen>
+    <dimen name="pull_to_refresh_text_size">14sp</dimen>
+    <dimen name="pull_to_refresh_text_icon_margin">0dp</dimen>
+    
+    <!-- 连接设备 -->
+    <dimen name="connect_device_detail_icon_top_padding">24dp</dimen>
+    <dimen name="connect_device_detail_icon_bottom_padding">24dp</dimen>
+    
+    <!-- 引导页 -->
+    <dimen name="intro_margin_lr">24dp</dimen>
+    <dimen name="intro_margin_top">24dp</dimen>
+    <dimen name="intro_image_margin_left">32dp</dimen>
+    <dimen name="intro_margin_top_text_btn">24dp</dimen>
+    <dimen name="intro_margin_top_icon_textimage">6dp</dimen>
+    <dimen name="intro_btn_margin_bottom">16dp</dimen>
+    <dimen name="intro_margin_bottom">32dp</dimen>
+    <dimen name="startup_admin_margin">64dp</dimen>
+    
+    <!-- 重启路由 -->
+    <dimen name="setting_items_restart_info_top_margin">64dp</dimen>
+    
+    <!-- 相册备份 -->
+    <dimen name="media_backup_upload_animation_delta_y">220dp</dimen>
+    <dimen name="media_backup_grid_item_width">141dp</dimen>
+    
+    <!-- QOS -->
+    <dimen name="qos_up_down_middle_width">16dp</dimen>
+    <dimen name="qos_up_down_right_margin">25dp</dimen>
+    <dimen name="qos_measure_delay_left_margin">64dp</dimen>
+    
+    <!-- 升级dialog -->
+     <dimen name="dialog_upgrade_text_maxheight">225dp</dimen>
+    <dimen name="dialog_upgrade_both_text_layout_height">300dp</dimen>
+	
+	<!-- smarthome dimens -->
+    <dimen name="smarthome_smart_mode_advance_setting_seekbar_margin_left_right">4dp</dimen>
+</resources>
