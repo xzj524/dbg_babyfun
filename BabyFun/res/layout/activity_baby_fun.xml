@@ -23,5 +23,11 @@
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/lineImageView"
 	    android:text="@string/button_search_bluetooth"/>
+	
+	<com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/findbtn" />
 
 </RelativeLayout>
