@@ -27,7 +27,7 @@ public class SplashActivity extends Activity {
         //Display the current version number
         PackageManager pm = getPackageManager();
         try {
-            PackageInfo pi = pm.getPackageInfo("org.wordpress.android", 0);
+            PackageInfo pi = pm.getPackageInfo("com.xzj.babyfun", 0);
             TextView versionNumber = (TextView) findViewById(R.id.versionNumber);
             Log.e("SplashActivity", "SplashActivity = " + pi.versionName);
             versionNumber.setText("Version " + getApplicationContext().getPackageName());

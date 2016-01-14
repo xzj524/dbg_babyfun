@@ -4,11 +4,11 @@
 package com.xzj.babyfun.ui.component.main;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,6 @@ import com.xzj.babyfun.R;
  * @author panxu
  * @since 2014-1-27
  */
-
 public class RouterStatusFragment extends Fragment {
 
     public static final int ABNORMAL_REQUEST_CODE = 1;
@@ -94,15 +93,6 @@ public class RouterStatusFragment extends Fragment {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
-        mIsDestroyed = false;
-
-        mCurrentState = CheckingState.IDEL;
-
-     /*   mRouterAdapter = new RouterAdapter(getActivity(), this);
-        mRouterAdapter.setCheckingListener(this);
-        mRouterAdapter.onCreate(getActivity(), savedInstanceState);
-
-        new UpgradeFactoryXlink().createEngine().autoCheck(new AutoCheckListener(this));*/
     }
 
     @Override

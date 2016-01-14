@@ -8,20 +8,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class BabyFunActivity extends Activity {
     BluetoothAdapter mAdapter;
+    Button mSearchBtnButton;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
         
         Intent enabler=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(enabler,10);//同startActivity(enabler);
+        startActivityForResult(enabler,10);//同startActivity(enabler);  启动蓝牙
         
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
@@ -38,6 +41,16 @@ public class BabyFunActivity extends Activity {
         	}else {
         		Toast.makeText(getApplicationContext(), "蓝牙禁用", Toast.LENGTH_SHORT).show();
 			}*/
+        
+        mSearchBtnButton = (Button) findViewById(R.id.findbtn);
+        mSearchBtnButton.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
     }
     
     @Override
@@ -71,4 +84,17 @@ public class BabyFunActivity extends Activity {
         }
         
     };
+    
+    
+    private void search() { //开启蓝牙和设置设备可见时间
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (!adapter.isEnabled()) {
+            adapter.enable();
+        }
+        Intent enable = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        enable.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3600); //3600为蓝牙设备可见时间
+        startActivity(enable);
+       /* Intent searchIntent = new Intent(this, ComminuteActivity.class);
+        startActivity(searchIntent);*/
+    }
 }

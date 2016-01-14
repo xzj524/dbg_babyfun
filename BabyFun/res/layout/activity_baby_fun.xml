@@ -7,20 +7,21 @@
     <fragment
         android:id="@+id/routerStatusFragment"
         android:name="com.xzj.babyfun.ui.component.main.RouterStatusFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.38" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/lineImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/routerStatusFragment"
         android:background="@drawable/line" />
 
 	<Button 
 	    android:id="@+id/findbtn"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_below="@id/lineImageView"
 	    android:text="@string/button_search_bluetooth"/>
 
 </RelativeLayout>
