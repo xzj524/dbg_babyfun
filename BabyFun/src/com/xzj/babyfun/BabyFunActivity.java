@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class BabyFunActivity extends Activity {
+    
+    private static final String TAG = BabyFunActivity.class.getSimpleName();
+    
     BluetoothAdapter mAdapter;
     Button mSearchBtnButton;
     

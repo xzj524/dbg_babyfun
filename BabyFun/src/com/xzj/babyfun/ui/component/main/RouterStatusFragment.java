@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import com.xzj.babyfun.R;
  * @since 2014-1-27
  */
 public class RouterStatusFragment extends Fragment {
+    
+    private static final String TAG = RouterStatusFragment.class.getSimpleName();
 
     public static final int ABNORMAL_REQUEST_CODE = 1;
 
@@ -92,7 +95,7 @@ public class RouterStatusFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-
+        mCurrentState = CheckingState.IDEL;
     }
 
     @Override
@@ -114,9 +117,6 @@ public class RouterStatusFragment extends Fragment {
 
         mConnectedStatusTextView = (TextView) babyfunStatusView.findViewById(R.id.connectedStatusTextView);
 
- 
-
-   
 
         return babyfunStatusView;
     }
@@ -130,10 +130,10 @@ public class RouterStatusFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (mCurrentState == CheckingState.IDEL) {
+     /*   if (mCurrentState == CheckingState.IDEL) {
             mCurrentState = CheckingState.CHECKING;
             startConnecting();
-        }
+        }*/
     }
 
     /**
@@ -219,10 +219,38 @@ public class RouterStatusFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-         //   doUpdateStatusClick();
+            doUpdateStatusClick();
         }
     }
 
+    /**
+     * 更新状态的click
+     */
+    private void doUpdateStatusClick() {
+        Log.e(TAG, "mCurrentState = IDEL  1  " + mCurrentState);
+        if (mCurrentState == CheckingState.IDEL) {
+            startConnecting();
+            mCurrentState = CheckingState.CHECKING;
+            Log.e(TAG, "mCurrentState = IDEL 2");
+            //mRouterAdapter.startCheckingStatus();
+       
+        } else if (mCurrentState == CheckingState.CHECKING) {
+            mIsConnectingAnimation = false;
+            mCurrentState = CheckingState.IDEL;
+            mProgressImageView.clearAnimation();
+            // 什么也不做
+        } else if (mCurrentState == CheckingState.FATAL_ROUTER_NOT_CONNECT) {
+            mCurrentState = CheckingState.CHECKING;
+            startConnecting();
+          
+        } else {
+
+            if (mCurrentState == CheckingState.FAIL) {
+                mCurrentState = CheckingState.IDEL;
+            }
+        }
+
+    }
   
 
     @Override
