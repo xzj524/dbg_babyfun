@@ -1,0 +1,108 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="${relativePackage}.${activityClass}" >
+
+   <fragment 
+        android:id="@+id/topViewFragment"
+        android:name="com.xzj.babyfun.ui.component.main.BabyStatusTopViewFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+         android:layout_marginTop="20dp"/> 
+
+   <ScrollView 
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/topViewFragment"
+       >
+       <LinearLayout 
+           android:id="@+id/babylist"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           >
+           
+      <RelativeLayout
+        android:id="@+id/babyRelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp" >
+
+        <ImageView
+            android:id="@+id/lightlineImageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lightline3"
+            android:visibility="gone" />
+        
+       <ImageView
+            android:id="@+id/lightlineImageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lightline4" 
+            android:visibility="gone"/>
+
+       <LinearLayout
+            android:id="@+id/connectInfoLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+
+
+            <TextView
+                android:id="@+id/babysleepStatusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="宝宝睡眠" 
+                android:textSize="64px"
+                android:textColor="@color/white"/>
+            
+             <TextView
+                android:id="@+id/babysleepPointTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="0 分" 
+                android:textSize="64px"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+       
+
+    </RelativeLayout>
+    
+    <fragment 
+        android:id="@+id/babyrealtimestatuFragment"
+        android:name="com.xzj.babyfun.ui.component.main.BabyRealTimeStatusFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"/>
+    
+  <!--   <fragment 
+        android:id="@+id/babySleepChartFragment"
+        android:name="com.xzj.babyfun.ui.component.main.BarChartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+         android:layout_marginTop="20dp"/>  -->
+         
+             
+   <fragment 
+        android:id="@+id/babySleepChartFragment"
+        android:name="com.xzj.babyfun.chart.SleepyChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="20dp"/>
+
+           
+       </LinearLayout>
+   </ScrollView>
+
+</RelativeLayout>

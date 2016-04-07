@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background" >
+ 
+    <RelativeLayout
+        android:id="@+id/connectingRelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" >
+
+        <ImageView
+            android:id="@+id/connectImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/tuoyuan" />
+
+        <ImageView
+            android:id="@+id/progressImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lightline" />
+
+        <LinearLayout
+            android:id="@+id/connectInfoLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/checkingItemImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/main_checking_connect_router" />
+
+            <TextView
+                android:id="@+id/checkingNetworkTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/checking_network" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/connectedStatusLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/connectedStatusIndicatorImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/connect_router_success_indicator" />
+
+             <TextView
+                android:id="@+id/connectedStatusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_gravity="center_horizontal"
+                android:lineSpacingExtra="2dp"
+				android:lineSpacingMultiplier="1"
+                android:gravity="center_horizontal"
+                android:text="@string/connecting_router_success" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/babystatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/connectingRelativeLayout">
+        
+        <LinearLayout 
+	        android:id="@+id/environment1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical"
+	        android:layout_marginRight="40dp">
+            <TextView 
+            	android:id="@+id/temperature"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="温度"/>
+             <TextView 
+            	android:id="@+id/temperaturevalues"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="36"
+	            android:textSize="64px"/>
+        </LinearLayout>
+        
+        <LinearLayout 
+	        android:id="@+id/environment2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical">
+            <TextView 
+            	android:id="@+id/humidity"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="湿度"/>
+             <TextView 
+            	android:id="@+id/humidityvalues"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="60"
+	            android:textSize="64px"/>
+        </LinearLayout>
+        
+         <LinearLayout 
+	        android:id="@+id/environment3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical"
+	        android:layout_marginLeft="40dp">
+            <TextView 
+            	android:id="@+id/sleepy"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="睡眠"/>
+             <TextView 
+            	android:id="@+id/sleepyvalues"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="80"
+	            android:textSize="64px"/>
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+         <LinearLayout 
+	        android:id="@+id/roomstatusindex"
+	        android:layout_width="match_parent"
+	        android:layout_height="40dp"
+	        android:gravity="center_horizontal"
+	        android:orientation="horizontal"
+	        android:layout_marginTop="20dp"
+	        android:layout_below="@id/babystatus">
+
+             <ImageView
+                 android:id="@+id/roommonitor"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+              	android:layout_marginRight="80dp"
+                 android:layout_gravity="left"
+                 android:src="@drawable/roomonitor" />
+             
+               <TextView 
+            	android:id="@+id/智能设备"
+            	android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:layout_centerInParent="true"
+	            android:gravity="center_vertical"
+	            android:text="设备状态"/>
+
+             <ImageView
+                 android:id="@+id/rightarrow"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:layout_marginLeft="80dp"
+                 android:gravity="center_vertical"
+                 android:src="@drawable/rightarrow" />
+
+         </LinearLayout>
+
+</RelativeLayout>

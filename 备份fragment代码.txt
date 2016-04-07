@@ -1,0 +1,302 @@
+﻿  /** 
+     * 根据传入的index参数来设置选中的tab页。 
+     *  
+     * @param index 
+     *            每个tab页对应的下标。0表示消息，1表示联系人，2表示动态，3表示设置。 
+     */  
+    private void setTabSelection(int index) {  
+        // 每次选中之前先清楚掉上次的选中状态  
+        clearSelection();  
+        // 开启一个Fragment事务  
+        FragmentTransaction transaction = mFragmentMan.beginTransaction();  
+        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况  
+        hideFragments(transaction);  
+        switch (index) {  
+        case 0:  
+            // 当点击了消息tab时，改变控件的图片和文字颜色  
+           // messageImage.setImageResource(R.drawable.message_selected);  
+           // messageText.setTextColor(Color.WHITE);  
+            if (messageFragment == null) {  
+                // 如果MessageFragment为空，则创建一个并添加到界面上  
+                messageFragment = new MessageFragment();  
+                transaction.add(R.id.content, messageFragment);  
+            } else {  
+                // 如果MessageFragment不为空，则直接将它显示出来  
+                transaction.show(messageFragment);  
+            }  
+            break;  
+        case 1:  
+            // 当点击了联系人tab时，改变控件的图片和文字颜色  
+            contactsImage.setImageResource(R.drawable.contacts_selected);  
+            contactsText.setTextColor(Color.WHITE);  
+            if (contactsFragment == null) {  
+                // 如果ContactsFragment为空，则创建一个并添加到界面上  
+                contactsFragment = new ContactsFragment();  
+                transaction.add(R.id.content, contactsFragment);  
+            } else {  
+                // 如果ContactsFragment不为空，则直接将它显示出来  
+                transaction.show(contactsFragment);  
+            }  
+            break;  
+        case 2:  
+            // 当点击了动态tab时，改变控件的图片和文字颜色  
+            newsImage.setImageResource(R.drawable.news_selected);  
+            newsText.setTextColor(Color.WHITE);  
+            if (newsFragment == null) {  
+                // 如果NewsFragment为空，则创建一个并添加到界面上  
+                newsFragment = new NewsFragment();  
+                transaction.add(R.id.content, newsFragment);  
+            } else {  
+                // 如果NewsFragment不为空，则直接将它显示出来  
+                transaction.show(newsFragment);  
+            }  
+            break;  
+        case 3:  
+        default:  
+            // 当点击了设置tab时，改变控件的图片和文字颜色  
+            settingImage.setImageResource(R.drawable.setting_selected);  
+            settingText.setTextColor(Color.WHITE);  
+            if (settingFragment == null) {  
+                // 如果SettingFragment为空，则创建一个并添加到界面上  
+                settingFragment = new SettingFragment();  
+                transaction.add(R.id.content, settingFragment);  
+            } else {  
+                // 如果SettingFragment不为空，则直接将它显示出来  
+                transaction.show(settingFragment);  
+            }  
+            break;  
+        }  
+        transaction.commit();  
+    }  
+  
+    /** 
+     * 清除掉所有的选中状态。 
+     */  
+    private void clearSelection() {  
+        messageImage.setImageResource(R.drawable.message_unselected);  
+        messageText.setTextColor(Color.parseColor("#82858b"));  
+        contactsImage.setImageResource(R.drawable.contacts_unselected);  
+        contactsText.setTextColor(Color.parseColor("#82858b"));  
+        newsImage.setImageResource(R.drawable.news_unselected);  
+        newsText.setTextColor(Color.parseColor("#82858b"));  
+        settingImage.setImageResource(R.drawable.setting_unselected);  
+        settingText.setTextColor(Color.parseColor("#82858b"));  
+    }  
+  
+    /** 
+     * 将所有的Fragment都置为隐藏状态。 
+     *  
+     * @param transaction 
+     *            用于对Fragment执行操作的事务 
+     */  
+    private void hideFragments(FragmentTransaction transaction) {  
+        if (messageFragment != null) {  
+            transaction.hide(messageFragment);  
+        }  
+        if (contactsFragment != null) {  
+            transaction.hide(contactsFragment);  
+        }  
+        if (newsFragment != null) {  
+            transaction.hide(newsFragment);  
+        }  
+        if (settingFragment != null) {  
+            transaction.hide(settingFragment);  
+        }  
+    }    
+
+	
+	
+	<!--      <fragment 
+        android:id="@+id/lineChartFragment"
+        android:name="com.xzj.babyfun.ui.component.main.ChartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="40dp"
+         /> -->
+     
+        <fragment 
+        android:id="@+id/barChartFragment"
+        android:name="com.xzj.babyfun.ui.component.main.BarChartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="40dp"
+         />
+        
+
+
+
+
+        
+        
+        //xVals.add("" + count);
+  
+        /*      for (int i = 0; i < count; i++) {  
+           
+            // x轴显示的数据，这里默认使用数字下标显示  
+            xVals.add(mMonths [i % 12]);  
+        } */ 
+   
+   
+          
+        
+      /*  for (int i1 = 0; i1 < count; i1++) {
+          float val = (float) (30 + i1);  
+            yVals.add(new Entry(val, i1));
+        }*/
+        
+        
+  /*
+        // y轴的数据  
+        ArrayList<Entry> yVals = new ArrayList<Entry>();  
+        for (int i1 = 0; i1 < freshtimes; i1++) {  
+           // float val = (float) (Math.random() * range) + 3;  
+            yVals.add(new Entry((count-freshtimes) + i1, i1));  
+        }  */
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		      mDatalength = Utiliy.mSleepList.size();
+            
+            for (int i = 0; i < mDatalength; i++) {
+                Log.e(TAG, "mDatalength = " + mDatalength + "  sleepvalue = " + Utiliy.mSleepList.get(i));
+                int sleepValue = Math.abs(Utiliy.mSleepList.get(i) - 50);
+                if (sleepValue < 10) {
+                    if (yValsNoSleep.size() > 0) {
+                       /* ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
+                        yValsSleep = yValsNoSleep;
+                        yArrayList.add(yValsSleep);   
+                        lineDataSet = getDataSet(0, yArrayList.get(yArrayList.size() - 1));
+                        dataSets.add(lineDataSet);*/
+                        yArrayList.add(yValsNoSleep);
+                        chartType.add(0);
+                        yValsNoSleep.clear(); 
+                    }
+                    
+                    if (yValsShadowSleep.size() > 0) {
+//                        ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
+//                        yValsSleep = yValsShadowSleep;
+//                        yArrayList.add(yValsSleep);  
+//                        lineDataSet = getDataSet(1, yArrayList.get(yArrayList.size() - 1));
+//                        dataSets.add(lineDataSet);
+                        
+                        yArrayList.add(yValsNoSleep);
+                        chartType.add(1);
+                        yValsShadowSleep.clear();
+                    }
+                    
+                    
+                    yValsDeepSleep.add(new Entry(sleepValue, i));
+                } else if (sleepValue > 10 && sleepValue <= 30) {
+                    if (yValsNoSleep.size() > 0) {
+//                        ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
+//                        yValsSleep = yValsNoSleep;
+//                        yArrayList.add(yValsSleep); 
+//                        lineDataSet = getDataSet(0, yArrayList.get(yArrayList.size() - 1));
+//                        dataSets.add(lineDataSet);
+                        
+                        yArrayList.add(yValsNoSleep);
+                        chartType.add(0);
+                        yValsNoSleep.clear(); 
+                    }
+                    
+                    if (yValsDeepSleep.size() > 0) {
+//                        ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
+//                        yValsSleep = yValsDeepSleep;
+//                        yArrayList.add(yValsSleep); 
+//                        lineDataSet = getDataSet(2, yArrayList.get(yArrayList.size() - 1));
+//                        dataSets.add(lineDataSet);
+                        
+                        yArrayList.add(yValsNoSleep);
+                        chartType.add(2);
+                        yValsDeepSleep.clear();
+                    }
+                    yValsShadowSleep.add(new Entry(sleepValue, i - 1));
+                } else if (sleepValue > 30 && sleepValue <= 50) {
+                    if (yValsShadowSleep.size() > 0) {
+//                        ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
+//                        yValsSleep = yValsShadowSleep;
+//                        yArrayList.add(yValsSleep);
+//                        lineDataSet = getDataSet(1, yArrayList.get(yArrayList.size() - 1));
+//                        dataSets.add(lineDataSet);
+//                        lineDataSet = getDataSet(1, yValsSleep);
+//
+//                        dataSets.add(lineDataSet);
+                        
+                        yArrayList.add(yValsNoSleep);
+                        chartType.add(1);
+                        yValsShadowSleep.clear(); 
+                    }
+                    if (yValsDeepSleep.size() > 0) {
+//                        ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
+//                        yValsSleep = yValsDeepSleep;
+//                        yArrayList.add(yValsSleep);
+//                        lineDataSet = getDataSet(2, yArrayList.get(yArrayList.size() - 1));
+//                        dataSets.add(lineDataSet);
+//                        lineDataSet = getDataSet(2, yValsSleep);
+//                        dataSets.add(lineDataSet);
+                        
+                        yArrayList.add(yValsNoSleep);
+                        chartType.add(2);
+                        yValsDeepSleep.clear();
+                    }
+                    yValsNoSleep.add(new Entry(sleepValue, i - 1));
+                }
+                
+                
+            }
+            int i = 0;
+            for (ArrayList<Entry> yVal : yArrayList) {
+                lineDataSet = getDataSet(chartType.get(i), yVal);
+                i++;
+                dataSets.add(lineDataSet);
+            }
+            
+//            lineDataSet = getDataSet(0, yValsSleep);
+//            dataSets.add(lineDataSet);
+            
+            for (int j = 0; j < mDatalength; j++) {
+                xVals.clear();
+                xVals.add(i + ""); 
+            }
+           /* mDatalength++;
+            Log.e(TAG, "mDatalength = " + mDatalength + "  count = " + count);
+            int sleepValue = Math.abs(count - 50);
+            if (sleepValue < 10) {
+                yValsDeepSleep.add(new Entry(sleepValue, mDatalength));
+                dataSets.add(DeepSleepySet);
+            } else if (sleepValue > 10 && sleepValue <= 30) {
+                yValsShadowSleep.add(new Entry(sleepValue, mDatalength - 1));
+                dataSets.add(ShadowSleepySet);
+            } else if (sleepValue > 30 && sleepValue <= 50) {
+                yValsNoSleep.add(new Entry(sleepValue, mDatalength - 1));
+                dataSets.add(NoSleepySet);
+            }*/
+        /*    if (mDatalength < 10) {
+           
+                yValsNoSleep.add(new Entry(count, mDatalength));
+            } else {
+                yValsShadowSleep.add(new Entry(count, mDatalength -1));
+            }*/
+           
+      
+              
+            /*dataSets.add(NoSleepySet); // add the datasets  
+            dataSets.add(ShadowSleepySet);*/
+            // create a data object with the datasets  
+            LineData data = new LineData(xVals, dataSets);  
+            return data;  
+        }
+        
+        return null;

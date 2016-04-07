@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/slidingmenubkg" >
+    
+   <LinearLayout 
+       android:id="@+id/sliddingmenu"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+        android:layout_marginTop="32dp"
+       android:orientation="horizontal">
+       
+    <ImageView 
+        android:id="@+id/headicon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="60dp"
+        android:gravity="center_vertical"
+        android:src="@drawable/headicon"/>
+    
+    <TextView 
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
+        android:text="用户登录"/>
+    
+    <ImageView 
+        android:id="@+id/righbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:gravity="center_vertical"
+        android:src="@drawable/rightarrow"/>
+       
+   </LinearLayout>
+        
+   
+    
+</LinearLayout>

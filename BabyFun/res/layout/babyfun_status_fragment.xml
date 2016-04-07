@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/router_status_bg" >
+    android:layout_height="wrap_content"
+     >
  
     <RelativeLayout
         android:id="@+id/connectingRelativeLayout"
@@ -17,21 +17,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/main_checking_status_bk_normal" />
+            android:src="@drawable/tuoyuan" />
 
         <ImageView
             android:id="@+id/progressImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/main_checking_status_progress" />
+            android:src="@drawable/lightline2" />
 
         <LinearLayout
             android:id="@+id/connectInfoLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="vertical" >
+            android:orientation="vertical" 
+           >
 
             <ImageView
                 android:id="@+id/checkingItemImageView"
@@ -49,12 +50,12 @@
         </LinearLayout>
         
         <LinearLayout
-            android:id="@+id/connectedStatusLayout"
+            android:id="@+id/connectedSucceedLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical"
-            android:visibility="gone" >
+              android:visibility="gone">
 
             <ImageView
                 android:id="@+id/connectedStatusIndicatorImageView"
@@ -73,6 +74,34 @@
 				android:lineSpacingMultiplier="1"
                 android:gravity="center_horizontal"
                 android:text="@string/connecting_router_success" />
+
+        </LinearLayout>
+        
+         <LinearLayout
+            android:id="@+id/connectedFailedLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+              android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/connectedFailedIndicatorImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/connect_router_fail_indicator" />
+
+             <TextView
+                android:id="@+id/connectedFailedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_gravity="center_horizontal"
+                android:lineSpacingExtra="2dp"
+				android:lineSpacingMultiplier="1"
+                android:gravity="center_horizontal"
+                android:text="@string/connecting_router_fail" />
 
         </LinearLayout>
 

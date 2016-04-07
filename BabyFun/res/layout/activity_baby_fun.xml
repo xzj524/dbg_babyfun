@@ -2,32 +2,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="${relativePackage}.${activityClass}" >
     
-    <fragment
+   
+    
+    <LinearLayout 
+       android:id="@+id/showdata"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:orientation="vertical">
+       
+        
+     <fragment 
+        android:id="@+id/topViewFragment"
+        android:name="com.xzj.babyfun.ui.component.main.HomePageTopTitleFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+         android:layout_marginTop="20dp"/> 
+
+     <fragment
         android:id="@+id/routerStatusFragment"
         android:name="com.xzj.babyfun.ui.component.main.RouterStatusFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/lineImageView"
+    
+    <fragment 
+        android:id="@+id/realtimestatuFragment"
+        android:name="com.xzj.babyfun.ui.component.main.RealTimeStatusFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/routerStatusFragment"
-        android:background="@drawable/line" />
-
-	<Button 
-	    android:id="@+id/findbtn"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/lineImageView"
-	    android:text="@string/button_search_bluetooth"/>
-	
-	<com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
+        android:layout_marginTop="100dp"
+        android:layout_below="@id/routerStatusFragment"/>
+    
+      <ImageView
+        android:id="@+id/lineImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/findbtn" />
+        android:layout_height="1dp"
+        android:layout_marginTop="60dp"
+        android:alpha="50"
+        android:background="@drawable/line" />
+    
+    <fragment
+        android:id="@+id/babyStatusIndicateFragment"
+        android:name="com.xzj.babyfun.ui.component.main.BabyStatusIndicateFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="10dp"/>
+    </LinearLayout>
 
 </RelativeLayout>

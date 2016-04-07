@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    android:layout_marginTop="40dp" >
+    
+    
+    <LinearLayout 
+       android:id="@+id/environment1"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:orientation="vertical"
+       android:layout_marginRight="40dp">
+          <TextView 
+          	android:id="@+id/temperature"
+          	android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text=" 室内温度"
+           android:textColor="@color/white"/>
+           <TextView 
+          	android:id="@+id/temperaturevalues"
+          	android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="--"
+           android:textSize="64px"
+            android:textColor="@color/white"/>
+      </LinearLayout>
+        
+        <LinearLayout 
+	        android:id="@+id/environment2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical">
+            <TextView 
+            	android:id="@+id/humidity"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="室内湿度"
+	            android:textColor="@color/white"/>
+             <TextView 
+            	android:id="@+id/humidityvalues"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="--"
+	            android:textSize="64px"
+	            android:textColor="@color/white"/>
+        </LinearLayout>
+        
+         <LinearLayout 
+	        android:id="@+id/environment3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical"
+	        android:layout_marginLeft="40dp">
+            <TextView 
+            	android:id="@+id/sleepy"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="室内PM2.5"
+	            android:textColor="@color/white"/>
+             <TextView 
+            	android:id="@+id/sleepyvalues"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="--"
+	            android:textSize="64px"
+	            android:textColor="@color/white"/>
+        </LinearLayout>
+
+</LinearLayout>

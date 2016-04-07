@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">BabyFun</string>
+    <string name="app_name">爱子</string>
     <string name="hello_world">Hello world!</string>
     <string name="strPoint">小圆点</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_baby_fun">BabyFunActivity</string>
+    <string name="title_activity_baby_fun">爱子</string>
     <string name="button_search_bluetooth">搜索蓝牙设备</string>
     <string name="title_activity_device_list">DeviceListActivity</string>
-    
-      <!-- 主界面 -->
+
+    <!-- 主界面 -->
     <string name="router_name">的路由</string>
-    <string name="checking_network">检查网络连接</string>
+    <string name="checking_network">检查蓝牙连接</string>
     <string name="checking_router_connect">检查路由连接</string>
     <string name="checking_router_disk">检查磁盘</string>
     <string name="router_speed">路由网速  %1$s</string>
@@ -28,13 +28,13 @@
     <string name="ext_apps">扩展应用</string>
     <string name="ext_apps_info">%1$d项应用</string>
     <string name="setting">设置</string>
-    <string name="connecting_router_success">没问题，欧耶!</string>
-    <string name="connecting_router_fail">找不到路由\n请重新检测</string>
+    <string name="connecting_router_success">蓝牙已连接</string>
+    <string name="connecting_router_fail">找不到设备\n请重新检测</string>
     <string name="connecting_router_one_abnormal">检测到一个问题\n点击查看</string>
     <string name="connecting_router_two_abnormal">检测到两个问题\n点击查看</string>
     <string name="check_router_status_abnormal">问题</string>
     <string name="extapps_bduss_invalidate_content">扩展应用由百度提供服务，先将路由与百度帐号绑定</string>
     <string name="extapps_bind_invalidate_content_for_unbind">您的路由被解绑，\n重新绑定路由可以启用服务</string>
-    
+    <string name="title_activity_baby_status">BabyStatusActivity</string>
 
 </resources>

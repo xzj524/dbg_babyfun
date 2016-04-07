@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <RelativeLayout 
+        android:id="@+id/babystatusindcate"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        
+         <ImageView 
+            android:id="@+id/roomonitor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/roomonitor"
+            android:layout_marginLeft="40dp"/>
+         
+         <LinearLayout 
+           android:id="@+id/babystatus"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_toRightOf="@id/roomonitor"
+           android:layout_centerInParent="true"
+           android:layout_marginLeft="40dp">
+             <TextView 
+                 android:id="@+id/babysleep"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="宝宝睡眠状态"
+                 android:textColor="@color/white"/>
+             <TextView 
+                 android:id="@+id/babynum"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textSize="16px"
+                 android:text="宝宝个数：1个"
+                 android:textColor="@color/white"/>
+         </LinearLayout>
+         
+          <ImageView 
+            android:id="@+id/rightarrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/rightarrow"
+            android:layout_alignParentRight="true"
+            android:paddingRight="40dp"/>
+        
+    </RelativeLayout>
+    
+
+</RelativeLayout>

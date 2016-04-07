@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    android:layout_marginTop="40dp" >
+    
+    
+    <LinearLayout 
+       android:id="@+id/babyenvironment1"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:orientation="vertical"
+       android:layout_marginRight="60dp">
+          <TextView 
+          	android:id="@+id/babytemperature"
+          	android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text=" 睡袋温度"
+           android:textColor="@color/white"/>
+           <TextView 
+          	android:id="@+id/babytemperaturevalues"
+          	android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="--"
+           android:textSize="64px"
+            android:textColor="@color/white"/>
+      </LinearLayout>
+        
+        <LinearLayout 
+	        android:id="@+id/babyenvironment2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:orientation="vertical">
+            <TextView 
+            	android:id="@+id/babyhumidity"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="睡袋湿度"
+	            android:textColor="@color/white"/>
+             <TextView 
+            	android:id="@+id/babyhumidityvalues"
+            	android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="--"
+	            android:textSize="64px"
+	            android:textColor="@color/white"/>
+        </LinearLayout>
+        
+ 
+
+</LinearLayout>
