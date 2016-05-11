@@ -202,46 +202,7 @@ public class SleepyChart extends Fragment{
             dataSets.add(SleepySet);
             LineData data = new LineData(xVals, dataSets);
             
-         
-     /*       int i = 0;
-            for (ArrayList<Entry> yVal : yArrayList) {
-                lineDataSet = getDataSet(chartType.get(i), yVal);
-                i++;
-                dataSets.add(lineDataSet);
-            }*/
-            
-//            lineDataSet = getDataSet(0, yValsSleep);
-//            dataSets.add(lineDataSet);
-            
-/*            for (int j = 0; j < mDatalength; j++) {
-                xVals.clear();
-                xVals.add(i + ""); 
-            }*/
-           /* mDatalength++;
-            Log.e(TAG, "mDatalength = " + mDatalength + "  count = " + count);
-            int sleepValue = Math.abs(count - 50);
-            if (sleepValue < 10) {
-                yValsDeepSleep.add(new Entry(sleepValue, mDatalength));
-                dataSets.add(DeepSleepySet);
-            } else if (sleepValue > 10 && sleepValue <= 30) {
-                yValsShadowSleep.add(new Entry(sleepValue, mDatalength - 1));
-                dataSets.add(ShadowSleepySet);
-            } else if (sleepValue > 30 && sleepValue <= 50) {
-                yValsNoSleep.add(new Entry(sleepValue, mDatalength - 1));
-                dataSets.add(NoSleepySet);
-            }*/
-        /*    if (mDatalength < 10) {
-           
-                yValsNoSleep.add(new Entry(count, mDatalength));
-            } else {
-                yValsShadowSleep.add(new Entry(count, mDatalength -1));
-            }*/
-           
       
-              
-            /*dataSets.add(NoSleepySet); // add the datasets  
-            dataSets.add(ShadowSleepySet);*/
-            // create a data object with the datasets  
              
             return data;  
      

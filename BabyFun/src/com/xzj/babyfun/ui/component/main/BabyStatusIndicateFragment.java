@@ -7,10 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xzj.babyfun.BabyStatusActivity;
 import com.xzj.babyfun.R;
+import com.xzj.babyfun.baseheader.BaseL2Message;
+import com.xzj.babyfun.utility.BaseMessageHandler;
 
 public class BabyStatusIndicateFragment extends Fragment{
     
@@ -37,6 +38,10 @@ public class BabyStatusIndicateFragment extends Fragment{
                 /*intent.putExtra("temp", getArguments().getInt("temp"));
                 intent.putExtra("humit", getArguments().getInt("humit"));*/
                 startActivity(intent);
+                
+                BaseL2Message bsTMsg = new BaseL2Message();
+                //bsTMsg = BaseL2Messag
+                BaseMessageHandler.sendL2Msg(true);
                // Toast.makeText(getActivity().getApplicationContext(), " 宝宝睡觉状态", Toast.LENGTH_SHORT).show();
             }
         });

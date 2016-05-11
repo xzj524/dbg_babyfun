@@ -92,19 +92,7 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         disappearAnimation = new AlphaAnimation(1, 0);  
         disappearAnimation.setDuration(1000); 
         
-        mHandler = new MyHandler();
-        // thread.start(); //启动线程
-       // m = new MyThread();
-       // new Thread(m).start();
-        
-      /* Intent intent = getIntent();
-        
-       tempValue = intent.getIntExtra("temp", 0);
-        humitValue = intent.getIntExtra("humit", 0);
-        
-        
-        realTimeStatusFragment.setTemperature(tempValue);
-        realTimeStatusFragment.setHumit(humitValue);*/
+
     
     }
     

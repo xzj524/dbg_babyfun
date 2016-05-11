@@ -20,10 +20,8 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
@@ -33,6 +31,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.xzj.babyfun.chart.BarChartFragment;
 import com.xzj.babyfun.chart.SleepyChart;
+import com.xzj.babyfun.crc.CRC16;
+import com.xzj.babyfun.eventbus.AsycEvent;
+import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataInteraction;
 import com.xzj.babyfun.service.ScanBlueToothService;
@@ -44,6 +45,8 @@ import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
 import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment.OnStatusSelectedListener;
 import com.xzj.babyfun.ui.component.main.RouterStatusFragment;
 import com.xzj.babyfun.ui.component.main.RouterStatusFragment.OnItemSelectedListener;
+
+import de.greenrobot.event.EventBus;
 
 public class BabyFunActivity extends Activity implements OnItemSelectedListener, OnStatusSelectedListener, OnButtonClickedListener, DataInteraction {
     
@@ -91,6 +94,13 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
         
+        byte p[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+        int crc16 = CRC16.calcCrc16(p);
+        SLog.e(TAG, "crc16 = " + crc16);
+        
+        //注册EventBus  
+       EventBus.getDefault().register(this);
+        
         initUartService();
         initScanService();
         //registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
@@ -118,32 +128,20 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         
         mFragmentMan = getFragmentManager();
         routerfragment = (RouterStatusFragment) mFragmentMan.findFragmentById(R.id.routerStatusFragment);
-      //  chartFragment = (ChartFragment) mFragmentMan.findFragmentById(R.id.lineChartFragment);
-        //barChartFragment = (BarChartFragment)mFragmentMan.findFragmentById(R.id.barChartFragment);
         realTimeStatusFragment = (RealTimeStatusFragment) mFragmentMan.findFragmentById(R.id.realtimestatuFragment);
-        FragmentTransaction fragmentTransaction = mFragmentMan.beginTransaction();
         
         babyStatusIndicateFragment = (BabyStatusIndicateFragment) mFragmentMan.findFragmentById(R.id.babyStatusIndicateFragment);
-        
-        
-        //showTempfragment();
-        //hidefragment();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
 
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(mReceiver, filter);
-        
-       // mAdapter= BluetoothAdapter.getDefaultAdapter();
- 
     }
     
     public void showTempfragment() {
         FragmentTransaction transaction = mFragmentMan.beginTransaction();
-       // transaction.show(routerfragment).hide(chartFragment).commit(); // 隐藏当前的fragment，显示下一个
         transaction.show(routerfragment).hide(barChartFragment).commit();
         mTemHide = false;
-        //transaction.hide(chartFragment).commit();
     }
     
     public void hideTempfragment() {
@@ -151,8 +149,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         FragmentTransaction transaction = mFragmentMan.beginTransaction();
         transaction.hide(routerfragment).show(barChartFragment).commit(); // 隐藏当前的fragment，显示下一个
         mTemHide = true;
-        //transaction.show(chartFragment).commit();
-    }
+       }
     
     public void showslidingmenu() {
         menu.showMenu();
@@ -185,24 +182,12 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                 mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
                
                 Log.e(TAG, "... onActivityResultdevice.address==" + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);
-               // ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName()+ " - connecting");
+         
                 mService.connect(deviceAddress);
                             
 
             }
             break;
-//        case REQUEST_ENABLE_BT:
-//            // When the request to enable Bluetooth returns
-//            if (resultCode == Activity.RESULT_OK) {
-//                Toast.makeText(this, "Bluetooth has turned on ", Toast.LENGTH_SHORT).show();
-//
-//            } else {
-//                // User did not enable Bluetooth or an error occurred
-//                Log.d(TAG, "BT not enabled");
-//                Toast.makeText(this, "Problem in BT Turning ON ", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//            break;
         default:
             Log.e(TAG, "wrong request code"+ requestCode);
             break;
@@ -274,6 +259,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                 public void OnScanDeviceSucceed(int touchid) {
                     // TODO Auto-generated method stub
                     if (touchid == 9) {
+                        routerfragment.setCurrentStateSucceed();
                         routerfragment.doUpdateStatusClick();
                         Log.e(TAG, "mScanService = 444444444444" + mScanService);
                         //deviceList = new ArrayList<BluetoothDevice>();
@@ -320,11 +306,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         Intent bindIntent = new Intent(this, UartService.class);
         boolean isbind = bindService(bindIntent, mUartServiceConnection, Context.BIND_AUTO_CREATE);
         Log.e(TAG, "service_init  " + isbind);
-       // registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
-        
-  
-      //  LocalBroadcastManager.getInstance(this).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
-    }
+     }
     
     private void search() { //寮�鍚摑鐗欏拰璁剧疆璁惧鍙鏃堕棿
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
@@ -344,7 +326,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        //intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
     }
     
@@ -366,10 +348,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                              Log.e(TAG, "UART_CONNECT_MSG3");
                             // btnSend.setEnabled(true);
                              Log.e(TAG, "UART_CONNECT_MSG4");
-                           //  ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName()+ " - ready");
-                          //   listAdapter.add("["+currentDateTimeString+"] Connected to: "+ mDevice.getName());
-                         //       messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                            // mState = UART_PROFILE_CONNECTED;
                              Log.e(TAG, "UART_CONNECT_MSG5");
                      }
                  });
@@ -381,14 +359,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                      public void run() {
                              String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
                              Log.d(TAG, "UART_DISCONNECT_MSG");
-//                             btnConnectDisconnect.setText("Connect");
-//                             edtMessage.setEnabled(false);
-//                             btnSend.setEnabled(false);
-//                             ((TextView) findViewById(R.id.deviceName)).setText("Not Connected");
-//                             listAdapter.add("["+currentDateTimeString+"] Disconnected to: "+ mDevice.getName());
-//                             mState = UART_PROFILE_DISCONNECTED;
-//                             mService.close();
-                            //setUiState();
                          
                      }
                  });
@@ -433,9 +403,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                      }
                  });*/
              }
-            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART)){
-
-            }           
+                  
         }
     };
     
@@ -466,9 +434,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
             }else {
                 hideTempfragment();
             }
-            //txValue = 10;
-           // LineData data = getData(txValue);             
-            //setupChart(chart, data, mColors[0]);  
         }else if (touchid == 2) {
             
         }
@@ -487,11 +452,12 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     @Override
     public void startNotification(Intent intent) {
         // TODO Auto-generated method stub
-        
+        Log.e(TAG, "ACTION_GATT_SERVICES_DISCOVERED 1");
        // mService.enableSleepNotification();
-        mService.enableTemperatureNotification();
+      //  mService.enableTemperatureNotification();
+          mService.enableDataNotification();
         
-        new Handler().postDelayed(new Runnable() {
+     /*   new Handler().postDelayed(new Runnable() {
             
             @Override
             public void run() {
@@ -510,7 +476,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                 mService.enableSleepNotification();
                 Log.e(TAG, "ACTION_GATT_SERVICES_DISCOVERED 3");
             }
-        }, 3000);
+        }, 3000);*/
     }
 
     @Override
@@ -519,9 +485,10 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         String action = intent.getAction();
         if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
             Log.e(TAG, "action disconnected ***********");
-            routerfragment.mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
-            routerfragment.mConnectedSucceedViewGroup.setVisibility(View.INVISIBLE);
-        }
+            Log.e(TAG, "UartService disconnect 3");
+            routerfragment.setCurrentStateFailed();
+            routerfragment.doUpdateStatusClick();
+         }
      int dataType = intent.getIntExtra(UartService.EXTRA_TYPE, 0);
      if (dataType == UartService.DATA_TYPE_TEMP_HUMIT) {
             tempValue = intent.getIntExtra(UartService.EXTRA_DATA_TEMP, 0);
@@ -539,13 +506,29 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         Bundle bundle = new Bundle();
         bundle.putInt("temp", tempValue);
         bundle.putInt("humit", humitValue);
-        //babyStatusIndicateFragment.setArguments(bundle);
     }
     
     
     public static int getTempValue() {
         return tempValue;
         
+    }
+    
+    public void onEventMainThread(AsycEvent event) {  
+        
+       /*// String msg = "onEventMainThread收到了消息：" + event.getMsg();  
+        Log.d("harvic", msg);  
+       // tv.setText(msg);  */
+        Toast.makeText(this, "enventbus write bytes", Toast.LENGTH_SHORT).show(); 
+        mService.writeBaseRXCharacteristic(event.getByte());
+    } 
+    
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        mService.disconnect();
+        EventBus.getDefault().unregister(this);//反注册EventBus  
     }
     
 }

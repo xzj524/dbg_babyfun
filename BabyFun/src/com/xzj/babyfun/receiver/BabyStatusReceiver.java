@@ -35,6 +35,7 @@ public class BabyStatusReceiver extends BroadcastReceiver{
             
         } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
             dataInteraction.setData(intent);
+            Log.e(TAG, "UartService disconnect 2");
         }
      }
     

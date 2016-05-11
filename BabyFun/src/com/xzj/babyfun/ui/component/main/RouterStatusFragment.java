@@ -33,6 +33,8 @@ import com.xzj.babyfun.service.ScanBlueToothService;
 import com.xzj.babyfun.service.ScanBlueToothService.OnScanDeviceListener;
 import com.xzj.babyfun.service.UartService;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * 
  * @author xuzejun
@@ -283,9 +285,17 @@ public class RouterStatusFragment extends Fragment{
 
         @Override
         public void onClick(View v) {
-            if (mCurrentState == CheckingState.IDEL || mCurrentState == CheckingState.FAIL) {
+            //Toast.makeText(getActivity().getApplicationContext(), "点击链接 currentstate = " + mCurrentState, Toast.LENGTH_SHORT).show();
+            //if (mCurrentState == CheckingState.IDEL || mCurrentState == CheckingState.FAIL) {
                 doUpdateStatusClick();
-            }
+            //}
+                
+                Intent l2intet = new Intent();
+                //l2intet.putExtra("bsl2Msg", bsl2Msg);
+                l2intet.putExtra("bsl2Msg", "bsl2Msg");
+                EventBus.getDefault().post(l2intet);
+                Toast.makeText(v.getContext(), "1243", Toast.LENGTH_SHORT).show();
+
             
         }
     }
@@ -310,8 +320,8 @@ public class RouterStatusFragment extends Fragment{
             mCurrentState = CheckingState.IDEL;
             mProgressImageView.clearAnimation();
             mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
-
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mConnectedFailedViewGroup.setVisibility(View.GONE);
             // 什么也不做
         } else if (mCurrentState == CheckingState.FATAL_DEVICE_NOT_CONNECT) {
             mCurrentState = CheckingState.CHECKING;
@@ -319,14 +329,20 @@ public class RouterStatusFragment extends Fragment{
           
         } else if (mCurrentState == CheckingState.SUCCEED) {
             mIsConnectingAnimation = false;
-            mCurrentState = CheckingState.IDEL;
+           // mCurrentState = CheckingState.IDEL;
+            Toast.makeText(getActivity().getApplicationContext(), "设备已连接", Toast.LENGTH_SHORT).show();
             mProgressImageView.clearAnimation();
+            mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
+            mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mConnectedFailedViewGroup.setVisibility(View.GONE);
         } else if (mCurrentState == CheckingState.FAIL) {
+            
+            Log.e(TAG, "UartService disconnect");
             mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
             mProgressImageView.clearAnimation();
-            mConnectedSucceedViewGroup.setVisibility(View.GONE);
-            mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mConnectedSucceedViewGroup.setVisibility(View.INVISIBLE);
+            mConnectingInfoViewGroup.setVisibility(View.INVISIBLE);
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
         }
         
@@ -384,6 +400,10 @@ public class RouterStatusFragment extends Fragment{
 
     public void setCurrentStateFailed(){
         mCurrentState = CheckingState.FAIL;    
+    }
+    
+    public void setCurrentStateSucceed(){
+        mCurrentState = CheckingState.SUCCEED;    
     }
     
     public CheckingState getCurrentState() {
