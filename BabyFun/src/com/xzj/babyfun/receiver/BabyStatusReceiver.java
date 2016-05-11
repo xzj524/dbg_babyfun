@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.xzj.babyfun.service.UartService;
+import com.xzj.babyfun.service.BluetoothService;
 
 public class BabyStatusReceiver extends BroadcastReceiver{
 
@@ -21,19 +21,19 @@ public class BabyStatusReceiver extends BroadcastReceiver{
         final Intent mIntent = intent;
 
       //*********************//
-        if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+        if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
             Log.e(TAG, "ACTION_GATT_SERVICES_DISCOVERED 1");
             
             dataInteraction.startNotification(intent);
           
             
-        } else if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+        } else if (action.equals(BluetoothService.ACTION_DATA_AVAILABLE)) {
             dataInteraction.setData(intent);
             if (dataStatusInteraction != null) {
                 dataStatusInteraction.setData(intent);
             }
             
-        } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+        } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
             dataInteraction.setData(intent);
             Log.e(TAG, "UartService disconnect 2");
         }

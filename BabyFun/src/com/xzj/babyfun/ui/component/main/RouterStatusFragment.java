@@ -31,7 +31,7 @@ import com.xzj.babyfun.DeviceListActivity;
 import com.xzj.babyfun.R;
 import com.xzj.babyfun.service.ScanBlueToothService;
 import com.xzj.babyfun.service.ScanBlueToothService.OnScanDeviceListener;
-import com.xzj.babyfun.service.UartService;
+import com.xzj.babyfun.service.BluetoothService;
 
 import de.greenrobot.event.EventBus;
 
@@ -47,7 +47,7 @@ public class RouterStatusFragment extends Fragment{
     public static final int ABNORMAL_REQUEST_CODE = 1;
     private static final int REQUEST_SELECT_DEVICE = 1;
     private BluetoothDevice mDevice = null;
-    private UartService mService = null;
+    private BluetoothService mService = null;
     OnItemSelectedListener mListener;
     OnScanDeviceListener mScanDeviceListener;
     private ScanBlueToothService mScanService = null;

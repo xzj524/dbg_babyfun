@@ -22,7 +22,7 @@ import com.xzj.babyfun.chart.SleepyChart;
 import com.xzj.babyfun.chart.SleepyChart.SetTextViewListener;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataStatusInteraction;
-import com.xzj.babyfun.service.UartService;
+import com.xzj.babyfun.service.BluetoothService;
 import com.xzj.babyfun.ui.component.main.BabyRealTimeStatusFragment;
 import com.xzj.babyfun.utility.Utiliy;
 
@@ -106,17 +106,17 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
     public void setData(Intent intent) {
         // TODO Auto-generated method stub
         //Toast.makeText(getApplicationContext(), " 使能notification", Toast.LENGTH_SHORT).show();
-        int dataType = intent.getIntExtra(UartService.EXTRA_TYPE, 0);
+        int dataType = intent.getIntExtra(BluetoothService.EXTRA_TYPE, 0);
         
-        if (dataType == UartService.DATA_TYPE_TEMP_HUMIT) {
-               tempValue = intent.getIntExtra(UartService.EXTRA_DATA_TEMP, 0);
-               humitValue = intent.getIntExtra(UartService.EXTRA_DATA_HUMIT, 0);
+        if (dataType == BluetoothService.DATA_TYPE_TEMP_HUMIT) {
+               tempValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_TEMP, 0);
+               humitValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_HUMIT, 0);
                realTimeStatusFragment.setTemperature(tempValue);
                realTimeStatusFragment.setHumit(humitValue);
-         } else if (dataType == UartService.DATA_TYPE_PM25) {
+         } else if (dataType == BluetoothService.DATA_TYPE_PM25) {
             // pm25Value = intent.getIntExtra(UartService.EXTRA_DATA_PM25, 0);
-         } else if (dataType == UartService.DATA_TYPE_SLEEP) {
-              sleepValue = intent.getIntExtra(UartService.EXTRA_DATA_SLEEP, 0);
+         } else if (dataType == BluetoothService.DATA_TYPE_SLEEP) {
+              sleepValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_SLEEP, 0);
               Utiliy.mSleepList.add(sleepValue);
               LineData data = sleepyChartFragment.getData(sleepValue);
               if (data != null) {

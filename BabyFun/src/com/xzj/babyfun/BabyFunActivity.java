@@ -38,7 +38,7 @@ import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataInteraction;
 import com.xzj.babyfun.service.ScanBlueToothService;
 import com.xzj.babyfun.service.ScanBlueToothService.OnScanDeviceListener;
-import com.xzj.babyfun.service.UartService;
+import com.xzj.babyfun.service.BluetoothService;
 import com.xzj.babyfun.ui.component.main.BabyStatusIndicateFragment;
 import com.xzj.babyfun.ui.component.main.HomePageTopTitleFragment.OnButtonClickedListener;
 import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
@@ -64,7 +64,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_SELECT_DEVICE = 1;
     private BluetoothDevice mDevice = null;
-    private UartService mService = null;
+    private BluetoothService mService = null;
     private ScanBlueToothService mScanService = null;
     static int tempValue = 0;
     static int humitValue = 0;
@@ -227,7 +227,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     //UART service connected/disconnected
     private ServiceConnection mUartServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-                mService = ((UartService.LocalBinder) rawBinder).getService();
+                mService = ((BluetoothService.LocalBinder) rawBinder).getService();
                 Log.e(TAG, "onServiceConnected mService= " + mService);
                 if (!mService.initialize()) {
                     Log.e(TAG, "Unable to initialize Bluetooth");
@@ -303,7 +303,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     
     
     private void initUartService() {
-        Intent bindIntent = new Intent(this, UartService.class);
+        Intent bindIntent = new Intent(this, BluetoothService.class);
         boolean isbind = bindService(bindIntent, mUartServiceConnection, Context.BIND_AUTO_CREATE);
         Log.e(TAG, "service_init  " + isbind);
      }
@@ -322,10 +322,10 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BluetoothService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothService.ACTION_DATA_AVAILABLE);
         //intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
     }
@@ -337,7 +337,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
             Log.e(TAG, "UART_CONNECT_MSG   getAction"  + action);
             final Intent mIntent = intent;
            //*********************//
-            if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
+            if (action.equals(BluetoothService.ACTION_GATT_CONNECTED)) {
                  runOnUiThread(new Runnable() {
                      public void run() {
                             String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
@@ -354,7 +354,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
             }
            
           //*********************//
-            if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+            if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
                  runOnUiThread(new Runnable() {
                      public void run() {
                              String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
@@ -366,12 +366,12 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
             
           
           //*********************//
-            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+            if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
                 Log.e(TAG, "ACTION_GATT_SERVICES_DISCOVERED 1");
                 // mService.enableTXNotification(); 
             }
           //*********************//
-            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+            if (action.equals(BluetoothService.ACTION_DATA_AVAILABLE)) {
 
                  // txValue = intent.getIntExtra(UartService.EXTRA_DATA, 0);
               /*   runOnUiThread(new Runnable() {
@@ -483,20 +483,20 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     public void setData(Intent intent) {
         // TODO Auto-generated method stub
         String action = intent.getAction();
-        if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
+        if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
             Log.e(TAG, "action disconnected ***********");
             Log.e(TAG, "UartService disconnect 3");
             routerfragment.setCurrentStateFailed();
             routerfragment.doUpdateStatusClick();
          }
-     int dataType = intent.getIntExtra(UartService.EXTRA_TYPE, 0);
-     if (dataType == UartService.DATA_TYPE_TEMP_HUMIT) {
-            tempValue = intent.getIntExtra(UartService.EXTRA_DATA_TEMP, 0);
-            humitValue = intent.getIntExtra(UartService.EXTRA_DATA_HUMIT, 0);
-      } else if (dataType == UartService.DATA_TYPE_PM25) {
-          pm25Value = intent.getIntExtra(UartService.EXTRA_DATA_PM25, 0);
-      } else if (dataType == UartService.DATA_TYPE_SLEEP) {
-          sleepValue = intent.getIntExtra(UartService.EXTRA_DATA_SLEEP, 0);
+     int dataType = intent.getIntExtra(BluetoothService.EXTRA_TYPE, 0);
+     if (dataType == BluetoothService.DATA_TYPE_TEMP_HUMIT) {
+            tempValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_TEMP, 0);
+            humitValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_HUMIT, 0);
+      } else if (dataType == BluetoothService.DATA_TYPE_PM25) {
+          pm25Value = intent.getIntExtra(BluetoothService.EXTRA_DATA_PM25, 0);
+      } else if (dataType == BluetoothService.DATA_TYPE_SLEEP) {
+          sleepValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_SLEEP, 0);
       }
         
         realTimeStatusFragment.setTemperature(tempValue);

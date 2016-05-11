@@ -1,100 +1,65 @@
-04-07 01:11:21.595: E/UartService(6316): enableTempNotification2
-04-07 01:11:21.595: E/UartService(6316): mSleepCharacterChar property = 16
-04-07 01:11:21.600: E/BabyFunActivity(6316): ACTION_GATT_SERVICES_DISCOVERED 3
-04-07 01:11:22.585: E/UartService(6316): enableTXNotification111111
-04-07 01:11:22.585: E/UartService(6316): text = #
-04-07 01:11:22.585: E/UartService(6316): TEM hrvalue = 21  humValue = 35
-04-07 01:11:22.600: E/BabyStatusReceiver(6316): UART_CONNECT_MSG   getActioncom.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE
-04-07 01:11:23.750: E/UartService(6316): enableTXNotification111111
-04-07 01:11:23.750: E/UartService(6316): text = ��4#l@������
-04-07 01:11:23.750: E/UartService(6316): characteristic = 00002990-0000-1000-8000-00805f9b34fb
-04-07 01:11:23.750: E/UartService(6316): SLEEP hrvalue = 0 5 52 35 8 108 64
-04-07 01:11:23.755: E/BabyStatusReceiver(6316): UART_CONNECT_MSG   getActioncom.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE
-04-07 01:11:24.695: E/SleepyChart(6316):   count = 0
-04-07 01:11:24.715: I/View(6316): ssignParent(ViewParent parent) parent is: android.view.ViewRootImpl@32a3b191
-04-07 01:11:25.560: E/UartService(6316): enableTXNotification111111
-04-07 01:11:25.560: E/UartService(6316): text = V
-04-07 01:11:25.560: E/UartService(6316): HR hrvalue = 86
-04-07 01:11:25.570: E/BabyStatusReceiver(6316): UART_CONNECT_MSG   getActioncom.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE
-04-07 01:11:25.605: E/UartService(6316): enableTXNotification111111
-04-07 01:11:25.605: E/UartService(6316): text = #
-04-07 01:11:25.605: E/UartService(6316): TEM hrvalue = 21  humValue = 35
-04-07 01:11:25.620: E/BabyStatusReceiver(6316): UART_CONNECT_MSG   getActioncom.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE
-04-07 01:11:28.580: E/UartService(6316): enableTXNotification111111
-04-07 01:11:28.580: E/UartService(6316): text = #
-04-07 01:11:28.580: E/UartService(6316): TEM hrvalue = 21  humValue = 35
-04-07 01:11:28.595: E/BabyStatusReceiver(6316): UART_CONNECT_MSG   getActioncom.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE
-04-07 01:11:28.775: E/UartService(6316): enableTXNotification111111
-04-07 01:11:28.775: E/UartService(6316): text = 0#l<������
-04-07 01:11:28.775: E/UartService(6316): characteristic = 00002990-0000-1000-8000-00805f9b34fb
-04-07 01:11:28.775: E/UartService(6316): SLEEP hrvalue = 15 5 48 35 4 108 60
-04-07 01:11:28.795: E/BabyStatusReceiver(6316): UART_CONNECT_MSG   getActioncom.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE
-04-07 01:11:28.795: E/SleepyChart(6316):   count = 15
-04-07 01:11:28.805: E/Babyfun(6316): sleepvalue = 15
-04-07 01:11:28.825: E/AndroidRuntime(6316): FATAL EXCEPTION: main
-04-07 01:11:28.825: E/AndroidRuntime(6316): Process: com.xzj.babyfun, PID: 6316
-04-07 01:11:28.825: E/AndroidRuntime(6316): java.lang.ArrayIndexOutOfBoundsException: length=1; index=1
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at com.github.mikephil.charting.renderer.LegendRenderer.renderLegend(LegendRenderer.java:392)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at com.github.mikephil.charting.charts.BarLineChartBase.onDraw(BarLineChartBase.java:239)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.draw(View.java:15291)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14213)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:3395)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:3374)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14173)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:3395)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:3374)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14173)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:3395)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:3374)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14173)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:3395)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:3374)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14173)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:3395)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:3374)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14173)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:3395)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:3374)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14173)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.recreateChildDisplayList(ViewGroup.java:3395)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewGroup.dispatchGetDisplayList(ViewGroup.java:3374)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.updateDisplayListIfDirty(View.java:14173)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.View.getDisplayList(View.java:14235)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ThreadedRenderer.updateViewTreeDisplayList(ThreadedRenderer.java:291)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ThreadedRenderer.updateRootDisplayList(ThreadedRenderer.java:297)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ThreadedRenderer.draw(ThreadedRenderer.java:349)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewRootImpl.draw(ViewRootImpl.java:2626)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewRootImpl.performDraw(ViewRootImpl.java:2426)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:2049)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:1105)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.ViewRootImpl$TraversalRunnable.run(ViewRootImpl.java:6186)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:793)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.Choreographer.doCallbacks(Choreographer.java:606)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.Choreographer.doFrame(Choreographer.java:575)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:779)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.os.Handler.handleCallback(Handler.java:739)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.os.Handler.dispatchMessage(Handler.java:95)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.os.Looper.loop(Looper.java:135)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at android.app.ActivityThread.main(ActivityThread.java:5595)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at java.lang.reflect.Method.invoke(Native Method)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at java.lang.reflect.Method.invoke(Method.java:372)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:960)
-04-07 01:11:28.825: E/AndroidRuntime(6316): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:755)
-04-07 01:11:28.835: I/Process(6316): Sending signal. PID: 6316 SIG: 9
-04-07 01:11:29.155: I/HwCust(6565): Constructor found for class android.app.HwCustApplicationPackageManagerImpl
-04-07 01:11:29.165: I/CachedDir(6565): file changed, refill cache - 1357
-04-07 01:11:29.270: E/BabyFunActivity(6565): service_init  true
-04-07 01:11:29.275: E/BabyFunActivity(6565): initScanService  true
-04-07 01:11:29.340: W/PG Utils(6565): set mRatioMinBrightness to default value for other product
-04-07 01:11:29.340: W/PG Utils(6565): mRatioMinBrightness = 35
-04-07 01:11:29.360: I/View(6565): ssignParent(ViewParent parent) parent is: android.view.ViewRootImpl@6414a3b
-04-07 01:11:29.415: I/OpenGLRenderer(6565): Initialized EGL, version 1.4
-04-07 01:11:29.445: E/BabyFunActivity(6565): onServiceConnected mService= com.xzj.babyfun.service.UartService@3bf04f17
-04-07 01:11:29.445: E/BabyFunActivity(6565): mScanService = 2com.xzj.babyfun.service.ScanBlueToothService@34df04
+  private void broadcastUpdate(final String action,
+                                 final BluetoothGattCharacteristic characteristic) {
+        final Intent intent = new Intent(action);
+        
+      //String text = new String(txValue, "UTF-8");
+        try {
+			Log.e(TAG, "text = " + (new String(characteristic.getValue(), "UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+       
+        int hrValue;
+        int humValue;
+        //hrValue = characteristic.getValue();
+        //Log.e(TAG, "hrvalue" + hrValue); 
+        
+     //   hrValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 1);
+        /*if (isHeartRateInUINT16(characteristic.getValue()[0])) {
+			hrValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 1);
+		} else {
+			hrValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+			int batteryValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+		}*/
+        
+        // This is special handling for the Heart Rate Measurement profile.  Data parsing is
+        // carried out as per profile specifications:
+        // http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
+        if (TEM_LEVEL_CHARACTERISTIC.equals(characteristic.getUuid())) {
+            characteristic.getValue();
+            hrValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            humValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1);
+            Log.e(TAG, "TEM hrvalue = " + hrValue + "  humValue = " + humValue); 
+            //Log.e(TAG, "characteristic = " + TEM_LEVEL_CHARACTERISTIC);
+            intent.putExtra(EXTRA_TYPE, DATA_TYPE_TEMP_HUMIT);
+            intent.putExtra(EXTRA_DATA_TEMP, hrValue);
+            intent.putExtra(EXTRA_DATA_HUMIT, humValue);
+           // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
+            
+        } else if (SLEEP_LEVEL_CHARACTERISTIC.equals(characteristic.getUuid())) {
+            Log.e(TAG, "characteristic = " + SLEEP_LEVEL_CHARACTERISTIC); 
+            int hrValue1 = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            int hrValue2 = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1);
+            int hrValue3 = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 2);
+            int hrValue4 = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 3);
+            int hrValue5 = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 4);
+            int hrValue6 = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 5);
+            int hrValue7 = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 6);
+            
+            Log.e(TAG, "SLEEP hrvalue = " + hrValue1 + " " + hrValue2 
+                    + " " + hrValue3 + " "+ hrValue4 + " "+ hrValue5 
+                    + " "+ hrValue6 + " "+ hrValue7); 
+            intent.putExtra(EXTRA_TYPE, DATA_TYPE_SLEEP);
+            intent.putExtra(EXTRA_DATA_SLEEP, hrValue1);   
+        } else if (BLE_UUID_NUS_RX_CHARACTERISTIC.equals(characteristic.getUuid())) {
+            //BaseMessageHandler.acquireBaseData(characteristic);
+            hrValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            intent.putExtra(EXTRA_TYPE, DATA_TYPE_PM25);
+            intent.putExtra(EXTRA_DATA_PM25, hrValue);
+            Log.e(TAG, "HR hrvalue = PM");
+            //Log.e(TAG, "characteristic = " + HR_CHARACTERISTIC_UUID); 
+        }
+        sendBroadcast(intent);
+    }
