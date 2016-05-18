@@ -108,7 +108,7 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         //Toast.makeText(getApplicationContext(), " 使能notification", Toast.LENGTH_SHORT).show();
         int dataType = intent.getIntExtra(BluetoothService.EXTRA_TYPE, 0);
         
-        if (dataType == BluetoothService.DATA_TYPE_TEMP_HUMIT) {
+       /* if (dataType == BluetoothService.DATA_TYPE_TEMP_HUMIT) {
                tempValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_TEMP, 0);
                humitValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_HUMIT, 0);
                realTimeStatusFragment.setTemperature(tempValue);
@@ -140,7 +140,7 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
               
               mBabyPoint.setText(Value + " 分");
              
-         }
+         }*/
         
        
         

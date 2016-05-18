@@ -8,7 +8,6 @@ import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -26,12 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.xzj.babyfun.DeviceListActivity;
 import com.xzj.babyfun.R;
-import com.xzj.babyfun.service.ScanBlueToothService;
-import com.xzj.babyfun.service.ScanBlueToothService.OnScanDeviceListener;
 import com.xzj.babyfun.service.BluetoothService;
+import com.xzj.babyfun.service.ScanDevicesService;
+import com.xzj.babyfun.service.ScanDevicesService.OnScanDeviceListener;
 
 import de.greenrobot.event.EventBus;
 
@@ -50,7 +47,7 @@ public class RouterStatusFragment extends Fragment{
     private BluetoothService mService = null;
     OnItemSelectedListener mListener;
     OnScanDeviceListener mScanDeviceListener;
-    private ScanBlueToothService mScanService = null;
+    private ScanDevicesService mScanService = null;
 
     /** 路由名称 */
     private TextView mRouterNameTextView;
@@ -192,7 +189,7 @@ public class RouterStatusFragment extends Fragment{
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             // TODO Auto-generated method stub
-            mScanService = ((ScanBlueToothService.ScanBinder) service).getService();
+            mScanService = ((ScanDevicesService.ScanBinder) service).getService();
         }
     };
     

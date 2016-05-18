@@ -40,11 +40,13 @@ public class BaseMessageHandler {
                 BaseL1Message bsL1Msg = getBaseL1Msg(baseData); // 生成L1数据
                 generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
                 if (isOver) {
-                   BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
-                   Intent l2intet = new Intent();
-                   //l2intet.putExtra("bsl2Msg", bsl2Msg);
-                   l2intet.putExtra("bsl2Msg", "bsl2Msg");
-                   EventBus.getDefault().post(l2intet);
+                    if (l2OutputStream.size() > 0) {
+                        BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
+                        Intent l2intent = new Intent();
+                        l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
+                        EventBus.getDefault().post(l2intent);
+                    }
+                   
                 }
                 if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) {
                     int crc16 = CRC16.calcCrc16(bsL1Msg.payload);

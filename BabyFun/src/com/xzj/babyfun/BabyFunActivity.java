@@ -36,9 +36,9 @@ import com.xzj.babyfun.eventbus.AsycEvent;
 import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataInteraction;
-import com.xzj.babyfun.service.ScanBlueToothService;
-import com.xzj.babyfun.service.ScanBlueToothService.OnScanDeviceListener;
 import com.xzj.babyfun.service.BluetoothService;
+import com.xzj.babyfun.service.ScanDevicesService;
+import com.xzj.babyfun.service.ScanDevicesService.OnScanDeviceListener;
 import com.xzj.babyfun.ui.component.main.BabyStatusIndicateFragment;
 import com.xzj.babyfun.ui.component.main.HomePageTopTitleFragment.OnButtonClickedListener;
 import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
@@ -65,7 +65,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     private static final int REQUEST_SELECT_DEVICE = 1;
     private BluetoothDevice mDevice = null;
     private BluetoothService mService = null;
-    private ScanBlueToothService mScanService = null;
+    private ScanDevicesService mScanService = null;
     static int tempValue = 0;
     static int humitValue = 0;
     static int pm25Value = 0;
@@ -252,7 +252,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             // TODO Auto-generated method stub
-            mScanService = ((ScanBlueToothService.ScanBinder) service).getService();
+            mScanService = ((ScanDevicesService.ScanBinder) service).getService();
             mScanService.setOnProgressListener(new OnScanDeviceListener() {
                 
                 @Override
@@ -294,7 +294,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     
  
     private void initScanService(){
-        Intent bindIntent = new Intent(this, ScanBlueToothService.class);
+        Intent bindIntent = new Intent(this, ScanDevicesService.class);
         boolean isbind = bindService(bindIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
         Log.e(TAG, "initScanService  " + isbind);
         
@@ -489,7 +489,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
             routerfragment.setCurrentStateFailed();
             routerfragment.doUpdateStatusClick();
          }
-     int dataType = intent.getIntExtra(BluetoothService.EXTRA_TYPE, 0);
+   /*  int dataType = intent.getIntExtra(BluetoothService.EXTRA_TYPE, 0);
      if (dataType == BluetoothService.DATA_TYPE_TEMP_HUMIT) {
             tempValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_TEMP, 0);
             humitValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_HUMIT, 0);
@@ -497,7 +497,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
           pm25Value = intent.getIntExtra(BluetoothService.EXTRA_DATA_PM25, 0);
       } else if (dataType == BluetoothService.DATA_TYPE_SLEEP) {
           sleepValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_SLEEP, 0);
-      }
+      }*/
         
         realTimeStatusFragment.setTemperature(tempValue);
         realTimeStatusFragment.setHumit(humitValue);
