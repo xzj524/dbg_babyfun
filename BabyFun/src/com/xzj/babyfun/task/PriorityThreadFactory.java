@@ -8,7 +8,7 @@ import android.os.Process;
 /**
  * 线程优先级factory
  * 
- * @author kongxiuli
+ * @author xuzejun
  * 
  */
 public class PriorityThreadFactory implements ThreadFactory {

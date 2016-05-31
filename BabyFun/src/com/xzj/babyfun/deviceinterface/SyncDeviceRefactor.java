@@ -13,7 +13,7 @@ public class SyncDeviceRefactor implements SyncDevice{
     }
 
     @Override
-    public DeviceResponse<?> setDeviceTime(DeviceTime dvtime) {
+    public DeviceResponse<?> setDeviceTime() {
         // TODO Auto-generated method stub
         return null;
     }

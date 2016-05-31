@@ -54,13 +54,24 @@
             android:label="@string/title_activity_baby_status" >
         </activity>
         
-           <receiver android:name="com.xzj.babyfun.receiver.BabyStatusReceiver" >
+         <activity
+            android:name=".TestActivity"
+            android:label="@string/title_activity_test" >
+        </activity>
+        <activity
+            android:name="com.xzj.babyfun.BabyBreathActivity"
+            android:label="@string/title_activity_baby_breath" >
+        </activity>
+
+        <receiver android:name=".receiver.BabyStatusReceiver" >
             <intent-filter>
                 <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_SERVICES_DISCOVERED" />
                 <action android:name="com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE" />
                 <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_DISCONNECTED" />
             </intent-filter>
         </receiver>
+
+       
     </application>
 
 </manifest>

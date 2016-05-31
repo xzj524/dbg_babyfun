@@ -40,13 +40,27 @@
         android:id="@+id/lineImageView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:alpha="50"
         android:background="@drawable/line" />
     
     <fragment
         android:id="@+id/babyStatusIndicateFragment"
         android:name="com.xzj.babyfun.ui.component.main.BabyStatusIndicateFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="10dp"/>
+    
+      <ImageView
+        android:id="@+id/lineImageView2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="50"
+        android:background="@drawable/line" />
+    
+      <fragment
+        android:id="@+id/babyBreathIndicateFragment"
+        android:name="com.xzj.babyfun.ui.component.main.BabyBreathIndicateFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:layout_marginTop="10dp"/>

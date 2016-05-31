@@ -32,6 +32,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.xzj.babyfun.chart.BarChartFragment;
 import com.xzj.babyfun.chart.SleepyChart;
 import com.xzj.babyfun.crc.CRC16;
+import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.eventbus.AsycEvent;
 import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
@@ -94,6 +95,11 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
         
+     /*   Intent testIntent = new Intent(getApplicationContext(), TestActivity.class);
+        startActivity(testIntent);*/
+     
+        AsyncDeviceFactory.getInstance(getApplicationContext());
+        
         byte p[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
         int crc16 = CRC16.calcCrc16(p);
         SLog.e(TAG, "crc16 = " + crc16);
@@ -101,7 +107,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         //注册EventBus  
        EventBus.getDefault().register(this);
         
-        initUartService();
+       // initUartService();
         initScanService();
         //registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
 
@@ -113,7 +119,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
        // 设置触摸屏幕的模式  
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);  
         menu.setShadowWidthRes(R.dimen.shadow_width);  
-        menu.setShadowDrawable(R.drawable.abs__ab_bottom_solid_light_holo);  
+      //  menu.setShadowDrawable(R.drawable.ab_bottom_solid_light_holo);  
        // 设置滑动菜单视图的宽度  
         menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);  
        // 设置渐入渐出效果的值  
@@ -137,6 +143,8 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(mReceiver, filter);
     }
+    
+
     
     public void showTempfragment() {
         FragmentTransaction transaction = mFragmentMan.beginTransaction();
@@ -246,7 +254,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         public void onServiceDisconnected(ComponentName name) {
             // TODO Auto-generated method stub
             mScanService = null;
-            Log.e(TAG, "mScanService = 1" + mScanService);
         }
         
         @Override
@@ -261,8 +268,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                     if (touchid == 9) {
                         routerfragment.setCurrentStateSucceed();
                         routerfragment.doUpdateStatusClick();
-                        Log.e(TAG, "mScanService = 444444444444" + mScanService);
-                        //deviceList = new ArrayList<BluetoothDevice>();
                         List<BluetoothDevice> devicelist = new ArrayList<BluetoothDevice>();
                         devicelist = mScanService.getDeviceList();
                         for (BluetoothDevice listDev : devicelist) {
@@ -271,11 +276,13 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                                 if (listDev.getName().equals("my_hrm")) {
                                     
                                     String deviceAddress = listDev.getAddress();
+                                    
                                     mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
                                    
-                                    Log.e(TAG, "... onActivityResultdevice.address==" + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);
+                                    Log.e(TAG, "... onActivityResultdevice.address==" + mDevice 
+                                            + "deviceaddress "+ deviceAddress 
+                                            +" myserviceValue = " + mService);
                                     mService.connect(deviceAddress);
-                                    
                                     break;
                                 }
                             }
@@ -288,7 +295,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                     }
                 }
             });
-            Log.e(TAG, "mScanService = 2" + mScanService);
         }
     };
     
@@ -297,7 +303,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         Intent bindIntent = new Intent(this, ScanDevicesService.class);
         boolean isbind = bindService(bindIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
         Log.e(TAG, "initScanService  " + isbind);
-        
     }
     
     

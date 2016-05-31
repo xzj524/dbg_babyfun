@@ -18,7 +18,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.xzj.babyfun.constant.Constant;
 import com.xzj.babyfun.logging.SLog;
+import com.xzj.babyfun.utility.PrivateParams;
 
 public class ScanDevicesService extends Service{
     
@@ -57,7 +59,7 @@ public class ScanDevicesService extends Service{
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, "手机不支持蓝牙", Toast.LENGTH_SHORT).show();
             stopSelf();
-        }
+        }  
         
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -153,9 +155,11 @@ public class ScanDevicesService extends Service{
                 +  "  rssi = " + rssi);
         devRssiValues.put(device.getAddress(), rssi);
         if (!deviceFound) {
-            mDeviceList.add(device);
             if (device.getName() != null) {
                 if (device.getName().equals("my_hrm")) {
+                    mDeviceList.add(device);
+                    PrivateParams.setSPString(getApplicationContext(), 
+                            Constant.SHARED_DEVICE_NAME, device.getAddress());
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mBLEScanCallback);
                     onScanDeviceListener.OnScanDeviceSucceed(9);

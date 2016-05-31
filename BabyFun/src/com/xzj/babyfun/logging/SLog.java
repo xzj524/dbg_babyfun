@@ -34,7 +34,7 @@ import android.text.TextUtils;
  */
 public final class SLog {
 
-    private static final String TAG = "BDPushSDK-SLog";
+    private static final String TAG = "AIZI-SLog";
 
     /** log开关，关闭后，log功能失效，不能输出任何东西。！！relase发布时和线上代码，保持关闭。 */
     private static boolean sLogEnabled = true; // false & Constants.DEBUG;

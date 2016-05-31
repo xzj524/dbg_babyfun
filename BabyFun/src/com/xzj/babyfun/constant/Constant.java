@@ -21,4 +21,15 @@ public class Constant {
     public static final short COMMAND_ID_CONTROL = 7;
     public static final short COMMAND_ID_DUMP_STACK = 8;
     public static final short COMMAND_ID_FLASH_TEST = 9;
+    
+    public static final short BASE_VERSION_CODE = 1;
+    
+    /** 存储app私有的shared preference */
+    public static final String SHARED_NAME_PRIVATE_SETTINGS = "aizi_pst";
+    
+    /** 存储DeviceName  */
+    public static final String SHARED_DEVICE_NAME = "dev_name";
+    
+    /** 设备时间与手机端偏差限制  */
+    public static final long DEVICE_TIME_OFFSET = 60 * 60 * 1000;
 }

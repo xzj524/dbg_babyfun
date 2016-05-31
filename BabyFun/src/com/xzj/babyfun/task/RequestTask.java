@@ -3,7 +3,7 @@ package com.xzj.babyfun.task;
 /**
  * 请求任务
  * 
- * @author kongxiuli
+ * @author xuzejun
  * 
  */
 public abstract class RequestTask implements Runnable {

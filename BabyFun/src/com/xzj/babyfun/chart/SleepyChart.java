@@ -21,7 +21,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.xzj.babyfun.R;
-import com.xzj.babyfun.ui.component.main.RouterStatusFragment.OnItemSelectedListener;
 import com.xzj.babyfun.utility.Utiliy;
 
 public class SleepyChart extends Fragment{
@@ -40,10 +39,10 @@ public class SleepyChart extends Fragment{
     static ArrayList<Entry> yValsDeepSleep = new ArrayList<Entry>();
     static ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
     
-    static ArrayList<ArrayList<Entry>> yArrayList = new ArrayList<ArrayList<Entry>>();
+ //   static ArrayList<ArrayList<Entry>> yArrayList = new ArrayList<ArrayList<Entry>>();
     
     static ArrayList<String> xVals = new ArrayList<String>();
-    static ArrayList<Integer> chartType = new ArrayList<Integer>();
+  //  static ArrayList<Integer> chartType = new ArrayList<Integer>();
     
     static LineDataSet NoSleepySet = new LineDataSet(yValsNoSleep, "清醒");
     static LineDataSet ShadowSleepySet = new LineDataSet(yValsShadowSleep, "浅睡");

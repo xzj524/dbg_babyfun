@@ -4,12 +4,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import android.R.bool;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Intent;
 
 import com.xzj.babyfun.baseheader.BaseL1Message;
 import com.xzj.babyfun.baseheader.BaseL2Message;
+import com.xzj.babyfun.baseheader.KeyPayload;
 import com.xzj.babyfun.constant.Constant;
 import com.xzj.babyfun.crc.CRC16;
 import com.xzj.babyfun.eventbus.AsycEvent;
@@ -38,25 +40,31 @@ public class BaseMessageHandler {
             }
             if (baseData.length >= BASE_DATA_HEAD) {
                 BaseL1Message bsL1Msg = getBaseL1Msg(baseData); // 生成L1数据
-                generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
-                if (isOver) {
-                    if (l2OutputStream.size() > 0) {
-                        BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
-                        Intent l2intent = new Intent();
-                        l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
-                        EventBus.getDefault().post(l2intent);
-                    }
-                   
-                }
-                if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) {
-                    int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
-                    if (bsL1Msg.CRC16 == (short)crc16) {
-                        sendACKBaseL1Msg(baseData);
-                    }
-                } else if (bsL1Msg.ackFlag == 1) { //收到设备的ack信息
+                if (bsL1Msg.ackFlag == 1) { //收到设备的ack信息
                     if (bsL1Msg.errFlag == 0) {
                         if (isWriteSuccess) {
-                            sendL2Msg(false);
+                            boolean isSendL2Over = sendL2Msg(false);
+                        }else {
+                            //重写接口
+                            
+                        }
+                    }
+                }else {
+                    generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
+                    if (isOver) {
+                        isOver = false;
+                        if (l2OutputStream.size() > 0) {
+                            BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
+                            Intent l2intent = new Intent();
+                            l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
+                            EventBus.getDefault().post(l2intent);
+                        }            
+                    }
+                    
+                    if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) { //收到设备发过来的信息，需要返回ACK
+                        int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
+                        if (bsL1Msg.CRC16 == (short)crc16) {
+                            sendACKBaseL1Msg(baseData);
                         }
                     }
                 }
@@ -76,35 +84,45 @@ public class BaseMessageHandler {
         EventBus.getDefault().post(new AsycEvent(ACKMsg)); 
     }
     
-    public static void sendL2Message(BaseL2Message bsl2msg) {
+    public static boolean sendL2Message(BaseL2Message bsl2msg) {
+        boolean isSendL2Over = false;
         try {
             l2InputStream = new ByteArrayInputStream(bsl2msg.toByte());
-            sendL2Msg(true);
+            if (l2InputStream != null) {
+                isSendL2Over = sendL2Msg(true);
+            }
         } catch (Exception e) {
             // TODO: handle exception
             SLog.e(TAG, e);
         }
+        
+        return isSendL2Over;
     }
     
-    public static void sendL2Msg(boolean isstart) {
+    public static boolean sendL2Msg(boolean isstart) {
         byte[] buffer = new byte[14];
+        byte[] sendbuff = null;
         int flag = 0;
+        boolean isSendL2Over = false;
         
         try {
             if (l2InputStream.available() > 0) {
                 int readcount = l2InputStream.read(buffer, 0, 14);
                 if (readcount > 0 && readcount <= 14) {
-                    if (l2InputStream.available() > 0) {
+                    sendbuff = new byte[readcount];
+                    System.arraycopy(buffer, 0, sendbuff, 0, readcount);
+                    if (l2InputStream.available() > 0) { //读取14个字符之后还有内容
                         if (isstart) {
-                            flag = 0; 
+                            flag = 0; //开始帧
                         } else {
-                            flag = 1;
+                            flag = 1; //中间帧
                         }
                     } else {
-                        flag = 2;
+                        flag = 2;//结束帧
                         l2InputStream.close();
+                        isSendL2Over = true;
                     }
-                    sendL1Msg(buffer, flag);
+                    sendL1Msg(sendbuff, flag);
                 }
             }
         } catch (Exception e) {
@@ -117,8 +135,8 @@ public class BaseMessageHandler {
                 e1.printStackTrace();
             }
         }
-       
         
+        return isSendL2Over;     
     }
     
 /*    public static void sendL2EndMsg() {
@@ -183,13 +201,28 @@ public class BaseMessageHandler {
                 } else if (bsL1Msg.errFlag == 2) { // 标识结束位
                     isOver = true;
                     l2OutputStream.write(bsL1Msg.payload);
+                } else {
+                    isOver = false;
                 }
                 l2OutputStream.close();
+            } else {
+                isOver = false;
             }
         } catch (Exception e) {
             // TODO: handle exception
             SLog.e(TAG, e);
         }  
+    }
+
+    public static BaseL2Message generateBaseL2Msg(short commanid, short version, 
+            KeyPayload keyPayload){
+        BaseL2Message bsl2Msg = new BaseL2Message();
+        bsl2Msg.commanID = commanid;
+        bsl2Msg.versionCode = version;
+        bsl2Msg.payload = new byte[keyPayload.keyLen + 3];
+        System.arraycopy(keyPayload.toByte(), 0, bsl2Msg.payload, 0, keyPayload.keyLen + 3);
+        return bsl2Msg;
+        
     }
 
     private static BaseL2Message getBaseL2Msg(byte[] l2data) {

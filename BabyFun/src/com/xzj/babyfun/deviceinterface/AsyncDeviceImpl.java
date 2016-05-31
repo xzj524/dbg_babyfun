@@ -37,12 +37,12 @@ public class AsyncDeviceImpl implements AsyncDevice {
 
             @Override
             public void run() {
-                DeviceResponse<?> response = mSyncDevice.setDeviceTime(dvtime);
-                if (response.error == null) {
+                DeviceResponse<?> response = mSyncDevice.setDeviceTime();
+               /* if (response.error == null) {
                     listener.onSetDeviceTime((Boolean) response.result);
                 } else {
                     listener.onError(response.error);
-                }
+                }*/
             }
         };
         return getDispatcher().dispatch(task);

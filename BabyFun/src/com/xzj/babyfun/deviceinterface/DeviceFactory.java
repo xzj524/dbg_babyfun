@@ -26,7 +26,7 @@ public final class DeviceFactory {
      */
     public static synchronized SyncDevice getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new SyncDeviceRefactor(context.getApplicationContext());
+            mInstance = new SyncDeviceImpl(context.getApplicationContext());
         }
         return mInstance;
     }

@@ -2,7 +2,6 @@ package com.xzj.babyfun;
 
 import java.util.ArrayList;
 
-
 import org.json.JSONObject;
 
 import android.support.v4.view.PagerAdapter;

@@ -24,7 +24,10 @@ public class BaseL2Message implements Parcelable{
         }   
         return arrayByteL2;
     }
+    
+    
 
+ 
     @Override
     public int describeContents() {
         // TODO Auto-generated method stub

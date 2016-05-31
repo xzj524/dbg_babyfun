@@ -36,6 +36,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.xzj.babyfun.deviceinterface.SyncDeviceImpl.BluetoothReady;
 import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.utility.BaseMessageHandler;
 
@@ -107,6 +108,7 @@ public class BluetoothService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                enableDataNotification();
             	SLog.e(TAG, "mBluetoothGatt = " + mBluetoothGatt );
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
@@ -313,6 +315,10 @@ public class BluetoothService extends Service {
             BluetoothGattDescriptor descriptor = mCharacterChar.getDescriptor(CCCD);
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
+            BluetoothReady bleReady = new BluetoothReady();
+            bleReady.isBluetoothReady = true;
+            
+            EventBus.getDefault().post(bleReady);
         } catch (Exception e) {
             // TODO: handle exception
             SLog.e(TAG, e);

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.xzj.babyfun.BabyStatusActivity;
 import com.xzj.babyfun.R;
 import com.xzj.babyfun.baseheader.BaseL2Message;
+import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.utility.BaseMessageHandler;
 
 public class BabyStatusIndicateFragment extends Fragment{
@@ -39,9 +40,13 @@ public class BabyStatusIndicateFragment extends Fragment{
                 intent.putExtra("humit", getArguments().getInt("humit"));*/
                 startActivity(intent);
                 
-                BaseL2Message bsTMsg = new BaseL2Message();
+               // BaseL2Message bsTMsg = new BaseL2Message();
                 //bsTMsg = BaseL2Messag
-                BaseMessageHandler.sendL2Msg(true);
+               // BaseMessageHandler.sendL2Msg(true);
+                
+               // AsyncBaiduRouterFactory.getInstance(RouterApplication.getInstance()).getCurrQoSSatus(
+               //         AccountUtils.getInstance().getBduss(), deviceId, sign, mListener);
+              //  AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).setDeviceTime(null, null);
                // Toast.makeText(getActivity().getApplicationContext(), " 宝宝睡觉状态", Toast.LENGTH_SHORT).show();
             }
         });
