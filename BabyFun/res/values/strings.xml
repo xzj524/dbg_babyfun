@@ -36,5 +36,7 @@
     <string name="extapps_bduss_invalidate_content">扩展应用由百度提供服务，先将路由与百度帐号绑定</string>
     <string name="extapps_bind_invalidate_content_for_unbind">您的路由被解绑，\n重新绑定路由可以启用服务</string>
     <string name="title_activity_baby_status">BabyStatusActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_baby_breath">BabyBreathActivity</string>
 
 </resources>

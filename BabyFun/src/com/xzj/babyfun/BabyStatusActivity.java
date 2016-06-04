@@ -77,14 +77,11 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
             Utiliy.mSleepList.add(0); 
         }
         
-        LineData data = sleepyChartFragment.getData(0);
+  /*      LineData data = sleepyChartFragment.getData(0);
         if (data != null) {
             sleepyChartFragment.setupChart(data, mColors[4]);
         }
-        
-        mImageViewbigline = (ImageView) findViewById(R.id.lightlineImageView2);
-        mImageViewsmalline = (ImageView) findViewById(R.id.lightlineImageView1);
-        
+        */
         
         appearAnimation = new AlphaAnimation(0, 1);  
         appearAnimation.setDuration(1000);  

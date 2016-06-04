@@ -45,10 +45,8 @@ public class BreathChart extends Fragment{
         mBreathChart = (LineChart) breathChartView.findViewById(R.id.breathchart);
         initDataSet();
         initBreathChart();
-        
-        LineData initData = initData(10);
+        LineData initData = initData(20);
         setupChart(initData, mColors[0]);
-        
         return breathChartView;
     }
     
@@ -76,45 +74,35 @@ public class BreathChart extends Fragment{
         }
         
         tempValue.add(new Entry(val, yValsBreath.size()-1));
-       
         return tempValue;
-        
     }
     
     public void generateNewWave(int val) {
-        // TODO Auto-generated method stub
-        //ArrayList<Entry> newyVals = generateNewyVals(val);
-        
+        // TODO Auto-generated method stub   
         yValsBreath = generateNewyVals(val);
-        
         if (yValsBreath != null) {
             //BreathSet.
             LineDataSet SleepySet = new LineDataSet(yValsBreath, null);
             setupLineDataSet(SleepySet);
             ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-            dataSets.add(SleepySet);
-            
+            dataSets.add(SleepySet);    
             if (xVals.size() > 0) {
                 xVals.clear();
             }  
             for (int i = 0; i < yValsBreath.size(); i++) {
                 xVals.add(i + "");
             }
-            LineData data = new LineData(xVals, dataSets);
-            
-            
+            LineData data = new LineData(xVals, dataSets);    
             setupChart(data, mColors[0]);
-        }
-        
-        
+        }   
     }
     
     private void setupLineDataSet(LineDataSet DataSet) {
         // TODO Auto-generated method stub
         DataSet.setLineWidth(1.75f); // 线宽  
-        DataSet.setCircleSize(3f);// 显示的圆形大小  
+       // DataSet.setCircleSize(3f);// 显示的圆形大小  
         DataSet.setColor(Color.WHITE);// 显示颜色  
-        DataSet.setCircleColor(Color.WHITE);// 圆形的颜色  
+       // DataSet.setCircleColor(Color.WHITE);// 圆形的颜色  
         DataSet.setHighLightColor(Color.WHITE); // 高亮的线的颜色  
         //BreathSet.setFillColor(Color.rgb(205, 205, 205));  
         //DataSet.setFillColor(Color.RED);
@@ -123,7 +111,7 @@ public class BreathChart extends Fragment{
         //DataSet.setDrawCircleHole(true);
         DataSet.setDrawCubic(true);
         
-        DataSet.setDrawCircles(true);
+        DataSet.setDrawCircles(false);
         DataSet.setDrawValues(false);
     }
 
@@ -139,23 +127,16 @@ public class BreathChart extends Fragment{
         if (yValsBreath.size() > 0) {
             yValsBreath.clear();
         }
+        
         for (int i = 0; i < count; i++) {
-            if (i%2 == 0) {
-                yValsBreath.add(new Entry(10, i));
-            } else {
-                yValsBreath.add(new Entry(0, i));
-            }
-           
+            yValsBreath.add(new Entry(0, i));
         }
-       
+
         LineDataSet SleepySet = new LineDataSet(yValsBreath, null);
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(SleepySet);
         LineData data = new LineData(xVals, dataSets);
-        
-        
         return data;
-        // TODO Auto-generated method stub
     }
     
     // 设置显示的样式  

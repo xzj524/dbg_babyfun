@@ -20,6 +20,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ValueFormatter;
 import com.xzj.babyfun.R;
 import com.xzj.babyfun.utility.Utiliy;
 
@@ -32,24 +33,16 @@ public class SleepyChart extends Fragment{
     static int[] mColors = new int[] { Color.rgb(137, 230, 81), Color.rgb(240, 240, 30),//  
             Color.rgb(89, 199, 250), Color.rgb(250, 104, 104) }; // 自定义颜色 
     
-    /*static ArrayList<Entry> yVals1 = new ArrayList<Entry>(); 
-    static ArrayList<Entry> yVals2 = new ArrayList<Entry>(); */
     static ArrayList<Entry> yValsNoSleep = new ArrayList<Entry>();
     static ArrayList<Entry> yValsShadowSleep = new ArrayList<Entry>();
     static ArrayList<Entry> yValsDeepSleep = new ArrayList<Entry>();
     static ArrayList<Entry> yValsSleep = new ArrayList<Entry>();
     
- //   static ArrayList<ArrayList<Entry>> yArrayList = new ArrayList<ArrayList<Entry>>();
-    
     static ArrayList<String> xVals = new ArrayList<String>();
-  //  static ArrayList<Integer> chartType = new ArrayList<Integer>();
-    
     static LineDataSet NoSleepySet = new LineDataSet(yValsNoSleep, "清醒");
     static LineDataSet ShadowSleepySet = new LineDataSet(yValsShadowSleep, "浅睡");
     static LineDataSet DeepSleepySet = new LineDataSet(yValsDeepSleep, "深睡");
     
-   // static LineDataSet SleepySet1 = new LineDataSet(yVals1, "温度");  
-   // static LineDataSet SleepySet2 = new LineDataSet(yVals2, "温度"); 
     static int mDatalength = 0;
     
     SetTextViewListener mListener;
@@ -75,10 +68,38 @@ public class SleepyChart extends Fragment{
         mChart = (LineChart) lineChartView.findViewById(R.id.linechart);
        // mChart.
         initDataSet();
+        initSleepStatus();
+       
         
         return lineChartView;
     }
     
+    private void initSleepStatus() {
+        // TODO Auto-generated method stub
+        if (yValsSleep.size() > 0) {
+            yValsSleep.clear();
+        }
+        for (int i = 0; i < 24; i++) {
+            yValsSleep.add(new Entry((float) (Math.random() * 100), i));
+        }
+        
+        if (xVals.size() > 0) {
+            xVals.clear();
+        }  
+        for (int i = 0; i < 24; i++) {
+            xVals.add(i + "");
+        }
+        
+        LineDataSet SleepySet = new LineDataSet(yValsSleep, null);
+        SleepySet.setDrawCubic(true);
+        SleepySet.setDrawValues(false);
+        
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(SleepySet);
+        LineData data = new LineData(xVals, dataSets);
+        setupChart(data, mColors[0]);
+    }
+
     // 设置显示的样式  
     public static void setupChart(LineData data, int color) {  
         // if enabled, the chart will always start at zero on the y-axis  
@@ -98,13 +119,24 @@ public class SleepyChart extends Fragment{
         leftAxis.setStartAtZero(false);   //设置图表起点从0开始
         leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
         
+        leftAxis.setLabelCount(6);
+        ValueFormatter valueFormatter = new ValueFormatter() {
+            
+            @Override
+            public String getFormattedValue(float arg0) {
+                // TODO Auto-generated method stub
+                return arg0 + "";
+            }
+        };
+        leftAxis.setValueFormatter(valueFormatter);
         
         YAxis rightAxis = mChart.getAxisRight();
-        //rightAxis.setDrawLabels(false);
-        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        rightAxis.setDrawLabels(false);
+        
+/*        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
         rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
         rightAxis.setStartAtZero(false);   //设置图表起点从0开始
-       
+*/       
   
         // no description text  
         mChart.setDescription("");// 数据描述  
@@ -151,7 +183,7 @@ public class SleepyChart extends Fragment{
         l.setTypeface(mTf);// 字体  
        // l.setLabels(strlist);
         // animate calls invalidate()...  
-        mChart.animateX(100); // 立即执行的动画,x轴  
+        mChart.animateX(2000); // 立即执行的动画,x轴  
     }  
   
     // 生成一个数据，  

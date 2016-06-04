@@ -33,9 +33,15 @@ public class BabyBreathActivity extends Activity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                // breathchartFragment.freshChart();
-                preValue = (int) (Math.random() * 100);
-                breathchartFragment.generateNewWave(preValue++);
-                
+                preValue = (int) Math.abs((Math.random() * 100));
+                for (int i = 0; i < 2; i++) {
+                    if (i == 0 ) {
+                        breathchartFragment.generateNewWave(10); 
+                    } else if (i == 1) {
+                        breathchartFragment.generateNewWave(preValue++); 
+                    } 
+                    
+                }
                 
             }
         });
