@@ -18,4 +18,10 @@ public class SyncDeviceRefactor implements SyncDevice{
         return null;
     }
 
+    @Override
+    public DeviceResponse<?> startSendBreathData() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

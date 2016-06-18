@@ -34,7 +34,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.xzj.babyfun.deviceinterface.SyncDeviceImpl.BluetoothReady;
 import com.xzj.babyfun.logging.SLog;
@@ -137,8 +136,10 @@ public class BluetoothService extends Service {
             if (BLE_UUID_NUS_TX_CHARACTERISTIC.equals(characteristic.getUuid())) {
                 if (BluetoothGatt.GATT_SUCCESS == status) {
                     BaseMessageHandler.isWriteSuccess = true;
+                    SLog.e("breathtest", "onCharacteristicWrite isWriteSuccess = true");
                 } else {
                     BaseMessageHandler.isWriteSuccess = false;
+                    SLog.e("breathtest", "onCharacteristicWrite isWriteSuccess = false");
                 }
             }
         };
@@ -165,7 +166,6 @@ public class BluetoothService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        EventBus.getDefault().register(this);
         return mBinder;
     }
 
@@ -359,17 +359,6 @@ public class BluetoothService extends Service {
         return mBluetoothGatt.getServices();
     }
     
-    public void onEvent(Intent intent) {
-        /*Object parcel = intent.getParcelableExtra("bsl2Msg");
-        BaseL2Message bsl2Msg = null;
-        if (parcel != null && (parcel instanceof BaseL2Message)) {
-            bsl2Msg = (BaseL2Message) parcel;
-            Toast.makeText(getApplicationContext(), "bsl2Message", Toast.LENGTH_SHORT).show();
-        }*/
-        
-        String str = intent.getStringExtra("bsl2Msg");
-        Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
-    }
     
     
 }

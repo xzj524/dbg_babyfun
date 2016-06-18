@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import android.R.bool;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Intent;
@@ -41,32 +40,42 @@ public class BaseMessageHandler {
             if (baseData.length >= BASE_DATA_HEAD) {
                 BaseL1Message bsL1Msg = getBaseL1Msg(baseData); // 生成L1数据
                 if (bsL1Msg.ackFlag == 1) { //收到设备的ack信息
+                    SLog.e("breathtest", "receive ACK");
                     if (bsL1Msg.errFlag == 0) {
                         if (isWriteSuccess) {
-                            boolean isSendL2Over = sendL2Msg(false);
+                            SLog.e("breathtest", "isWriteSuccess = true");
+                           // boolean isSendL2Over = sendL2Msg(false);
                         }else {
                             //重写接口
                             
                         }
                     }
                 }else {
+                    if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) { //收到设备发过来的信息，需要返回ACK
+                        int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
+                        SLog.e("breathtest", "ACK crc16 = " + crc16 + " bsL1Msg = " + bsL1Msg.CRC16);
+                        if (bsL1Msg.CRC16 == (short)crc16) {
+                            SLog.e("breathtest", "send ACK");
+                            sendACKBaseL1Msg(baseData);
+                        } else {
+                            SLog.e("breathtest", "not send ACK");
+                        }
+                    }
+                    
                     generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
                     if (isOver) {
                         isOver = false;
                         if (l2OutputStream.size() > 0) {
                             BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
+                            
                             Intent l2intent = new Intent();
                             l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
-                            EventBus.getDefault().post(l2intent);
+                            EventBus.getDefault().post(bsl2Msg);
+                            SLog.e("breathtest", "receive L2 DATA");
                         }            
                     }
                     
-                    if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) { //收到设备发过来的信息，需要返回ACK
-                        int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
-                        if (bsL1Msg.CRC16 == (short)crc16) {
-                            sendACKBaseL1Msg(baseData);
-                        }
-                    }
+                    
                 }
             }
         }  
@@ -200,6 +209,7 @@ public class BaseMessageHandler {
                     isOver =false;
                 } else if (bsL1Msg.errFlag == 2) { // 标识结束位
                     isOver = true;
+                    l2OutputStream.reset();
                     l2OutputStream.write(bsL1Msg.payload);
                 } else {
                     isOver = false;

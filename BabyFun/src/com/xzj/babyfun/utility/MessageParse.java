@@ -8,13 +8,16 @@ import java.util.BitSet;
 import java.util.Calendar;
 import java.util.List;
 
+import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 
 import com.xzj.babyfun.baseheader.BaseL2Message;
 import com.xzj.babyfun.baseheader.KeyPayload;
+import com.xzj.babyfun.breath.BabyBreath;
 import com.xzj.babyfun.constant.Constant;
 import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
+import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.synctime.DeviceTime;
 
 import de.greenrobot.event.EventBus;
@@ -22,11 +25,14 @@ import de.greenrobot.event.EventBus;
 public class MessageParse {
     
     private DataInputStream mDis;
+    int mBreathStartResult;
+    int mBreathCount;
     
     /** single instance. */
     private static volatile MessageParse mInstance;   
     protected MessageParse(Context context) {
         EventBus.getDefault().register(this); 
+        mBreathStartResult = 1;
     }
 
     
@@ -39,8 +45,9 @@ public class MessageParse {
         }
     }
     
-    public void onEvent(Intent intent) {
-        Object parcel = intent.getParcelableExtra(Constant.BASE_L2_MESSAGE);
+    public void onEvent(BaseL2Message bsl2Msg) {
+        SLog.e("breathtest", "handleL2Msg L2 DATA");
+       /* Object parcel = intent.getParcelableExtra(Constant.BASE_L2_MESSAGE);
         BaseL2Message bMsg = null;
         if (parcel != null && (parcel instanceof BaseL2Message)) {
             bMsg = (BaseL2Message) parcel;
@@ -48,13 +55,10 @@ public class MessageParse {
         
         if (bMsg == null) {
             return;
-        }
+        }*/
         
-        handleL2Msg(bMsg);
+        handleL2Msg(bsl2Msg);
         
-        
-        
-        //Toast.makeText(mContext, "123456", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -76,6 +80,10 @@ public class MessageParse {
             case Constant.COMMAND_ID_DATA:
                 
                 break;
+            case Constant.COMMAND_ID_MANUFACTURE_TEST:
+                handleManufature(params);
+                break;
+
 
             default:
                 break;
@@ -83,6 +91,50 @@ public class MessageParse {
         }
                 
       
+    }
+
+
+    private void handleManufature(List<KeyPayload> params) {
+        // TODO Auto-generated method stub
+        for (KeyPayload kpload:params) {
+            if (kpload.key == 2) { // 呼吸测试启动返回
+                SLog.e("breathtest", "START BREATH RETURN");
+                if (kpload.keyLen == 1) {
+                    mBreathStartResult = kpload.keyValue[0] & 0x0f;
+                }
+            } else if (kpload.key == 5) { // 呼吸测试数据
+                SLog.e("breathtest", "START REAL BREATH DATA");
+                ArrayList<BabyBreath> babyBreaths = getBabyBreaths(kpload.keyValue);
+                if (babyBreaths != null) {
+                    updateBreathWave(babyBreaths);
+                }
+            }
+        }
+    }
+
+
+    private void updateBreathWave(ArrayList<BabyBreath> babyBreaths) {
+        // TODO Auto-generated method stub
+        EventBus.getDefault().post(babyBreaths);
+    }
+
+
+    private ArrayList<BabyBreath> getBabyBreaths(byte[] keyValue) {
+        // TODO Auto-generated method stub
+        ArrayList<BabyBreath> babyBreaths = new ArrayList<BabyBreath>();
+        int BreathCount = keyValue[0] & 0xff;
+        if (BreathCount <= 0 || keyValue.length < 4) {
+            return null;
+        }
+        for (int i = 0; i < BreathCount; i++) {
+            BabyBreath breath = new BabyBreath();
+            byte[] tmp = new byte[3];
+            System.arraycopy(keyValue, i+1 + 3*i, tmp, 0, 3);
+            breath.mBreathValue = tmp[2] & 0xff;
+            breath.mBreathTime = (tmp[1] & 0xff) | (((tmp[0] & 0xff) << 8) & 0xff00);
+            babyBreaths.add(breath);
+        }
+        return babyBreaths;
     }
 
 

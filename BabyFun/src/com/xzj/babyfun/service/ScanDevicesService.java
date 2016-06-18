@@ -99,11 +99,6 @@ public class ScanDevicesService extends Service{
         mDeviceList = new ArrayList<BluetoothDevice>();
         devRssiValues = new HashMap<String, Integer>();
         scanLeDevice(true);
-
-       /* ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
-        newDevicesListView.setAdapter(deviceAdapter);
-        newDevicesListView.setOnItemClickListener(mDeviceClickListener);
-        */
     }
 
     private void scanLeDevice(final boolean enable) {

@@ -284,16 +284,12 @@ public class RouterStatusFragment extends Fragment{
         public void onClick(View v) {
             //Toast.makeText(getActivity().getApplicationContext(), "点击链接 currentstate = " + mCurrentState, Toast.LENGTH_SHORT).show();
             //if (mCurrentState == CheckingState.IDEL || mCurrentState == CheckingState.FAIL) {
-                doUpdateStatusClick();
+            /*if (mCurrentState == CheckingState.SUCCEED) {
+                mCurrentState = CheckingState.FAIL;
+                mService.disconnect();
+            }*/
+            doUpdateStatusClick();
             //}
-                
-                Intent l2intet = new Intent();
-                //l2intet.putExtra("bsl2Msg", bsl2Msg);
-                l2intet.putExtra("bsl2Msg", "bsl2Msg");
-                EventBus.getDefault().post(l2intet);
-                Toast.makeText(v.getContext(), "1243", Toast.LENGTH_SHORT).show();
-
-            
         }
     }
 
@@ -325,9 +321,13 @@ public class RouterStatusFragment extends Fragment{
             startConnecting();
           
         } else if (mCurrentState == CheckingState.SUCCEED) {
+           /* Intent closeIntent = new Intent();
+            closeIntent.putExtra("extra_method", "close_bluetooth");
+            mListener.onItemSelected(closeIntent);
+            mCurrentState = CheckingState.IDEL;*/
             mIsConnectingAnimation = false;
            // mCurrentState = CheckingState.IDEL;
-            Toast.makeText(getActivity().getApplicationContext(), "设备已连接", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity().getApplicationContext(), "设备已连接", Toast.LENGTH_SHORT).show();
             mProgressImageView.clearAnimation();
             mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
@@ -342,8 +342,6 @@ public class RouterStatusFragment extends Fragment{
             mConnectingInfoViewGroup.setVisibility(View.INVISIBLE);
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
         }
-        
-
     }
   
     @Override
@@ -366,7 +364,6 @@ public class RouterStatusFragment extends Fragment{
             }
         }
        if (requestCode == 10) {
-       
            Intent intent = new Intent("com.babyfun.scandevices");
            mListener.onItemSelected(intent);
           // mScanDeviceListener.OnScanDeviceSucceed(9);

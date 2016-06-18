@@ -14,5 +14,13 @@ public interface AsyncDevice {
      */
     Future<?> setDeviceTime(final DeviceTime dvtime,  final DeviceTimeListener listener);
 
+    
+    /**
+     * @Description: 启动设备发送呼吸数据
+     * @param dvtime
+     * @param listener
+     * @return
+     */
+    Future<?> startSendBreathData();
 
 }

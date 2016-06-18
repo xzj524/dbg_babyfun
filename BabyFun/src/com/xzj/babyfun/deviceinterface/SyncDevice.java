@@ -11,4 +11,6 @@ public interface SyncDevice {
      */
     DeviceResponse<?> setDeviceTime();
 
+    DeviceResponse<?> startSendBreathData();
+
 }

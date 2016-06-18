@@ -46,6 +46,7 @@ import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
 import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment.OnStatusSelectedListener;
 import com.xzj.babyfun.ui.component.main.RouterStatusFragment;
 import com.xzj.babyfun.ui.component.main.RouterStatusFragment.OnItemSelectedListener;
+import com.xzj.babyfun.utility.MessageParse;
 
 import de.greenrobot.event.EventBus;
 
@@ -99,6 +100,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         startActivity(testIntent);*/
      
         AsyncDeviceFactory.getInstance(getApplicationContext());
+        MessageParse.getInstance(getApplicationContext());
         
         byte p[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
         int crc16 = CRC16.calcCrc16(p);
@@ -107,7 +109,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         //注册EventBus  
        EventBus.getDefault().register(this);
         
-       // initUartService();
+        initUartService();
         initScanService();
         //registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
 
@@ -418,15 +420,29 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         // TODO Auto-generated method stub
         String action = intent.getAction();
         if (action.equals("com.babyfun.scandevices")) {
-            mScanService.startScanList();
-        }else {
-            Log.e(TAG, "onItemSelected " + intent.toURI());
-            String deviceAddress = intent.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
-            mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
+            if (mScanService != null) {
+                mScanService.startScanList();
+            }else {
+                Intent bindIntent = new Intent(this, ScanDevicesService.class);
+                bindService(bindIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
+            }
            
-            Log.e(TAG, "... onActivityResultdevice.address==" + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);
-           // ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName()+ " - connecting");
-            mService.connect(deviceAddress);
+        }else {
+            if (intent.hasExtra("extra_method")) {
+                String extra = intent.getStringExtra("extra_method");
+                if (extra.equals("close_bluetooth")) {
+                    mService.disconnect();
+                }
+            } else {
+                Log.e(TAG, "onItemSelected " + intent.toURI());
+                String deviceAddress = intent.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
+                mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
+               
+                Log.e(TAG, "... onActivityResultdevice.address==" + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);
+               // ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName()+ " - connecting");
+                mService.connect(deviceAddress);
+            }
+           
         } 
     }
 
@@ -504,8 +520,8 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
           sleepValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_SLEEP, 0);
       }*/
         
-        realTimeStatusFragment.setTemperature(tempValue);
-        realTimeStatusFragment.setHumit(humitValue);
+       // realTimeStatusFragment.setTemperature(tempValue);
+       // realTimeStatusFragment.setHumit(humitValue);
         //realTimeStatusFragment.setPM25(sleepValue);    
         
         Bundle bundle = new Bundle();

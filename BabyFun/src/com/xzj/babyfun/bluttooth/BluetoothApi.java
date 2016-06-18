@@ -29,13 +29,13 @@ public class BluetoothApi {
     public BluetoothApi(Context context) {
         // TODO Auto-generated constructor stub
         EventBus.getDefault().register(this);
-        bindBluetoothService(context);
+        /*bindBluetoothService(context);
         mAddress = PrivateParams.getSPString(context, Constant.SHARED_DEVICE_NAME);
         if (!TextUtils.isEmpty(mAddress)) {
             mBluetoothService.connect(mAddress);
         }else {
             
-        }
+        }*/
     }
 
     public static BluetoothApi getInstance(Context context) {

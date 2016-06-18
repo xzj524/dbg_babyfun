@@ -82,4 +82,23 @@ public class SyncDeviceImpl implements SyncDevice{
        return dvtm;
     }
 
+
+
+    @Override
+    public DeviceResponse<?> startSendBreathData() {
+        // TODO Auto-generated method stub
+        SLog.e(TAG, " startSendBreathData ");
+        if (mIsBluetoothReady) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 1;
+            keyPayload.keyLen = 0;
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
 }

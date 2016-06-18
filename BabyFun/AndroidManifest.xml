@@ -43,10 +43,10 @@
         </activity>
 
         <service
-            android:name=".service.UartService"
+            android:name=".service.BluetoothService"
             android:enabled="true" />
         <service
-            android:name=".service.ScanBlueToothService"
+            android:name=".service.ScanDevicesService"
             android:enabled="true" />
 
         <activity

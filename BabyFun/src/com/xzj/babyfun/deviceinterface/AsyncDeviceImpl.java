@@ -48,5 +48,24 @@ public class AsyncDeviceImpl implements AsyncDevice {
         return getDispatcher().dispatch(task);
     }
 
+    @Override
+    public Future<?> startSendBreathData() {
+        // TODO Auto-generated method stub
+        
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.startSendBreathData();
+               /* if (response.error == null) {
+                    listener.onSetDeviceTime((Boolean) response.result);
+                } else {
+                    listener.onError(response.error);
+                }*/
+            }
+        };
+        return getDispatcher().dispatch(task);
+    }
+
 
 }

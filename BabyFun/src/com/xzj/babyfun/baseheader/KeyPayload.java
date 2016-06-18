@@ -17,7 +17,10 @@ public class KeyPayload {
             keyPayload[0] = (byte) (key & 0xff);
             keyPayload[1] = (byte) ((keyLen & 0x100) >> 8); 
             keyPayload[2] = (byte) (keyLen & 0xff); 
-            System.arraycopy(keyValue, 0, keyPayload, 3, keyLen);
+            if (keyLen > 0) {
+               System.arraycopy(keyValue, 0, keyPayload, 3, keyLen);
+            }
+            
         } catch (Exception e) {
             // TODO: handle exception
             SLog.e(TAG, e);

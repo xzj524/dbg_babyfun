@@ -45,7 +45,7 @@ public class BreathChart extends Fragment{
         mBreathChart = (LineChart) breathChartView.findViewById(R.id.breathchart);
         initDataSet();
         initBreathChart();
-        LineData initData = initData(20);
+        LineData initData = initData(50);
         setupChart(initData, mColors[0]);
         return breathChartView;
     }
@@ -180,14 +180,14 @@ public class BreathChart extends Fragment{
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawLabels(true);
         //leftAxis.setAxisLineColor(Color.RED);
-        leftAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        leftAxis.setAxisMaxValue(30); // 设置Y轴最大值
         leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
         leftAxis.setStartAtZero(false);   //设置图表起点从0开始
         leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
         
         //右侧Y轴设置
         YAxis rightAxis = mBreathChart.getAxisRight();
-        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        rightAxis.setAxisMaxValue(30); // 设置Y轴最大值
         rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
         rightAxis.setStartAtZero(false);   //设置图表起点从0开始
        
