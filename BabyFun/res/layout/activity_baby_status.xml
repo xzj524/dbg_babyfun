@@ -1,90 +1,45 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:orientation="vertical"
     tools:context="${relativePackage}.${activityClass}" >
 
    <fragment 
         android:id="@+id/topViewFragment"
-        android:name="com.xzj.babyfun.ui.component.main.BabyStatusTopViewFragment"
+        android:name="com.xzj.babyfun.titlefragment.BabyStatusTopViewFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
-         android:layout_marginTop="20dp"/> 
+         android:layout_marginTop="30dp"/> 
 
-   <ScrollView 
+  <ScrollView 
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
        android:layout_below="@id/topViewFragment">
+       
        <LinearLayout 
            android:id="@+id/babylist"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical">
+	       android:layout_width="match_parent"
+	       android:layout_height="wrap_content"
+	       android:orientation="vertical">
            
-      <fragment 
-        android:id="@+id/babySleepChartFragment"
-        android:name="com.xzj.babyfun.chart.SleepyChart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-      
-      <fragment 
-        android:id="@+id/babySleepPieChartFragment"
-        android:name="com.xzj.babyfun.chart.SleepyPieChart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-           
-      <RelativeLayout
-        android:id="@+id/babyRelativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp" >
-
-   
-
-       <LinearLayout
-            android:id="@+id/connectInfoLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-
-
-            <TextView
-                android:id="@+id/babysleepStatusTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="宝宝睡眠" 
-                android:textSize="64px"
-                android:textColor="@color/white"/>
-            
-             <TextView
-                android:id="@+id/babysleepPointTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:text="0 分" 
-                android:textSize="64px"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-       
-
-    </RelativeLayout>
-    
-   <fragment 
-        android:id="@+id/babyrealtimestatuFragment"
-        android:name="com.xzj.babyfun.ui.component.main.BabyRealTimeStatusFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"/>
-
-
-           
+           <fragment 
+		        android:id="@+id/babySleepPieChartFragment"
+		        android:name="com.xzj.babyfun.chart.SleepyPieChart"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:tag="piechart"/>
+	           
+	          <fragment 
+		        android:id="@+id/babySleepChartFragment"
+		        android:name="com.xzj.babyfun.chart.SleepyChart"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"/>
        </LinearLayout>
+  
+     
    </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

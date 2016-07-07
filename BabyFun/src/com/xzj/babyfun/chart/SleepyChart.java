@@ -11,18 +11,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ValueFormatter;
 import com.xzj.babyfun.R;
+import com.xzj.babyfun.utility.SleepyInfo;
 import com.xzj.babyfun.utility.Utiliy;
+
+import de.greenrobot.event.EventBus;
 
 public class SleepyChart extends Fragment{
     
@@ -30,8 +32,35 @@ public class SleepyChart extends Fragment{
     private static final String TAG = SleepyChart.class.getSimpleName();
     
     static Typeface mTf; // 自定义显示字体  
-    static int[] mColors = new int[] { Color.rgb(137, 230, 81), Color.rgb(240, 240, 30),//  
+    static int[] mColors = new int[] { Color.rgb(4, 158, 255), Color.rgb(240, 240, 30),//  
             Color.rgb(89, 199, 250), Color.rgb(250, 104, 104) }; // 自定义颜色 
+    static int[] mTextColors = new int[] {
+        Color.rgb(9, 79, 55),
+        Color.rgb(13, 89, 116),
+        Color.rgb(16, 51, 116),
+        Color.rgb(14, 39, 90)
+    };
+
+    TextView mTextSober;
+    TextView mTextFallSleep;
+    TextView mTextLightSleep;
+    TextView mTextDeepSleep;
+    
+    TextView mSoberText;
+    TextView mFallSleepText;
+    TextView mLightSleepText;
+    TextView mDeepSleepText;
+    
+    TextView mSoberPercent;
+    TextView mFallSleepPercent;
+    TextView mLightSleepPercent;
+    TextView mDeepSleepPercent;
+    
+    float mSoberCount;
+    float mFallSleepCount;
+    float mLightSleepCount;
+    float mDeepSleepCount;
+    
     
     static ArrayList<Entry> yValsNoSleep = new ArrayList<Entry>();
     static ArrayList<Entry> yValsShadowSleep = new ArrayList<Entry>();
@@ -50,6 +79,8 @@ public class SleepyChart extends Fragment{
     public interface SetTextViewListener{  
         public void SetBabyStatus(String str);  
         public void SetBabyPoint(String str);
+        public void SetPieChart(float sober, float fallsleep,
+                float lightsleep, float deepsleep);
     } 
     
     @Override
@@ -63,36 +94,106 @@ public class SleepyChart extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+     
         
         View lineChartView = inflater.inflate(R.layout.chart_fragment, container, false);
         mChart = (LineChart) lineChartView.findViewById(R.id.linechart);
-       // mChart.
+        mTextSober = (TextView) lineChartView.findViewById(R.id.sleepylist1);
+        mTextFallSleep = (TextView) lineChartView.findViewById(R.id.sleepylist2);
+        mTextLightSleep = (TextView) lineChartView.findViewById(R.id.sleepylist3);
+        mTextDeepSleep = (TextView) lineChartView.findViewById(R.id.sleepylist4);
+        
+        mSoberText = (TextView) lineChartView.findViewById(R.id.sobertext);
+        mFallSleepText = (TextView) lineChartView.findViewById(R.id.fallsleeptext);
+        mLightSleepText = (TextView) lineChartView.findViewById(R.id.lightsleeptext);
+        mDeepSleepText = (TextView) lineChartView.findViewById(R.id.deepsleeptext);
+        
+        mSoberPercent = (TextView) lineChartView.findViewById(R.id.soberpercent);
+        mFallSleepPercent = (TextView) lineChartView.findViewById(R.id.fallsleeppercent);
+        mLightSleepPercent = (TextView) lineChartView.findViewById(R.id.lightsleeppercent);
+        mDeepSleepPercent = (TextView) lineChartView.findViewById(R.id.deepsleeppercent);
+        
+        initColors();
         initDataSet();
         initSleepStatus();
-       
         
+        for (int i = 0; i < 48; i++) {
+            float slpvalue = yValsSleep.get(i).getVal();
+            
+            if (slpvalue < 25) {
+                mDeepSleepCount++;
+            } else if (slpvalue >= 25 && slpvalue < 50) {
+                mLightSleepCount++;
+            } else if (slpvalue >= 50 && slpvalue < 75) {
+                mFallSleepCount++;
+            } else if (slpvalue >= 75 && slpvalue < 100) {
+                mSoberCount++;
+            }
+        }
+        
+        setSleepyPercent(mSoberCount, mFallSleepCount, mLightSleepCount, mDeepSleepCount);
+        
+        
+      //  EventBus.getDefault().register(this);
         return lineChartView;
     }
     
+    public void onEvent() {
+        
+    }
+    
+    private void initColors() {
+        mTextSober.setTextColor(mTextColors[0]);
+        mTextFallSleep.setTextColor(mTextColors[1]);
+        mTextLightSleep.setTextColor(mTextColors[2]);
+        mTextDeepSleep.setTextColor(mTextColors[3]);
+        
+        mSoberText.setTextColor(mTextColors[0]);
+        mFallSleepText.setTextColor(mTextColors[1]);
+        mLightSleepText.setTextColor(mTextColors[2]);
+        mDeepSleepText.setTextColor(mTextColors[3]);
+    }
+    
+    private void setSleepyPercent(float sober, float fallsleep, float lighsleep, float deepsleep){
+        mSoberPercent.setText(Math.round((sober/48) * 100) + "%");
+        mFallSleepPercent.setText(Math.round((fallsleep/48) * 100) + "%");
+        mLightSleepPercent.setText(Math.round((lighsleep/48) * 100) + "%");
+        mDeepSleepPercent.setText(Math.round((deepsleep/48) * 100) + "%");
+        
+        mListener.SetPieChart(Math.round((sober/48) * 100), 
+                Math.round((fallsleep/48) * 100),
+                Math.round((lighsleep/48) * 100),
+                Math.round((deepsleep/48) * 100));
+        
+        SleepyInfo slpInfo = new SleepyInfo(Math.round((sober/48) * 100), 
+                Math.round((fallsleep/48) * 100),
+                Math.round((lighsleep/48) * 100),
+                Math.round((deepsleep/48) * 100));
+        
+      //  EventBus.getDefault().post(slpInfo);
+        
+    }
+
     private void initSleepStatus() {
-        // TODO Auto-generated method stub
         if (yValsSleep.size() > 0) {
             yValsSleep.clear();
         }
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 48; i++) {
             yValsSleep.add(new Entry((float) (Math.random() * 100), i));
         }
+        
         
         if (xVals.size() > 0) {
             xVals.clear();
         }  
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 48; i++) {
             xVals.add(i + "");
         }
         
         LineDataSet SleepySet = new LineDataSet(yValsSleep, null);
         SleepySet.setDrawCubic(true);
         SleepySet.setDrawValues(false);
+        SleepySet.setDrawCircles(false);
         
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(SleepySet);
@@ -106,58 +207,38 @@ public class SleepyChart extends Fragment{
    
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawAxisLine(false);
-        xAxis.setEnabled(false);
+        xAxis.setDrawLabels(false);
+        xAxis.setSpaceBetweenLabels(6);
         
         
         YAxis leftAxis = mChart.getAxisLeft();  //得到图表的左侧Y轴实例
         leftAxis.setDrawAxisLine(true);
-        leftAxis.setDrawLabels(true);
-        //leftAxis.setAxisLineColor(Color.RED);
+        leftAxis.setDrawLabels(false);
         leftAxis.setAxisMaxValue(100); // 设置Y轴最大值
         leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
-        leftAxis.setStartAtZero(false);   //设置图表起点从0开始
-        leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
+        leftAxis.setStartAtZero(true);   //设置图表起点从0开始
         
-        leftAxis.setLabelCount(6);
-        ValueFormatter valueFormatter = new ValueFormatter() {
-            
-            @Override
-            public String getFormattedValue(float arg0) {
-                // TODO Auto-generated method stub
-                return arg0 + "";
-            }
-        };
-        leftAxis.setValueFormatter(valueFormatter);
-        
-        YAxis rightAxis = mChart.getAxisRight();
+        YAxis rightAxis = mChart.getAxisRight();  //得到图表的右侧Y轴实例
+        rightAxis.setDrawAxisLine(true);
         rightAxis.setDrawLabels(false);
-        
-/*        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
         rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
-        rightAxis.setStartAtZero(false);   //设置图表起点从0开始
-*/       
+        rightAxis.setStartAtZero(true);   //设置图表起点从0开始
+   
   
         // no description text  
         mChart.setDescription("");// 数据描述  
-        // 如果没有数据的时候，会显示这个，类似listview的emtpyview  
-        mChart.setNoDataTextDescription("You need to provide data for the chart.");  
-   
-        
-  
-        // enable / disable grid lines  
        
-        // mChart.setDrawHorizontalGrid(false);  
-        //  
+     
         // enable / disable grid background  
         mChart.setDrawGridBackground(false); // 是否显示表格颜色  
        
         // enable touch gestures  
-        mChart.setTouchEnabled(true); // 设置是否可以触摸  
+        mChart.setTouchEnabled(false); // 设置是否可以触摸  
   
         // enable scaling and dragging  
-        mChart.setDragEnabled(true);// 是否可以拖拽  
-        mChart.setScaleEnabled(true);// 是否可以缩放  
+        mChart.setDragEnabled(false);// 是否可以拖拽  
+        mChart.setScaleEnabled(false);// 是否可以缩放  
   
         // if disabled, scaling can be done on x- and y-axis separately  
         mChart.setPinchZoom(false);//   
@@ -169,19 +250,7 @@ public class SleepyChart extends Fragment{
     
         // get the legend (only possible after setting data)  
         Legend l = mChart.getLegend(); // 设置标示，就是那个一组y的value的  
-        
-       // ArrayList<String> strlist = new ArrayList<String>();
-        
-       // strlist.add("hh");
-       // strlist.add("ee");
-  
-        // modify the legend ...  
-       // l.setPosition(LegendPosition.LEFT_OF_CHART);  
-        l.setForm(LegendForm.SQUARE);// 样式  
-        l.setFormSize(6f);// 字体  
-        l.setTextColor(Color.WHITE);// 颜色  
-        l.setTypeface(mTf);// 字体  
-       // l.setLabels(strlist);
+        l.setEnabled(false);
         // animate calls invalidate()...  
         mChart.animateX(2000); // 立即执行的动画,x轴  
     }  
@@ -198,14 +267,10 @@ public class SleepyChart extends Fragment{
             Utiliy.mSleepList.add(0);
         }
         mDatalength = Utiliy.mSleepList.size();
-            /*mDatalength++;
-            yValsSleep.add(new Entry(sleepValue, mDatalength));
-            xVals.add(mDatalength + "");*/
             if (yValsSleep.size() > 0) {
                 yValsSleep.clear();
             }
             for (int i = 0; i < mDatalength; i++) {
-                //int sleepvalue = Utiliy.mSleepList.get(i);
                 int sleepValue = Math.abs(Utiliy.mSleepList.get(i) - 50);
                 yValsSleep.add(new Entry(Math.abs(sleepValue * 2 - 100), i));
             }
@@ -217,24 +282,14 @@ public class SleepyChart extends Fragment{
             }
             
             LineDataSet SleepySet = new LineDataSet(yValsSleep, null);
-            //SleepySet.setLineWidth(1.75f); // 线宽  
-            //SleepySet.setCircleSize(3f);// 显示的圆形大小  
-            //SleepySet.setColor(Color.WHITE);// 显示颜色  
-            //SleepySet.setCircleColor(Color.WHITE);// 圆形的颜色  
-            //SleepySet.setHighLightColor(Color.WHITE); // 高亮的线的颜色  
-            //NoSleepySet.setFillColor(Color.rgb(205, 205, 205));  
-            
-            //SleepySet.setFillAlpha(255);
-           // SleepySet.setDrawFilled(true);
             SleepySet.setDrawCubic(true);
             SleepySet.setDrawValues(false);
+            SleepySet.setDrawCircles(false);
             
             ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
             dataSets.add(SleepySet);
             LineData data = new LineData(xVals, dataSets);
-            
-      
-             
+
             return data;  
      
     }
@@ -270,6 +325,7 @@ public class SleepyChart extends Fragment{
         dataSet.setDrawFilled(true);
         dataSet.setDrawCubic(true);
         dataSet.setDrawValues(false);
+        dataSet.setDrawCircles(false);
         
         return dataSet;
     }

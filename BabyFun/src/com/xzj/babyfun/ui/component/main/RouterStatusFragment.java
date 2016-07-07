@@ -114,7 +114,6 @@ public class RouterStatusFragment extends Fragment{
         super.onAttach(activity);
         try{  
             mListener =(OnItemSelectedListener)activity;  
-           // mScanDeviceListener = (OnScanDeviceListener)activity;
         }catch(ClassCastException e){  
             throw new ClassCastException(activity.toString()+"must implement OnArticleSelectedListener");  
         }  
@@ -141,11 +140,11 @@ public class RouterStatusFragment extends Fragment{
         mProgressImageView.setOnClickListener(new UpdateStatusOnclickListener());
 
         mConnectingInfoViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectInfoLayout);
-        mCheckingItemImageView = (ImageView) babyfunStatusView.findViewById(R.id.checkingItemImageView);
+        //mCheckingItemImageView = (ImageView) babyfunStatusView.findViewById(R.id.checkingItemImageView);
 
         mConnectedSucceedViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectedSucceedLayout);
-        mConnectedStatusIndicatorImageView = (ImageView) babyfunStatusView
-                .findViewById(R.id.connectedStatusIndicatorImageView);
+        //mConnectedStatusIndicatorImageView = (ImageView) babyfunStatusView
+        //        .findViewById(R.id.connectedStatusIndicatorImageView);
 
         mConnectedStatusTextView = (TextView) babyfunStatusView.findViewById(R.id.connectedStatusTextView);
 
@@ -193,32 +192,6 @@ public class RouterStatusFragment extends Fragment{
         }
     };
     
-  
-
-    /**
-     * 设置路由名称
-     * 
-     * @param name
-     *            路由名称
-     */
-    public void setRouterName(String name) {
-        mRouterNameTextView.setText(name);
-    }
-
-
-    /**
-     * 设置远程还是直连
-     * 
-     * @param isLocal
-     *            是否是直连
-     */
-    public void setRemoteOrLocal(boolean isLocal) {
-        if (isLocal) {
-            mRemoteOrLocalTextView.setText(R.string.local);
-        } else {
-            mRemoteOrLocalTextView.setText(R.string.remote);
-        }
-    }
 
     /**
      * 开始检查连接
@@ -227,20 +200,13 @@ public class RouterStatusFragment extends Fragment{
 
         if (!mIsConnectingAnimation) {
             mIsConnectingAnimation = true;
-
-        //    mProgressImageView.setImageResource(R.drawable.main_checking_status_progress);
             mProgressImageView.setImageResource(R.drawable.lightline);
-
             Animation progressAnimation = AnimationUtils.loadAnimation(getActivity(),
                     R.anim.connecting_router_rotate_animation);
-
             mProgressImageView.startAnimation(progressAnimation);
-
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
-
             mConnectingInfoViewGroup.setVisibility(View.VISIBLE);
-
         }
     }
 
@@ -304,8 +270,7 @@ public class RouterStatusFragment extends Fragment{
             Log.e(TAG, "mCurrentState = IDEL 2");
             
             Intent enabler=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enabler,10);//鍚宻tartActivity(enabler);  鍚姩钃濈墮
-            //mRouterAdapter.startCheckingStatus();
+            startActivityForResult(enabler,10);
            
        
         } else if (mCurrentState == CheckingState.CHECKING) {

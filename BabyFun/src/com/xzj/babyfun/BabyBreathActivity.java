@@ -11,21 +11,26 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.xzj.babyfun.breath.BabyBreath;
 import com.xzj.babyfun.chart.BreathChart;
-import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.logging.SLog;
 
 import de.greenrobot.event.EventBus;
 
 public class BabyBreathActivity extends Activity {
+    private static final String TAG = BabyBreathActivity.class.getSimpleName();
     
     private Button mFreshButton;
     private Button mStartButton;
     private FragmentManager mFragmentMan;
     private BreathChart breathchartFragment;
+    private TextView mBreatData;
     int mPreValue = 10;
+    long mLastBreathTime;
+    long mBreathPeriod;
+    int mBreathFreq;
     Timer timer;
 
     @Override
@@ -39,10 +44,20 @@ public class BabyBreathActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-               // breathchartFragment.freshChart();
-               //  mPreValue = (int) Math.abs((Math.random() * 100));
+                //breathchartFragment.freshChart();
+                mPreValue = (int) Math.abs((Math.random() * 30));
+                
+                long curtime = System.currentTimeMillis();
+                if (mLastBreathTime == 0) {
+                    mLastBreathTime = curtime;
+                } else {
+                    mBreathPeriod = curtime - mLastBreathTime;
+                    mLastBreathTime = curtime;
+                }
+                
+                SLog.e(TAG, "mLastBreathTime = " + mLastBreathTime);
                 //updateBreathWave(mPreValue);
-                AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+               // AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
             }
         });
         
@@ -57,10 +72,17 @@ public class BabyBreathActivity extends Activity {
         });
         
         mFragmentMan = getFragmentManager();
-        breathchartFragment = (BreathChart) mFragmentMan.findFragmentById(R.id.babybreathChartFragment);
-       
+        breathchartFragment = (BreathChart) mFragmentMan.findFragmentById(R.id.babybreathChartFragment);     
         timer = new Timer(true);
-       
+        
+        mBreatData = (TextView)findViewById(R.id.breathfrequencedata);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        timer.cancel();
+        super.onDestroy();
     }
     
     private void updateBreathWave(int preValue) {
@@ -71,15 +93,18 @@ public class BabyBreathActivity extends Activity {
             } else if (i == 1) {
                 breathchartFragment.generateNewWave(preValue); 
             } 
-            
         }
     }
     
-    final Handler handler = new Handler(){  
+    final Handler mHandler = new Handler(){  
             public void handleMessage(Message msg) {  
                  switch (msg.what) {      
                      case 1:      
-                     updateBreathWave(msg.arg1);
+                         updateBreathWave(msg.arg1);
+                         if (mBreathPeriod > 0) {
+                             mBreathFreq = (int)((60 * 1000) / mBreathPeriod); 
+                             mBreatData.setText(mBreathFreq + "");
+                         }
                          break;      
                      }      
                      super.handleMessage(msg);  
@@ -93,12 +118,19 @@ public class BabyBreathActivity extends Activity {
            message.what = 1; 
            message.arg1 = mPreValue;
            mPreValue = 5;
-           handler.sendMessage(message);    
+           mHandler.sendMessage(message);    
          }  
       };  
     
     public void onEvent(final ArrayList<BabyBreath> breaths) { 
         SLog.e("breathtest", "BabyBreathActivity receive REAL BREATH DATA");
+        long curtime = System.currentTimeMillis();
+        if (mLastBreathTime == 0) {
+            mLastBreathTime = curtime;
+        } else {
+            mBreathPeriod = curtime - mLastBreathTime;
+            mLastBreathTime = curtime;
+        }
         if (breaths.size() == 1) {
             mPreValue = breaths.get(0).mBreathValue;
             SLog.e("breathtest", "BabyBreathActivity receive REAL BREATH DATA " + mPreValue);
@@ -114,19 +146,7 @@ public class BabyBreathActivity extends Activity {
                     mPreValue = breaths.get(1).mBreathValue;
                 }
             }, timelen * 1000);
-  
         }
-       /* for (BabyBreath breath:breaths) {
-            mPreValue = breath.mBreathValue;
-            for (int i = 0; i < 2; i++) {
-                if (i == 0 ) {
-                    breathchartFragment.generateNewWave(10); 
-                } else if (i == 1) {
-                    breathchartFragment.generateNewWave(mPreValue); 
-                } 
-                
-            }
-        }*/
     }
     
 }

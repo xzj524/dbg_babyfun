@@ -26,7 +26,7 @@
             android:layout_centerInParent="true"
             android:src="@drawable/lightline2" />
 
-        <LinearLayout
+       <LinearLayout
             android:id="@+id/connectInfoLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,19 +34,13 @@
             android:orientation="vertical" 
            >
 
-            <ImageView
-                android:id="@+id/checkingItemImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/main_checking_connect_router" />
 
             <TextView
                 android:id="@+id/checkingNetworkTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/checking_network" />
+                android:text="@string/start_breath" />
         </LinearLayout>
         
         <LinearLayout
@@ -55,14 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical"
-              android:visibility="gone">
+            android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/connectedStatusIndicatorImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/connect_router_success_indicator" />
 
              <TextView
                 android:id="@+id/connectedStatusTextView"
@@ -77,20 +65,14 @@
 
         </LinearLayout>
         
-         <LinearLayout
+        <LinearLayout
             android:id="@+id/connectedFailedLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical"
-              android:visibility="gone">
+            android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/connectedFailedIndicatorImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/connect_router_fail_indicator" />
 
              <TextView
                 android:id="@+id/connectedFailedTextView"

@@ -31,17 +31,15 @@ import com.github.mikephil.charting.data.Entry;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.xzj.babyfun.chart.BarChartFragment;
 import com.xzj.babyfun.chart.SleepyChart;
-import com.xzj.babyfun.crc.CRC16;
 import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.eventbus.AsycEvent;
-import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataInteraction;
 import com.xzj.babyfun.service.BluetoothService;
 import com.xzj.babyfun.service.ScanDevicesService;
 import com.xzj.babyfun.service.ScanDevicesService.OnScanDeviceListener;
+import com.xzj.babyfun.titlefragment.HomePageTopTitleFragment.OnButtonClickedListener;
 import com.xzj.babyfun.ui.component.main.BabyStatusIndicateFragment;
-import com.xzj.babyfun.ui.component.main.HomePageTopTitleFragment.OnButtonClickedListener;
 import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
 import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment.OnStatusSelectedListener;
 import com.xzj.babyfun.ui.component.main.RouterStatusFragment;
@@ -95,19 +93,12 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
-        
-     /*   Intent testIntent = new Intent(getApplicationContext(), TestActivity.class);
-        startActivity(testIntent);*/
      
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
         
-        byte p[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
-        int crc16 = CRC16.calcCrc16(p);
-        SLog.e(TAG, "crc16 = " + crc16);
-        
         //注册EventBus  
-       EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
         
         initUartService();
         initScanService();
@@ -294,6 +285,11 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                     } else if (touchid == 10) {
                         routerfragment.setCurrentStateFailed();
                         routerfragment.doUpdateStatusClick();
+                        
+                        Intent intent = new Intent(getApplicationContext(), BabyBreathActivity.class);
+                        startActivity(intent); 
+                         
+                         overridePendingTransition(R.anim.main_special_activity_open_enter, R.anim.main_special_activity_open_exit);
                     }
                 }
             });

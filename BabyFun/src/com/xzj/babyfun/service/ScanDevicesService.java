@@ -30,7 +30,7 @@ public class ScanDevicesService extends Service{
     private boolean mScanning;
     List<BluetoothDevice> mDeviceList;
     Map<String, Integer> devRssiValues;
-    private static final long SCAN_PERIOD = 5 * 1000; //10 seconds
+    private static final long SCAN_PERIOD = 2 * 1000; //10 seconds
 
    // private DeviceAdapter deviceAdapter;
     

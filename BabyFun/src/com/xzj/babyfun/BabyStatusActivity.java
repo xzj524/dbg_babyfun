@@ -9,17 +9,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
 import com.xzj.babyfun.chart.BarChartFragment;
 import com.xzj.babyfun.chart.SleepyChart;
 import com.xzj.babyfun.chart.SleepyChart.SetTextViewListener;
+import com.xzj.babyfun.chart.SleepyPieChart;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataStatusInteraction;
 import com.xzj.babyfun.service.BluetoothService;
@@ -31,6 +29,7 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
     BabyRealTimeStatusFragment realTimeStatusFragment;
     BarChartFragment babyChartFragment;
     SleepyChart sleepyChartFragment;
+    SleepyPieChart sleepyPieChartFragmentChart;
     int tempValue = 0;
     int humitValue = 0;
     int sleepValue = 0;
@@ -46,6 +45,7 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
     int count = 0;
     AlphaAnimation appearAnimation;
     AlphaAnimation disappearAnimation;
+    FragmentManager mFragmentMan;
     
     ArrayList<Integer> mSleepValues = new ArrayList<Integer>();
     
@@ -60,37 +60,24 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         BabyStatusReceiver babyStatusReceiver = new BabyStatusReceiver();
         babyStatusReceiver.setDataStatusInteractionListener(this);
         
-        mBabyPoint = (TextView) findViewById(R.id.babysleepPointTextView);
-        mBabyStatus = (TextView) findViewById(R.id.babysleepStatusTextView);
+ 
         
-        FragmentManager mFragmentMan = getFragmentManager();
-       // routerfragment = (RouterStatusFragment) mFragmentMan.findFragmentById(R.id.routerStatusFragment);
-      //  chartFragment = (ChartFragment) mFragmentMan.findFragmentById(R.id.lineChartFragment);
-        //barChartFragment = (BarChartFragment)mFragmentMan.findFragmentById(R.id.barChartFragment);
-        realTimeStatusFragment = (BabyRealTimeStatusFragment) mFragmentMan.findFragmentById(R.id.babyrealtimestatuFragment);
+        mFragmentMan = getFragmentManager();
         sleepyChartFragment = (SleepyChart) mFragmentMan.findFragmentById(R.id.babySleepChartFragment);
-        //sleepyChartFragment = (SleepyChart) mFragmentMan.findFragmentById(R.id.sleepychart);
-      //  BarData data = babyChartFragment.getData(10);
         
-      //  babyChartFragment.setupChart(data, mColors[4]);
+        sleepyPieChartFragmentChart
+            = (SleepyPieChart) mFragmentMan.findFragmentById(R.id.babySleepPieChartFragment);
+        
+        
         if (Utiliy.mSleepList.size() == 0) {
             Utiliy.mSleepList.add(0); 
         }
-        
-  /*      LineData data = sleepyChartFragment.getData(0);
-        if (data != null) {
-            sleepyChartFragment.setupChart(data, mColors[4]);
-        }
-        */
-        
+
         appearAnimation = new AlphaAnimation(0, 1);  
         appearAnimation.setDuration(1000);  
   
         disappearAnimation = new AlphaAnimation(1, 0);  
         disappearAnimation.setDuration(1000); 
-        
-
-    
     }
     
     @Override
@@ -204,6 +191,22 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         // TODO Auto-generated method stub
         mBabyPoint.setText(str);
         
+    }
+
+    @Override
+    public void SetPieChart(float sober, float fallsleep, float lightsleep, float deepsleep) {
+        // TODO Auto-generated method stub
+        mFragmentMan = getFragmentManager();
+        if (mFragmentMan != null) {
+            sleepyPieChartFragmentChart
+            = (SleepyPieChart) mFragmentMan.findFragmentByTag("piechart");
+        
+            sleepyChartFragment 
+            = (SleepyChart) mFragmentMan.findFragmentById(R.id.babySleepChartFragment);
+        }
+       
+       
+        sleepyPieChartFragmentChart.setPieChart(sober, fallsleep, lightsleep, deepsleep);
     }
    
 }

@@ -6,28 +6,79 @@
     tools:context="${relativePackage}.${activityClass}" >
 
     
-   <fragment 
+     <fragment 
         android:id="@+id/breathtopViewFragment"
-        android:name="com.xzj.babyfun.ui.component.main.BabyStatusTopViewFragment"
+        android:name="com.xzj.babyfun.titlefragment.BabyBreathTopViewFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
-         android:layout_marginTop="20dp"/> 
+        android:layout_marginTop="20dp"/> 
+        
+     <TextView 
+         android:id="@+id/breathtitle"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textColor="@color/white"
+         android:text="宝宝呼吸实时曲线"
+         android:gravity="center_horizontal"
+         android:layout_below="@id/breathtopViewFragment"
+         android:layout_marginTop="20dp"/>
          
    
      <fragment 
         android:id="@+id/babybreathChartFragment"
         android:name="com.xzj.babyfun.chart.BreathChart"
-        android:layout_below="@id/breathtopViewFragment"
+        android:layout_below="@id/breathtitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"/>
      
+     <RelativeLayout 
+         android:id="@+id/breathfreq"
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal"
+         android:gravity="center_horizontal"
+         android:layout_marginTop="20dp"
+         android:layout_below="@id/babybreathChartFragment">
+         
+           <TextView 
+	         android:id="@+id/breathfrequence"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="实时呼吸频率："
+	         android:gravity="center_horizontal"
+	         />
+           
+            <TextView 
+	         android:id="@+id/breathfrequencedata"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="80"
+	         android:textSize="64px"
+	         android:layout_toRightOf="@id/breathfrequence"
+	         android:gravity="center_horizontal"/>
+            
+           <TextView 
+	         android:id="@+id/breathfrequenceunit"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="  BPM"
+	         android:layout_toRightOf="@id/breathfrequencedata"
+	         android:gravity="center_horizontal"/>
+         
+     </RelativeLayout>
+     
+     
+      
      
      <Button 
          android:id="@+id/breathbtn"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:layout_below="@id/babybreathChartFragment"
+         android:layout_below="@id/breathfreq"
          android:layout_marginTop="20dp"
          android:text="更新"/>
      

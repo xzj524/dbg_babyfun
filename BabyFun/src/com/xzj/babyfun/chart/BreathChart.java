@@ -28,7 +28,7 @@ public class BreathChart extends Fragment{
     
     static Typeface mTf; // 自定义显示字体  
     static int[] mColors = new int[] { Color.rgb(137, 230, 81), Color.rgb(240, 240, 30),//  
-            Color.rgb(89, 199, 250), Color.rgb(250, 104, 104) }; // 自定义颜色 
+            Color.rgb(89, 199, 250), Color.rgb(250, 104, 104), Color.rgb(4, 158, 255) }; // 自定义颜色 
     
     static ArrayList<Entry> yValsBreath = new ArrayList<Entry>();
     static ArrayList<String> xValsBreathTime = new ArrayList<String>();
@@ -43,7 +43,6 @@ public class BreathChart extends Fragment{
         // TODO Auto-generated method stub
         View breathChartView = inflater.inflate(R.layout.breath_chart, container, false);
         mBreathChart = (LineChart) breathChartView.findViewById(R.id.breathchart);
-        initDataSet();
         initBreathChart();
         LineData initData = initData(50);
         setupChart(initData, mColors[0]);
@@ -100,17 +99,9 @@ public class BreathChart extends Fragment{
     private void setupLineDataSet(LineDataSet DataSet) {
         // TODO Auto-generated method stub
         DataSet.setLineWidth(1.75f); // 线宽  
-       // DataSet.setCircleSize(3f);// 显示的圆形大小  
         DataSet.setColor(Color.WHITE);// 显示颜色  
-       // DataSet.setCircleColor(Color.WHITE);// 圆形的颜色  
         DataSet.setHighLightColor(Color.WHITE); // 高亮的线的颜色  
-        //BreathSet.setFillColor(Color.rgb(205, 205, 205));  
-        //DataSet.setFillColor(Color.RED);
-        //DataSet.setFillAlpha(255);
-        //DataSet.setDrawFilled(true);
-        //DataSet.setDrawCircleHole(true);
         DataSet.setDrawCubic(true);
-        
         DataSet.setDrawCircles(false);
         DataSet.setDrawValues(false);
     }
@@ -133,6 +124,7 @@ public class BreathChart extends Fragment{
         }
 
         LineDataSet SleepySet = new LineDataSet(yValsBreath, null);
+        setupLineDataSet(SleepySet);
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(SleepySet);
         LineData data = new LineData(xVals, dataSets);
@@ -146,27 +138,7 @@ public class BreathChart extends Fragment{
         // add data  
         mBreathChart.setData(data); // 设置数据  
     }  
-    
-    
-    
-    private void initDataSet(){
-        BreathSet.setLineWidth(1.75f); // 线宽  
-        BreathSet.setCircleSize(3f);// 显示的圆形大小  
-        BreathSet.setColor(Color.WHITE);// 显示颜色  
-        BreathSet.setCircleColor(Color.WHITE);// 圆形的颜色  
-        BreathSet.setHighLightColor(Color.WHITE); // 高亮的线的颜色  
-        //BreathSet.setFillColor(Color.rgb(205, 205, 205));  
-        BreathSet.setFillColor(Color.RED);
-        BreathSet.setFillAlpha(255);
-        BreathSet.setDrawFilled(true);
-        //BreathSet.setDrawCircleHole(true);
-        //BreathSet.setDrawCubic(true);
-        
-        BreathSet.setDrawCircles(true);
-        BreathSet.setDrawValues(false);
 
-    }
-    
     private void initBreathChart() {
         
         //X轴设置
@@ -174,22 +146,27 @@ public class BreathChart extends Fragment{
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawAxisLine(false);
         xAxis.setEnabled(false);
+        xAxis.setGridColor(Color.WHITE);
+        
+        
         
         //左侧Y轴设置
         YAxis leftAxis = mBreathChart.getAxisLeft();  //得到图表的左侧Y轴实例
         leftAxis.setDrawAxisLine(true);
-        leftAxis.setDrawLabels(true);
         //leftAxis.setAxisLineColor(Color.RED);
         leftAxis.setAxisMaxValue(30); // 设置Y轴最大值
         leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
         leftAxis.setStartAtZero(false);   //设置图表起点从0开始
-        leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
+//        leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
+        leftAxis.setDrawLabels(false);
+        leftAxis.setGridColor(Color.WHITE);
         
         //右侧Y轴设置
         YAxis rightAxis = mBreathChart.getAxisRight();
         rightAxis.setAxisMaxValue(30); // 设置Y轴最大值
         rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
         rightAxis.setStartAtZero(false);   //设置图表起点从0开始
+        rightAxis.setDrawLabels(false);
        
   
         // no description text  
@@ -197,19 +174,26 @@ public class BreathChart extends Fragment{
         // 如果没有数据的时候，会显示这个，类似listview的emtpyview  
         //mBreathChart.setNoDataTextDescription("You need to provide data for the chart.");   
         // enable / disable grid background  
-        mBreathChart.setDrawGridBackground(false); // 是否显示表格颜色  
+
+        mBreathChart.setDrawGridBackground(false); // 是否显示表格颜色 
+        mBreathChart.setGridBackgroundColor(mColors[2]);
+        
+        mBreathChart.setDrawBorders(false);
+    //    mBreathChart.setBorderPositions(new BorderPosition[] { BorderPosition.BOTTOM, BorderPosition.LEFT });// 设置图标边框
+        mBreathChart.setBorderColor(Color.WHITE);
+        mBreathChart.setBorderWidth(2);
        
         // enable touch gestures  
-        mBreathChart.setTouchEnabled(true); // 设置是否可以触摸  
+        mBreathChart.setTouchEnabled(false); // 设置是否可以触摸  
   
         // enable scaling and dragging  
-        mBreathChart.setDragEnabled(true);// 是否可以拖拽  
-        mBreathChart.setScaleEnabled(true);// 是否可以缩放  
+        mBreathChart.setDragEnabled(false);// 是否可以拖拽  
+        mBreathChart.setScaleEnabled(false);// 是否可以缩放  
   
         // if disabled, scaling can be done on x- and y-axis separately  
         mBreathChart.setPinchZoom(false);    
         
-        mBreathChart.setBackgroundColor(mColors[3]);// 设置背景  
+        mBreathChart.setBackgroundColor(mColors[4]);// 设置背景  
         
         // get the legend (only possible after setting data)  
         Legend breathLegend = mBreathChart.getLegend(); // 设置标示，就是那个一组y的value的  

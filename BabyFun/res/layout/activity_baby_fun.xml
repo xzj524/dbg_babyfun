@@ -17,7 +17,7 @@
         
      <fragment 
         android:id="@+id/topViewFragment"
-        android:name="com.xzj.babyfun.ui.component.main.HomePageTopTitleFragment"
+        android:name="com.xzj.babyfun.titlefragment.HomePageTopTitleFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
          android:layout_marginTop="20dp"/> 
@@ -58,12 +58,7 @@
         android:alpha="50"
         android:background="@drawable/line" />
     
-      <fragment
-        android:id="@+id/babyBreathIndicateFragment"
-        android:name="com.xzj.babyfun.ui.component.main.BabyBreathIndicateFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_marginTop="10dp"/>
+      
     </LinearLayout>
 
 </RelativeLayout>

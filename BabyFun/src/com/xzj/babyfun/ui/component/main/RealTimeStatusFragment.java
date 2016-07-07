@@ -25,9 +25,6 @@ public class RealTimeStatusFragment extends Fragment{
 
     /** 湿度 view */
     private LinearLayout mHumidityView;
-   
-    /** 睡眠 view */
-    private LinearLayout mSleepView;
     
     private TextView mTemperatureTextView;
     private TextView mHumitTextView;
@@ -61,18 +58,7 @@ public class RealTimeStatusFragment extends Fragment{
       
       mTemperatureTextView = (TextView) realtimeStatusView.findViewById(R.id.temperaturevalues);
       mHumitTextView = (TextView) realtimeStatusView.findViewById(R.id.humidityvalues);
-      mPM25TextView = (TextView) realtimeStatusView.findViewById(R.id.sleepyvalues);
       
-      
-      mSleepView = (LinearLayout) realtimeStatusView.findViewById(R.id.environment3);
-    /*  mSleepView.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            mListener.onStatusSelected(2);
-        }
-    });*/
       return realtimeStatusView;
         //return super.onCreateView(inflater, container, savedInstanceState);
     }
