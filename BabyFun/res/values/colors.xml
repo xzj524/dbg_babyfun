@@ -4,6 +4,8 @@
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="blue">#4ba3ff</color>
+    <color name="pink">#998675</color>
+    <color name="pink_press">#ff6a6a</color>
     <color name="text_default">#2c2c2c</color>
     <color name="activity_bg_color">#fff6f6f7</color>
     <color name="startup_checking_bg_color">#ff3a96fa</color>

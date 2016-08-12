@@ -10,7 +10,17 @@ public interface SyncDevice {
      * @return
      */
     DeviceResponse<?> setDeviceTime();
+    
+    /**
+     * @Description: 获取设备时间
+     * @return
+     */
+    DeviceResponse<?> getDeviceTime();
 
     DeviceResponse<?> startSendBreathData();
+    
+    DeviceResponse<?> stopSendBreathData();
+
+    DeviceResponse<?> getBodyTemperature();
 
 }

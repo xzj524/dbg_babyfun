@@ -186,10 +186,6 @@ public class DeviceListActivity extends Activity {
         if (!deviceFound) {
         	deviceList.add(device);
             mEmptyList.setVisibility(View.GONE);
-                 	
-        	
-
-            
             deviceAdapter.notifyDataSetChanged();
         }
     }

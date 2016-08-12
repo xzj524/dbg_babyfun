@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context="${relativePackage}.${activityClass}" >
+
+ 
+    <TextView
+        android:id="@+id/babyemergencytitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20dp"
+        android:textSize="80px"
+        android:text="@string/hello_world" />
+    
+     <LinearLayout
+         android:id="@+id/line"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_below="@id/babyemergencytitle">
+	 </LinearLayout>
+	 
+     
+     <TextView
+        android:id="@+id/babyemergencecontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/line"
+        android:paddingTop="20dp"
+        android:textSize="60px"
+        android:text="@string/hello_world" />
+     
+     <LinearLayout 
+         android:id="@+id/babyemergencebutton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:gravity="center_horizontal"
+         android:layout_alignParentBottom="true">
+         
+         <Button 
+	         android:id="@+id/userkonw"
+	         android:layout_width="160dp"
+	         android:layout_height="wrap_content"
+	         android:text="我知道了"
+	         android:layout_marginLeft="20dp"
+	         android:layout_marginBottom="40dp"
+	         />
+         
+          <Button 
+	         android:id="@+id/usercall"
+	         android:layout_width="160dp"
+	         android:layout_height="wrap_content"
+	         
+	         android:text="一键求助"
+	         android:layout_marginBottom="40dp"/>
+         
+         
+     </LinearLayout>
+     
+     
+    
+
+</RelativeLayout>

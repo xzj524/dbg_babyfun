@@ -24,8 +24,6 @@ import com.xzj.babyfun.R;
 import com.xzj.babyfun.utility.SleepyInfo;
 import com.xzj.babyfun.utility.Utiliy;
 
-import de.greenrobot.event.EventBus;
-
 public class SleepyChart extends Fragment{
     
     static LineChart mChart;
@@ -33,7 +31,7 @@ public class SleepyChart extends Fragment{
     
     static Typeface mTf; // 自定义显示字体  
     static int[] mColors = new int[] { Color.rgb(4, 158, 255), Color.rgb(240, 240, 30),//  
-            Color.rgb(89, 199, 250), Color.rgb(250, 104, 104) }; // 自定义颜色 
+            Color.rgb(89, 199, 250), Color.rgb(250, 104, 104) ,Color.rgb(153, 134, 117)}; // 自定义颜色 
     static int[] mTextColors = new int[] {
         Color.rgb(9, 79, 55),
         Color.rgb(13, 89, 116),
@@ -97,7 +95,7 @@ public class SleepyChart extends Fragment{
      
         
         View lineChartView = inflater.inflate(R.layout.chart_fragment, container, false);
-        mChart = (LineChart) lineChartView.findViewById(R.id.linechart);
+        mChart = (LineChart) lineChartView.findViewById(R.id.sleeplinechart);
         mTextSober = (TextView) lineChartView.findViewById(R.id.sleepylist1);
         mTextFallSleep = (TextView) lineChartView.findViewById(R.id.sleepylist2);
         mTextLightSleep = (TextView) lineChartView.findViewById(R.id.sleepylist3);
@@ -179,7 +177,16 @@ public class SleepyChart extends Fragment{
             yValsSleep.clear();
         }
         for (int i = 0; i < 48; i++) {
-            yValsSleep.add(new Entry((float) (Math.random() * 100), i));
+            if (i < 12) {
+                yValsSleep.add(new Entry((float) (100 - (Math.random() * 10)), i));
+            } else if (i > 11 && i < 24) {
+                yValsSleep.add(new Entry((float) (30 - (Math.random() * 10)), i));
+            }else if (i > 23 && i < 36) {
+                yValsSleep.add(new Entry((float) (70 - (Math.random() * 10)), i));
+            }else if (i > 35 && i < 48) {
+                yValsSleep.add(new Entry((float) (90 - (Math.random() * 10)), i));
+            }
+            
         }
         
         
@@ -198,7 +205,7 @@ public class SleepyChart extends Fragment{
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(SleepySet);
         LineData data = new LineData(xVals, dataSets);
-        setupChart(data, mColors[0]);
+        setupChart(data, mColors[4]);
     }
 
     // 设置显示的样式  
@@ -242,8 +249,7 @@ public class SleepyChart extends Fragment{
   
         // if disabled, scaling can be done on x- and y-axis separately  
         mChart.setPinchZoom(false);//   
-      
-  
+
         mChart.setBackgroundColor(color);// 设置背景  
         // add data  
         mChart.setData(data); // 设置数据  

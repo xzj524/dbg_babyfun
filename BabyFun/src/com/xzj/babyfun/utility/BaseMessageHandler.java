@@ -40,10 +40,10 @@ public class BaseMessageHandler {
             if (baseData.length >= BASE_DATA_HEAD) {
                 BaseL1Message bsL1Msg = getBaseL1Msg(baseData); // 生成L1数据
                 if (bsL1Msg.ackFlag == 1) { //收到设备的ack信息
-                    SLog.e("breathtest", "receive ACK");
+                    SLog.e(TAG, "receive ACK");
                     if (bsL1Msg.errFlag == 0) {
                         if (isWriteSuccess) {
-                            SLog.e("breathtest", "isWriteSuccess = true");
+                            SLog.e(TAG, "isWriteSuccess = true");
                            // boolean isSendL2Over = sendL2Msg(false);
                         }else {
                             //重写接口
@@ -53,12 +53,12 @@ public class BaseMessageHandler {
                 }else {
                     if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) { //收到设备发过来的信息，需要返回ACK
                         int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
-                        SLog.e("breathtest", "ACK crc16 = " + crc16 + " bsL1Msg = " + bsL1Msg.CRC16);
+                        SLog.e(TAG, "ACK crc16 = " + crc16 + " bsL1Msg = " + bsL1Msg.CRC16);
                         if (bsL1Msg.CRC16 == (short)crc16) {
-                            SLog.e("breathtest", "send ACK");
+                            SLog.e(TAG, "send ACK");
                             sendACKBaseL1Msg(baseData);
                         } else {
-                            SLog.e("breathtest", "not send ACK");
+                            SLog.e(TAG, "not send ACK");
                         }
                     }
                     
@@ -71,7 +71,7 @@ public class BaseMessageHandler {
                             Intent l2intent = new Intent();
                             l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
                             EventBus.getDefault().post(bsl2Msg);
-                            SLog.e("breathtest", "receive L2 DATA");
+                            SLog.e(TAG, "receive L2 DATA");
                         }            
                     }
                     
@@ -192,6 +192,7 @@ public class BaseMessageHandler {
             bsL1Msg.sequenceId = (short) ++squenceID;
             bsL1Msg.CRC16 = (short) CRC16.calcCrc16(bsL1Msg.payload);
             
+            byte[] bsl1buffer = bsL1Msg.tobyte();
             SLog.e(TAG, "write BASE character readcount = " + buffer.length);
             EventBus.getDefault().post(new AsycEvent(bsL1Msg.tobyte()));
         }

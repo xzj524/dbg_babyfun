@@ -27,8 +27,13 @@ public class BreathChart extends Fragment{
     private static final String TAG = BreathChart.class.getSimpleName();
     
     static Typeface mTf; // 自定义显示字体  
-    static int[] mColors = new int[] { Color.rgb(137, 230, 81), Color.rgb(240, 240, 30),//  
-            Color.rgb(89, 199, 250), Color.rgb(250, 104, 104), Color.rgb(4, 158, 255) }; // 自定义颜色 
+    static int[] mColors = new int[] {
+        Color.rgb(137, 230, 81), 
+        Color.rgb(240, 240, 30),//  
+        Color.rgb(89, 199, 250), 
+        Color.rgb(250, 104, 104), 
+        Color.rgb(4, 158, 255),
+        Color.rgb(222, 182, 180) }; // 自定义颜色 
     
     static ArrayList<Entry> yValsBreath = new ArrayList<Entry>();
     static ArrayList<String> xValsBreathTime = new ArrayList<String>();
@@ -45,7 +50,7 @@ public class BreathChart extends Fragment{
         mBreathChart = (LineChart) breathChartView.findViewById(R.id.breathchart);
         initBreathChart();
         LineData initData = initData(50);
-        setupChart(initData, mColors[0]);
+        setupChart(initData, mColors[5]);
         return breathChartView;
     }
     
@@ -53,7 +58,7 @@ public class BreathChart extends Fragment{
         // TODO Auto-generated method stub
         if (mData != null) {
             mData = initData(5);
-            setupChart(mData, mColors[0]);
+            setupChart(mData, mColors[5]);
         }
     }
     
@@ -66,7 +71,6 @@ public class BreathChart extends Fragment{
             return null;
         }
         for (int i = 1; i < yValsBreath.size(); i++) {
-
             Entry tmpEntry = yValsBreath.get(i);
             entryval = tmpEntry.getVal();
             tempValue.add(new Entry(entryval, i-1));
@@ -92,7 +96,7 @@ public class BreathChart extends Fragment{
                 xVals.add(i + "");
             }
             LineData data = new LineData(xVals, dataSets);    
-            setupChart(data, mColors[0]);
+            setupChart(data, mColors[5]);
         }   
     }
     
@@ -176,7 +180,7 @@ public class BreathChart extends Fragment{
         // enable / disable grid background  
 
         mBreathChart.setDrawGridBackground(false); // 是否显示表格颜色 
-        mBreathChart.setGridBackgroundColor(mColors[2]);
+        mBreathChart.setGridBackgroundColor(mColors[5]);
         
         mBreathChart.setDrawBorders(false);
     //    mBreathChart.setBorderPositions(new BorderPosition[] { BorderPosition.BOTTOM, BorderPosition.LEFT });// 设置图标边框
@@ -193,7 +197,7 @@ public class BreathChart extends Fragment{
         // if disabled, scaling can be done on x- and y-axis separately  
         mBreathChart.setPinchZoom(false);    
         
-        mBreathChart.setBackgroundColor(mColors[4]);// 设置背景  
+        mBreathChart.setBackgroundColor(mColors[5]);// 设置背景  
         
         // get the legend (only possible after setting data)  
         Legend breathLegend = mBreathChart.getLegend(); // 设置标示，就是那个一组y的value的  

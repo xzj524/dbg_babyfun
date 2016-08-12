@@ -1,0 +1,292 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    
+    <TextView 
+        android:id="@+id/sleep_comment"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingTop="20dp"
+        android:textSize="80px"
+        android:text="睡眠建议">
+        </TextView>
+        
+     <LinearLayout
+         android:id="@+id/line_up"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleep_comment">
+	 </LinearLayout>
+	 
+        <TextView 
+        android:id="@+id/sleep_comment_content"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingTop="20dp"
+        android:textSize="60px"
+        android:layout_below="@id/line_up"
+        android:text="宝宝的睡眠很好，请继续保持！">
+        </TextView>
+        
+           <LinearLayout
+         android:id="@+id/line_down"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleep_comment_content">
+	 </LinearLayout>
+        
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/setting_items_padding_top"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/line_down">
+
+            <RelativeLayout
+                android:id="@+id/sleep_time_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+                <TextView
+                    android:id="@+id/actual_sleep_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="实际睡眠时长过短" />
+                
+                <TextView 
+                    android:id="@+id/actual_sleep_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="-10"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/actual_sleep_time"/>
+                
+            </RelativeLayout>
+            
+            <LinearLayout
+		         android:id="@+id/line_2"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/sleep_noenough_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+                <TextView
+                    android:id="@+id/set_network"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+               		android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="深睡眠不足" />
+                
+                 <TextView 
+                    android:id="@+id/set_network_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="-10"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/set_network"/>
+
+            </RelativeLayout>
+            
+            <LinearLayout
+		         android:id="@+id/line_3"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/sleep_hard_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+                <TextView
+                    android:id="@+id/set_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"	
+					android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="难于入睡" />
+                
+                  <TextView 
+                    android:id="@+id/set_account_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="-10"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/set_account"/>
+                
+
+            </RelativeLayout>
+            
+                <LinearLayout
+		         android:id="@+id/line_4"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/sleep_wake_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+
+                <TextView
+                    android:id="@+id/set_admin_password"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+          			android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="睡觉易醒" />
+                
+                 <TextView 
+                    android:id="@+id/set_admin_password_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="-10"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/set_admin_password"/>
+
+            </RelativeLayout>
+            <!-- 云安全 -->
+            
+            <LinearLayout
+		         android:id="@+id/line_5"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/sleep_distribute_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+
+                <TextView
+                    android:id="@+id/set_cloudsec"
+                    android:layout_marginLeft="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="良性睡眠分布" />
+                
+                     <TextView 
+                    android:id="@+id/set_cloudsec_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="-10"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/set_cloudsec"/>
+
+    
+            </RelativeLayout>
+            
+            
+          <LinearLayout
+		         android:id="@+id/line_6"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+            <!-- QoS -->
+
+            <RelativeLayout
+                android:id="@+id/sleep_effcience_view"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:visibility="visible"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+                <TextView
+                    android:id="@+id/set_qos_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:layout_marginLeft="40dp"
+                    android:text="睡眠效率" />
+
+                <TextView 
+                    android:id="@+id/set_qos_mode_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="-10"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/set_qos_mode"/>
+               </RelativeLayout>
+        </LinearLayout>
+    
+</RelativeLayout>

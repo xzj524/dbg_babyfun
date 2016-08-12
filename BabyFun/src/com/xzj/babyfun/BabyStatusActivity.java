@@ -59,15 +59,12 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         
         BabyStatusReceiver babyStatusReceiver = new BabyStatusReceiver();
         babyStatusReceiver.setDataStatusInteractionListener(this);
-        
- 
-        
+  
         mFragmentMan = getFragmentManager();
         sleepyChartFragment = (SleepyChart) mFragmentMan.findFragmentById(R.id.babySleepChartFragment);
         
         sleepyPieChartFragmentChart
-            = (SleepyPieChart) mFragmentMan.findFragmentById(R.id.babySleepPieChartFragment);
-        
+            = (SleepyPieChart) mFragmentMan.findFragmentById(R.id.babySleepPieChartFragment);      
         
         if (Utiliy.mSleepList.size() == 0) {
             Utiliy.mSleepList.add(0); 
@@ -91,48 +88,6 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         // TODO Auto-generated method stub
         //Toast.makeText(getApplicationContext(), " 使能notification", Toast.LENGTH_SHORT).show();
         int dataType = intent.getIntExtra(BluetoothService.EXTRA_TYPE, 0);
-        
-       /* if (dataType == BluetoothService.DATA_TYPE_TEMP_HUMIT) {
-               tempValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_TEMP, 0);
-               humitValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_HUMIT, 0);
-               realTimeStatusFragment.setTemperature(tempValue);
-               realTimeStatusFragment.setHumit(humitValue);
-         } else if (dataType == BluetoothService.DATA_TYPE_PM25) {
-            // pm25Value = intent.getIntExtra(UartService.EXTRA_DATA_PM25, 0);
-         } else if (dataType == BluetoothService.DATA_TYPE_SLEEP) {
-              sleepValue = intent.getIntExtra(BluetoothService.EXTRA_DATA_SLEEP, 0);
-              Utiliy.mSleepList.add(sleepValue);
-              LineData data = sleepyChartFragment.getData(sleepValue);
-              if (data != null) {
-                  sleepyChartFragment.setupChart(data, mColors[4]);
-              }
-              Log.e("Babyfun", "sleepvalue = " + sleepValue);
-              
-              int Value = Math.abs(Math.abs(sleepValue - 50) * 2 - 100);
-              //ValsSleep.add(new Entry(Math.abs(sleepValue * 2 - 100), i));
-              
-              if (Value < 30) {
-                mBabyStatus.setText("宝宝清醒");
-              
-            } else if (Value >= 30 && Value < 60) {
-                mBabyStatus.setText("宝宝入睡");
-            } else if (Value >= 60 && Value < 90) {
-                mBabyStatus.setText("宝宝浅睡");
-            } else if (Value >= 90 && Value < 100) {
-                mBabyStatus.setText("宝宝深睡");
-            } 
-              
-              mBabyPoint.setText(Value + " 分");
-             
-         }*/
-        
-       
-        
-        
-        
-        
-        
-        //realTimeStatusFragment.setPM25(pm25Value);
     }
    
     class MyHandler extends Handler{

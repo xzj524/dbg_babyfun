@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context="${relativePackage}.${activityClass}" >
+
+      
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/setting_items_padding_top"
+            android:layout_marginTop="20dp">
+
+
+            <RelativeLayout
+                android:id="@+id/emergency_120_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+                <TextView
+                    android:id="@+id/emergency_120"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="急救电话(120)" />
+          
+                
+            </RelativeLayout>
+            
+            <LinearLayout
+		         android:id="@+id/line_up"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+			 </LinearLayout>
+	 
+            <!-- 外网设置 -->
+
+            <RelativeLayout
+                android:id="@+id/emergency_hospital_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+                <TextView
+                    android:id="@+id/emergency_hospital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+               		android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="附近的医院" />
+                
+  
+
+            </RelativeLayout>
+            
+        </LinearLayout>
+
+</RelativeLayout>

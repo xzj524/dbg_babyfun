@@ -3,11 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
+  
+    
     <LinearLayout 
+        android:id="@+id/sleepylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView 
+            android:id="@+id/sleepylist1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="清醒"/>
+        <TextView 
+            android:id="@+id/sleepylist2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="入睡"/>
+        <TextView 
+            android:id="@+id/sleepylist3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="浅睡"/>
+        <TextView 
+            android:id="@+id/sleepylist4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="深睡"/>
+    </LinearLayout>
+    
+     <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/sleeplinechart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_toRightOf="@id/sleepylist"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+     
+    
+     <LinearLayout 
          android:id="@+id/sleeppercent"
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
          android:orientation="horizontal"
+         android:layout_below="@id/sleeplinechart"
          android:layout_marginLeft="10dp">
          
          <LinearLayout 
@@ -86,132 +129,6 @@
              
          </LinearLayout>
      </LinearLayout>
-    
-    <LinearLayout 
-        android:id="@+id/sleepylist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="10dp">
-        <TextView 
-            android:id="@+id/sleepylist1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="清醒"/>
-        <TextView 
-            android:id="@+id/sleepylist2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="入睡"/>
-        <TextView 
-            android:id="@+id/sleepylist3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="浅睡"/>
-        <TextView 
-            android:id="@+id/sleepylist4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="深睡"/>
-    </LinearLayout>
-    
-     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/linechart"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_toRightOf="@id/sleepylist"
-        android:layout_below="@id/sleeppercent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
-     
-     <LinearLayout 
-        android:id="@+id/sleepstatistics"
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:orientation="vertical"
-         android:layout_below="@id/linechart"
-         android:layout_marginLeft="10dp"
-         android:layout_marginBottom="20dp">
-         <TextView 
-	       android:id="@+id/sleepstatisticstext"
-	       android:layout_width="wrap_content"
-	       android:layout_height="wrap_content"
-	       android:textColor="@color/white"
-	       android:textSize="56px"
-	       android:text="宝宝睡眠统计:"/>
-         
-          <LinearLayout 
-	         android:id="@+id/sleeppercentbelow"
-	         android:layout_height="wrap_content"
-	         android:layout_width="match_parent"
-	         android:orientation="horizontal"
-	         android:layout_marginTop="10dp">
-         
-         <LinearLayout 
-             android:id="@+id/sleepefficiency"
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:paddingLeft="50dp"
-             android:orientation="vertical">
-             <TextView 
-                 android:id="@+id/sleepefficiencytext"
-                 android:layout_height="wrap_content"
-             	 android:layout_width="wrap_content"
-             	 android:text="睡眠效率"/>
-              <TextView 
-                 android:id="@+id/sleepefficiencypercent"
-                 android:layout_height="wrap_content"
-             	 android:layout_width="wrap_content"
-             	 android:text="50%"/>
-             
-         </LinearLayout>
-         
-         <LinearLayout 
-             android:id="@+id/bodymove"
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:paddingLeft="50dp"
-             android:orientation="vertical">
-             <TextView 
-                 android:id="@+id/bodymovetext"
-                 android:layout_height="wrap_content"
-             	 android:layout_width="wrap_content"
-             	 android:text="宝宝体动"/>
-              <TextView 
-                 android:id="@+id/bodymovepercent"
-                 android:layout_height="wrap_content"
-             	 android:layout_width="wrap_content"
-             	 android:text="50%"/>
-             
-         </LinearLayout>
-         
-         <LinearLayout 
-             android:id="@+id/sleepscore"
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:paddingLeft="50dp"
-             android:orientation="vertical">
-             <TextView 
-                 android:id="@+id/sleepscoretext"
-                 android:layout_height="wrap_content"
-             	 android:layout_width="wrap_content"
-             	 android:text="睡眠评分"/>
-              <TextView 
-                 android:id="@+id/sleepscorepercent"
-                 android:layout_height="wrap_content"
-             	 android:layout_width="wrap_content"
-             	 android:text="50%"/>
-             
-         </LinearLayout>
-         
- 
-     </LinearLayout>
-        
-    </LinearLayout>
    
      
      

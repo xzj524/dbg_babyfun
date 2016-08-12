@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@color/pink"
     android:orientation="vertical"
     tools:context="${relativePackage}.${activityClass}" >
 
@@ -11,12 +11,12 @@
         android:name="com.xzj.babyfun.titlefragment.BabyStatusTopViewFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
-         android:layout_marginTop="30dp"/> 
+         android:layout_marginTop="20dp"/> 
 
   <ScrollView 
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
        android:layout_below="@id/topViewFragment">
        
        <LinearLayout 
@@ -32,11 +32,25 @@
 		        android:layout_height="wrap_content"
 		        android:tag="piechart"/>
 	           
-	          <fragment 
+	      <fragment 
 		        android:id="@+id/babySleepChartFragment"
 		        android:name="com.xzj.babyfun.chart.SleepyChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"/>
+	      
+	       <fragment 
+		        android:id="@+id/babybreathstopChartFragment"
+		        android:name="com.xzj.babyfun.chart.BreathStopChart"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="20dp"/>
+	       
+	        <fragment 
+		        android:id="@+id/babytemperatureChartFragment"
+		        android:name="com.xzj.babyfun.chart.TemperatureChart"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="20dp"/>
        </LinearLayout>
   
      

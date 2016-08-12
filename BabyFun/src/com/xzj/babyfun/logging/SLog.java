@@ -11,12 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import com.xzj.babyfun.constant.Constant;
-
 import android.os.Environment;
 import android.os.Process;
-import android.provider.SyncStateContract.Constants;
 import android.text.TextUtils;
+
+import com.xzj.babyfun.constant.Constant;
 
 /**
  * 

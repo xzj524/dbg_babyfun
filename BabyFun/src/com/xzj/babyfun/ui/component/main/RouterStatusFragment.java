@@ -140,25 +140,12 @@ public class RouterStatusFragment extends Fragment{
         mProgressImageView.setOnClickListener(new UpdateStatusOnclickListener());
 
         mConnectingInfoViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectInfoLayout);
-        //mCheckingItemImageView = (ImageView) babyfunStatusView.findViewById(R.id.checkingItemImageView);
 
         mConnectedSucceedViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectedSucceedLayout);
-        //mConnectedStatusIndicatorImageView = (ImageView) babyfunStatusView
-        //        .findViewById(R.id.connectedStatusIndicatorImageView);
 
         mConnectedStatusTextView = (TextView) babyfunStatusView.findViewById(R.id.connectedStatusTextView);
 
         mConnectedFailedViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectedFailedLayout);
-//        mStatusView = (LinearLayout) babyfunStatusView.findViewById(R.id.environment1);
-//
-//        mStatusView.setOnClickListener(new View.OnClickListener() {
-//            
-//            @Override
-//            public void onClick(View v) {
-//                // TODO Auto-generated method stub
-//                Toast.makeText(v.getContext(), "点击", Toast.LENGTH_SHORT).show();
-//            }
-//        });
         return babyfunStatusView;
     }
 
@@ -171,28 +158,8 @@ public class RouterStatusFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-     /*   if (mCurrentState == CheckingState.IDEL) {
-            mCurrentState = CheckingState.CHECKING;
-            startConnecting();
-        }*/
     }
     
-   private ServiceConnection mScanServiceConnection = new ServiceConnection() {
-        
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            // TODO Auto-generated method stub
-            
-        }
-        
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            // TODO Auto-generated method stub
-            mScanService = ((ScanDevicesService.ScanBinder) service).getService();
-        }
-    };
-    
-
     /**
      * 开始检查连接
      */
@@ -231,13 +198,8 @@ public class RouterStatusFragment extends Fragment{
     @Override
     public void onDestroy() {
         mIsDestroyed = true;
-
-
         super.onDestroy();
     }
-    
-    
-    
     /**
      * 更新状态的OnClick
      * 
@@ -248,14 +210,7 @@ public class RouterStatusFragment extends Fragment{
 
         @Override
         public void onClick(View v) {
-            //Toast.makeText(getActivity().getApplicationContext(), "点击链接 currentstate = " + mCurrentState, Toast.LENGTH_SHORT).show();
-            //if (mCurrentState == CheckingState.IDEL || mCurrentState == CheckingState.FAIL) {
-            /*if (mCurrentState == CheckingState.SUCCEED) {
-                mCurrentState = CheckingState.FAIL;
-                mService.disconnect();
-            }*/
             doUpdateStatusClick();
-            //}
         }
     }
 
@@ -263,16 +218,11 @@ public class RouterStatusFragment extends Fragment{
      * 更新状态的click
      */
     public void doUpdateStatusClick() {
-        Log.e(TAG, "mCurrentState = IDEL  1  " + mCurrentState);
         if (mCurrentState == CheckingState.IDEL) {
             startConnecting();
-            mCurrentState = CheckingState.CHECKING;
-            Log.e(TAG, "mCurrentState = IDEL 2");
-            
+            mCurrentState = CheckingState.CHECKING;        
             Intent enabler=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enabler,10);
-           
-       
+            startActivityForResult(enabler,10);    
         } else if (mCurrentState == CheckingState.CHECKING) {
             mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
@@ -331,9 +281,6 @@ public class RouterStatusFragment extends Fragment{
        if (requestCode == 10) {
            Intent intent = new Intent("com.babyfun.scandevices");
            mListener.onItemSelected(intent);
-          // mScanDeviceListener.OnScanDeviceSucceed(9);
-           //Intent newIntent = new Intent(getActivity(), DeviceListActivity.class);
-           //startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
     }
     }
     
@@ -369,39 +316,5 @@ public class RouterStatusFragment extends Fragment{
         return mCurrentState;
     }
 
- 
-    
-/*    
-    //UART service connected/disconnected
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-                mService = ((UartService.LocalBinder) rawBinder).getService();
-                Log.e(TAG, "onServiceConnected mService= " + mService);
-                if (!mService.initialize()) {
-                    Log.e(TAG, "Unable to initialize Bluetooth");
-                    getActivity().finish();
-                }
-                
-                Log.e(TAG, "Unable to initialize Bluetooth   onServiceConnected");
-
-        }
-
-        public void onServiceDisconnected(ComponentName classname) {
-       ////     mService.disconnect(mDevice);
-                mService = null;
-                Log.e(TAG, "Unable to initialize Bluetooth   onServiceDisconnected");
-        }
-    };*/
-    
-    
-/*    private void service_init() {
-        Intent bindIntent = new Intent(getActivity(), UartService.class);
-        getActivity().bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        Log.e(TAG, "onServiceConnected mService= " + mService);
-       // registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
-        
-  
-      //  LocalBroadcastManager.getInstance(this).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
-    }*/
 
 }

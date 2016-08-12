@@ -37,5 +37,14 @@
     <string name="title_activity_baby_status">BabyStatusActivity</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_baby_breath">BabyBreathActivity</string>
+    <string name="title_activity_critical">CriticalActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
+    <string name="title_activity_baby_explain">BabyExplainActivity</string>
+    <string name="title_activity_sleep_problem">SleepProblemActivity</string>
+    <string name="title_activity_sleep_analysis">SleepAnalysisActivity</string>
+    <string name="title_activity_emergency_map">EmergencyMapActivity</string>
+    <string name="title_activity_baby_emergency">BabyEmergencyActivity</string>
+    <string name="title_activity_emergency_phone_number">EmergencyPhoneNumberActivity</string>
 
 </resources>

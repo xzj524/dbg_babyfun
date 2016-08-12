@@ -109,7 +109,7 @@ public class BluetoothService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 enableDataNotification();
             	SLog.e(TAG, "mBluetoothGatt = " + mBluetoothGatt );
-                broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+              //  broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
                 SLog.e(TAG, "onServicesDiscovered received: " + status);
             }
@@ -136,10 +136,10 @@ public class BluetoothService extends Service {
             if (BLE_UUID_NUS_TX_CHARACTERISTIC.equals(characteristic.getUuid())) {
                 if (BluetoothGatt.GATT_SUCCESS == status) {
                     BaseMessageHandler.isWriteSuccess = true;
-                    SLog.e("breathtest", "onCharacteristicWrite isWriteSuccess = true");
+                    SLog.e(TAG, "onCharacteristicWrite isWriteSuccess = true");
                 } else {
                     BaseMessageHandler.isWriteSuccess = false;
-                    SLog.e("breathtest", "onCharacteristicWrite isWriteSuccess = false");
+                    SLog.e(TAG, "onCharacteristicWrite isWriteSuccess = false");
                 }
             }
         };
@@ -328,7 +328,6 @@ public class BluetoothService extends Service {
     
     public void writeBaseRXCharacteristic(byte[] value)
     {
-    
         BluetoothGattService RxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
         if (RxService == null) {
             SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_SERVICE not found!");
@@ -344,7 +343,7 @@ public class BluetoothService extends Service {
         RxChar.setValue(value);
         boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
         
-        SLog.e(TAG, "write TXchar - status=" + status);  
+        SLog.e(TAG, "write TXchar status = " + status);  
     }
     
     /**

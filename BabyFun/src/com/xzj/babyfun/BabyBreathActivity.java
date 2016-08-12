@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.xzj.babyfun.breath.BabyBreath;
 import com.xzj.babyfun.chart.BreathChart;
+import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.logging.SLog;
 
 import de.greenrobot.event.EventBus;
@@ -32,12 +33,15 @@ public class BabyBreathActivity extends Activity {
     long mBreathPeriod;
     int mBreathFreq;
     Timer timer;
+    int isbreath = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_baby_breath);
+        
+
         mFreshButton = (Button) findViewById(R.id.breathbtn);
         mFreshButton.setOnClickListener(new View.OnClickListener() {
             
@@ -76,6 +80,10 @@ public class BabyBreathActivity extends Activity {
         timer = new Timer(true);
         
         mBreatData = (TextView)findViewById(R.id.breathfrequencedata);
+        
+        timer.schedule(task,1000, 1300); 
+        
+        AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
     }
     
     @Override
@@ -88,7 +96,7 @@ public class BabyBreathActivity extends Activity {
     private void updateBreathWave(int preValue) {
         // TODO Auto-generated method stub
         for (int i = 0; i < 2; i++) {
-            if (i == 0 ) {
+            if (i == 0) {
                 breathchartFragment.generateNewWave(5); 
             } else if (i == 1) {
                 breathchartFragment.generateNewWave(preValue); 
@@ -114,16 +122,32 @@ public class BabyBreathActivity extends Activity {
             
      TimerTask task = new TimerTask(){  
            public void run() {  
+ /*          if (isbreath % 2 == 1) {
+               mPreValue = (int) (20 + Math.random() * 2);
+        } else {
+            mPreValue = 5;
+        }
+           isbreath++;*/
+
            Message message = new Message();      
            message.what = 1; 
            message.arg1 = mPreValue;
            mPreValue = 5;
+           
+           //mPreValue = (int) Math.abs((Math.random() * 30));
+           
+           long curtime = System.currentTimeMillis();
+           if (mLastBreathTime == 0) {
+               mLastBreathTime = curtime;
+           } else {
+               mBreathPeriod = curtime - mLastBreathTime;
+               mLastBreathTime = curtime;
+           }
            mHandler.sendMessage(message);    
          }  
       };  
     
     public void onEvent(final ArrayList<BabyBreath> breaths) { 
-        SLog.e("breathtest", "BabyBreathActivity receive REAL BREATH DATA");
         long curtime = System.currentTimeMillis();
         if (mLastBreathTime == 0) {
             mLastBreathTime = curtime;
@@ -133,7 +157,7 @@ public class BabyBreathActivity extends Activity {
         }
         if (breaths.size() == 1) {
             mPreValue = breaths.get(0).mBreathValue;
-            SLog.e("breathtest", "BabyBreathActivity receive REAL BREATH DATA " + mPreValue);
+            SLog.e(TAG, "BabyBreathActivity receive REAL BREATH DATA " + mPreValue);
         } else if (breaths.size() == 2) {
             mPreValue = breaths.get(0).mBreathValue;
             int timelen = breaths.get(1).mBreathTime - breaths.get(0).mBreathTime;

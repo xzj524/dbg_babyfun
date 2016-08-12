@@ -8,15 +8,12 @@ import java.util.BitSet;
 import java.util.Calendar;
 import java.util.List;
 
-import android.R.integer;
 import android.content.Context;
-import android.content.Intent;
 
 import com.xzj.babyfun.baseheader.BaseL2Message;
 import com.xzj.babyfun.baseheader.KeyPayload;
 import com.xzj.babyfun.breath.BabyBreath;
 import com.xzj.babyfun.constant.Constant;
-import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.synctime.DeviceTime;
 
@@ -24,15 +21,19 @@ import de.greenrobot.event.EventBus;
 
 public class MessageParse {
     
+    private static final String TAG = MessageParse.class.getSimpleName();
+    
     private DataInputStream mDis;
     int mBreathStartResult;
     int mBreathCount;
+    Context mContext;
     
     /** single instance. */
     private static volatile MessageParse mInstance;   
     protected MessageParse(Context context) {
         EventBus.getDefault().register(this); 
         mBreathStartResult = 1;
+        mContext = context;
     }
 
     
@@ -46,19 +47,8 @@ public class MessageParse {
     }
     
     public void onEvent(BaseL2Message bsl2Msg) {
-        SLog.e("breathtest", "handleL2Msg L2 DATA");
-       /* Object parcel = intent.getParcelableExtra(Constant.BASE_L2_MESSAGE);
-        BaseL2Message bMsg = null;
-        if (parcel != null && (parcel instanceof BaseL2Message)) {
-            bMsg = (BaseL2Message) parcel;
-        }
-        
-        if (bMsg == null) {
-            return;
-        }*/
-        
+        SLog.e(TAG, "handleL2Msg L2 DATA");
         handleL2Msg(bsl2Msg);
-        
     }
 
 
@@ -72,17 +62,20 @@ public class MessageParse {
                 break;
             case Constant.COMMAND_ID_SETTING:
                handleSettings(params);
-        
                 break;
             case Constant.COMMAND_ID_BIND:
                 
                 break;
             case Constant.COMMAND_ID_DATA:
-                
+                handleData(params);
                 break;
             case Constant.COMMAND_ID_MANUFACTURE_TEST:
                 handleManufature(params);
                 break;
+                
+            case Constant.COMMAND_ID_NOTIFY:
+                handleNotify(params);
+            break;
 
 
             default:
@@ -94,16 +87,80 @@ public class MessageParse {
     }
 
 
+    private void handleData(List<KeyPayload> params) {
+        // TODO Auto-generated method stub
+        for (KeyPayload kpload:params) {
+            if (kpload.key == 2) { // 接收到实时数据
+                SLog.e(TAG, "receive  realtime data");
+                if (kpload.keyLen == 4) {
+                    acquireTemp(kpload.keyValue); //分析实时数据
+                    //mBreathStartResult = kpload.keyValue[0] & 0x0f;
+                }
+            } 
+        }
+    }
+
+
+    private void acquireTemp(byte[] keyValue) {
+        // TODO Auto-generated method stub
+        int PNValue = (keyValue[0] & 0x80) >> 7;
+        int tempHigh = keyValue[0] & 0x7f;
+        int tempLow = keyValue[1] & 0xff;
+        
+        int humbit = keyValue[2] & 0xff;
+        int energy = keyValue[3] & 0xff;
+        
+        if (PNValue == 1) {
+            SLog.e(TAG, "temp = " + "-" + tempHigh + "." + tempLow);
+        } else {
+            SLog.e(TAG, "temp = " + tempHigh + "." + tempLow);
+        }
+       
+        SLog.e(TAG, "humbit = " + humbit);
+        SLog.e(TAG, "energy = " + energy);
+    }
+
+
+    private void handleNotify(List<KeyPayload> params) {
+        // TODO Auto-generated method stub
+        for (KeyPayload kpload:params) {
+            if (kpload.key == 1) { // 正反状态报警
+                SLog.e(TAG, "正反状态 ALARM");
+                if (kpload.keyLen == 1) {
+                    //mBreathStartResult = kpload.keyValue[0] & 0x0f;
+                }
+            } else if (kpload.key == 2) { // 温度报警
+                SLog.e(TAG, "TEMP ALARM");
+                int babytemp = getBabyTemp(kpload.keyValue);
+                
+                Utiliy.showFeverNotification(mContext, 
+                        "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + babytemp + " 请及时就医。", null);
+                
+            } else if (kpload.key == 3) { // 呼吸停滞报警
+                SLog.e(TAG, "BREATH ALARM");
+                Utiliy.showFeverNotification(mContext, 
+                        "呼吸停滞！！", "孩子呼吸停滞了， 请及时就医。", null);
+            }
+        }
+    }
+
+
+    private int getBabyTemp(byte[] keyValue) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+
     private void handleManufature(List<KeyPayload> params) {
         // TODO Auto-generated method stub
         for (KeyPayload kpload:params) {
             if (kpload.key == 2) { // 呼吸测试启动返回
-                SLog.e("breathtest", "START BREATH RETURN");
+                SLog.e(TAG, "START BREATH RETURN");
                 if (kpload.keyLen == 1) {
                     mBreathStartResult = kpload.keyValue[0] & 0x0f;
                 }
             } else if (kpload.key == 5) { // 呼吸测试数据
-                SLog.e("breathtest", "START REAL BREATH DATA");
+                SLog.e(TAG, "START REAL BREATH DATA");
                 ArrayList<BabyBreath> babyBreaths = getBabyBreaths(kpload.keyValue);
                 if (babyBreaths != null) {
                     updateBreathWave(babyBreaths);
@@ -157,9 +214,21 @@ public class MessageParse {
                             devTime.hour, devTime.min, devTime.second);
                     calendar.getTime().getTime();
                     
-                   // AsyncDeviceFactory.getInstance()
+                    SLog.e(TAG, "year = " + devTime.year 
+                            + " month = " + devTime.month
+                            + " day = " + devTime.day
+                            + " hour = " + devTime.hour
+                            + " min = " + devTime.min
+                            + " second = " + devTime.second);
+                    
                                        
                 }
+            } else if (kpload.key == 2) { //设置时间返回结果
+                if (kpload.keyLen == 1) {
+                    int settimeresult = kpload.keyValue[0] & 0x0f;
+                    SLog.e(TAG, "settimeresult = " + settimeresult);
+                }
+                
             }
         }
         

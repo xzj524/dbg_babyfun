@@ -1,0 +1,153 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    
+    
+     <TextView
+        android:id="@+id/sleepproblemtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:textSize="80px"
+        android:layout_centerHorizontal="true"
+        android:text="@string/hello_world" />
+    
+     <LinearLayout
+         android:id="@+id/line_1"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleepproblemtitle">
+	 </LinearLayout>
+	 
+     
+     <TextView
+        android:id="@+id/sleepfator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line_1"
+        android:paddingTop="20dp"
+        android:textSize="60px"
+        android:text="因素" />
+     
+        <LinearLayout
+         android:id="@+id/line_2"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleepfator">
+		 </LinearLayout>
+		 
+        <TextView
+        android:id="@+id/sleepfactorcontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line_2"
+        android:paddingTop="20dp"
+        android:textSize="40px"
+        android:text="因素内容" />
+     
+        <LinearLayout
+         android:id="@+id/line_3"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleepfactorcontent">
+	 </LinearLayout>
+	 
+     <TextView
+        android:id="@+id/sleepexplain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line_3"
+        android:paddingTop="20dp"
+        android:textSize="60px"
+        android:text="解释" />
+     
+        <LinearLayout
+         android:id="@+id/line_4"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleepexplain">
+	 </LinearLayout>
+	 
+	 <TextView
+        android:id="@+id/sleepexplaincontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line_4"
+        android:paddingTop="20dp"
+        android:textSize="40px"
+        android:text="解释内容" />
+     
+        <LinearLayout
+         android:id="@+id/line_5"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleepexplaincontent">
+	 </LinearLayout>
+	 
+     <TextView
+        android:id="@+id/sleepsuggest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line_5"
+        android:paddingTop="20dp"
+        android:textSize="60px"
+        android:text="建议" />
+     
+        <LinearLayout
+         android:id="@+id/line_6"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleepsuggest">
+	 </LinearLayout>
+	 
+     <TextView
+        android:id="@+id/sleepsuggestcontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line_6"
+        android:paddingTop="20dp"
+        android:textSize="40px"
+        android:text="建议内容" />
+     
+        <LinearLayout
+         android:id="@+id/line_7"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_marginTop="10dp"
+		 android:layout_below="@id/sleepsuggestcontent">
+	 </LinearLayout>
+     
+     <Button 
+         android:id="@+id/userkonw"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="我知道了"
+         android:layout_marginBottom="40dp"
+         android:layout_alignParentBottom="true"/>
+    
+
+</RelativeLayout>

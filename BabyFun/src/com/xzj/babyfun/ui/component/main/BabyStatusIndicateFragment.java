@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xzj.babyfun.BabyStatusActivity;
+import com.xzj.babyfun.CriticalActivity;
 import com.xzj.babyfun.R;
 import com.xzj.babyfun.baseheader.BaseL2Message;
 import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
@@ -33,6 +34,7 @@ public class BabyStatusIndicateFragment extends Fragment{
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(getActivity(), BabyStatusActivity.class);
+                
                 //intent.putExtra("deviceid", mDeviceId);
                 /*bundle.putInt("temp", tempValue);
                 bundle.putInt("humit", humitValue);*/

@@ -54,7 +54,7 @@ public class SyncDeviceImpl implements SyncDevice{
            keyPayload.key = 1;
            keyPayload.keyLen = 4; 
            
-           DeviceTime dvtm = getDeviceTime();
+           DeviceTime dvtm = acqDeviceTime();
            keyPayload.keyValue = dvtm.toByte();  
            
            BaseL2Message bsl2Msg 
@@ -68,7 +68,7 @@ public class SyncDeviceImpl implements SyncDevice{
 
 
 
-    private DeviceTime getDeviceTime() {
+    private DeviceTime acqDeviceTime() {
         // TODO Auto-generated method stub
        DeviceTime dvtm = new DeviceTime();
        Calendar calendar = Calendar.getInstance(); 
@@ -95,6 +95,63 @@ public class SyncDeviceImpl implements SyncDevice{
             
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public DeviceResponse<?> stopSendBreathData() {
+        // TODO Auto-generated method stub
+        SLog.e(TAG, " stopSendBreathData ");
+        if (mIsBluetoothReady) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 3;
+            keyPayload.keyLen = 0;
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public DeviceResponse<?> getDeviceTime() {
+        // TODO Auto-generated method stub
+        SLog.e(TAG, " getDeviceTime ");
+        if (mIsBluetoothReady) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 3;
+            keyPayload.keyLen = 0;
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public DeviceResponse<?> getBodyTemperature() {
+        // TODO Auto-generated method stub
+        SLog.e(TAG, " getBodyTemperature ");
+        if (mIsBluetoothReady) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 1;
+            keyPayload.keyLen = 0;
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
         }

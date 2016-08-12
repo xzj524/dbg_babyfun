@@ -30,7 +30,7 @@ public class AsyncDeviceImpl implements AsyncDevice {
     }
 
     @Override
-    public Future<?> setDeviceTime(final DeviceTime dvtime, final DeviceTimeListener listener) {
+    public Future<?> setDeviceTime() {
         // TODO Auto-generated method stub
         
         RequestTask task = new RequestTask() {
@@ -47,10 +47,28 @@ public class AsyncDeviceImpl implements AsyncDevice {
         };
         return getDispatcher().dispatch(task);
     }
+    
+    @Override
+    public Future<?> getDeviceTime() {
+        // TODO Auto-generated method stub
+      
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.getDeviceTime();
+               /* if (response.error == null) {
+                    listener.onSetDeviceTime((Boolean) response.result);
+                } else {
+                    listener.onError(response.error);
+                }*/
+            }
+        };
+        return getDispatcher().dispatch(task);
+    }
 
     @Override
     public Future<?> startSendBreathData() {
-        // TODO Auto-generated method stub
         
         RequestTask task = new RequestTask() {
 
@@ -66,6 +84,46 @@ public class AsyncDeviceImpl implements AsyncDevice {
         };
         return getDispatcher().dispatch(task);
     }
+
+    @Override
+    public Future<?> stopSendBreathData() {
+
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.startSendBreathData();
+     
+            }
+        };
+        return getDispatcher().dispatch(task);
+    }
+
+    @Override
+    public Future<?> getBodyTemperature() {
+        // TODO Auto-generated method stub
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.getBodyTemperature();
+               /* if (response.error == null) {
+                    listener.onSetDeviceTime((Boolean) response.result);
+                } else {
+                    listener.onError(response.error);
+                }*/
+            }
+        };
+        return getDispatcher().dispatch(task);
+    }
+
+    @Override
+    public Future<?> getSleepInfo() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
 
 
 }

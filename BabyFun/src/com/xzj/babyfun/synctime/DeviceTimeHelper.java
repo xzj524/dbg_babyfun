@@ -16,7 +16,7 @@ public class DeviceTimeHelper {
     
     public static void setDeviceTime(Context context, DeviceTime dvtime) {
         
-        AsyncDeviceFactory.getInstance(context).setDeviceTime(dvtime, mListener);
+        AsyncDeviceFactory.getInstance(context).setDeviceTime();
     }
     
     class devTimeListener implements DeviceTimeListener {

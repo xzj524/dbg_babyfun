@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <TextView
+        android:id="@+id/babyexplaintitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20dp"
+        android:textSize="80px"
+        android:text="@string/hello_world" />
+    
+     <LinearLayout
+         android:id="@+id/line"
+		 android:layout_width="match_parent" 
+		 android:layout_height="1dp"
+		 android:background="#000000"
+		 android:orientation="vertical"
+		 android:layout_below="@id/babyexplaintitle">
+	 </LinearLayout>
+	 
+     
+     <TextView
+        android:id="@+id/babyexplaincontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/line"
+        android:paddingTop="20dp"
+        android:textSize="60px"
+        android:text="@string/hello_world" />
+     
+     <Button 
+         android:id="@+id/userkonw"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="我知道了"
+         android:layout_marginBottom="40dp"
+         android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

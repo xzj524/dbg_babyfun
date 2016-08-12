@@ -3,6 +3,7 @@ package com.xzj.babyfun;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -22,13 +23,21 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import cn.smssdk.gui.RegisterPage;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.analytics.MobclickAgent.EScenarioType;
+import com.umeng.analytics.MobclickAgent.UMAnalyticsConfig;
 import com.xzj.babyfun.chart.BarChartFragment;
 import com.xzj.babyfun.chart.SleepyChart;
 import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
@@ -54,6 +63,15 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     
     BluetoothAdapter mAdapter;
     Button mSearchBtnButton;
+    Button mMessageBtn;
+    Button mSettingBtn;
+    Button mStopBluetoothService;
+    Button mLogin;
+    
+    Button mGetDevicetimeButton;
+    Button mSetDevicetimeButton;
+    
+    Button mBreathBtn;
     Fragment mContent;
     private FragmentManager mFragmentMan;
     RouterStatusFragment routerfragment;
@@ -73,6 +91,12 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     static int freshtimes = 0;
     boolean mTemHide = false;
     boolean mSleepHide = false;
+    
+    
+    ViewGroup mMessageCenterViewGroup;
+    ViewGroup mBabyBreathViewGroup;
+    ViewGroup mBabySleepViewGroup;
+    ViewGroup mSettingsViewGroup;
 
     LineChart[] mCharts = new LineChart[4]; // 4条数据  
     static Typeface mTf; // 自定义显示字体  
@@ -93,6 +117,13 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
+        
+       // SMSSDK.initSDK(this, "15cc6f2034e7d", "027c72f4185b80d6f1d2e49be748b98f");
+        
+        MobclickAgent.startWithConfigure(
+                new UMAnalyticsConfig(getApplicationContext(), 
+                "4f83c5d852701564c0000011", "Umeng", 
+                EScenarioType.E_UM_NORMAL));
      
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
@@ -124,17 +155,162 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);  
        //为侧滑菜单设置布局  
        menu.setMenu(R.layout.slidingmenu);  
+       
+       mMessageCenterViewGroup = (ViewGroup) findViewById(R.id.message_center_view);
+       mMessageCenterViewGroup.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent(getApplicationContext(), CriticalActivity.class);
+            startActivity(intent);
+        }
+    });
+       
+       mBabyBreathViewGroup = (ViewGroup) findViewById(R.id.baby_breath_view);
+       mBabyBreathViewGroup.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent(getApplicationContext(), BabyBreathActivity.class);
+            startActivity(intent);
+        }
+    });
+       
+       mBabySleepViewGroup = (ViewGroup) findViewById(R.id.baby_sleep_view);
+       mBabySleepViewGroup.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent(getApplicationContext(), BabyStatusActivity.class);
+            startActivity(intent);
+        }
+    });
+       
+       mSettingsViewGroup = (ViewGroup) findViewById(R.id.baby_settings_view);
+       mMessageCenterViewGroup.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            Intent intent = new Intent(getApplicationContext(), CriticalActivity.class);
+            startActivity(intent);
+        }
+    });
+      /* mMessageBtn = (Button) findViewById(R.id.messagebtn);
+       mMessageBtn.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+//            Intent intent = new Intent(getApplicationContext(), CriticalActivity.class);
+//            startActivity(intent);
+        }
+    });
+       
+       mBreathBtn = (Button) findViewById(R.id.breathshowbtn);
+       mBreathBtn.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+             Intent intent = new Intent(getApplicationContext(), BabyBreathActivity.class);
+             startActivity(intent);
+        }
+    });
+       mSettingBtn = (Button) findViewById(R.id.settingsbtn);
+       mSettingBtn.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            
+            
+           // Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            //startActivity(intent);
+            
+           // ContactsPage contactsPage = new ContactsPage();
+           // contactsPage.show(context);
+           
+            //打开注册页面
+            RegisterPage registerPage = new RegisterPage();
+            registerPage.setRegisterCallback(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+            // 解析注册结果
+            if (result == SMSSDK.RESULT_COMPLETE) {
+            @SuppressWarnings("unchecked")
+            HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
+            String country = (String) phoneMap.get("country");
+            String phone = (String) phoneMap.get("phone"); 
+             
+            }
+            }
+            });
+            registerPage.show(getApplicationContext());
+       
+        }
+    });
+       */
+       
+       mStopBluetoothService = (Button) findViewById(R.id.gettemp);
+       mStopBluetoothService.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+          //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+              AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
+          //    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+          //     AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
+        }
+    });
+       
+       mGetDevicetimeButton = (Button) findViewById(R.id.getdevicetime);
+       mGetDevicetimeButton.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+          //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+          //    AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
+          //    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+               AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
+        }
+    });
+       
+       mSetDevicetimeButton = (Button) findViewById(R.id.setdevicetime);
+       mSetDevicetimeButton.setOnClickListener(new View.OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+          //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+          //    AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
+              AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+          //     AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
+        }
+    });
         
         mFragmentMan = getFragmentManager();
         routerfragment = (RouterStatusFragment) mFragmentMan.findFragmentById(R.id.routerStatusFragment);
         realTimeStatusFragment = (RealTimeStatusFragment) mFragmentMan.findFragmentById(R.id.realtimestatuFragment);
-        
         babyStatusIndicateFragment = (BabyStatusIndicateFragment) mFragmentMan.findFragmentById(R.id.babyStatusIndicateFragment);
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(mReceiver, filter);
-
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        registerReceiver(mReceiver, filter);
+    }
+    
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
     
 
@@ -200,31 +376,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
     }
     
-    BroadcastReceiver mReceiver = new BroadcastReceiver(){
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent
-                        .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                
-                if (device.getBondState() != BluetoothDevice.BOND_BONDED){
-                    Toast.makeText(getApplicationContext(), "find device:" + device.getName()
-                            + device.getAddress(), Toast.LENGTH_SHORT).show();
-    
-                }
-            }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                setTitle("鎼滅储瀹屾垚");
-           
-            }
-        }
-        
-    };
-    
-
-    
     //UART service connected/disconnected
     private ServiceConnection mUartServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder rawBinder) {
@@ -276,6 +427,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                                             + "deviceaddress "+ deviceAddress 
                                             +" myserviceValue = " + mService);
                                     mService.connect(deviceAddress);
+                                    
                                     break;
                                 }
                             }

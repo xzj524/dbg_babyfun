@@ -24,4 +24,22 @@ public class SyncDeviceRefactor implements SyncDevice{
         return null;
     }
 
+    @Override
+    public DeviceResponse<?> stopSendBreathData() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DeviceResponse<?> getDeviceTime() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DeviceResponse<?> getBodyTemperature() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

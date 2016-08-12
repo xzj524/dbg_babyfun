@@ -38,7 +38,168 @@
         android:src="@drawable/rightarrow"/>
        
    </LinearLayout>
+   
+
+    
+    
+    
+    
+      <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/setting_items_padding_top"
+            android:layout_marginTop="20dp">
+
+          
+            <RelativeLayout
+                android:id="@+id/message_center_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+                <TextView
+                    android:id="@+id/message_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+               		android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="消息中心" />
+                
+            </RelativeLayout>
+            
+            <LinearLayout
+		         android:id="@+id/line_3"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/baby_breath_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+                <TextView
+                    android:id="@+id/baby_breath_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"	
+					android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="宝宝呼吸" />
+                
+            </RelativeLayout>
+            
+                <LinearLayout
+		         android:id="@+id/line_4"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/baby_sleep_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+
+
+                <TextView
+                    android:id="@+id/baby_sleep_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+          			android:layout_marginLeft="40dp"
+                    android:duplicateParentState="true"
+                    android:text="宝宝睡眠" />
+                
+
+            </RelativeLayout>
+            <!-- 云安全 -->
+            
+            <LinearLayout
+		         android:id="@+id/line_5"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/baby_settings_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+                <TextView
+                    android:id="@+id/baby_settings"
+                    android:layout_marginLeft="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="设置" />
+    
+            </RelativeLayout>
+            
+            
+          <LinearLayout
+		         android:id="@+id/line_6"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+        </LinearLayout>
+      <!--  <Button 
+       android:id="@+id/messagebtn"
+       android:layout_width="100dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="20dp"
+       android:layout_marginLeft="20dp"
+       android:text="消息中心"/>
+   
+    <Button 
+       android:id="@+id/settingsbtn"
+       android:layout_width="100dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="20dp"
+       android:layout_marginLeft="20dp"
+       android:text="设置"/>
+    
+    
+    <Button 
+       android:id="@+id/breathshowbtn"
+       android:layout_width="100dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="20dp"
+       android:layout_marginLeft="20dp"
+       android:text="宝宝呼吸"/> 
         
+    
+    <Button 
+       android:id="@+id/babylogin"
+       android:layout_width="100dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="20dp"
+       android:layout_marginLeft="20dp"
+       android:text="登录/注册"/>
+        -->
    
     
 </LinearLayout>

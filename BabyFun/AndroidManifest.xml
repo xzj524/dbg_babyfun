@@ -13,7 +13,15 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
         android:allowBackup="true"
@@ -56,13 +64,12 @@
             android:name=".BabyStatusActivity"
             android:label="@string/title_activity_baby_status" >
         </activity>
-        
-         <activity
+        <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_test" >
         </activity>
         <activity
-            android:name="com.xzj.babyfun.BabyBreathActivity"
+            android:name=".BabyBreathActivity"
             android:label="@string/title_activity_baby_breath" >
         </activity>
 
@@ -82,7 +89,60 @@
             android:name="UMENG_CHANNEL"
             android:value="Umeng" >
         </meta-data>
-       
+
+        <activity
+            android:name=".CriticalActivity"
+            android:label="@string/title_activity_critical" >
+        </activity>
+        <activity
+            android:name=".CalendarActivity"
+            android:label="@string/title_activity_calendar" >
+        </activity>
+        <activity
+            android:name=".BabyExplainActivity"
+            android:label="@string/title_activity_baby_explain" >
+        </activity>
+        <activity
+            android:name=".SleepProblemActivity"
+            android:label="@string/title_activity_sleep_problem" >
+        </activity>
+        <activity
+            android:name=".SleepAnalysisActivity"
+            android:label="@string/title_activity_sleep_analysis" >
+        </activity>
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="zGOG68GTMiC9vzx6dDa5kVEhg5S9i0x9" />
+
+        <activity
+            android:name=".EmergencyMapActivity"
+            android:label="@string/title_activity_emergency_map" >
+        </activity>
+        <activity
+            android:name=".BabyEmergencyActivity"
+            android:label="@string/title_activity_baby_emergency" >
+        </activity>
+        <activity
+            android:name=".EmergencyPhoneNumberActivity"
+            android:label="@string/title_activity_emergency_phone_number" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        
+        <activity
+			android:name="com.mob.tools.MobUIShell"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			android:configChanges="keyboardHidden|orientation|screenSize"
+			android:windowSoftInputMode="stateHidden|adjustResize"/>
     </application>
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>

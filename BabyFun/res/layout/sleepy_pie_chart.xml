@@ -7,13 +7,95 @@
    <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/sleepypiechart"
         android:layout_width="match_parent"
-        android:layout_height="240dp"/>
+        android:layout_height="196dp"/>
    
-   
-    
-   
-   
-   
+    <LinearLayout 
+        android:id="@+id/sleepstatistics"
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="vertical"
+         android:layout_marginLeft="10dp"
+         android:layout_marginBottom="20dp">
+         <TextView 
+	       android:id="@+id/sleepstatisticstext"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:textColor="@color/white"
+	       android:textSize="56px"
+	       android:text="宝宝睡眠统计:"/>
+         
+          <LinearLayout 
+	         android:id="@+id/sleeppercentbelow"
+	         android:layout_height="wrap_content"
+	         android:layout_width="match_parent"
+	         android:orientation="horizontal"
+	         android:layout_marginTop="10dp">
+         
+         <LinearLayout 
+             android:id="@+id/sleepefficiency"
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:paddingLeft="30dp"
+             android:orientation="vertical">
+             <TextView 
+                 android:id="@+id/sleepefficiencytext"
+                 android:layout_height="wrap_content"
+             	 android:layout_width="wrap_content"
+             	 android:text="睡眠效率"/>
+              <TextView 
+                 android:id="@+id/sleepefficiencypercent"
+                 android:layout_height="wrap_content"
+             	 android:layout_width="wrap_content"
+             	 android:paddingLeft="14dp"
+             	 android:text="50%"/>
+             
+         </LinearLayout>
+         
+         <LinearLayout 
+             android:id="@+id/breathstop"
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:paddingLeft="50dp"
+             android:orientation="vertical">
+             <TextView 
+                 android:id="@+id/breathstoptext"
+                 android:layout_height="wrap_content"
+             	 android:layout_width="wrap_content"
+             	 android:text="呼吸停滞次数"/>
+              <TextView 
+                 android:id="@+id/breathstoptimes"
+                 android:layout_height="wrap_content"
+             	 android:layout_width="wrap_content"
+             	 android:paddingLeft="24dp"
+             	 android:text="0次"/>
+              
+         </LinearLayout>
+         
+         <LinearLayout 
+             android:id="@+id/lightsleeps"
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:paddingLeft="50dp"
+             android:orientation="vertical">
+             <TextView 
+                 android:id="@+id/lightsleeptext"
+                 android:layout_height="wrap_content"
+             	 android:layout_width="wrap_content"
+             	 android:text="睡眠评分"/>
+              <TextView 
+                 android:id="@+id/lightsleeppercent"
+                 android:layout_height="wrap_content"
+             	 android:layout_width="wrap_content"
+             	 android:paddingLeft="14dp"
+             	 android:text="90分"/>
+             
+         </LinearLayout>
+         
+ 
+     </LinearLayout>
+      
+
+     </LinearLayout>
     
 
 </LinearLayout>

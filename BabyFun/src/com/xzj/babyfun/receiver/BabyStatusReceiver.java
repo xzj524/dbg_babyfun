@@ -18,7 +18,6 @@ public class BabyStatusReceiver extends BroadcastReceiver{
         // TODO Auto-generated method stub
         String action = intent.getAction();
         Log.e(TAG, "UART_CONNECT_MSG   getAction"  + action);
-        final Intent mIntent = intent;
 
       //*********************//
         if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {

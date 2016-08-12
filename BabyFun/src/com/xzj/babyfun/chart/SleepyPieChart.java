@@ -3,6 +3,7 @@ package com.xzj.babyfun.chart;
 import java.util.ArrayList;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -17,19 +18,24 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.PercentFormatter;
+import com.xzj.babyfun.BabyBreathActivity;
+import com.xzj.babyfun.BabyExplainActivity;
 import com.xzj.babyfun.R;
-import com.xzj.babyfun.eventbus.AsycEvent;
+import com.xzj.babyfun.SleepAnalysisActivity;
 import com.xzj.babyfun.utility.SleepyInfo;
 
 public class SleepyPieChart extends Fragment{
     
+    ViewGroup mSleepEfficiency;
+    ViewGroup mSleepBreathStop;
+    ViewGroup mSleepLightSleep;
     static PieChart mPieChart;
     private static final String TAG = SleepyPieChart.class.getSimpleName();
     static int[] mTextColors = new int[] {
-        Color.rgb(9, 79, 55),
-        Color.rgb(13, 89, 116),
-        Color.rgb(16, 51, 116),
-        Color.rgb(14, 39, 90)
+        Color.rgb(110, 215, 217),
+        Color.rgb(53, 199, 202),
+        Color.rgb(255, 185, 188),
+        Color.rgb(233, 103, 39)
     };
     
     @Override
@@ -38,6 +44,46 @@ public class SleepyPieChart extends Fragment{
         
         View pieChartView = inflater.inflate(R.layout.sleepy_pie_chart, container, false);
         mPieChart = (PieChart) pieChartView.findViewById(R.id.sleepypiechart);
+        
+        mSleepEfficiency = (ViewGroup) pieChartView.findViewById(R.id.sleepefficiency);
+        mSleepBreathStop = (ViewGroup) pieChartView.findViewById(R.id.breathstop);
+        mSleepLightSleep = (ViewGroup) pieChartView.findViewById(R.id.lightsleeps);
+        mSleepEfficiency.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(getActivity().getApplicationContext(), BabyExplainActivity.class);
+                intent.putExtra("title", "睡眠效率");
+                intent.putExtra("content", "睡眠效率是指除清醒外的睡眠时间占躺床上睡觉总时间的百发比。");
+                startActivity(intent);
+            }   
+        });
+        
+        mSleepBreathStop.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(getActivity().getApplicationContext(), BabyExplainActivity.class);
+                intent.putExtra("title", "呼吸暂停");
+                intent.putExtra("content", "呼吸暂停问题");
+                startActivity(intent);
+            }   
+        });
+ 
+        mSleepLightSleep.setOnClickListener(new View.OnClickListener() {
+     
+     @Override
+     public void onClick(View v) {
+         // TODO Auto-generated method stub
+         Intent intent = new Intent(getActivity().getApplicationContext(), SleepAnalysisActivity.class);
+         intent.putExtra("title", "睡眠分析");
+         intent.putExtra("content", "睡眠分析问题");
+         startActivity(intent);
+     }   
+ });
+        
         
         //initPieChart();
         return pieChartView;
