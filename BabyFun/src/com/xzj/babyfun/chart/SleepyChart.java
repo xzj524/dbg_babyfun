@@ -177,7 +177,25 @@ public class SleepyChart extends Fragment{
             yValsSleep.clear();
         }
         for (int i = 0; i < 48; i++) {
-            if (i < 12) {
+            
+            if (i < 6) {
+                yValsSleep.add(new Entry((float) (80 - (Math.random() * 10)), i));
+            } else if (i > 5 && i < 12) {
+                yValsSleep.add(new Entry((float) (75 - (Math.random() * 5)), i));
+            } else if (i > 11 && i < 18) {
+                yValsSleep.add(new Entry((float) (56 - (Math.random() * 5)), i));
+            } else if (i > 17 && i < 30) {
+                yValsSleep.add(new Entry((float) (20 - (Math.random() * 10)), i));
+            } else if (i > 29 && i < 36) {
+                yValsSleep.add(new Entry((float) (48 - (Math.random() * 10)), i));
+            }else if (i > 35 && i < 42) {
+                yValsSleep.add(new Entry((float) (64 - (Math.random() * 5)), i));
+            } else if (i > 41 && i < 48) {
+                yValsSleep.add(new Entry((float) (78 - (Math.random() * 10)), i));
+            }
+            
+            
+         /*   if (i < 12) {
                 yValsSleep.add(new Entry((float) (100 - (Math.random() * 10)), i));
             } else if (i > 11 && i < 24) {
                 yValsSleep.add(new Entry((float) (30 - (Math.random() * 10)), i));
@@ -187,7 +205,7 @@ public class SleepyChart extends Fragment{
                 yValsSleep.add(new Entry((float) (90 - (Math.random() * 10)), i));
             }
             
-        }
+*/        }
         
         
         if (xVals.size() > 0) {
@@ -239,7 +257,8 @@ public class SleepyChart extends Fragment{
      
         // enable / disable grid background  
         mChart.setDrawGridBackground(false); // 是否显示表格颜色  
-       
+       mChart.setBorderColor(mColors[0]);
+       mChart.setGridBackgroundColor(mColors[0]);
         // enable touch gestures  
         mChart.setTouchEnabled(false); // 设置是否可以触摸  
   

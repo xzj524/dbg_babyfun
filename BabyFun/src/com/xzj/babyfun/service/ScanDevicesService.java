@@ -158,6 +158,7 @@ public class ScanDevicesService extends Service{
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mBLEScanCallback);
                     onScanDeviceListener.OnScanDeviceSucceed(9);
+                    onScanDeviceListener.OnScanDeviceSucceed(10);
                 }
             }
         }

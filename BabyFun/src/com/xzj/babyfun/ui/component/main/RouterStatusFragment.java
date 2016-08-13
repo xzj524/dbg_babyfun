@@ -309,7 +309,7 @@ public class RouterStatusFragment extends Fragment{
     }
     
     public void setCurrentStateSucceed(){
-        mCurrentState = CheckingState.SUCCEED;    
+        mCurrentState = CheckingState.SUCCEED;  
     }
     
     public CheckingState getCurrentState() {

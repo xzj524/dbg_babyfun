@@ -199,104 +199,12 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
             startActivity(intent);
         }
     });
-      /* mMessageBtn = (Button) findViewById(R.id.messagebtn);
-       mMessageBtn.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-//            Intent intent = new Intent(getApplicationContext(), CriticalActivity.class);
-//            startActivity(intent);
-        }
-    });
-       
-       mBreathBtn = (Button) findViewById(R.id.breathshowbtn);
-       mBreathBtn.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-             Intent intent = new Intent(getApplicationContext(), BabyBreathActivity.class);
-             startActivity(intent);
-        }
-    });
-       mSettingBtn = (Button) findViewById(R.id.settingsbtn);
-       mSettingBtn.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            
-            
-           // Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            //startActivity(intent);
-            
-           // ContactsPage contactsPage = new ContactsPage();
-           // contactsPage.show(context);
-           
-            //打开注册页面
-            RegisterPage registerPage = new RegisterPage();
-            registerPage.setRegisterCallback(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-            // 解析注册结果
-            if (result == SMSSDK.RESULT_COMPLETE) {
-            @SuppressWarnings("unchecked")
-            HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
-            String country = (String) phoneMap.get("country");
-            String phone = (String) phoneMap.get("phone"); 
-             
-            }
-            }
-            });
-            registerPage.show(getApplicationContext());
-       
-        }
-    });
-       */
-       
-       mStopBluetoothService = (Button) findViewById(R.id.gettemp);
-       mStopBluetoothService.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-          //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
-              AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
-          //    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-          //     AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
-        }
-    });
-       
-       mGetDevicetimeButton = (Button) findViewById(R.id.getdevicetime);
-       mGetDevicetimeButton.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-          //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
-          //    AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
-          //    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-               AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
-        }
-    });
-       
-       mSetDevicetimeButton = (Button) findViewById(R.id.setdevicetime);
-       mSetDevicetimeButton.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-          //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
-          //    AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
-              AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-          //     AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
-        }
-    });
+      
         
         mFragmentMan = getFragmentManager();
         routerfragment = (RouterStatusFragment) mFragmentMan.findFragmentById(R.id.routerStatusFragment);
         realTimeStatusFragment = (RealTimeStatusFragment) mFragmentMan.findFragmentById(R.id.realtimestatuFragment);
-        babyStatusIndicateFragment = (BabyStatusIndicateFragment) mFragmentMan.findFragmentById(R.id.babyStatusIndicateFragment);
+   //     babyStatusIndicateFragment = (BabyStatusIndicateFragment) mFragmentMan.findFragmentById(R.id.babyStatusIndicateFragment);
     }
     
     @Override
@@ -411,7 +319,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                     // TODO Auto-generated method stub
                     if (touchid == 9) {
                         routerfragment.setCurrentStateSucceed();
-                        routerfragment.doUpdateStatusClick();
+                       // routerfragment.doUpdateStatusClick();
                         List<BluetoothDevice> devicelist = new ArrayList<BluetoothDevice>();
                         devicelist = mScanService.getDeviceList();
                         for (BluetoothDevice listDev : devicelist) {
@@ -435,13 +343,15 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
                         }
                         //mScanService.startScanList();
                     } else if (touchid == 10) {
-                        routerfragment.setCurrentStateFailed();
+                       // routerfragment.setCurrentStateFailed();
+                        routerfragment.setCurrentStateSucceed();
                         routerfragment.doUpdateStatusClick();
                         
                         Intent intent = new Intent(getApplicationContext(), BabyBreathActivity.class);
-                        startActivity(intent); 
+                       // startActivity(intent); 
+                       
                          
-                         overridePendingTransition(R.anim.main_special_activity_open_enter, R.anim.main_special_activity_open_exit);
+                      //   overridePendingTransition(R.anim.main_special_activity_open_enter, R.anim.main_special_activity_open_exit);
                     }
                 }
             });
@@ -688,7 +598,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
        /*// String msg = "onEventMainThread收到了消息：" + event.getMsg();  
         Log.d("harvic", msg);  
        // tv.setText(msg);  */
-        Toast.makeText(this, "enventbus write bytes", Toast.LENGTH_SHORT).show(); 
+   //     Toast.makeText(this, "enventbus write bytes", Toast.LENGTH_SHORT).show(); 
         mService.writeBaseRXCharacteristic(event.getByte());
     } 
     
@@ -696,6 +606,8 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
+        unbindService(mUartServiceConnection);
+        unbindService(mScanServiceConnection);
         mService.disconnect();
         EventBus.getDefault().unregister(this);//反注册EventBus  
     }

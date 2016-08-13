@@ -16,6 +16,8 @@ import com.xzj.babyfun.breath.BabyBreath;
 import com.xzj.babyfun.constant.Constant;
 import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.synctime.DeviceTime;
+import com.xzj.babyfun.ui.component.main.BabyRealTimeStatusFragment;
+import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
 
 import de.greenrobot.event.EventBus;
 
@@ -110,11 +112,17 @@ public class MessageParse {
         int humbit = keyValue[2] & 0xff;
         int energy = keyValue[3] & 0xff;
         
+        String tempString;
         if (PNValue == 1) {
             SLog.e(TAG, "temp = " + "-" + tempHigh + "." + tempLow);
+            tempString = "-" + tempHigh + "." + tempLow;
         } else {
             SLog.e(TAG, "temp = " + tempHigh + "." + tempLow);
+            tempString = tempHigh + "." + tempLow;
         }
+        
+        EventBus.getDefault().post(tempString);
+        //RealTimeStatusFragment.setTemperature(tempString);
        
         SLog.e(TAG, "humbit = " + humbit);
         SLog.e(TAG, "energy = " + energy);

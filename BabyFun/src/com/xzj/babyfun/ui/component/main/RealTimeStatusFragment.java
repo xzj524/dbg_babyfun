@@ -1,8 +1,12 @@
 package com.xzj.babyfun.ui.component.main;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xzj.babyfun.R;
+import com.xzj.babyfun.baseheader.BaseL2Message;
+import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
+import com.xzj.babyfun.logging.SLog;
+import com.xzj.babyfun.utility.PrivateParams;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * 
@@ -43,26 +53,30 @@ public class RealTimeStatusFragment extends Fragment{
         // TODO Auto-generated method stub
         View realtimeStatusView = inflater.inflate(R.layout.realtime_status_fragment, container, false);
         
-      mTemptureView = (LinearLayout) realtimeStatusView.findViewById(R.id.environment1);
-
-      
-  /*    mTemptureView.setOnClickListener(new View.OnClickListener() {
-          
-          @Override
-          public void onClick(View v) {
-              // TODO Auto-generated method stub
-              Toast.makeText(v.getContext(), "点击温度", Toast.LENGTH_SHORT).show();
-              mListener.onStatusSelected(1);
-          }
-      });*/
-      
-      mTemperatureTextView = (TextView) realtimeStatusView.findViewById(R.id.temperaturevalues);
+      //mTemptureView = (LinearLayout) realtimeStatusView.findViewById(R.id.environment1);
+      mTemperatureTextView = (TextView) realtimeStatusView.findViewById(R.id.temperaturevalues123);
       mHumitTextView = (TextView) realtimeStatusView.findViewById(R.id.humidityvalues);
       
+      Timer timer = new Timer(true);
+    //  timer.schedule(task,1000, 3000); 
+      
+      EventBus.getDefault().register(this);
+      
       return realtimeStatusView;
-        //return super.onCreateView(inflater, container, savedInstanceState);
     }
     
+    
+    TimerTask task = new TimerTask(){  
+        public void run() {  
+            int connected =  PrivateParams.getSPInt(getActivity().getApplicationContext(), "connectedbluetooth", 0);
+   if (connected == 1) {
+       AsyncDeviceFactory.getInstance(getActivity()
+               .getApplicationContext()).getBodyTemperature();
+   }
+          
+      }  
+   };  
+
     
     //Container Activity must implement this interface  
     public interface OnStatusSelectedListener{  
@@ -77,8 +91,9 @@ public class RealTimeStatusFragment extends Fragment{
         mListener =(OnStatusSelectedListener)activity;  
     }
     
-    public void setTemperature(int value) {
-        mTemperatureTextView.setText(""+value);
+    public void setTemperature(String tempString) {
+        SLog.e(TAG, "tempString = " + tempString);
+      //  mTemperatureTextView.setText(tempString);
         
     }
     
@@ -90,5 +105,16 @@ public class RealTimeStatusFragment extends Fragment{
     public void setPM25(int value) {
         mPM25TextView.setText(""+value);
         
+    }
+    
+    public void onEventMainThread(String str) {
+        setTemperature(str);
+    }
+    
+    @Override
+    public void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

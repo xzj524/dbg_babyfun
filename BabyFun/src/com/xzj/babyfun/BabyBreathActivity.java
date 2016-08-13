@@ -28,12 +28,14 @@ public class BabyBreathActivity extends Activity {
     private FragmentManager mFragmentMan;
     private BreathChart breathchartFragment;
     private TextView mBreatData;
-    int mPreValue = 10;
+    int mPreValue = 5;
     long mLastBreathTime;
     long mBreathPeriod;
     int mBreathFreq;
     Timer timer;
     int isbreath = 0;
+    
+    boolean breatfreq = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class BabyBreathActivity extends Activity {
                 
                 SLog.e(TAG, "mLastBreathTime = " + mLastBreathTime);
                 //updateBreathWave(mPreValue);
-               // AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+              //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
             }
         });
         
@@ -109,10 +111,14 @@ public class BabyBreathActivity extends Activity {
                  switch (msg.what) {      
                      case 1:      
                          updateBreathWave(msg.arg1);
-                         if (mBreathPeriod > 0) {
-                             mBreathFreq = (int)((60 * 1000) / mBreathPeriod); 
-                             mBreatData.setText(mBreathFreq + "");
-                         }
+                         if (breatfreq) {
+                            breatfreq = false;
+                            if (mBreathPeriod > 0) {
+                                mBreathFreq = (int)((60 * 1000) / mBreathPeriod); 
+                                mBreatData.setText(mBreathFreq + "");
+                            }
+                        }
+                       
                          break;      
                      }      
                      super.handleMessage(msg);  
@@ -122,13 +128,6 @@ public class BabyBreathActivity extends Activity {
             
      TimerTask task = new TimerTask(){  
            public void run() {  
- /*          if (isbreath % 2 == 1) {
-               mPreValue = (int) (20 + Math.random() * 2);
-        } else {
-            mPreValue = 5;
-        }
-           isbreath++;*/
-
            Message message = new Message();      
            message.what = 1; 
            message.arg1 = mPreValue;
@@ -155,10 +154,11 @@ public class BabyBreathActivity extends Activity {
             mBreathPeriod = curtime - mLastBreathTime;
             mLastBreathTime = curtime;
         }
+        breatfreq = true;
         if (breaths.size() == 1) {
             mPreValue = breaths.get(0).mBreathValue;
             SLog.e(TAG, "BabyBreathActivity receive REAL BREATH DATA " + mPreValue);
-        } else if (breaths.size() == 2) {
+        } /*else if (breaths.size() == 2) {
             mPreValue = breaths.get(0).mBreathValue;
             int timelen = breaths.get(1).mBreathTime - breaths.get(0).mBreathTime;
             Handler mHandler = new Handler(getMainLooper());
@@ -170,7 +170,7 @@ public class BabyBreathActivity extends Activity {
                     mPreValue = breaths.get(1).mBreathValue;
                 }
             }, timelen * 1000);
-        }
+        }*/
     }
     
 }

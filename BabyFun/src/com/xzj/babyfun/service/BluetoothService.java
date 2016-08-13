@@ -38,6 +38,7 @@ import android.util.Log;
 import com.xzj.babyfun.deviceinterface.SyncDeviceImpl.BluetoothReady;
 import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.utility.BaseMessageHandler;
+import com.xzj.babyfun.utility.PrivateParams;
 
 import de.greenrobot.event.EventBus;
 
@@ -107,6 +108,8 @@ public class BluetoothService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                
+                PrivateParams.setSPInt(getApplicationContext(), "connectedbluetooth", 1);
                 enableDataNotification();
             	SLog.e(TAG, "mBluetoothGatt = " + mBluetoothGatt );
               //  broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
@@ -271,9 +274,12 @@ public class BluetoothService extends Service {
             return;
         }
         SLog.e(TAG, "mBluetoothGatt closed");
+        
         mBluetoothDeviceAddress = null;
         mBluetoothGatt.close();
         mBluetoothGatt = null;
+        
+        PrivateParams.setSPInt(getApplicationContext(), "connectedbluetooth", 0);
     }
 
     /**

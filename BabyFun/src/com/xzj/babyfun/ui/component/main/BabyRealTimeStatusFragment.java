@@ -28,7 +28,7 @@ public class BabyRealTimeStatusFragment extends Fragment{
     /** 睡眠 view */
     private LinearLayout mSleepView;
     
-    private TextView mTemperatureTextView;
+    private static TextView mTemperatureTextView;
     private TextView mHumitTextView;
    // private TextView mPM25TextView;
    
@@ -55,8 +55,8 @@ public class BabyRealTimeStatusFragment extends Fragment{
      
     
     
-    public void setTemperature(int value) {
-        mTemperatureTextView.setText(""+value);
+    public static void setTemperature(String tempString) {
+        mTemperatureTextView.setText(tempString);
         
     }
     

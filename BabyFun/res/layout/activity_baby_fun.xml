@@ -33,23 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
      
-     <Button 
-         android:id="@+id/gettemp"
-         android:layout_width="wrap_content"
-         android:layout_height="match_parent"
-         android:text="获取温度"/>
-     
-      <Button 
-         android:id="@+id/getdevicetime"
-         android:layout_width="wrap_content"
-         android:layout_height="match_parent"
-         android:text="获取设备时间"/>
-      
-       <Button 
-         android:id="@+id/setdevicetime"
-         android:layout_width="wrap_content"
-         android:layout_height="match_parent"
-         android:text="设置设备时间"/>
+   
     
     <fragment 
         android:id="@+id/realtimestatuFragment"
@@ -59,20 +43,6 @@
         android:layout_marginTop="100dp"
         android:layout_below="@id/routerStatusFragment"/>
     
-      <ImageView
-        android:id="@+id/lineImageView"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="60dp"
-        android:alpha="50"
-        android:background="@drawable/line" />
-    
-    <fragment
-        android:id="@+id/babyStatusIndicateFragment"
-        android:name="com.xzj.babyfun.ui.component.main.BabyStatusIndicateFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_marginTop="10dp"/>
     
     
     
