@@ -46,5 +46,7 @@
     <string name="title_activity_emergency_map">EmergencyMapActivity</string>
     <string name="title_activity_baby_emergency">BabyEmergencyActivity</string>
     <string name="title_activity_emergency_phone_number">EmergencyPhoneNumberActivity</string>
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
 
 </resources>

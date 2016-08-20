@@ -3,7 +3,6 @@ package com.xzj.babyfun;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -19,8 +18,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.DropBoxManager.Entry;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
@@ -28,25 +27,18 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-import cn.smssdk.gui.RegisterPage;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.analytics.MobclickAgent.EScenarioType;
-import com.umeng.analytics.MobclickAgent.UMAnalyticsConfig;
 import com.xzj.babyfun.chart.BarChartFragment;
 import com.xzj.babyfun.chart.SleepyChart;
 import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.eventbus.AsycEvent;
+import com.xzj.babyfun.login.LoginActivity;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataInteraction;
 import com.xzj.babyfun.service.BluetoothService;
 import com.xzj.babyfun.service.ScanDevicesService;
 import com.xzj.babyfun.service.ScanDevicesService.OnScanDeviceListener;
+import com.xzj.babyfun.slidingmenu.SlidingMenuHelper;
 import com.xzj.babyfun.titlefragment.HomePageTopTitleFragment.OnButtonClickedListener;
 import com.xzj.babyfun.ui.component.main.BabyStatusIndicateFragment;
 import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
@@ -79,7 +71,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     BarChartFragment barChartFragment;
     RealTimeStatusFragment realTimeStatusFragment;
     BabyStatusIndicateFragment babyStatusIndicateFragment;
-    private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_SELECT_DEVICE = 1;
     private BluetoothDevice mDevice = null;
     private BluetoothService mService = null;
@@ -98,13 +89,11 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     ViewGroup mBabySleepViewGroup;
     ViewGroup mSettingsViewGroup;
 
-    LineChart[] mCharts = new LineChart[4]; // 4条数据  
-    static Typeface mTf; // 自定义显示字体  
+  
     static int[] mColors = new int[] { Color.rgb(137, 230, 81), Color.rgb(240, 240, 30),//  
             Color.rgb(89, 199, 250), Color.rgb(250, 104, 104), Color.rgb(4, 158, 255) }; // 自定义颜色 
     
     static ArrayList<Entry> yVals = new ArrayList<Entry>(); 
-    SlidingMenu menu;
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -118,15 +107,16 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
         
-       // SMSSDK.initSDK(this, "15cc6f2034e7d", "027c72f4185b80d6f1d2e49be748b98f");
-        
-        MobclickAgent.startWithConfigure(
+ /*       MobclickAgent.startWithConfigure(
                 new UMAnalyticsConfig(getApplicationContext(), 
                 "4f83c5d852701564c0000011", "Umeng", 
-                EScenarioType.E_UM_NORMAL));
+                EScenarioType.E_UM_NORMAL));*/
      
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
+        
+        SlidingMenuHelper slidingMenuHelper = new SlidingMenuHelper(this);
+        slidingMenuHelper.initSlidingMenu();
         
         //注册EventBus  
         EventBus.getDefault().register(this);
@@ -137,26 +127,9 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
 
         BabyStatusReceiver babyStatusReceiver = new BabyStatusReceiver();
         babyStatusReceiver.setBRInteractionListener(this);
-        
-        menu = new SlidingMenu(this);
-        menu.setMode(SlidingMenu.LEFT);  
-       // 设置触摸屏幕的模式  
-        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);  
-        menu.setShadowWidthRes(R.dimen.shadow_width);  
-      //  menu.setShadowDrawable(R.drawable.ab_bottom_solid_light_holo);  
-       // 设置滑动菜单视图的宽度  
-        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);  
-       // 设置渐入渐出效果的值  
-        menu.setFadeDegree(0.35f);  
-      //* 
-      //   SLIDING_WINDOW will include the Title/ActionBar in the content 
-       //  section of the SlidingMenu, while SLIDING_CONTENT does not. 
-        //  
-       menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);  
-       //为侧滑菜单设置布局  
-       menu.setMenu(R.layout.slidingmenu);  
        
-       mMessageCenterViewGroup = (ViewGroup) findViewById(R.id.message_center_view);
+       
+    /*   mMessageCenterViewGroup = (ViewGroup) findViewById(R.id.message_center_view);
        mMessageCenterViewGroup.setOnClickListener(new View.OnClickListener() {
         
         @Override
@@ -165,7 +138,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
             Intent intent = new Intent(getApplicationContext(), CriticalActivity.class);
             startActivity(intent);
         }
-    });
+    });*/
        
        mBabyBreathViewGroup = (ViewGroup) findViewById(R.id.baby_breath_view);
        mBabyBreathViewGroup.setOnClickListener(new View.OnClickListener() {
@@ -190,12 +163,12 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     });
        
        mSettingsViewGroup = (ViewGroup) findViewById(R.id.baby_settings_view);
-       mMessageCenterViewGroup.setOnClickListener(new View.OnClickListener() {
+       mSettingsViewGroup.setOnClickListener(new View.OnClickListener() {
         
         @Override
         public void onClick(View v) {
             // TODO Auto-generated method stub
-            Intent intent = new Intent(getApplicationContext(), CriticalActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }
     });
@@ -211,14 +184,14 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-        MobclickAgent.onResume(this);
+       // MobclickAgent.onResume(this);
     }
     
     @Override
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPause(this);
     }
     
 
@@ -236,9 +209,9 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         mTemHide = true;
        }
     
-    public void showslidingmenu() {
+/*    public void showslidingmenu() {
         menu.showMenu();
-    }
+    }*/
     
     public void switchContent(Fragment from, Fragment to) {
        
@@ -523,7 +496,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         // TODO Auto-generated method stub
         if (touchid == 2) {
             Log.e(TAG, "touchid = " + touchid);
-            menu.showMenu();
+            //.showMenu();
       
         }
     }
@@ -611,5 +584,6 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         mService.disconnect();
         EventBus.getDefault().unregister(this);//反注册EventBus  
     }
-    
+
+
 }

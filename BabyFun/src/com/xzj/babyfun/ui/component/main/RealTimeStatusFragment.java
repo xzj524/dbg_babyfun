@@ -6,7 +6,6 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xzj.babyfun.R;
-import com.xzj.babyfun.baseheader.BaseL2Message;
 import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
 import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.utility.PrivateParams;
