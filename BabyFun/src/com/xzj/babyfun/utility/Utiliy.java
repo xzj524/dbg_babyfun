@@ -74,7 +74,8 @@ public class Utiliy {
         notif = NotificationBuilderManager.createNotification(context, 0, title, content, false);
         //notif.contentIntent = clickPendingIntent;
         //notif.deleteIntent = deletePendingIntent;
-        nmNotificationManager.notify(0, notif);
+        //nmNotificationManager.notify(0, notif);
+        nmNotificationManager.notify(System.currentTimeMillis() + "", 0, notif);
         //nmNotificationManager.notify("1232", 0, notif);
         // send a broadcast when notifications arrive at client
        // sendNotificationArrivedReceiver(context, pkgName, pMsg);

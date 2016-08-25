@@ -4,16 +4,13 @@ package com.xzj.babyfun.sleepdatabase;
 
 public class SleepInfoEnumClass {
 
-    //SleepInfoId, SleepTimestamp, SleepDeviceTime, SleepValue;
     private long mSleepTimestamp = 0;
-    private int mSleepDeviceTime = 0;
+    private int mSleepYear= 0;
+    private int mSleepMonth= 0;
+    private int mSleepDay= 0;
+    private int mSleepMinute= 0;
     private int mSleepValue = 0;
-//    private String pushcurpkgname = "";
-//    private String pushwebappbindinfo = "";
-//    private String pushlightappbindinfo = "";
-//    private String pushsdkclientbindinfo = "";
-//    private String pushclientsbindinfo = "";
-//    private String pushselfbindinfo = "";
+
     
     public long getSleepTimestamp() {
         return mSleepTimestamp;
@@ -23,12 +20,36 @@ public class SleepInfoEnumClass {
         this.mSleepTimestamp = sleeptimestamp;
     }
     
-    public int getSleepDeviceTime() {
-        return mSleepDeviceTime;
+    public int getSleepYear() {
+        return mSleepYear;
     }
 
-    public void setSleepDeviceTime(int sleepdevicetime) {
-        this.mSleepDeviceTime = sleepdevicetime;
+    public void setSleepYear(int sleepyear) {
+        this.mSleepYear = sleepyear;
+    }
+    
+    public int getSleepMonth() {
+        return mSleepMonth;
+    }
+
+    public void setSleepMonth(int sleepmonth) {
+        this.mSleepMonth = sleepmonth;
+    }
+    
+    public int getSleepDay() {
+        return mSleepDay;
+    }
+
+    public void setSleepDay(int sleepday) {
+        this.mSleepDay = sleepday;
+    }
+    
+    public int getSleepMinute() {
+        return mSleepMinute;
+    }
+
+    public void setSleepMinute(int sleepminute) {
+        this.mSleepMinute = sleepminute;
     }
 
     public int getSleepValue() {
@@ -38,6 +59,4 @@ public class SleepInfoEnumClass {
     public void setSleepValue(int  sleepvalue) {
         this.mSleepValue = sleepvalue;
     }
-
-    
 }

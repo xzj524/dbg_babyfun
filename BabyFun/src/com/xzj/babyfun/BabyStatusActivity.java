@@ -18,6 +18,8 @@ import com.xzj.babyfun.chart.BarChartFragment;
 import com.xzj.babyfun.chart.SleepyChart;
 import com.xzj.babyfun.chart.SleepyChart.SetTextViewListener;
 import com.xzj.babyfun.chart.SleepyPieChart;
+import com.xzj.babyfun.deviceinterface.AsyncDeviceFactory;
+import com.xzj.babyfun.logging.SLog;
 import com.xzj.babyfun.receiver.BabyStatusReceiver;
 import com.xzj.babyfun.receiver.BabyStatusReceiver.DataStatusInteraction;
 import com.xzj.babyfun.service.BluetoothService;
@@ -56,6 +58,9 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_status);
+        
+        AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
+        SLog.e("BabyStatusActivity", "getAllNoSyncInfo");
         
         BabyStatusReceiver babyStatusReceiver = new BabyStatusReceiver();
         babyStatusReceiver.setDataStatusInteractionListener(this);

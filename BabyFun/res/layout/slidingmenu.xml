@@ -166,40 +166,34 @@
 				 android:orientation="vertical">
 		 		</LinearLayout>
         </LinearLayout>
-      <!--  <Button 
-       android:id="@+id/messagebtn"
-       android:layout_width="100dp"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="20dp"
-       android:layout_marginLeft="20dp"
-       android:text="消息中心"/>
-   
-    <Button 
-       android:id="@+id/settingsbtn"
-       android:layout_width="100dp"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="20dp"
-       android:layout_marginLeft="20dp"
-       android:text="设置"/>
-    
-    
-    <Button 
-       android:id="@+id/breathshowbtn"
-       android:layout_width="100dp"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="20dp"
-       android:layout_marginLeft="20dp"
-       android:text="宝宝呼吸"/> 
         
+       <RelativeLayout
+                android:id="@+id/baby_syncdata_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+                <TextView
+                    android:id="@+id/baby_sync_data"
+                    android:layout_marginLeft="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="同步数据" />
     
-    <Button 
-       android:id="@+id/babylogin"
-       android:layout_width="100dp"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="20dp"
-       android:layout_marginLeft="20dp"
-       android:text="登录/注册"/>
-        -->
-   
+            </RelativeLayout>
+            
+            
+          <LinearLayout
+		         android:id="@+id/line_7"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
+
     
 </LinearLayout>

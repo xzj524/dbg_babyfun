@@ -42,4 +42,10 @@ public class SyncDeviceRefactor implements SyncDevice{
         return null;
     }
 
+    @Override
+    public DeviceResponse<?> getAllNoSyncInfo() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

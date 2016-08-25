@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
@@ -101,7 +102,10 @@ public class SleepInfoDatabase {
             try {
                 SleepInfo sleepinfo = new SleepInfo();
                 sleepinfo.mSleepTimestamp = System.currentTimeMillis();
-                sleepinfo.mSleepDeviceTime = 0;
+                sleepinfo.mSleepYear = 0;
+                sleepinfo.mSleepMonth = 0;
+                sleepinfo.mSleepDay = 0;
+                sleepinfo.mSleepMinute = 0;
                 sleepinfo.mSleepValue = 3;
       
                 insertSleepInfo(context, sleepinfo);
@@ -129,7 +133,10 @@ public class SleepInfoDatabase {
             }
             ContentValues values = new ContentValues();
             values.put(SleepInfoEnum.SleepTimestamp.name(), sleepinfo.mSleepTimestamp);
-            values.put(SleepInfoEnum.SleepDeviceTime.name(), sleepinfo.mSleepDeviceTime);
+            values.put(SleepInfoEnum.SleepYear.name(), sleepinfo.mSleepYear);
+            values.put(SleepInfoEnum.SleepMonth.name(), sleepinfo.mSleepMonth);
+            values.put(SleepInfoEnum.SleepDay.name(), sleepinfo.mSleepDay);
+            values.put(SleepInfoEnum.SleepMinute.name(), sleepinfo.mSleepMinute);
             values.put(SleepInfoEnum.SleepValue.name(), sleepinfo.mSleepValue);
             
             long ret = -1;
@@ -261,11 +268,71 @@ public class SleepInfoDatabase {
                 while (cursor.moveToNext()) {
                     SleepInfoEnumClass sleepvalues = new SleepInfoEnumClass();
                     sleepvalues.setSleepTimestamp(cursor.getLong(cursor.getColumnIndex(SleepInfoEnum.SleepTimestamp.name())));
-                    sleepvalues.setSleepDeviceTime(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDeviceTime.name())));
+                    sleepvalues.setSleepYear(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepYear.name())));
+                    sleepvalues.setSleepMonth(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMonth.name())));
+                    sleepvalues.setSleepDay(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDay.name())));
+                    sleepvalues.setSleepMinute(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMinute.name())));
                     sleepvalues.setSleepValue(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepValue.name())));
                     
                     values.add(sleepvalues);
+                }
+            } catch (Exception e) {
+                SLog.d(TAG, "e getADBehaviorEnumClassList " + e.getMessage());
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+                if (db != null) {
+                    db.close();
+                }
+            }
 
+            return values;
+        }
+    }
+
+    /**
+     * 从数据库中取出某一天的睡眠数据
+     * 
+     * @param context
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     *           
+     * @return SleepInfoEnumClass list
+     */
+    public static List<SleepInfoEnumClass> getSleepInfoEnumList(Context context, int year,
+            int month, int day) {
+        synchronized (myLock) {
+            SQLiteDatabase db = getDb(context);
+            if (db == null) {
+                return null;
+            }
+            List<SleepInfoEnumClass> values = new ArrayList<SleepInfoEnumClass>();
+
+            String selection = "SELECT * FROM " + SleepInfoEnum.TABLE_NAME
+                    + " WHERE " + SleepInfoEnum.SleepYear.name()
+                    + " = " + year
+                    + " AND " + SleepInfoEnum.SleepMonth.name()
+                    + " = " + month
+                    + " AND " + SleepInfoEnum.SleepDay.name()
+                    + " = " + day
+                    + ";";
+
+            Cursor cursor = null;
+            try {
+                cursor = db.rawQuery(selection, null);
+
+                while (cursor.moveToNext()) {
+                    SleepInfoEnumClass sleepvalues = new SleepInfoEnumClass();
+                    sleepvalues.setSleepTimestamp(cursor.getLong(cursor.getColumnIndex(SleepInfoEnum.SleepTimestamp.name())));
+                    sleepvalues.setSleepYear(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepYear.name())));
+                    sleepvalues.setSleepMonth(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMonth.name())));
+                    sleepvalues.setSleepDay(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDay.name())));
+                    sleepvalues.setSleepMinute(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMinute.name())));
+                    sleepvalues.setSleepValue(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepValue.name())));
+                    
+                    values.add(sleepvalues);
                 }
             } catch (Exception e) {
                 SLog.d(TAG, "e getADBehaviorEnumClassList " + e.getMessage());
@@ -412,8 +479,14 @@ public class SleepInfoDatabase {
                 if (cursor.moveToFirst()) {
                     values.setSleepTimestamp(cursor
                             .getLong(cursor.getColumnIndex(SleepInfoEnum.SleepTimestamp.name())));
-                    values.setSleepDeviceTime(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDeviceTime.name())));
+                    values.setSleepYear(cursor
+                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepYear.name())));
+                    values.setSleepMonth(cursor
+                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMonth.name())));
+                    values.setSleepDay(cursor
+                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDay.name())));
+                    values.setSleepMinute(cursor
+                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMinute.name())));
                     values.setSleepValue(cursor
                             .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepValue.name())));
                 }
@@ -539,16 +612,24 @@ public class SleepInfoDatabase {
             
             try {
                 // 睡眠数据表
-                db.execSQL("CREATE TABLE " + SleepInfoEnum.TABLE_NAME + " (" + SleepInfoEnum.SleepInfoId.name()
-                        + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SleepInfoEnum.SleepTimestamp.name()
-                        + " LONG  NOT NULL DEFAULT ((0)), " + SleepInfoEnum.SleepDeviceTime.name()
-                        + " INTEGER DEFAULT ((0)), " + SleepInfoEnum.SleepValue.name() + " INTEGER DEFAULT ((0)) " + ");");
+                db.execSQL("CREATE TABLE " + SleepInfoEnum.TABLE_NAME + " (" 
+                        + SleepInfoEnum.SleepInfoId.name() + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+                        + SleepInfoEnum.SleepTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
+                        + SleepInfoEnum.SleepYear.name() + " INTEGER DEFAULT ((0)), " 
+                        + SleepInfoEnum.SleepMonth.name() + " INTEGER DEFAULT ((0)), "
+                        + SleepInfoEnum.SleepDay.name() + " INTEGER DEFAULT ((0)), "
+                        + SleepInfoEnum.SleepMinute.name() + " INTEGER DEFAULT ((0)), "
+                        + SleepInfoEnum.SleepValue.name() + " INTEGER DEFAULT ((0)) " + ");");
                 
                 SLog.e(TAG,
-                        "CREATE TABLE " + SleepInfoEnum.TABLE_NAME + " (" + SleepInfoEnum.SleepInfoId.name()
-                        + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SleepInfoEnum.SleepTimestamp.name()
-                        + " LONG  NOT NULL DEFAULT ((0)), " + SleepInfoEnum.SleepDeviceTime.name()
-                        + " INTEGER DEFAULT ((0)), " + SleepInfoEnum.SleepValue.name() + " INTEGER DEFAULT ((0)) " + ");");
+                        "CREATE TABLE " + SleepInfoEnum.TABLE_NAME + " (" 
+                                + SleepInfoEnum.SleepInfoId.name() + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+                                + SleepInfoEnum.SleepTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
+                                + SleepInfoEnum.SleepYear.name() + " INTEGER DEFAULT ((0)), " 
+                                + SleepInfoEnum.SleepMonth.name() + " INTEGER DEFAULT ((0)), "
+                                + SleepInfoEnum.SleepDay.name() + " INTEGER DEFAULT ((0)), "
+                                + SleepInfoEnum.SleepMinute.name() + " INTEGER DEFAULT ((0)), "
+                                + SleepInfoEnum.SleepValue.name() + " INTEGER DEFAULT ((0)) " + ");");
                 
                 // 呼吸数据表
                 db.execSQL("CREATE TABLE " + BreathInfoEnum.TABLE_NAME + " (" + BreathInfoEnum.BreathInfoId.name()
@@ -599,7 +680,7 @@ public class SleepInfoDatabase {
     }
 
     enum SleepInfoEnum {
-        SleepInfoId, SleepTimestamp, SleepDeviceTime, SleepValue;
+        SleepInfoId, SleepTimestamp, SleepYear, SleepMonth, SleepDay, SleepMinute, SleepValue;
         static final String TABLE_NAME = "SleepInfo";
     }
     

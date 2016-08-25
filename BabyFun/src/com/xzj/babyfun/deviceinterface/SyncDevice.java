@@ -23,4 +23,7 @@ public interface SyncDevice {
 
     DeviceResponse<?> getBodyTemperature();
 
+    DeviceResponse<?> getAllNoSyncInfo();
+
+
 }

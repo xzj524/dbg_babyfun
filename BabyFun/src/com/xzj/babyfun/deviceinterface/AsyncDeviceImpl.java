@@ -4,7 +4,6 @@ import java.util.concurrent.Future;
 
 import android.content.Context;
 
-import com.xzj.babyfun.synctime.DeviceTime;
 import com.xzj.babyfun.task.DispatcherFactory;
 import com.xzj.babyfun.task.RequestTask;
 import com.xzj.babyfun.task.TaskDispatcher;
@@ -121,6 +120,24 @@ public class AsyncDeviceImpl implements AsyncDevice {
     public Future<?> getSleepInfo() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Future<?> getAllNoSyncInfo() {
+        // TODO Auto-generated method stub
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.getAllNoSyncInfo();
+               /* if (response.error == null) {
+                    listener.onSetDeviceTime((Boolean) response.result);
+                } else {
+                    listener.onError(response.error);
+                }*/
+            }
+        };
+        return getDispatcher().dispatch(task);
     }
 
 

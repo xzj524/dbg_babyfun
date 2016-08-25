@@ -14,10 +14,12 @@ public class BaseL2Message implements Parcelable{
     public byte[] toByte() {
         byte[] arrayByteL2 = null;
         try {
-            arrayByteL2 = new byte[2 + payload.length];
-            arrayByteL2[0] = (byte) (commanID & 0xff);
-            arrayByteL2[1] = (byte) ((versionCode & 0x0f) << 4); 
-            System.arraycopy(payload, 0, arrayByteL2, 2, payload.length);
+            if (payload != null) {
+                arrayByteL2 = new byte[2 + payload.length];
+                arrayByteL2[0] = (byte) (commanID & 0xff);
+                arrayByteL2[1] = (byte) ((versionCode & 0x0f) << 4); 
+                System.arraycopy(payload, 0, arrayByteL2, 2, payload.length);
+            }
         } catch (Exception e) {
             // TODO: handle exception
             SLog.e(TAG, e);

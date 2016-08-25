@@ -2,22 +2,26 @@ package com.xzj.babyfun.utility;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.xzj.babyfun.baseheader.BaseL2Message;
 import com.xzj.babyfun.baseheader.KeyPayload;
 import com.xzj.babyfun.breath.BabyBreath;
 import com.xzj.babyfun.constant.Constant;
 import com.xzj.babyfun.logging.SLog;
+import com.xzj.babyfun.sleepdatabase.SleepInfo;
+import com.xzj.babyfun.sleepdatabase.SleepInfoDatabase;
 import com.xzj.babyfun.synctime.DeviceTime;
-import com.xzj.babyfun.ui.component.main.BabyRealTimeStatusFragment;
-import com.xzj.babyfun.ui.component.main.RealTimeStatusFragment;
 
 import de.greenrobot.event.EventBus;
 
@@ -50,17 +54,27 @@ public class MessageParse {
     
     public void onEvent(BaseL2Message bsl2Msg) {
         SLog.e(TAG, "handleL2Msg L2 DATA");
+        SLog.e(TAG, "bsl2Msg = " + Arrays.toString(bsl2Msg.toByte()));
         handleL2Msg(bsl2Msg);
+        
+       
+        String fileName = "/synclog.txt";
+        try {
+            writeSDFile(Environment.getExternalStorageDirectory() + fileName, bsl2Msg.toByte());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 
     private void handleL2Msg(BaseL2Message bMsg) {
         // TODO Auto-generated method stub
+        
         List<KeyPayload> params = getKeyPayloadList(bMsg.payload);
         if (params != null) {
             switch (bMsg.commanID) {
             case Constant.COMMAND_ID_UPDATE_ROM:
-                
                 break;
             case Constant.COMMAND_ID_SETTING:
                handleSettings(params);
@@ -88,9 +102,23 @@ public class MessageParse {
       
     }
 
+  //写文件  
+    public void writeSDFile(String fileName, byte[] write_str) throws IOException{    
+      
+            File file = new File(fileName);    
+      
+            FileOutputStream fos = new FileOutputStream(file);    
+      
+            byte [] bytes = write_str;   
+      
+            fos.write(bytes);   
+      
+            fos.close();   
+    }   
 
     private void handleData(List<KeyPayload> params) {
         // TODO Auto-generated method stub
+        SLog.e(TAG, "handleData List<KeyPayload> params");
         for (KeyPayload kpload:params) {
             if (kpload.key == 2) { // 接收到实时数据
                 SLog.e(TAG, "receive  realtime data");
@@ -98,8 +126,107 @@ public class MessageParse {
                     acquireTemp(kpload.keyValue); //分析实时数据
                     //mBreathStartResult = kpload.keyValue[0] & 0x0f;
                 }
-            } 
+            } else if (kpload.key == 5) {
+                SLog.e(TAG, "receiver data complete " + kpload.keyLen);
+                //handleSleepData(kpload.keyValue);
+            } else if (kpload.key == 6) {
+                SLog.e(TAG, "receiver sleep data " + kpload.keyLen);
+                handleSleepData(kpload.keyValue);
+            } else if (kpload.key == 7) {
+                SLog.e(TAG, "receiver temp data " + + kpload.keyLen);
+                handleTempData(kpload.keyValue);
+            } else if (kpload.key == 8) {
+                SLog.e(TAG, "receiver humit data " + + kpload.keyLen);
+                handleHumbitData(kpload.keyValue);
+            }
         }
+    }
+
+
+    private void handleHumbitData(byte[] keyValue) {
+        // TODO Auto-generated method stub
+        int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
+        int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
+        int day = keyValue[1] & 0x1f;
+        int minu = keyValue[2] << 8 | keyValue[3];
+        int sleepcount = keyValue[4] << 8 | keyValue[5];
+        
+        SLog.e(TAG, "Humbit year = " + year 
+                + " month = " + month 
+                + " day = " + day 
+                + " minu = " + minu 
+                + " sleepcount = " + sleepcount );
+        
+        for (int i = 0; i < sleepcount; i++) {
+            SLog.e(TAG, "Humbit value = " + keyValue[6+i]);
+        }
+    }
+
+
+    private void handleTempData(byte[] keyValue) {
+        // TODO Auto-generated method stub
+        int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
+        int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
+        int day = keyValue[1] & 0x1f;
+        int minu = keyValue[2] << 8 | keyValue[3];
+        int sleepcount = keyValue[4] << 8 | keyValue[5];
+        
+        SLog.e(TAG, "Temp year = " + year 
+                + " month = " + month 
+                + " day = " + day 
+                + " minu = " + minu 
+                + " sleepcount = " + sleepcount );
+        
+        for (int i = 0; i < sleepcount; i++) {
+            SLog.e(TAG, "Temp value = " + keyValue[6+i]);
+        }
+    }
+
+
+    private void handleSleepData(byte[] keyValue) {
+        // TODO Auto-generated method stub
+        if (keyValue.length > 6) {
+            List<SleepInfo> sleepInfos = getSleepInfoList(keyValue);
+            for (SleepInfo sleepinfo : sleepInfos) {
+                SleepInfoDatabase.insertSleepInfo(mContext, sleepinfo);
+            }
+        } else {
+            SLog.e(TAG, "There is no Sleep Data");
+        }
+    }
+
+
+    private List<SleepInfo> getSleepInfoList(byte[] keyValue) {
+        List<SleepInfo> sleepInfos = new ArrayList<SleepInfo>();
+        
+        int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
+        int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
+        int day = keyValue[1] & 0x1f;
+        int minu = keyValue[2] << 8 | keyValue[3];
+        int sleepcount = keyValue[4] << 8 | keyValue[5];
+        
+        SleepInfo sleepInfo = new SleepInfo();
+        if (keyValue.length == 6 + sleepcount) {
+            if (sleepcount <= 1440) {
+                for (int i = 0; i < sleepcount; i++) {
+                   SLog.e(TAG, "sleep value = " + keyValue[6+i]);
+                   sleepInfo.mSleepTimestamp = System.currentTimeMillis();
+                   sleepInfo.mSleepYear = year;
+                   sleepInfo.mSleepMonth = month;
+                   sleepInfo.mSleepDay = day;
+                   sleepInfo.mSleepMinute = minu+i;
+                   sleepInfo.mSleepValue = keyValue[6+i];
+                   sleepInfos.add(sleepInfo);
+               }
+           } 
+        }
+        return sleepInfos;
+    }
+
+
+    private SleepInfo convertTosleepinfo(byte[] keyValue) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 
@@ -202,7 +329,6 @@ public class MessageParse {
         return babyBreaths;
     }
 
-
     public static void handleSettings(List<KeyPayload> params) {
         // TODO Auto-generated method stub 
         for (KeyPayload kpload : params) {
@@ -227,19 +353,15 @@ public class MessageParse {
                             + " day = " + devTime.day
                             + " hour = " + devTime.hour
                             + " min = " + devTime.min
-                            + " second = " + devTime.second);
-                    
-                                       
+                            + " second = " + devTime.second);                     
                 }
             } else if (kpload.key == 2) { //设置时间返回结果
                 if (kpload.keyLen == 1) {
                     int settimeresult = kpload.keyValue[0] & 0x0f;
                     SLog.e(TAG, "settimeresult = " + settimeresult);
                 }
-                
             }
         }
-        
     }
 
     private List<KeyPayload> getKeyPayloadList(byte[] payload) {
@@ -257,7 +379,7 @@ public class MessageParse {
                 mDis.read(keyPd.keyValue, 0, keyPd.keyLen);
               
                 params.add(keyPd);
-            }
+             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

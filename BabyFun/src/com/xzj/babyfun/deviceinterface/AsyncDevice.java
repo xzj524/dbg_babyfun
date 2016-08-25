@@ -40,6 +40,14 @@ public interface AsyncDevice {
      */
     Future<?> getSleepInfo();
     
+    /**
+     * @Description: 获取全部未同步数据
+     * @param dvtime
+     * @param listener
+     * @return
+     */
+    Future<?> getAllNoSyncInfo();
+    
     
     
     /***********控制接口*************/

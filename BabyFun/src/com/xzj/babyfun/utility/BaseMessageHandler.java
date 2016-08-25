@@ -3,6 +3,7 @@ package com.xzj.babyfun.utility;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -37,6 +38,7 @@ public class BaseMessageHandler {
             if (baseData == null) {
                 return;
             }
+            SLog.e(TAG, "print base l1 log  = " + Arrays.toString(baseData));
             if (baseData.length >= BASE_DATA_HEAD) {
                 BaseL1Message bsL1Msg = getBaseL1Msg(baseData); // 生成L1数据
                 if (bsL1Msg.ackFlag == 1) { //收到设备的ack信息
@@ -60,13 +62,13 @@ public class BaseMessageHandler {
                         } else {
                             SLog.e(TAG, "not send ACK");
                         }
-                    }
-                    
+                    }  
                     generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
                     if (isOver) {
                         isOver = false;
                         if (l2OutputStream.size() > 0) {
                             BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
+                            l2OutputStream.reset();
                             
                             Intent l2intent = new Intent();
                             l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
@@ -74,9 +76,8 @@ public class BaseMessageHandler {
                             SLog.e(TAG, "receive L2 DATA");
                         }            
                     }
-                    
-                    
-                }
+                } 
+                
             }
         }  
     }
@@ -210,7 +211,7 @@ public class BaseMessageHandler {
                     isOver =false;
                 } else if (bsL1Msg.errFlag == 2) { // 标识结束位
                     isOver = true;
-                    l2OutputStream.reset();
+                  //  l2OutputStream.reset();
                     l2OutputStream.write(bsL1Msg.payload);
                 } else {
                     isOver = false;

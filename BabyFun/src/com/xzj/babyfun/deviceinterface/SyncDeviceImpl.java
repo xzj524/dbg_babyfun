@@ -158,4 +158,23 @@ public class SyncDeviceImpl implements SyncDevice{
         return null;
     }
 
+
+
+    @Override
+    public DeviceResponse<?> getAllNoSyncInfo() {
+        // TODO Auto-generated method stub
+        SLog.e(TAG, " getAllNoSyncInfo ");
+        if (mIsBluetoothReady) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 3;
+            keyPayload.keyLen = 0;
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
 }
