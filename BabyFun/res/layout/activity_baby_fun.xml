@@ -22,14 +22,14 @@
         
      <fragment 
         android:id="@+id/topViewFragment"
-        android:name="com.xzj.babyfun.titlefragment.HomePageTopTitleFragment"
+        android:name="com.aizi.xiaohuhu.titlefragment.HomePageTopTitleFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
          android:layout_marginTop="20dp"/> 
 
      <fragment
         android:id="@+id/routerStatusFragment"
-        android:name="com.xzj.babyfun.ui.component.main.RouterStatusFragment"
+        android:name="com.aizi.xiaohuhu.ui.component.main.RouterStatusFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
      
@@ -37,7 +37,7 @@
     
     <fragment 
         android:id="@+id/realtimestatuFragment"
-        android:name="com.xzj.babyfun.ui.component.main.RealTimeStatusFragment"
+        android:name="com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"

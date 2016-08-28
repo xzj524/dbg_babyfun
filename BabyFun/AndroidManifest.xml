@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xzj.babyfun"
+    package="com.aizi.xiaohuhu"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -25,6 +25,10 @@
 	<uses-permission android:name="android.permission.RECEIVE_SMS" />
 	<uses-permission android:name="android.permission.READ_SMS" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -32,17 +36,17 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.aizi.xiaohuhu.MainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name="com.aizi.xiaohuhu.SplashActivity"
             android:label="@string/title_activity_splash"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".BabyFunActivity"
+            android:name="com.aizi.xiaohuhu.BabyFunActivity"
             android:label="@string/title_activity_baby_fun" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,32 +55,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeviceListActivity"
+            android:name="com.aizi.xiaohuhu.DeviceListActivity"
             android:label="@string/title_activity_device_list"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
 
         <service
-            android:name=".service.BluetoothService"
+            android:name="com.aizi.xiaohuhu.service.BluetoothService"
             android:enabled="true" />
         <service
-            android:name=".service.ScanDevicesService"
+            android:name="com.aizi.xiaohuhu.service.ScanDevicesService"
             android:enabled="true" />
 
         <activity
-            android:name=".BabyStatusActivity"
+            android:name="com.aizi.xiaohuhu.BabyStatusActivity"
             android:label="@string/title_activity_baby_status" >
         </activity>
         <activity
-            android:name=".TestActivity"
+            android:name="com.aizi.xiaohuhu.TestActivity"
             android:label="@string/title_activity_test" >
         </activity>
         <activity
-            android:name=".BabyBreathActivity"
+            android:name="com.aizi.xiaohuhu.BabyBreathActivity"
             android:label="@string/title_activity_baby_breath" >
         </activity>
 
-        <receiver android:name=".receiver.BabyStatusReceiver" >
+        <receiver android:name="com.aizi.xiaohuhu.receiver.BabyStatusReceiver" >
             <intent-filter>
                 <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_SERVICES_DISCOVERED" />
                 <action android:name="com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE" />
@@ -94,23 +98,23 @@
         </meta-data>
 
         <activity
-            android:name=".CriticalActivity"
+            android:name="com.aizi.xiaohuhu.CriticalActivity"
             android:label="@string/title_activity_critical" >
         </activity>
         <activity
-            android:name=".CalendarActivity"
+            android:name="com.aizi.xiaohuhu.CalendarActivity"
             android:label="@string/title_activity_calendar" >
         </activity>
         <activity
-            android:name=".BabyExplainActivity"
+            android:name="com.aizi.xiaohuhu.BabyExplainActivity"
             android:label="@string/title_activity_baby_explain" >
         </activity>
         <activity
-            android:name=".SleepProblemActivity"
+            android:name="com.aizi.xiaohuhu.SleepProblemActivity"
             android:label="@string/title_activity_sleep_problem" >
         </activity>
         <activity
-            android:name=".SleepAnalysisActivity"
+            android:name="com.aizi.xiaohuhu.SleepAnalysisActivity"
             android:label="@string/title_activity_sleep_analysis" >
         </activity>
 
@@ -119,19 +123,19 @@
             android:value="zGOG68GTMiC9vzx6dDa5kVEhg5S9i0x9" />
 
         <activity
-            android:name=".EmergencyMapActivity"
+            android:name="com.aizi.xiaohuhu.EmergencyMapActivity"
             android:label="@string/title_activity_emergency_map" >
         </activity>
         <activity
-            android:name=".BabyEmergencyActivity"
+            android:name="com.aizi.xiaohuhu.BabyEmergencyActivity"
             android:label="@string/title_activity_baby_emergency" >
         </activity>
         <activity
-            android:name=".EmergencyPhoneNumberActivity"
+            android:name="com.aizi.xiaohuhu.EmergencyPhoneNumberActivity"
             android:label="@string/title_activity_emergency_phone_number" >
         </activity>
         <activity
-            android:name=".login.LoginActivity"
+            android:name="com.aizi.xiaohuhu.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
@@ -141,18 +145,15 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".login.ResetPasswordActivity"
+            android:name="com.aizi.xiaohuhu.login.ResetPasswordActivity"
             android:label="@string/title_activity_reset_password" >
         </activity>
         <activity
-            android:name=".login.RegisterActivity"
+            android:name="com.aizi.xiaohuhu.login.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
     </application>
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
 
 </manifest>

@@ -8,7 +8,7 @@
 
    <fragment 
         android:id="@+id/topViewFragment"
-        android:name="com.xzj.babyfun.titlefragment.BabyStatusTopViewFragment"
+        android:name="com.aizi.xiaohuhu.titlefragment.BabyStatusTopViewFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
          android:layout_marginTop="20dp"/> 
@@ -27,27 +27,27 @@
            
            <fragment 
 		        android:id="@+id/babySleepPieChartFragment"
-		        android:name="com.xzj.babyfun.chart.SleepyPieChart"
+		        android:name="com.aizi.xiaohuhu.chart.SleepyPieChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:tag="piechart"/>
 	           
 	      <fragment 
 		        android:id="@+id/babySleepChartFragment"
-		        android:name="com.xzj.babyfun.chart.SleepyChart"
+		        android:name="com.aizi.xiaohuhu.chart.SleepyChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"/>
 	      
 	       <fragment 
 		        android:id="@+id/babybreathstopChartFragment"
-		        android:name="com.xzj.babyfun.chart.BreathStopChart"
+		        android:name="com.aizi.xiaohuhu.chart.BreathStopChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="20dp"/>
 	       
 	        <fragment 
 		        android:id="@+id/babytemperatureChartFragment"
-		        android:name="com.xzj.babyfun.chart.TemperatureChart"
+		        android:name="com.aizi.xiaohuhu.chart.TemperatureChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="20dp"/>
