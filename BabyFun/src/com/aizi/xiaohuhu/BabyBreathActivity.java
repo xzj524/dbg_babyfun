@@ -150,6 +150,10 @@ public class BabyBreathActivity extends Activity {
            mHandler.sendMessage(message);    
          }  
       };  
+      
+      public void onEvent(Object arg) {
+          
+      }
     
     public void onEventMainThread(final ArrayList<BabyBreath> breaths) { 
         long curtime = System.currentTimeMillis();

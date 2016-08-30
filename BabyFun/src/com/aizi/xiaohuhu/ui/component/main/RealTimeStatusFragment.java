@@ -109,6 +109,10 @@ public class RealTimeStatusFragment extends Fragment{
         setTemperature(str);
     }
     
+    public void onEvent(String str) {
+        
+    }
+    
     @Override
     public void onDestroy() {
         // TODO Auto-generated method stub

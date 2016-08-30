@@ -11,7 +11,6 @@ import java.util.BitSet;
 import java.util.Calendar;
 import java.util.List;
 
-import android.R.integer;
 import android.content.Context;
 import android.os.Environment;
 
@@ -24,7 +23,6 @@ import com.aizi.xiaohuhu.sleepdatabase.BreathStopInfo;
 import com.aizi.xiaohuhu.sleepdatabase.SleepInfo;
 import com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase;
 import com.aizi.xiaohuhu.synctime.DeviceTime;
-import com.github.mikephil.charting.buffer.HorizontalBarBuffer;
 
 import de.greenrobot.event.EventBus;
 
@@ -140,9 +138,12 @@ public class MessageParse {
             } else if (kpload.key == 8) { //湿度数据
                 SLog.e(TAG, "receiver humit data " + + kpload.keyLen);
                 handleHumbitData(kpload.keyValue);
-            } else if (kpload.key == 9) { //呼吸停滞数据
+            } else if (kpload.key == 12) { //呼吸停滞数据
                 SLog.e(TAG, "receiver breath stop data " + + kpload.keyLen);
                 handleBreathStopData(kpload.keyValue);
+            } else if (kpload.key == 13) { //呼吸停滞数据结束
+                SLog.e(TAG, "receiver breath stop data completed " + + kpload.keyLen);
+               // handleBreathStopData(kpload.keyValue);
             }
         }
     }
@@ -154,7 +155,7 @@ public class MessageParse {
         int breathstoplength = keyValue.length;
         if (breathstoplength % 4 == 0) {
             for (int i = 0; i < keyValue.length/4; i++) {
-                int isAlarm = (keyValue[i*4] & 0x80) >> 8;
+                int isAlarm = (keyValue[i*4] & 0x80) >> 7;
                 if (isAlarm == 1) {
                     breathStopInfo.mBreathIsAlarm = isAlarm;
                 } else {
@@ -173,7 +174,8 @@ public class MessageParse {
                         + " day = " + day
                         + " hour = " + hour
                         + " minu = " + minu
-                        + " second = " + second);
+                        + " second = " + second
+                        + " isAlarm = " + isAlarm);
                 
                 breathStopInfo.mBreathYear = year;
                 breathStopInfo.mBreathMonth = month;

@@ -50,13 +50,13 @@ public class RouterStatusFragment extends Fragment{
     private ScanDevicesService mScanService = null;
 
     /** 路由名称 */
-    private TextView mRouterNameTextView;
+    private TextView mDeviceNameTextView;
 
     /** 速度 */
-    private TextView mRouterSpeedTextView;
+    private TextView mDeviceSpeedTextView;
 
     /** 远程还是本地 */
-    private TextView mRemoteOrLocalTextView;
+    private TextView mDeviceOrLocalTextView;
 
     /** 检查网络 */
     private TextView mCheckNetworkConnectingTextView;

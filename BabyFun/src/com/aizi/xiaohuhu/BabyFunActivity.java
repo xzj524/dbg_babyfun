@@ -22,26 +22,21 @@ import android.os.Bundle;
 import android.os.DropBoxManager.Entry;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.aizi.xiaohuhu.R;
 import com.aizi.xiaohuhu.chart.BarChartFragment;
 import com.aizi.xiaohuhu.chart.SleepyChart;
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.eventbus.AsycEvent;
-import com.aizi.xiaohuhu.login.LoginActivity;
+import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.receiver.BabyStatusReceiver;
 import com.aizi.xiaohuhu.receiver.BabyStatusReceiver.DataInteraction;
 import com.aizi.xiaohuhu.service.BluetoothService;
 import com.aizi.xiaohuhu.service.ScanDevicesService;
 import com.aizi.xiaohuhu.service.ScanDevicesService.OnScanDeviceListener;
-import com.aizi.xiaohuhu.sleepdatabase.BreathStopInfo;
-import com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase;
-import com.aizi.xiaohuhu.sleepdatabase.TemperatureInfo;
 import com.aizi.xiaohuhu.slidingmenu.SlidingMenuHelper;
 import com.aizi.xiaohuhu.titlefragment.HomePageTopTitleFragment.OnButtonClickedListener;
 import com.aizi.xiaohuhu.ui.component.main.BabyStatusIndicateFragment;
@@ -93,8 +88,9 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     ViewGroup mBabySleepViewGroup;
     ViewGroup mSettingsViewGroup;
     ViewGroup mSyncDataViewGroup;
+    
+    SlidingMenuHelper mSlidingMenuHelper;
 
-  
     static int[] mColors = new int[] { Color.rgb(137, 230, 81), Color.rgb(240, 240, 30),//  
             Color.rgb(89, 199, 250), Color.rgb(250, 104, 104), Color.rgb(4, 158, 255) }; // 自定义颜色 
     
@@ -120,8 +116,8 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
         
-        SlidingMenuHelper slidingMenuHelper = new SlidingMenuHelper(this);
-        slidingMenuHelper.initSlidingMenu();
+        mSlidingMenuHelper = new SlidingMenuHelper(this);
+        mSlidingMenuHelper.initSlidingMenu();
         
         //注册EventBus  
         EventBus.getDefault().register(this);
@@ -132,87 +128,10 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
 
         BabyStatusReceiver babyStatusReceiver = new BabyStatusReceiver();
         babyStatusReceiver.setBRInteractionListener(this);
-       
-       
-    /*   mMessageCenterViewGroup = (ViewGroup) findViewById(R.id.message_center_view);
-       mMessageCenterViewGroup.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            Intent intent = new Intent(getApplicationContext(), CriticalActivity.class);
-            startActivity(intent);
-        }
-    });*/
-       
-       mBabyBreathViewGroup = (ViewGroup) findViewById(R.id.baby_breath_view);
-       mBabyBreathViewGroup.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            Intent intent = new Intent(getApplicationContext(), BabyBreathActivity.class);
-            startActivity(intent);
-        }
-    });
-       
-       mBabySleepViewGroup = (ViewGroup) findViewById(R.id.baby_sleep_view);
-       mBabySleepViewGroup.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            Intent intent = new Intent(getApplicationContext(), BabyStatusActivity.class);
-            startActivity(intent);
-        }
-    });
-       
-       mSettingsViewGroup = (ViewGroup) findViewById(R.id.baby_settings_view);
-       mSettingsViewGroup.setOnClickListener(new View.OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-            AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
-        }
-    });
-       
-       mSyncDataViewGroup = (ViewGroup) findViewById(R.id.baby_syncdata_view);
-       mSyncDataViewGroup.setOnClickListener(new View.OnClickListener() {
-           
-           @Override
-           public void onClick(View v) {
-               // TODO Auto-generated method stub
-              // AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
-               
-               BreathStopInfo breathStopInfo = new BreathStopInfo();
-               breathStopInfo.mBreathYear = 2016;
-               breathStopInfo.mBreathMonth = 8;
-               breathStopInfo.mBreathDay = 27;
-               breathStopInfo.mBreathHour = 20;
-               breathStopInfo.mBreathMinute = 36;
-               breathStopInfo.mBreathSecond = 0;
-               breathStopInfo.mBreathDuration = 10;
-               breathStopInfo.mBreathIsAlarm = 1;
-               breathStopInfo.mBreathTimestamp = System.currentTimeMillis();
-               
-               SleepInfoDatabase.insertBreathInfo(getApplicationContext(), breathStopInfo);
-               
-               TemperatureInfo temperatureinfo = new TemperatureInfo();
-               temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
-               temperatureinfo.mTemperatureValue = "35.24";
-               SleepInfoDatabase.insertTemperatureInfo(getApplicationContext(), temperatureinfo);
-               
-           }
-       });
-      
-        
+
         mFragmentMan = getFragmentManager();
         routerfragment = (RouterStatusFragment) mFragmentMan.findFragmentById(R.id.routerStatusFragment);
         realTimeStatusFragment = (RealTimeStatusFragment) mFragmentMan.findFragmentById(R.id.realtimestatuFragment);
-   //     babyStatusIndicateFragment = (BabyStatusIndicateFragment) mFragmentMan.findFragmentById(R.id.babyStatusIndicateFragment);
     }
     
     @Override
@@ -242,11 +161,7 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
         FragmentTransaction transaction = mFragmentMan.beginTransaction();
         transaction.hide(routerfragment).show(barChartFragment).commit(); // 隐藏当前的fragment，显示下一个
         mTemHide = true;
-       }
-    
-/*    public void showslidingmenu() {
-        menu.showMenu();
-    }*/
+   }
     
     public void switchContent(Fragment from, Fragment to) {
        
@@ -530,9 +445,8 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
     public void OnButtonClicked(int touchid) {
         // TODO Auto-generated method stub
         if (touchid == 2) {
-            Log.e(TAG, "touchid = " + touchid);
-            //.showMenu();
-      
+            mSlidingMenuHelper.showMenu();
+            SLog.e(TAG, "SlidingMenuHelper  showing");
         }
     }
 
@@ -609,6 +523,10 @@ public class BabyFunActivity extends Activity implements OnItemSelectedListener,
    //     Toast.makeText(this, "enventbus write bytes", Toast.LENGTH_SHORT).show(); 
         mService.writeBaseRXCharacteristic(event.getByte());
     } 
+    
+  public void onEvent(Object arg) {
+        
+    }
     
     @Override
     protected void onDestroy() {

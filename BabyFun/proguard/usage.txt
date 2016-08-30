@@ -1,0 +1,344 @@
+android.support.annotation.AnimRes
+android.support.annotation.AnimatorRes
+android.support.annotation.AnyRes
+android.support.annotation.ArrayRes
+android.support.annotation.AttrRes
+android.support.annotation.BinderThread
+android.support.annotation.BoolRes
+android.support.annotation.CallSuper
+android.support.annotation.CheckResult
+android.support.annotation.ColorInt
+android.support.annotation.ColorRes
+android.support.annotation.DimenRes
+android.support.annotation.DrawableRes
+android.support.annotation.FloatRange
+android.support.annotation.FractionRes
+android.support.annotation.IdRes
+android.support.annotation.IntDef
+android.support.annotation.IntRange
+android.support.annotation.IntegerRes
+android.support.annotation.InterpolatorRes
+android.support.annotation.Keep
+android.support.annotation.LayoutRes
+android.support.annotation.MainThread
+android.support.annotation.MenuRes
+android.support.annotation.NonNull
+android.support.annotation.Nullable
+android.support.annotation.PluralsRes
+android.support.annotation.RawRes
+android.support.annotation.RequiresPermission
+android.support.annotation.RequiresPermission$Read
+android.support.annotation.RequiresPermission$Write
+android.support.annotation.Size
+android.support.annotation.StringDef
+android.support.annotation.StringRes
+android.support.annotation.StyleRes
+android.support.annotation.StyleableRes
+android.support.annotation.TransitionRes
+android.support.annotation.UiThread
+android.support.annotation.VisibleForTesting
+android.support.annotation.WorkerThread
+android.support.annotation.XmlRes
+com.aizi.xiaohuhu.BabyFunActivity:
+    android.bluetooth.BluetoothAdapter mAdapter
+    android.widget.Button mSearchBtnButton
+    android.widget.Button mMessageBtn
+    android.widget.Button mSettingBtn
+    android.widget.Button mStopBluetoothService
+    android.widget.Button mLogin
+    android.widget.Button mGetDevicetimeButton
+    android.widget.Button mSetDevicetimeButton
+    android.widget.Button mBreathBtn
+    android.app.Fragment mContent
+    com.aizi.xiaohuhu.chart.SleepyChart chartFragment
+    com.aizi.xiaohuhu.chart.BarChartFragment barChartFragment
+    com.aizi.xiaohuhu.ui.component.main.BabyStatusIndicateFragment babyStatusIndicateFragment
+    private static final int REQUEST_SELECT_DEVICE
+    android.view.ViewGroup mMessageCenterViewGroup
+    android.view.ViewGroup mBabyBreathViewGroup
+    android.view.ViewGroup mBabySleepViewGroup
+    android.view.ViewGroup mSettingsViewGroup
+    android.view.ViewGroup mSyncDataViewGroup
+    154:157:public void showTempfragment()
+    161:164:public void hideTempfragment()
+    168:174:public void switchContent(android.app.Fragment,android.app.Fragment)
+    206:208:public void startdevlistactivity()
+    300:309:private void search()
+    312:318:private static android.content.IntentFilter makeGattUpdateIntentFilter()
+    433:442:public void onStatusSelected(int)
+    514:514:public static int getTempValue()
+com.aizi.xiaohuhu.BabyStatusActivity:
+    com.aizi.xiaohuhu.ui.component.main.BabyRealTimeStatusFragment realTimeStatusFragment
+    com.aizi.xiaohuhu.chart.BarChartFragment babyChartFragment
+    android.widget.ImageView mImageViewbigline
+    android.widget.ImageView mImageViewsmalline
+    android.widget.TextView mBabyStatus
+    android.widget.TextView mBabyPoint
+    com.aizi.xiaohuhu.BabyStatusActivity$MyHandler mHandler
+    com.aizi.xiaohuhu.BabyStatusActivity$MyThread m
+    148:149:public void SetBabyStatus(java.lang.String)
+    154:156:public void SetBabyPoint(java.lang.String)
+com.aizi.xiaohuhu.BabyStatusActivity$MyHandler
+com.aizi.xiaohuhu.BabyStatusActivity$MyThread
+com.aizi.xiaohuhu.BuildConfig
+com.aizi.xiaohuhu.DeviceListActivity:
+    public static final java.lang.String TAG
+    private static final long SCAN_PERIOD
+    314:315:private void showMessage(java.lang.String)
+com.aizi.xiaohuhu.R:
+    10:10:public R()
+com.aizi.xiaohuhu.bluttooth.BluetoothApi
+com.aizi.xiaohuhu.bluttooth.BluetoothApi$1
+com.aizi.xiaohuhu.chart.BarChartFragment:
+    static android.graphics.Typeface mTf
+    57:107:public static void setupChart(com.github.mikephil.charting.data.BarData,int)
+    113:135:public static com.github.mikephil.charting.data.BarData getData(int)
+com.aizi.xiaohuhu.chart.BreathChart:
+    59:63:public void freshChart()
+com.aizi.xiaohuhu.chart.BreathStopChart:
+    static android.graphics.Typeface mTf
+com.aizi.xiaohuhu.chart.SleepyChart:
+    static android.graphics.Typeface mTf
+    141:141:public void onEvent()
+    287:318:public static com.github.mikephil.charting.data.LineData getData(int)
+    323:355:private static com.github.mikephil.charting.data.LineDataSet getDataSet(int,java.util.ArrayList)
+com.aizi.xiaohuhu.chart.SleepyChart$SetTextViewListener:
+    public abstract void SetBabyStatus(java.lang.String)
+    public abstract void SetBabyPoint(java.lang.String)
+com.aizi.xiaohuhu.chart.SleepyPieChart:
+    99:99:public void initPieChart()
+com.aizi.xiaohuhu.chart.TemperatureChart:
+    static android.graphics.Typeface mTf
+com.aizi.xiaohuhu.constant.Constant:
+    public static final java.lang.String LOG_PREFIX
+    public static final java.lang.String BASE_L2_MESSAGE
+    public static final short COMMAND_ID_UPDATE_ROM
+    public static final short COMMAND_ID_SETTING
+    public static final short COMMAND_ID_BIND
+    public static final short COMMAND_ID_NOTIFY
+    public static final short COMMAND_ID_DATA
+    public static final short COMMAND_ID_MANUFACTURE_TEST
+    public static final short COMMAND_ID_CONTROL
+    public static final short COMMAND_ID_DUMP_STACK
+    public static final short COMMAND_ID_FLASH_TEST
+    public static final short BASE_VERSION_CODE
+    public static final java.lang.String SHARED_NAME_PRIVATE_SETTINGS
+    public static final java.lang.String SHARED_DEVICE_NAME
+    public static final long DEVICE_TIME_OFFSET
+    5:5:public Constant()
+com.aizi.xiaohuhu.crc.CRC16:
+    9:9:public CRC16()
+com.aizi.xiaohuhu.deviceinterface.AsyncDevice:
+    public abstract java.util.concurrent.Future setDeviceTime()
+    public abstract java.util.concurrent.Future getDeviceTime()
+    public abstract java.util.concurrent.Future getSleepInfo()
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory:
+    16:17:private AsyncDeviceFactory()
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceImpl:
+    35:47:public java.util.concurrent.Future setDeviceTime()
+    54:66:public java.util.concurrent.Future getDeviceTime()
+    122:122:public java.util.concurrent.Future getSleepInfo()
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceImpl$1
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceImpl$2
+com.aizi.xiaohuhu.deviceinterface.DeviceApi
+com.aizi.xiaohuhu.deviceinterface.DeviceError
+com.aizi.xiaohuhu.deviceinterface.DeviceFactory:
+    16:18:private DeviceFactory()
+com.aizi.xiaohuhu.deviceinterface.DeviceInterface
+com.aizi.xiaohuhu.deviceinterface.DeviceListener
+com.aizi.xiaohuhu.deviceinterface.DeviceResponse:
+    public java.lang.Object result
+    public com.aizi.xiaohuhu.deviceinterface.DeviceError error
+    26:26:public static com.aizi.xiaohuhu.deviceinterface.DeviceResponse success(java.lang.Object)
+    39:39:public static com.aizi.xiaohuhu.deviceinterface.DeviceResponse error(com.aizi.xiaohuhu.deviceinterface.DeviceError)
+    50:53:public DeviceResponse(java.lang.Object,com.aizi.xiaohuhu.deviceinterface.DeviceError)
+    58:59:public DeviceResponse()
+com.aizi.xiaohuhu.deviceinterface.DeviceTimeListener
+com.aizi.xiaohuhu.deviceinterface.ServerError
+com.aizi.xiaohuhu.deviceinterface.SyncDevice:
+    public abstract com.aizi.xiaohuhu.deviceinterface.DeviceResponse setDeviceTime()
+    public abstract com.aizi.xiaohuhu.deviceinterface.DeviceResponse getDeviceTime()
+com.aizi.xiaohuhu.deviceinterface.SyncDeviceImpl:
+    private java.lang.String mAddress
+    51:66:public com.aizi.xiaohuhu.deviceinterface.DeviceResponse setDeviceTime()
+    73:82:private com.aizi.xiaohuhu.synctime.DeviceTime acqDeviceTime()
+    128:139:public com.aizi.xiaohuhu.deviceinterface.DeviceResponse getDeviceTime()
+com.aizi.xiaohuhu.deviceinterface.SyncDeviceRefactor
+com.aizi.xiaohuhu.dialog.CalendarDialog
+com.aizi.xiaohuhu.dialog.CalendarDialog$Builder
+com.aizi.xiaohuhu.logging.SLog:
+    private static final java.lang.String TAG
+    public static final int FILE_LIMETE
+    public static final int FILE_NUMBER
+    53:54:private SLog()
+    66:74:public static void v(java.lang.String,java.lang.String)
+    88:89:public static void v(java.lang.String,java.lang.String,java.lang.Throwable)
+    100:108:public static void i(java.lang.String,java.lang.String)
+    122:123:public static void i(java.lang.String,java.lang.String,java.lang.Throwable)
+    156:157:public static void d(java.lang.String,java.lang.String,java.lang.Throwable)
+    190:191:public static void w(java.lang.String,java.lang.String,java.lang.Throwable)
+    240:243:public static void e(java.lang.String,java.lang.String,java.lang.Throwable)
+    269:276:private static java.lang.String getLogFileName()
+    287:342:private static java.lang.String getProcessNameForPid(int)
+    352:353:public static void setLogEnabled(boolean)
+    362:390:public static void setLog2File(boolean)
+com.aizi.xiaohuhu.login.LoginActivity:
+    175:175:private boolean isEmailValid(java.lang.String)
+com.aizi.xiaohuhu.login.LoginActivity$ProfileQuery:
+    public static final int ADDRESS
+    public static final int IS_PRIMARY
+com.aizi.xiaohuhu.login.RegisterActivity:
+    private android.view.View mProgressView
+    private android.view.View mLoginFormView
+com.aizi.xiaohuhu.math.MathMethod
+com.aizi.xiaohuhu.math.RunningVariance
+com.aizi.xiaohuhu.receiver.BabyStatusReceiver:
+    private static final java.lang.String TAG
+com.aizi.xiaohuhu.service.BluetoothService:
+    private static final int STATE_DISCONNECTED
+    private static final int STATE_CONNECTING
+    private static final int STATE_CONNECTED
+    public static final java.lang.String ACTION_GATT_CONNECTED
+    public static final java.lang.String ACTION_GATT_DISCONNECTED
+    public static final java.lang.String ACTION_GATT_SERVICES_DISCOVERED
+    public static final java.lang.String ACTION_DATA_AVAILABLE
+    public static final java.lang.String EXTRA_TYPE
+    public static final java.lang.String DEVICE_DOES_NOT_SUPPORT_BLUETOOTH
+    159:159:private boolean isHeartRateInUINT16(byte)
+    293:299:public void readCharacteristic(android.bluetooth.BluetoothGattCharacteristic)
+    362:364:public java.util.List getSupportedGattServices()
+com.aizi.xiaohuhu.service.ScanDevicesService:
+    private static final long SCAN_PERIOD
+com.aizi.xiaohuhu.sleepdatabase.BreathInfoEnumClass
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase:
+    private static final int DB_VERSION
+    private static final java.lang.String DB_DIR
+    private static final java.lang.String DATA_DIR
+    private static final java.lang.String TAG
+    private static final java.lang.String DB_NAME
+    22:22:public SleepInfoDatabase()
+    33:44:public static void close()
+    106:124:public static synchronized void initSleepInfoDataBase(android.content.Context)
+    280:280:public static java.util.List getSleepInfoEnumClassList(android.content.Context,long,long,int,int)
+    337:337:public static java.util.List getSleepInfoEnumList(android.content.Context,int,int,int)
+    396:396:public static java.util.List getBreathInfoEnumClassList(android.content.Context,long,long,int,int)
+    452:452:public static java.util.List getTemperatureInfoEnumClassList(android.content.Context,long,long,int,int)
+    501:501:public static synchronized com.aizi.xiaohuhu.sleepdatabase.SleepInfoEnumClass getSleepInfoEnumClass(android.content.Context)
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase$BreathInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase$SleepInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase$TemperatureInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoEnumClass
+com.aizi.xiaohuhu.sleepdatabase.TemperatureInfoEnumClass
+com.aizi.xiaohuhu.slidingmenu.SlidingMenuHelper:
+    170:170:public com.jeremyfeinstein.slidingmenu.lib.SlidingMenu getSlidingMenu()
+    177:178:public void toggle()
+    184:185:public void showContent()
+    199:200:public void showSecondaryMenu()
+com.aizi.xiaohuhu.synctime.DataTime
+com.aizi.xiaohuhu.synctime.DeviceTime:
+    public long millisecondValue
+    private java.util.BitSet bitSet
+    26:43:public byte[] toByte()
+    49:59:private void calculateBitset(java.util.BitSet,int,int)
+    62:63:private boolean checkDeviceTimeCorrect()
+com.aizi.xiaohuhu.synctime.DeviceTimeHelper
+com.aizi.xiaohuhu.synctime.DeviceTimeHelper$devTimeListener
+com.aizi.xiaohuhu.synctime.DeviceTimeManager
+com.aizi.xiaohuhu.task.DispatcherFactory:
+    13:15:private DispatcherFactory()
+com.aizi.xiaohuhu.task.RequestTask:
+    private long id
+    21:21:public long getId()
+    31:32:public void setId(long)
+    40:40:public boolean isCanceled()
+    47:48:public void cancel()
+com.aizi.xiaohuhu.task.TaskDispatcher:
+    public abstract void shutdown()
+    public abstract void cancel(long)
+com.aizi.xiaohuhu.task.TaskDispatcherImpl:
+    38:39:public void shutdown()
+    44:44:public void cancel(long)
+com.aizi.xiaohuhu.titlefragment.HomePageTopTitleFragment:
+    android.widget.ImageView plusView
+com.aizi.xiaohuhu.ui.component.main.BabyRealTimeStatusFragment:
+    private android.widget.LinearLayout mTemptureView
+    private android.widget.LinearLayout mHumidityView
+    private android.widget.LinearLayout mSleepView
+    59:61:public static void setTemperature(java.lang.String)
+    64:66:public void setHumit(int)
+com.aizi.xiaohuhu.ui.component.main.BabyStatusIndicateFragment:
+    android.widget.TextView mBabyStatus
+com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment:
+    private android.widget.LinearLayout mTemptureView
+    private android.widget.LinearLayout mHumidityView
+    private android.widget.TextView mPM25TextView
+    99:101:public void setHumit(int)
+    104:106:public void setPM25(int)
+com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment$OnStatusSelectedListener:
+    public abstract void onStatusSelected(int)
+com.aizi.xiaohuhu.ui.component.main.RouterStatusFragment:
+    public static final int ABNORMAL_REQUEST_CODE
+    private static final int REQUEST_SELECT_DEVICE
+    com.aizi.xiaohuhu.service.ScanDevicesService$OnScanDeviceListener mScanDeviceListener
+    private android.widget.TextView mDeviceNameTextView
+    private android.widget.TextView mDeviceSpeedTextView
+    private android.widget.TextView mDeviceOrLocalTextView
+    private android.widget.ImageView mCheckingItemImageView
+    private android.widget.ImageView mConnectedStatusIndicatorImageView
+    private android.widget.ImageView mSettingImageView
+    private android.widget.LinearLayout mStatusView
+    private int[] mCheckStates
+    private boolean mIsBaiduLoginShow
+    316:316:public com.aizi.xiaohuhu.ui.component.main.RouterStatusFragment$CheckingState getCurrentState()
+com.aizi.xiaohuhu.userdatabase.UserAccountDataBase:
+    private static final int DB_VERSION
+    private static final java.lang.String DB_DIR
+    private static final java.lang.String DATA_DIR
+    private static final java.lang.String TAG
+    private static final java.lang.String DB_NAME
+    28:28:public UserAccountDataBase()
+    39:50:public static void close()
+    106:121:public static synchronized void initUserAccountInfoDataBase(android.content.Context)
+    132:132:public static synchronized long insertUserAccountInfo(android.content.Context,com.aizi.xiaohuhu.userdatabase.UserAccountInfo)
+com.aizi.xiaohuhu.userdatabase.UserAccountDataBase$UserAccountInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.userdatabase.UserAccountInfo
+com.aizi.xiaohuhu.utility.BaseMessageHandler:
+    private static final short BASE_DATA_HEAD
+    static byte[] baseTwobytes
+com.aizi.xiaohuhu.utility.BitSetConvert:
+    5:5:public BitSetConvert()
+    8:14:public static byte[] bitSet2ByteArray(java.util.BitSet)
+com.aizi.xiaohuhu.utility.LittleEndianDataIutputStream
+com.aizi.xiaohuhu.utility.LittleEndianDataOutputStream
+com.aizi.xiaohuhu.utility.MessageParse:
+    int mBreathCount
+    294:294:private com.aizi.xiaohuhu.sleepdatabase.SleepInfo convertTosleepinfo(byte[])
+com.aizi.xiaohuhu.utility.NotificationBuilderManager:
+    public static final int MEDIA_BUILDER_ID
+    public static final java.lang.String MEDIA_NOFIFY_DESCRIPTION
+    12:12:public NotificationBuilderManager()
+com.aizi.xiaohuhu.utility.PrivateParams:
+    private static final java.lang.String TAG
+    16:16:public PrivateParams()
+    62:69:public static void setMutiproSPInt(android.content.Context,java.lang.String,int)
+    80:81:public static int getMutiproSPInt(android.content.Context,java.lang.String,int)
+    112:113:public static java.lang.String getSPString(android.content.Context,java.lang.String)
+    125:133:public static void setSPLong(android.content.Context,java.lang.String,long)
+    143:144:public static long getSPLong(android.content.Context,java.lang.String)
+com.aizi.xiaohuhu.utility.PushNotificationBuilder
+com.aizi.xiaohuhu.utility.Utiliy:
+    public static final java.lang.String ACTION_PRIVATE_NOTIFICATION_CLICK
+    public static final java.lang.String ACTION_PRIVATE_NOTIFICATION_DELETE
+    17:17:public Utiliy()
+com.aizi.xiaohuhu.utility.Utiliy$CheckingState
+com.github.mikephil.charting.animation.Easing$EasingFunctions:
+    108:108:private Easing$EasingFunctions()
+com.jeremyfeinstein.slidingmenu.lib.SlidingMenu$1:
+    public static final int POSITION_OPEN
+    public static final int POSITION_CLOSE
+    public static final int POSITION_SECONDARY_OPEN
+de.greenrobot.event.EventBus$PostCallback

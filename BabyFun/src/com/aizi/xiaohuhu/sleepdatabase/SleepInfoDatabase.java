@@ -245,8 +245,7 @@ public class SleepInfoDatabase {
             values.put(TemperatureInfoEnum.TemperatureMonth.name(), temperatureinfo.mTemperatureMonth);
             values.put(TemperatureInfoEnum.TemperatureDay.name(), temperatureinfo.mTemperatureDay);
             values.put(TemperatureInfoEnum.TemperatureMinute.name(), temperatureinfo.mTemperatureMinute);
-            
-            
+                    
             long ret = -1;
             Cursor cs = null;
             try {
@@ -693,11 +692,11 @@ public class SleepInfoDatabase {
                 db.execSQL("CREATE TABLE " + TemperatureInfoEnum.TABLE_NAME + " (" + TemperatureInfoEnum.TemperatureInfoId.name()
                         + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
                         + TemperatureInfoEnum.TemperatureTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
-                        + TemperatureInfoEnum.TemperatureValue.name() + " TEXT "
+                        + TemperatureInfoEnum.TemperatureValue.name() + " TEXT, "
                         + TemperatureInfoEnum.TemperatureYear.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureMonth.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureDay.name() + " INTEGER DEFAULT ((0)), " 
-                        + TemperatureInfoEnum.TemperatureMinute.name() + " INTEGER DEFAULT ((0)), " 
+                        + TemperatureInfoEnum.TemperatureMinute.name() + " INTEGER DEFAULT ((0)) " 
                         + ");");
                 
                 SLog.e(TAG,

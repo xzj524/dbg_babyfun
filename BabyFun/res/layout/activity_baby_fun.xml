@@ -8,10 +8,8 @@
    
     <ScrollView 
        android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-       
-    
+       android:layout_height="wrap_content">
+
     <LinearLayout 
        android:id="@+id/showdata"
        android:layout_width="match_parent"
@@ -24,28 +22,21 @@
         android:id="@+id/topViewFragment"
         android:name="com.aizi.xiaohuhu.titlefragment.HomePageTopTitleFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-         android:layout_marginTop="20dp"/> 
+        android:layout_height="wrap_content" /> 
 
      <fragment
         android:id="@+id/routerStatusFragment"
         android:name="com.aizi.xiaohuhu.ui.component.main.RouterStatusFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-     
-   
-    
-    <fragment 
+
+     <fragment 
         android:id="@+id/realtimestatuFragment"
         android:name="com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_below="@id/routerStatusFragment"/>
-    
-    
-    
-    
       
     </LinearLayout>
     

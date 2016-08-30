@@ -20,24 +20,19 @@ public class HomePageTopTitleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        View homePageTopView = inflater.inflate(R.layout.homepagetoptitle, container, false);
-        //return super.onCreateView(inflater, container, savedInstanceState);
+        View HomePageTopView = inflater.inflate(R.layout.homepagetoptitle, container, false);
         
-        settingView = (ImageView) homePageTopView.findViewById(R.id.settingbtn);
-        plusView = (ImageView) homePageTopView.findViewById(R.id.plusbtn);
+        settingView = (ImageView) HomePageTopView.findViewById(R.id.settingbtn);
+        //plusView = (ImageView) HomePageTopView.findViewById(R.id.plusbtn);
         
         settingView.setOnClickListener(new View.OnClickListener() {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //getActivity().
-                
                 mListener.OnButtonClicked(2);
             }
         });
-        
-        return homePageTopView;
+        return HomePageTopView;
     }
     
     
@@ -49,8 +44,6 @@ public class HomePageTopTitleFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         // TODO Auto-generated method stub
-        
-       
         super.onAttach(activity);
         mListener = (OnButtonClickedListener)activity;
     }
