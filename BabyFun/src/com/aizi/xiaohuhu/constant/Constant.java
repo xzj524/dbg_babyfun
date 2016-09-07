@@ -27,9 +27,16 @@ public class Constant {
     /** 存储app私有的shared preference */
     public static final String SHARED_NAME_PRIVATE_SETTINGS = "aizi_pst";
     
-    /** 存储DeviceName  */
-    public static final String SHARED_DEVICE_NAME = "dev_name";
+    /** 存储DeviceAddress  */
+    public static final String SHARED_DEVICE_ADDRESS = "dev_address";
     
     /** 设备时间与手机端偏差限制  */
     public static final long DEVICE_TIME_OFFSET = 60 * 60 * 1000;
+    
+    
+    /** 用户登录是否成功  */
+    public static final String LOGIN_VALUE = "login_value";
+    
+    /** 蓝牙连接是否准备好  */
+    public static final String BLUETOOTH_IS_READY = "bluetooth_is_ready";
 }

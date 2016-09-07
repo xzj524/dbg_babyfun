@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ import com.aizi.xiaohuhu.logging.SLog;
 
 import de.greenrobot.event.EventBus;
 
-public class BabyBreathActivity extends Activity {
+public class BabyBreathActivity extends Activity implements OnClickListener{
     private static final String TAG = BabyBreathActivity.class.getSimpleName();
     
     private Button mFreshButton;
@@ -183,6 +184,12 @@ public class BabyBreathActivity extends Activity {
                 }
             }, timelen * 1000);
         }*/
+    }
+
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        
     }
     
 }

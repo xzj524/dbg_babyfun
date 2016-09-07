@@ -194,6 +194,35 @@
 				 android:background="#000000"
 				 android:orientation="vertical">
 		 		</LinearLayout>
+		 		
+          
+            <RelativeLayout
+                android:id="@+id/baby_quit_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+                <TextView
+                    android:id="@+id/baby_quit_account"
+                    android:layout_marginLeft="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="退出登录" />
+    
+            </RelativeLayout>
+            
+            
+          <LinearLayout
+		         android:id="@+id/line_8"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="#000000"
+				 android:orientation="vertical">
+		 		</LinearLayout>
 
     
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.aizi.xiaohuhu;
 
 import com.aizi.xiaohuhu.R;
+import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.utility.Utiliy;
 
 
@@ -18,6 +19,13 @@ public class CriticalActivity extends Activity {
     
     Button mFever;
     Button mBreathAbnormal;
+    
+    Button mGetNoSyncData;
+    Button mGetAllData;
+    Button mStartBreathData;
+    Button mStopBreathData;
+    Button mGetBreathHistoryData;
+    Button mGetRealTimeData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +42,6 @@ public class CriticalActivity extends Activity {
                 // TODO Auto-generated method stub
                 Utiliy.showFeverNotification(getApplicationContext(), 
                         "孩子发烧了！！", "孩子发烧了，请及时就医。", null);
-               
-               /* PendingIntent pendingIntent3 = PendingIntent.getActivity(this, 0,  
-                        new Intent(this, MainActivity.class), 0);  
-                // 通过Notification.Builder来创建通知，注意API Level  
-                // API16之后才支持  
-                Notification notify3 = new Notification.Builder(this)  
-                        .setSmallIcon(R.drawable.ic_launcher)  
-                        .setTicker("TickerText:" + "您有新短消息，请注意查收！")  
-                        .setContentTitle("Notification Title")  
-                        .setContentText("This is the notification message")  
-                        .setContentIntent(pendingIntent3).setNumber(1).build(); // 需要注意build()是在API  
-                                                                                // level16及之后增加的，API11可以使用getNotificatin()来替代  
-                notify3.flags |= Notification.FLAG_AUTO_CANCEL; // FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。  
-                manager.notify(0, notify3);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示  
-                */
             }
         });
         
@@ -59,6 +52,67 @@ public class CriticalActivity extends Activity {
                 // TODO Auto-generated method stub
                 Utiliy.showBreathNotification(getApplicationContext(), 
                         "孩子呼吸停滞！！", "孩子呼吸停滞，请及时处理。", null);
+            }
+        });
+        
+        mGetNoSyncData = (Button) findViewById(R.id.getnosyncdata);
+        mGetNoSyncData.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
+            }
+        });
+        
+        mGetAllData = (Button) findViewById(R.id.getallsyncdata);
+        mGetAllData.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getAllSyncInfo();
+            }
+        });
+        
+        mStartBreathData = (Button) findViewById(R.id.startbreathdata);
+        mStartBreathData.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+            }
+        });
+        
+        mStopBreathData = (Button) findViewById(R.id.stopbreathdata);
+        mStopBreathData.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+            }
+        });
+        
+        mGetBreathHistoryData = (Button) findViewById(R.id.getbreathhistorydata);
+        mGetBreathHistoryData.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
+            }
+        });
+        
+        
+        mGetRealTimeData = (Button) findViewById(R.id.gettempdata);
+        mGetRealTimeData.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
             }
         });
     }

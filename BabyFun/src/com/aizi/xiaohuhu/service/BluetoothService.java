@@ -35,7 +35,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.aizi.xiaohuhu.deviceinterface.SyncDeviceImpl.BluetoothReady;
+import com.aizi.xiaohuhu.constant.Constant;
 import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.utility.BaseMessageHandler;
 import com.aizi.xiaohuhu.utility.PrivateParams;
@@ -69,18 +69,18 @@ public class BluetoothService extends Service {
     private static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
     public final static String ACTION_GATT_CONNECTED =
-            "com.aizi.easybaby.ACTION_GATT_CONNECTED";
+            "com.aizi.xiaohuhu.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
-            "com.aizi.easybaby.ACTION_GATT_DISCONNECTED";
+            "com.aizi.xiaohuhu.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
-            "com.aizi.easybaby.ACTION_GATT_SERVICES_DISCOVERED";
+            "com.aizi.xiaohuhu.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
-            "com.aizi.easybaby.ACTION_DATA_AVAILABLE";
+            "com.aizi.xiaohuhu.ACTION_DATA_AVAILABLE";
 
     public final static String EXTRA_TYPE =
-            "com.aizi.easybaby.EXTRA_TYPE";
+            "com.aizi.xiaohuhu.EXTRA_TYPE";
     public final static String DEVICE_DOES_NOT_SUPPORT_BLUETOOTH =
-            "com.aizi.easybaby.DEVICE_DOES_NOT_SUPPORT_BLUETOOTH";
+            "com.aizi.xiaohuhu.DEVICE_DOES_NOT_SUPPORT_BLUETOOTH";
     
     
    
@@ -94,13 +94,13 @@ public class BluetoothService extends Service {
                 connectionAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 SLog.e(TAG, "Connected to GATT server.");
-                mBluetoothGatt.discoverServices();
-                // Attempts to discover services after successful connection.
+                mBluetoothGatt.discoverServices(); // Attempts to discover services after successful connection.
                 SLog.e(TAG, "Attempting to start service discovery:");
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 connectionAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
                 SLog.e(TAG, "Disconnected from GATT server.");   
+                PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
             }
             broadcastUpdate(connectionAction);
         }
@@ -108,23 +108,23 @@ public class BluetoothService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                
-                PrivateParams.setSPInt(getApplicationContext(), "connectedbluetooth", 1);
-                enableDataNotification();
-            	SLog.e(TAG, "mBluetoothGatt = " + mBluetoothGatt );
-              //  broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
-            } else {
-                SLog.e(TAG, "onServicesDiscovered received: " + status);
+                boolean isEnable = enableDataNotification();
+                if (isEnable) { // 蓝牙已经连接并且准备好数据传输
+                    SLog.e(TAG, "Bluetooth  is Ready, mBluetoothGatt = " + mBluetoothGatt );
+                    PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 1);
+                    return;
+                }
+            } else {  
+                SLog.e(TAG, "Bluetooth  is not Discovered ");
             }
+            PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
-        	Log.e(TAG, "Charater Read Status = " + status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
-               // broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
         }
 
@@ -158,8 +158,6 @@ public class BluetoothService extends Service {
     private boolean isHeartRateInUINT16(final byte value) {
 		return ((value & 0x01) != 0);
 	}
-
-  
 
     public class LocalBinder extends Binder {
            public BluetoothService getService() {
@@ -232,6 +230,7 @@ public class BluetoothService extends Service {
                 mConnectionState = STATE_CONNECTING;
                 return true;
             } else {
+                PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
                 return false;
             }
         }
@@ -239,6 +238,7 @@ public class BluetoothService extends Service {
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
             SLog.e(TAG, "Device not found.  Unable to connect.");
+            PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
             return false;
         }
         // We want to directly connect to the device, so we are setting the autoConnect
@@ -262,6 +262,7 @@ public class BluetoothService extends Service {
             Log.e(TAG, "BluetoothAdapter not initialized");
             return;
         }
+        PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         mBluetoothGatt.disconnect();
     }
 
@@ -278,8 +279,7 @@ public class BluetoothService extends Service {
         mBluetoothDeviceAddress = null;
         mBluetoothGatt.close();
         mBluetoothGatt = null;
-        
-        PrivateParams.setSPInt(getApplicationContext(), "connectedbluetooth", 0);
+        PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
     }
 
     /**
@@ -303,32 +303,34 @@ public class BluetoothService extends Service {
      *
      * @return 
      */
-    public void  enableDataNotification() {
+    public boolean  enableDataNotification() {
         try {
             mDataService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
             if (mDataService == null) {
                 SLog.e(TAG, "enableDataNotification BLE_UUID_NUS_SERVICE not found!");
                 broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-                return;
+                PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+                return false;
             }
             mCharacterChar = mDataService.getCharacteristic(BLE_UUID_NUS_RX_CHARACTERISTIC);
             if (mCharacterChar == null) {
                 SLog.e(TAG, "enableDataNotification BLE_UUID_NUS_RX_CHARACTERISTIC not found!");
                 broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-                return;
+                PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+                return false;
             }
             mBluetoothGatt.setCharacteristicNotification(mCharacterChar,true);
             BluetoothGattDescriptor descriptor = mCharacterChar.getDescriptor(CCCD);
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
-            BluetoothReady bleReady = new BluetoothReady();
-            bleReady.isBluetoothReady = true;
-            
-            EventBus.getDefault().post(bleReady);
+
+            return true;
         } catch (Exception e) {
             // TODO: handle exception
             SLog.e(TAG, e);
         }
+        PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+        return false;
         
     }
     

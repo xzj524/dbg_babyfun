@@ -11,29 +11,17 @@
 
     <!-- 主界面 -->
     <string name="main_name">小呼呼</string>
-    <string name="start_breath">开启呼吸检测</string>
-    <string name="checking_router_connect">检查路由连接</string>
-    <string name="checking_router_disk">检查磁盘</string>
-    <string name="router_speed">路由网速  %1$s</string>
-    <string name="router_speed_none">路由网速</string>
-    <string name="remote">远程</string>
-    <string name="local">直连</string>
-    <string name="remote_download">远程下载</string>
-    <string name="remote_download_info">%1$d个下载</string>
-    <string name="connected_device_manager">设备管理</string>
-    <string name="connected_device_manager_info">%1$d台设备</string>
-    <string name="file_manager">文件管理</string>
-    <string name="disk_readonly">磁盘只读</string>
-    <string name="ext_apps">扩展应用</string>
-    <string name="ext_apps_info">%1$d项应用</string>
+    <string name="start_breath">启动连接，同步数据</string>
+    <string name="show_device_status">宝宝状态</string>
+    <string name="reset_user_password">重置密码</string>
+    <string name="register_user_account">注册账号</string>
+  
     <string name="setting">设置</string>
-    <string name="connecting_router_success">设备已连接</string>
-    <string name="connecting_router_fail">找不到设备\n请重新检测</string>
+    <string name="connecting_device_success">设备已连接</string>
+    <string name="connecting_device_fail">找不到设备\n请重新检测</string>
     <string name="connecting_router_one_abnormal">检测到一个问题\n点击查看</string>
     <string name="connecting_router_two_abnormal">检测到两个问题\n点击查看</string>
     <string name="check_router_status_abnormal">问题</string>
-    <string name="extapps_bduss_invalidate_content">扩展应用由百度提供服务，先将路由与百度帐号绑定</string>
-    <string name="extapps_bind_invalidate_content_for_unbind">您的路由被解绑，\n重新绑定路由可以启用服务</string>
     <string name="title_activity_baby_status">BabyStatusActivity</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_baby_breath">BabyBreathActivity</string>
@@ -48,5 +36,6 @@
     <string name="title_activity_emergency_phone_number">EmergencyPhoneNumberActivity</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_xiao_huhu">XiaoHuhuActivity</string>
 
 </resources>

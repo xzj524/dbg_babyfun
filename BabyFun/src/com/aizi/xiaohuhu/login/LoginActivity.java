@@ -28,15 +28,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.aizi.xiaohuhu.BabyFunActivity;
 import com.aizi.xiaohuhu.R;
+import com.aizi.xiaohuhu.constant.Constant;
+import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.userdatabase.UserAccountDataBase;
+import com.aizi.xiaohuhu.utility.PrivateParams;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+    
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -60,6 +65,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+      
 
         // Set up the login form.
         mPhoneView = (AutoCompleteTextView) findViewById(R.id.phonenumber);
@@ -77,8 +83,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.phone_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mPhoneSignInButton = (Button) findViewById(R.id.phone_sign_in_button);
+        mPhoneSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -225,7 +231,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
                 // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[] { ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE },
+                new String[] { ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE },
 
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
@@ -241,7 +247,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(phonenumbers);
+        addPhonesToAutoComplete(phonenumbers);
     }
 
     @Override
@@ -257,11 +263,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         int IS_PRIMARY = 1;
     }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+    private void addPhonesToAutoComplete(List<String> phoneCollection) {
         // Create adapter to tell the AutoCompleteTextView what to show in its
         // dropdown list.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(LoginActivity.this,
-                android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+                android.R.layout.simple_dropdown_item_1line, phoneCollection);
 
         mPhoneView.setAdapter(adapter);
     }
@@ -286,23 +292,34 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(1000);
                 if (UserAccountDataBase.checkUserAccountAndPassword(getApplicationContext(),
                         mPhoneNumber, mPassword)) {
-                    Toast.makeText(getApplicationContext(), "登录成功！！", Toast.LENGTH_SHORT).show();
+                    SLog.e(TAG, "login success");
+                    PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
+                } else {
+                    return false;
+                   /* UserAccountInfo useraccountinfo = new UserAccountInfo();
+                    useraccountinfo.mUserAccountName = mPhoneNumber;
+                    useraccountinfo.mUserAccountInfoPassWord = mPassword;
+                    useraccountinfo.mUserAccountTimestamp = System.currentTimeMillis();
+                    useraccountinfo.mUserAccountPosition = "";
+                    UserAccountDataBase.insertUserAccountInfo(getApplicationContext(), useraccountinfo );*/
                 }
+                
+                
             } catch (InterruptedException e) {
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
+       /*     for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mPhoneNumber)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
             }
-
+*/
             // TODO: register the new account here.
             return true;
         }
@@ -314,6 +331,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             if (success) {
                 finish();
+                Intent intent = new Intent(getApplicationContext(), BabyFunActivity.class);
+                startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

@@ -7,12 +7,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,29 +20,28 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizi.xiaohuhu.R;
+import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.service.BluetoothService;
 import com.aizi.xiaohuhu.service.ScanDevicesService;
 import com.aizi.xiaohuhu.service.ScanDevicesService.OnScanDeviceListener;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * 
  * @author xuzejun
  * @since 2016-4-2
  */
-public class RouterStatusFragment extends Fragment{
+public class DeviceConnectStatusFragment extends Fragment{
     
-    private static final String TAG = RouterStatusFragment.class.getSimpleName();
+    private static final String TAG = DeviceConnectStatusFragment.class.getSimpleName();
 
     public static final int ABNORMAL_REQUEST_CODE = 1;
     private static final int REQUEST_SELECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BLUETOOTH = 101;
     private BluetoothDevice mDevice = null;
     private BluetoothService mService = null;
-    OnItemSelectedListener mListener;
+    OnDeviceConnectListener mListener;
     OnScanDeviceListener mScanDeviceListener;
     private ScanDevicesService mScanService = null;
 
@@ -113,7 +109,7 @@ public class RouterStatusFragment extends Fragment{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try{  
-            mListener =(OnItemSelectedListener)activity;  
+            mListener =(OnDeviceConnectListener)activity;  
         }catch(ClassCastException e){  
             throw new ClassCastException(activity.toString()+"must implement OnArticleSelectedListener");  
         }  
@@ -124,29 +120,24 @@ public class RouterStatusFragment extends Fragment{
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         mCurrentState = CheckingState.IDEL;
-        
-   
-       // service_init();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View babyfunStatusView = inflater.inflate(R.layout.babyfun_status_fragment, container, false);
+        View deviceStatusView = inflater.inflate(R.layout.babyfun_status_fragment, container, false);
         
        // service_init();
-        mCheckNetworkConnectingTextView = (TextView) babyfunStatusView.findViewById(R.id.checkingNetworkTextView);
-
-        mProgressImageView = (ImageView) babyfunStatusView.findViewById(R.id.progressImageView);
+        mCheckNetworkConnectingTextView = (TextView) deviceStatusView.findViewById(R.id.checkingNetworkTextView);
+        mConnectedStatusTextView = (TextView) deviceStatusView.findViewById(R.id.connectedStatusTextView);
+        
+        mProgressImageView = (ImageView) deviceStatusView.findViewById(R.id.progressImageView);
         mProgressImageView.setOnClickListener(new UpdateStatusOnclickListener());
 
-        mConnectingInfoViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectInfoLayout);
-
-        mConnectedSucceedViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectedSucceedLayout);
-
-        mConnectedStatusTextView = (TextView) babyfunStatusView.findViewById(R.id.connectedStatusTextView);
-
-        mConnectedFailedViewGroup = (ViewGroup) babyfunStatusView.findViewById(R.id.connectedFailedLayout);
-        return babyfunStatusView;
+        mConnectingInfoViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectInfoLayout);
+        mConnectedSucceedViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectedSucceedLayout);
+        mConnectedFailedViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectedFailedLayout);
+        
+        return deviceStatusView;
     }
 
     @Override
@@ -157,13 +148,12 @@ public class RouterStatusFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
     
     /**
      * 开始检查连接
      */
-    public void startConnecting() {
+    public void startConnectingAnimation() {
 
         if (!mIsConnectingAnimation) {
             mIsConnectingAnimation = true;
@@ -171,6 +161,7 @@ public class RouterStatusFragment extends Fragment{
             Animation progressAnimation = AnimationUtils.loadAnimation(getActivity(),
                     R.anim.connecting_router_rotate_animation);
             mProgressImageView.startAnimation(progressAnimation);
+            
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.VISIBLE);
@@ -191,7 +182,6 @@ public class RouterStatusFragment extends Fragment{
 
     @Override
     public void onDestroyView() {
-       
         super.onDestroyView();
     }
 
@@ -219,10 +209,10 @@ public class RouterStatusFragment extends Fragment{
      */
     public void doUpdateStatusClick() {
         if (mCurrentState == CheckingState.IDEL) {
-            startConnecting();
+            startConnectingAnimation();
             mCurrentState = CheckingState.CHECKING;        
-            Intent enabler=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enabler,10);    
+            Intent Bluetoothenabler=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(Bluetoothenabler,REQUEST_ENABLE_BLUETOOTH);    
         } else if (mCurrentState == CheckingState.CHECKING) {
             mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
@@ -230,11 +220,9 @@ public class RouterStatusFragment extends Fragment{
             mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
-            // 什么也不做
         } else if (mCurrentState == CheckingState.FATAL_DEVICE_NOT_CONNECT) {
             mCurrentState = CheckingState.CHECKING;
-            startConnecting();
-          
+            startConnectingAnimation();
         } else if (mCurrentState == CheckingState.SUCCEED) {
            /* Intent closeIntent = new Intent();
             closeIntent.putExtra("extra_method", "close_bluetooth");
@@ -249,7 +237,7 @@ public class RouterStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.GONE);
         } else if (mCurrentState == CheckingState.FAIL) {
             
-            Log.e(TAG, "UartService disconnect");
+            SLog.e(TAG, "Bluetooth Service disconnect");
             mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
             mProgressImageView.clearAnimation();
@@ -267,26 +255,23 @@ public class RouterStatusFragment extends Fragment{
                 String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
                 mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
                
-                Log.e(TAG, "... onActivityResultdevice.address==" + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);
-               // ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName()+ " - connecting");
-              //  mService.connect(deviceAddress);
-                
-              //  Log.e(TAG, "... onActivityResultdevice.address==" + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);
-                mListener.onItemSelected(data);
-               // mCurrentState = CheckingState.SUCCEED;
+                SLog.e(TAG, "onActivityResultdevice.address = " + mDevice 
+                        + "deviceaddress = "+ deviceAddress 
+                        +" myserviceValue = " + mService);
+             
+                mListener.onDeviceConnected(data);
                 doUpdateStatusClick();
 
             }
+        } else if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
+            Intent intent = new Intent("com.babyfun.scandevices");
+            mListener.onDeviceConnected(intent);
         }
-       if (requestCode == 10) {
-           Intent intent = new Intent("com.babyfun.scandevices");
-           mListener.onItemSelected(intent);
-    }
     }
     
     //Container Activity must implement this interface  
-    public interface OnItemSelectedListener{  
-        public void onItemSelected(Intent intent);  
+    public interface OnDeviceConnectListener{  
+        public void onDeviceConnected(Intent intent);  
     } 
 
 
@@ -301,7 +286,7 @@ public class RouterStatusFragment extends Fragment{
         CHECKING, // 正在检查
         FATAL_DEVICE_NOT_CONNECT, // 无法连接路由
         FAIL, // 失败
-        SUCCEED
+        SUCCEED // 成功
     }
 
     public void setCurrentStateFailed(){

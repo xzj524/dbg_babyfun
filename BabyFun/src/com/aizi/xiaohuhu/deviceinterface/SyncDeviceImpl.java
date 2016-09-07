@@ -11,8 +11,7 @@ import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.service.BluetoothService;
 import com.aizi.xiaohuhu.synctime.DeviceTime;
 import com.aizi.xiaohuhu.utility.BaseMessageHandler;
-
-import de.greenrobot.event.EventBus;
+import com.aizi.xiaohuhu.utility.PrivateParams;
 
 public class SyncDeviceImpl implements SyncDevice{
     
@@ -20,28 +19,12 @@ public class SyncDeviceImpl implements SyncDevice{
     private BluetoothService mBluetoothService = null;
     private static boolean mIsBluetoothReady;
     private String mAddress;
+    Context mContext;
 
     public SyncDeviceImpl(Context context) {
         // TODO Auto-generated constructor stub
-        mIsBluetoothReady = false;
-        //注册EventBus  
-        EventBus.getDefault().register(this);
-        
-    }
-    
-   
-    
-    public void onEvent(BluetoothReady bleReady) {  
-        mIsBluetoothReady = bleReady.isBluetoothReady;
-     } 
-    
-    public static class BluetoothReady{
-        public boolean isBluetoothReady;
-        public BluetoothReady() {
-            // TODO Auto-generated constructor stub
-            isBluetoothReady = false;
-        }
-       
+        mContext = context;
+        mIsBluetoothReady = false;      
     }
     
 
@@ -49,18 +32,19 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> setDeviceTime() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " setDeviceTime ");
-        if (mIsBluetoothReady) {
-           KeyPayload keyPayload = new KeyPayload();
-           keyPayload.key = 1;
-           keyPayload.keyLen = 4; 
-           
-           DeviceTime dvtm = acqDeviceTime();
-           keyPayload.keyValue = dvtm.toByte();  
-           
-           BaseL2Message bsl2Msg 
-           = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
-                   Constant.BASE_VERSION_CODE, keyPayload);
-           boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 1;
+            keyPayload.keyLen = 4; 
+            
+            DeviceTime dvtm = acqDeviceTime();
+            keyPayload.keyValue = dvtm.toByte();  
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            mIsBluetoothReady = true;
         }
         
         return null;
@@ -88,7 +72,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> startSendBreathData() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " startSendBreathData ");
-        if (mIsBluetoothReady) {
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 1;
             keyPayload.keyLen = 0;
@@ -107,7 +91,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> stopSendBreathData() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " stopSendBreathData ");
-        if (mIsBluetoothReady) {
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 4;
             keyPayload.keyLen = 0;
@@ -126,7 +110,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getDeviceTime() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getDeviceTime ");
-        if (mIsBluetoothReady) {
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 3;
             keyPayload.keyLen = 0;
@@ -145,7 +129,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getBodyTemperature() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getBodyTemperature ");
-        if (mIsBluetoothReady) {
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 1;
             keyPayload.keyLen = 0;
@@ -155,6 +139,7 @@ public class SyncDeviceImpl implements SyncDevice{
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
         }
+
         return null;
     }
 
@@ -164,7 +149,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getAllNoSyncInfo() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getAllNoSyncInfo ");
-        if (mIsBluetoothReady) {
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 3;
             keyPayload.keyLen = 0;
@@ -174,6 +159,7 @@ public class SyncDeviceImpl implements SyncDevice{
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
         }
+
         return null;
     }
 
@@ -183,7 +169,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getAllSyncInfo() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getAllSyncInfo ");
-        if (mIsBluetoothReady) {
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 4;
             keyPayload.keyLen = 0;
@@ -193,6 +179,7 @@ public class SyncDeviceImpl implements SyncDevice{
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
         }
+
         return null;
     }
 
@@ -200,7 +187,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getBreahStopInfo() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getBreahStopInfo ");
-        if (mIsBluetoothReady) {
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 11;
             keyPayload.keyLen = 0;

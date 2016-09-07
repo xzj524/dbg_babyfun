@@ -65,13 +65,8 @@ public class SleepInfoDatabase {
         synchronized (myLock) {
             if (mDbHelper == null) {
                 String dbName = null;
-              /*  File dbDir = new File(Environment.getDataDirectory().getAbsolutePath() + DATA_DIR + File.separator
-                        + context.getPackageName() + DB_DIR);
-                SLog.d(TAG, "File Path is  " + Environment.getDataDirectory().getAbsolutePath() 
-                        + DATA_DIR + File.separator
-                        + context.getPackageName() + DB_DIR);*/
                 
-                File dbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + DATA_DIR + File.separator
+                File dbDir = new File(Environment.getDataDirectory().getAbsolutePath() + DATA_DIR + File.separator
                         + context.getPackageName() + DB_DIR);
                 SLog.d(TAG, "File Path is  " + Environment.getDataDirectory().getAbsolutePath() 
                         + DATA_DIR + File.separator

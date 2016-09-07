@@ -15,7 +15,9 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Pair;
+import android.widget.TextView;
 
 import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.sleepdatabase.BreathInfoEnumClass;
@@ -143,7 +145,6 @@ public class UserAccountDataBase {
             long ret = -1;
             Cursor cs = null;
             try {
-              
                 ret = db.insert(UserAccountInfoEnum.TABLE_NAME, null, values);
                 SLog.d(TAG, "UserAccountInfoEnum:  insert into database");
             } catch (Exception e) {
@@ -200,6 +201,46 @@ public class UserAccountDataBase {
         return false;
     }
   
+    
+    /**
+     * 从数据库中查询用户名是否存在
+     * 
+     * @param context
+     * @return PushInfoEnumClass
+     */
+    public static synchronized boolean checkUserAccount(Context context, 
+            String useraccountname) {
+        synchronized (myLock) {
+            SQLiteDatabase db = getDb(context);
+            if (db == null) {
+                return false;
+            }
+            
+            Cursor cursor = null;
+            try {
+                cursor = db.query(UserAccountInfoEnum.TABLE_NAME, null, null, null, null, null, null);
+                while (cursor.moveToNext()) {
+                    String  username = cursor.getString(cursor.getColumnIndex(UserAccountInfoEnum.UserAccountName.name()));
+                    if (username.equals(useraccountname)) {
+                        String password = cursor.getString(cursor.getColumnIndex(UserAccountInfoEnum.UserAccountInfoPassWord.name()));
+                        if (!TextUtils.isEmpty(password)) {
+                            return true;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                SLog.e(TAG, e);
+            } finally {
+                if (null != null && !cursor.isClosed()) {
+                    cursor.close();
+                }
+                if (db != null) {
+                    db.close();
+                }
+            }
+        }
+        return false;
+    }
     
     /**
      * 从数据库中取出SleepInfoEnumClass

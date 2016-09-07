@@ -15,7 +15,7 @@ import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.aizi.xiaohuhu.constant.Constant;
@@ -31,21 +31,17 @@ public class ScanDevicesService extends Service{
     List<BluetoothDevice> mDeviceList;
     Map<String, Integer> devRssiValues;
     private static final long SCAN_PERIOD = 2 * 1000; //10 seconds
-
-   // private DeviceAdapter deviceAdapter;
     
     /** 
      * 更新进度的回调接口 
      */  
-    private OnScanDeviceListener onScanDeviceListener;  
-      
-      
+    private OnScanDeviceListener mListener;  
     /** 
      * 注册回调接口的方法，供外部调用 
      * @param onProgressListener 
      */  
     public void setOnProgressListener(OnScanDeviceListener onScanDeviceListener) {  
-        this.onScanDeviceListener = onScanDeviceListener;  
+        this.mListener = onScanDeviceListener;  
     } 
 
     public interface OnScanDeviceListener{  
@@ -71,6 +67,9 @@ public class ScanDevicesService extends Service{
             stopSelf();
         }
         
+        /* Initialize device list container */
+        mDeviceList = new ArrayList<BluetoothDevice>();
+        devRssiValues = new HashMap<String, Integer>();
         return new ScanBinder();
     }
     
@@ -89,20 +88,16 @@ public class ScanDevicesService extends Service{
             SLog.e(TAG, "devicelist = " + listDev.getName());
         }
         return mDeviceList;
-        
     }
     
+   
     
     
     public void startScanList() {
-        /* Initialize device list container */
-        mDeviceList = new ArrayList<BluetoothDevice>();
-        devRssiValues = new HashMap<String, Integer>();
         scanLeDevice(true);
     }
 
     private void scanLeDevice(final boolean enable) {
-        // TODO Auto-generated method stub
         if (enable) {
             // Stops scanning after a pre-defined scan period.
             mHandler.postDelayed(new Runnable() {
@@ -110,15 +105,14 @@ public class ScanDevicesService extends Service{
                 public void run() {
                    if (mScanning) {
                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                       onScanDeviceListener.OnScanDeviceSucceed(10);
-                }
-
+                       mListener.OnScanDeviceSucceed(2);
+                   }
                 }
             }, SCAN_PERIOD);
 
             mScanning = true;
             mBluetoothAdapter.startLeScan(mBLEScanCallback);
-            Log.e("addDevice", "address rssi");
+            SLog.e(TAG, "start Scan bluetooth devices");
         } else {
             mScanning = false;
             mBluetoothAdapter.stopLeScan(mBLEScanCallback);
@@ -137,11 +131,10 @@ public class ScanDevicesService extends Service{
 
     
     private void addDevice(BluetoothDevice device, int rssi) {
-        boolean deviceFound = false;
-
+        boolean isDeviceFound = false;
         for (BluetoothDevice listDev : mDeviceList) {
             if (listDev.getAddress().equals(device.getAddress())) {
-                deviceFound = true;
+                isDeviceFound = true;
                 break;
             }
         }    
@@ -149,19 +142,32 @@ public class ScanDevicesService extends Service{
                 + " name = " + device.getName() 
                 +  "  rssi = " + rssi);
         devRssiValues.put(device.getAddress(), rssi);
-        if (!deviceFound) {
-            if (device.getName() != null) {
+        if (!isDeviceFound) {
+            if (!TextUtils.isEmpty(device.getName())) {
                 if (device.getName().equals("my_hrm")) {
                     mDeviceList.add(device);
                     PrivateParams.setSPString(getApplicationContext(), 
-                            Constant.SHARED_DEVICE_NAME, device.getAddress());
+                            Constant.SHARED_DEVICE_ADDRESS, device.getAddress());
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                    onScanDeviceListener.OnScanDeviceSucceed(9);
-                    onScanDeviceListener.OnScanDeviceSucceed(10);
+                    
+                    mListener.OnScanDeviceSucceed(1);
                 }
             }
         }
+    }
+    
+    @Override
+    public void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        scanLeDevice(false);
+    }
+    
+    @Override
+    public boolean onUnbind(Intent intent) {
+        // TODO Auto-generated method stub
+        return super.onUnbind(intent);
     }
 
 }

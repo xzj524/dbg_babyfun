@@ -2,9 +2,11 @@ package com.aizi.xiaohuhu.login;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,18 +15,22 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 import com.aizi.xiaohuhu.R;
 import com.aizi.xiaohuhu.logging.SLog;
+import com.aizi.xiaohuhu.userdatabase.UserAccountDataBase;
+import com.aizi.xiaohuhu.userdatabase.UserAccountInfo;
+import com.aizi.xiaohuhu.view.TopBarView;
+import com.aizi.xiaohuhu.view.TopBarView.onTitleBarClickListener;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements onTitleBarClickListener{
     
     private static final String TAG = RegisterActivity.class.getSimpleName();
     
-   // private UserRegisterTask mRegisterTask = null;
 
     // UI references.
     private AutoCompleteTextView mRegiserPhoneView;
@@ -33,9 +39,13 @@ public class RegisterActivity extends Activity {
     private View mProgressView;
     private View mLoginFormView;
     private Button mSendCheckCodeButton;
+    private Button mRegisterButton;
     EventHandler mEventHandler;
     // 国家号码规则
     private HashMap<String, String> mCountryRules;
+    
+    private  TopBarView topbar;  
+    private TimeCount time;
 
 
     @Override
@@ -43,8 +53,19 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         
+        topbar = (TopBarView) findViewById(R.id.topbar);
+        topbar.setClickListener(this);
         
-        SMSSDK.initSDK(this, "15cc6f2034e7d", "027c72f4185b80d6f1d2e49be748b98f");
+        time = new TimeCount(60000, 1000);//构造CountDownTimer对象
+        mRegiserPhoneView = (AutoCompleteTextView) findViewById(R.id.register_phonenumber);
+        //populateAutoComplete();
+        mCheckCodeView = (EditText) findViewById(R.id.register_check_code_text);
+        mSendCheckCodeButton = (Button) findViewById(R.id.send_check_code);
+        mPasswordView = (EditText) findViewById(R.id.register_password_text);
+        mRegisterButton = (Button) findViewById(R.id.phone_sign_in_button);
+        
+        
+        SMSSDK.initSDK(this, "16cac73c0585e", "5a43a8be5eaf2786403d854f39ce28f1");
         mEventHandler = new EventHandler(){
             
             @Override
@@ -54,6 +75,26 @@ public class RegisterActivity extends Activity {
                 //回调完成
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                 //提交验证码成功
+                    SLog.e(TAG, " check code is right");
+                    if (!UserAccountDataBase.checkUserAccountAndPassword(getApplicationContext(),
+                            mRegiserPhoneView.getText().toString(), mPasswordView.getText().toString())) {
+                        UserAccountInfo useraccountinfo = new UserAccountInfo();
+                        useraccountinfo.mUserAccountName = mRegiserPhoneView.getText().toString();
+                        useraccountinfo.mUserAccountInfoPassWord = mPasswordView.getText().toString();
+                        useraccountinfo.mUserAccountPosition = "beijing";
+                        useraccountinfo.mUserAccountTimestamp = System.currentTimeMillis();
+                        long res = UserAccountDataBase.insertUserAccountInfo(getApplicationContext(), 
+                                useraccountinfo );  
+                        if (res != -1) {
+                            Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "该手机号已经注册过", Toast.LENGTH_SHORT).show();
+                    }
+                    
+                    finish();
+                    
+                    
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                     SLog.e(TAG, " get check code ");
                 //获取验证码成功
@@ -62,31 +103,34 @@ public class RegisterActivity extends Activity {
                     if (result == SMSSDK.RESULT_COMPLETE) {
                         onCountryListGot((ArrayList<HashMap<String,Object>>) data);
                     } 
-                    
                 } 
               }else{                                                                 
                  ((Throwable)data).printStackTrace(); 
-          }
-      } 
-   }; 
-       SMSSDK.registerEventHandler(mEventHandler); //注册短信回调
+              }
+            } 
+        }; 
         
-        mRegiserPhoneView = (AutoCompleteTextView) findViewById(R.id.register_phonenumber);
-        //populateAutoComplete();
-        mCheckCodeView = (EditText) findViewById(R.id.register_check_code_text);
-        mSendCheckCodeButton = (Button) findViewById(R.id.send_check_code);
+        SMSSDK.registerEventHandler(mEventHandler); //注册短信回调
+        
+     
         mSendCheckCodeButton.setOnClickListener(new View.OnClickListener() {
             
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                SMSSDK.getVerificationCode("86", mRegiserPhoneView.getText().toString());
-                SLog.e(TAG, "mRegiserPhoneView = " + mRegiserPhoneView.getText().toString());
-               // SMSSDK.getVerificationCode("86", "18811130187");
+                if (UserAccountDataBase.checkUserAccount(getApplicationContext(),
+                        mRegiserPhoneView.getText().toString())) {
+                    Toast.makeText(getApplicationContext(), "该手机号已注册过,请更换号码或直接登录", 
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    SMSSDK.getVerificationCode("86", mRegiserPhoneView.getText().toString());
+                    SLog.e(TAG, "mRegiserPhoneView = " + mRegiserPhoneView.getText().toString());
+                    time.start();//开始计时
+                }
             }
         });
 
-        mPasswordView = (EditText) findViewById(R.id.register_password_text);
+    
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -95,6 +139,15 @@ public class RegisterActivity extends Activity {
                     return true;
                 }
                 return false;
+            }
+        });
+        
+        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                SMSSDK.submitVerificationCode("86", mRegiserPhoneView.getText().toString(), 
+                        mCheckCodeView.getText().toString());
             }
         });
     }
@@ -123,7 +176,33 @@ public class RegisterActivity extends Activity {
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        
         SMSSDK.unregisterEventHandler(mEventHandler);
     }
+
+    @Override
+    public void onBackClick() {
+        finish();
+    }
+
+    @Override
+    public void onRightClick() {
+     
+    }
+    
+    
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
+        }
+        @Override
+        public void onFinish() {//计时完毕时触发
+            mSendCheckCodeButton.setText("重新验证");
+            mSendCheckCodeButton.setClickable(true);
+        }
+        @Override
+        public void onTick(long millisUntilFinished){//计时过程显示
+            mSendCheckCodeButton.setClickable(false);
+            mSendCheckCodeButton.setText(millisUntilFinished /1000+"秒");
+        }
+        }
 }

@@ -1,7 +1,6 @@
 package com.aizi.xiaohuhu.slidingmenu;
 
 import android.app.Activity;
-
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,13 @@ import com.aizi.xiaohuhu.BabyBreathActivity;
 import com.aizi.xiaohuhu.BabyStatusActivity;
 import com.aizi.xiaohuhu.CriticalActivity;
 import com.aizi.xiaohuhu.R;
+import com.aizi.xiaohuhu.XiaoHuhuActivity;
+import com.aizi.xiaohuhu.constant.Constant;
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
-import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.login.LoginActivity;
-import com.aizi.xiaohuhu.sleepdatabase.BreathStopInfo;
-import com.aizi.xiaohuhu.sleepdatabase.SleepInfo;
-import com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase;
-import com.aizi.xiaohuhu.sleepdatabase.TemperatureInfo;
+import com.aizi.xiaohuhu.userdatabase.UserAccountDataBase;
+import com.aizi.xiaohuhu.userdatabase.UserAccountInfo;
+import com.aizi.xiaohuhu.utility.PrivateParams;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class SlidingMenuHelper {
@@ -29,6 +28,10 @@ public class SlidingMenuHelper {
     ViewGroup mBabySleepViewGroup;
     ViewGroup mSettingsViewGroup;
     ViewGroup mSyncDataViewGroup;
+    
+    ViewGroup mUserAccountGroup;
+    ViewGroup mQuitUserAccountGroup;
+    
 
     private SlidingMenu mSlidingMenu;
 
@@ -51,6 +54,17 @@ public class SlidingMenuHelper {
         mSlidingMenu.attachToActivity(mActivity, SlidingMenu.SLIDING_CONTENT);  
        //为侧滑菜单设置布局  
         mSlidingMenu.setMenu(R.layout.slidingmenu); 
+        
+        mUserAccountGroup = (ViewGroup) findViewById(R.id.useraccount);
+        mUserAccountGroup.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(mActivity.getApplicationContext(), LoginActivity.class);
+                mActivity.startActivity(intent);
+            }
+        });
         
         mMessageCenterViewGroup = (ViewGroup) findViewById(R.id.message_center_view);
         mMessageCenterViewGroup.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +117,22 @@ public class SlidingMenuHelper {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                AsyncDeviceFactory.getInstance(mActivity.getApplicationContext()).getBreathStopInfo();
+                
+      /*          if (!UserAccountDataBase.checkUserAccountAndPassword(mActivity.getApplicationContext(),
+                        "18811130187", "123456")) {
+                    UserAccountInfo useraccountinfo = new UserAccountInfo();
+                    useraccountinfo.mUserAccountName = "18811130187";
+                    useraccountinfo.mUserAccountInfoPassWord = "123456";
+                    useraccountinfo.mUserAccountTimestamp = System.currentTimeMillis();
+                    useraccountinfo.mUserAccountPosition = "beijing";
+                    UserAccountDataBase.insertUserAccountInfo(mActivity.getApplicationContext(),
+                            useraccountinfo );
+                }*/
+                
+                Intent intent = new Intent(mActivity.getApplicationContext(), XiaoHuhuActivity.class);
+                mActivity.startActivity(intent);
+                
+               /* AsyncDeviceFactory.getInstance(mActivity.getApplicationContext()).getBreathStopInfo();
                 
                 BreathStopInfo breathStopInfo = new BreathStopInfo();
                 breathStopInfo.mBreathYear = 2016;
@@ -137,7 +166,21 @@ public class SlidingMenuHelper {
                 sleepInfo.mSleepTimestamp = System.currentTimeMillis();
                 sleepInfo.mSleepValue = 100;
                 
-                SleepInfoDatabase.insertSleepInfo(mActivity.getApplicationContext(), sleepInfo);
+                SleepInfoDatabase.insertSleepInfo(mActivity.getApplicationContext(), sleepInfo);*/
+            }
+        });
+        
+        
+        mQuitUserAccountGroup = (ViewGroup) findViewById(R.id.baby_quit_view);
+        mQuitUserAccountGroup.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                PrivateParams.setSPInt(mActivity.getApplicationContext(),
+                        Constant.LOGIN_VALUE, 0);
+                Intent intent = new Intent(mActivity.getApplicationContext(), LoginActivity.class);
+                mActivity.startActivity(intent);
             }
         });
         

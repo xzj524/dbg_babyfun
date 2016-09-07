@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aizi.xiaohuhu"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.1" >
 
     <uses-sdk
-        android:minSdkVersion="18"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -22,65 +22,66 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	<uses-permission android:name="android.permission.RECEIVE_SMS" />
-	<uses-permission android:name="android.permission.READ_SMS" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher_sleep"
+        android:icon="@drawable/icon512"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.aizi.xiaohuhu.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.SplashActivity"
+            android:name=".SplashActivity"
             android:label="@string/title_activity_splash"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.BabyFunActivity"
+            android:name=".BabyFunActivity"
             android:label="@string/title_activity_baby_fun" >
-            <intent-filter>
+           <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+           </intent-filter>
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.DeviceListActivity"
+            android:name=".DeviceListActivity"
             android:label="@string/title_activity_device_list"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
 
         <service
-            android:name="com.aizi.xiaohuhu.service.BluetoothService"
+            android:name=".service.BluetoothService"
             android:enabled="true" />
         <service
-            android:name="com.aizi.xiaohuhu.service.ScanDevicesService"
+            android:name=".service.ScanDevicesService"
             android:enabled="true" />
 
         <activity
-            android:name="com.aizi.xiaohuhu.BabyStatusActivity"
+            android:name=".BabyStatusActivity"
             android:label="@string/title_activity_baby_status" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.TestActivity"
+            android:name=".TestActivity"
             android:label="@string/title_activity_test" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.BabyBreathActivity"
+            android:name=".BabyBreathActivity"
             android:label="@string/title_activity_baby_breath" >
         </activity>
 
-        <receiver android:name="com.aizi.xiaohuhu.receiver.BabyStatusReceiver" >
+        <receiver android:name=".receiver.BabyStatusReceiver" >
             <intent-filter>
                 <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_SERVICES_DISCOVERED" />
                 <action android:name="com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE" />
@@ -98,23 +99,23 @@
         </meta-data>
 
         <activity
-            android:name="com.aizi.xiaohuhu.CriticalActivity"
+            android:name=".CriticalActivity"
             android:label="@string/title_activity_critical" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.CalendarActivity"
+            android:name=".CalendarActivity"
             android:label="@string/title_activity_calendar" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.BabyExplainActivity"
+            android:name=".BabyExplainActivity"
             android:label="@string/title_activity_baby_explain" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.SleepProblemActivity"
+            android:name=".SleepProblemActivity"
             android:label="@string/title_activity_sleep_problem" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.SleepAnalysisActivity"
+            android:name=".SleepAnalysisActivity"
             android:label="@string/title_activity_sleep_analysis" >
         </activity>
 
@@ -123,21 +124,23 @@
             android:value="zGOG68GTMiC9vzx6dDa5kVEhg5S9i0x9" />
 
         <activity
-            android:name="com.aizi.xiaohuhu.EmergencyMapActivity"
+            android:name=".EmergencyMapActivity"
             android:label="@string/title_activity_emergency_map" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.BabyEmergencyActivity"
+            android:name=".BabyEmergencyActivity"
             android:label="@string/title_activity_baby_emergency" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.EmergencyPhoneNumberActivity"
+            android:name=".EmergencyPhoneNumberActivity"
             android:label="@string/title_activity_emergency_phone_number" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.login.LoginActivity"
-            android:label="@string/title_activity_login"
+            android:name=".login.LoginActivity"
+            android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+            
+
         </activity>
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -145,15 +148,20 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.aizi.xiaohuhu.login.ResetPasswordActivity"
+            android:name=".login.ResetPasswordActivity"
             android:label="@string/title_activity_reset_password" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.login.RegisterActivity"
+            android:name=".login.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
+        <activity
+            android:name=".XiaoHuhuActivity"
+            android:label="@string/title_activity_xiao_huhu" >
+        </activity>
+        
+        <meta-data android:value="57ca68af67e58ebc68003313" android:name="UMENG_APPKEY"></meta-data>
+		<meta-data android:value="360" android:name="UMENG_CHANNEL"/>
     </application>
-
-
 
 </manifest>
