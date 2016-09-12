@@ -12,7 +12,7 @@
     
     
      <com.aizi.xiaohuhu.view.TopBarView  
-        android:id="@+id/topbar"  
+        android:id="@+id/registertopbar"  
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
         android:layout_marginTop="10dp"
@@ -148,7 +148,7 @@
            
 
             <Button
-                android:id="@+id/phone_sign_in_button"
+                android:id="@+id/phone_register_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -12,40 +12,30 @@
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
         android:layout_marginTop="10dp"
-        custom:titleText="@string/main_name"   
+        custom:titleText="@string/title_search_bluetooth"   
         custom:titleSize="6sp"   
         custom:titleColor="@android:color/white"   
         custom:leftBtn="@drawable/settings"/> 
     
    
-    <ScrollView 
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_below="@id/hometopbar">
-
-    <LinearLayout 
-       android:id="@+id/showdata"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:gravity="center_horizontal"
-       android:orientation="vertical">
-
-     <fragment
-        android:id="@+id/routerStatusFragment"
-        android:name="com.aizi.xiaohuhu.ui.component.main.DeviceConnectStatusFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-     <fragment 
-        android:id="@+id/realtimestatuFragment"
-        android:name="com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_below="@id/routerStatusFragment"/>
-      
-    </LinearLayout>
-    
-    </ScrollView>
+	    <ScrollView 
+	       android:layout_width="match_parent"
+	       android:layout_height="wrap_content"
+	       android:layout_below="@id/hometopbar">
+	
+		     <LinearLayout 
+		       android:id="@+id/showdata"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:gravity="center_horizontal"
+		       android:orientation="vertical">
+		     <fragment
+		        android:id="@+id/routerStatusFragment"
+		        android:name="com.aizi.xiaohuhu.ui.component.main.DeviceConnectStatusFragment"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content" />
+	      
+	    	 </LinearLayout> 
+	    </ScrollView>
 
 </RelativeLayout>

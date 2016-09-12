@@ -1,19 +1,24 @@
 package com.aizi.xiaohuhu;
 
-import com.aizi.xiaohuhu.R;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.utility.Utiliy;
-
-
-import android.app.Activity;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 public class CriticalActivity extends Activity {
     
@@ -112,8 +117,40 @@ public class CriticalActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
+                //AsyncDeviceFactory.getInstance(getApplicationContext()).getBodyTemperature();
+                
+                new SimpleCalendarDialogFragment().show(getFragmentManager(), "test-simple-calendar");
             }
         });
+    }
+    
+    private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
+    
+    public static class SimpleCalendarDialogFragment extends DialogFragment implements OnDateSelectedListener {
+
+        private TextView textView;
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.dialog_calendar, container, false);
+        }
+
+        @SuppressLint("NewApi")
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            textView = (TextView) view.findViewById(R.id.textView);
+
+            MaterialCalendarView widget = (MaterialCalendarView) view.findViewById(R.id.calendarView);
+
+            widget.setOnDateChangedListener(this);
+        }
+
+        @Override
+        public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+            textView.setText(FORMATTER.format(date.getDate()));
+            
+        }
     }
 }

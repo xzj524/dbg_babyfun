@@ -145,7 +145,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -183,7 +183,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     private boolean isPasswordValid(String password) {
         // TODO: Replace this with your own logic
-        return password.length() > 4;
+        if (!TextUtils.isEmpty(password)) {
+            return password.length() > 4;
+        }
+        return false;
     }
 
     /**

@@ -13,14 +13,12 @@ public class SleepFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         View sleepView = inflater.inflate(R.layout.activity_tab_sleep, container,false); 
         return sleepView;
     }
     
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
     }
     

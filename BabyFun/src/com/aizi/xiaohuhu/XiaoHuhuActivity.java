@@ -10,10 +10,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aizi.xiaohuhu.adapter.FragmentAdapter;
 import com.aizi.xiaohuhu.fragment.BreathFragment;
@@ -24,7 +24,6 @@ import com.aizi.xiaohuhu.view.TopBarView;
 import com.aizi.xiaohuhu.view.TopBarView.onTitleBarClickListener;
 
 public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarClickListener{
-    
     
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();  
     private FragmentAdapter mFragmentAdapter;  
@@ -53,15 +52,17 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
      */  
     private int screenWidth;  
     
-    private  TopBarView topbar;  
+    private  TopBarView topbar;
+    private View mBreathTab;
+    private View mTemperatureTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xiao_huhu);
         
-        topbar = (TopBarView) findViewById(R.id.topbar);
-        topbar.setClickListener(this);  
+        topbar = (TopBarView) findViewById(R.id.xiaohuhutopbar);
+        topbar.setClickListener(this);
         
         findById();  
         init();  
@@ -71,9 +72,12 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
     private void findById() {  
         mTabBreathTv = (TextView) this.findViewById(R.id.id_breath_tv);  
         mTabTemperatureTv = (TextView) this.findViewById(R.id.id_temperature_tv);  
-        mTabSleepTv = (TextView) this.findViewById(R.id.id_sleep_tv);  
+        //mTabSleepTv = (TextView) this.findViewById(R.id.id_sleep_tv);  
         mTabLineIv = (ImageView) this.findViewById(R.id.id_tab_line_iv);  
         mPageVp = (ViewPager) this.findViewById(R.id.id_page_vp);  
+        
+        mBreathTab = (View) findViewById(R.id.id_tab_breath_ll);
+        mTemperatureTab = (View) findViewById(R.id.id_tab_temperature_ll);
     }  
   
     private void init() {  
@@ -83,11 +87,29 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
         
         mFragmentList.add(mBreathFg);  
         mFragmentList.add(mTemperatureFg);  
-        mFragmentList.add(mSleepFg);   
+        //mFragmentList.add(mSleepFg);   
         mFragmentAdapter = new FragmentAdapter(  
                 this.getSupportFragmentManager(), mFragmentList);  
         mPageVp.setAdapter(mFragmentAdapter);  
         mPageVp.setCurrentItem(0);  
+        
+        mBreathTab.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                mPageVp.setCurrentItem(0); 
+            }
+        });
+        
+        mTemperatureTab.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                mPageVp.setCurrentItem(1); 
+            }
+        });
+        
+        
   
         mPageVp.setOnPageChangeListener(new OnPageChangeListener() {  
   
@@ -120,25 +142,25 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
   
                 if (currentIndex == 0 && position == 0)// 0->1  
                 {  
-                    lp.leftMargin = (int) (offset * (screenWidth * 1.0 / 3) + currentIndex  
-                            * (screenWidth / 3));  
+                    lp.leftMargin = (int) (offset * (screenWidth * 1.0 / 2) + currentIndex  
+                            * (screenWidth / 2));  
   
                 } else if (currentIndex == 1 && position == 0) // 1->0  
                 {  
                     lp.leftMargin = (int) (-(1 - offset)  
-                            * (screenWidth * 1.0 / 3) + currentIndex  
-                            * (screenWidth / 3));  
+                            * (screenWidth * 1.0 / 2) + currentIndex  
+                            * (screenWidth / 2));  
   
                 } else if (currentIndex == 1 && position == 1) // 1->2  
                 {  
-                    lp.leftMargin = (int) (offset * (screenWidth * 1.0 / 3) + currentIndex  
-                            * (screenWidth / 3));  
-                } else if (currentIndex == 2 && position == 1) // 2->1  
+                    lp.leftMargin = (int) (offset * (screenWidth * 1.0 / 2) + currentIndex  
+                            * (screenWidth / 2));  
+                } /*else if (currentIndex == 2 && position == 1) // 2->1  
                 {  
                     lp.leftMargin = (int) (-(1 - offset)  
                             * (screenWidth * 1.0 / 3) + currentIndex  
                             * (screenWidth / 3));  
-                }  
+                }  */
                 mTabLineIv.setLayoutParams(lp);  
             }  
   
@@ -152,14 +174,13 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
                 case 1:  
                     mTabTemperatureTv.setTextColor(Color.BLUE);  
                     break;  
-                case 2:  
+/*                case 2:  
                     mTabSleepTv.setTextColor(Color.BLUE);  
-                    break;  
+                    break;  */
                 }  
                 currentIndex = position;  
             }  
         });  
-  
     }  
   
     /** 
@@ -172,7 +193,8 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
         screenWidth = dpMetrics.widthPixels;  
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv  
                 .getLayoutParams();  
-        lp.width = screenWidth / 3;  
+        //lp.width = screenWidth / 3; 
+        lp.width = screenWidth / 2;  
         mTabLineIv.setLayoutParams(lp);  
     }  
   
@@ -182,7 +204,7 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
     private void resetTextView() {  
         mTabBreathTv.setTextColor(Color.BLACK);  
         mTabTemperatureTv.setTextColor(Color.BLACK);  
-        mTabSleepTv.setTextColor(Color.BLACK);  
+       // mTabSleepTv.setTextColor(Color.BLACK);  
     }
 
     @Override

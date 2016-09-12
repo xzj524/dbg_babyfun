@@ -51,13 +51,10 @@ public class RealTimeStatusFragment extends Fragment{
         // TODO Auto-generated method stub
         View realtimeStatusView = inflater.inflate(R.layout.realtime_status_fragment, container, false);
         
-      //mTemptureView = (LinearLayout) realtimeStatusView.findViewById(R.id.environment1);
       mTemperatureTextView = (TextView) realtimeStatusView.findViewById(R.id.temperaturevalues123);
       mHumitTextView = (TextView) realtimeStatusView.findViewById(R.id.humidityvalues);
       
-      Timer timer = new Timer(true);
-    //  timer.schedule(task,1000, 3000); 
-      
+      Timer timer = new Timer(true);      
       EventBus.getDefault().register(this);
       
       return realtimeStatusView;
@@ -86,7 +83,7 @@ public class RealTimeStatusFragment extends Fragment{
         // TODO Auto-generated method stub
         super.onAttach(activity);
         
-        mListener =(OnStatusSelectedListener)activity;  
+
     }
     
     public void setTemperature(String tempString) {

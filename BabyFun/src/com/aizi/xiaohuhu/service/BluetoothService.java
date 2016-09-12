@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.aizi.xiaohuhu.constant.Constant;
@@ -112,11 +113,14 @@ public class BluetoothService extends Service {
                 if (isEnable) { // 蓝牙已经连接并且准备好数据传输
                     SLog.e(TAG, "Bluetooth  is Ready, mBluetoothGatt = " + mBluetoothGatt );
                     PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 1);
+                    broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                     return;
                 }
             } else {  
                 SLog.e(TAG, "Bluetooth  is not Discovered ");
             }
+            
+            broadcastUpdate(ACTION_GATT_DISCONNECTED);
             PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         }
 
@@ -149,7 +153,7 @@ public class BluetoothService extends Service {
     };
 
     private void broadcastUpdate(String action) {
-        if (action != null) {
+        if (!TextUtils.isEmpty(action)) {
             Intent intent = new Intent(action);
             EventBus.getDefault().post(intent); 
         }
@@ -167,6 +171,7 @@ public class BluetoothService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        
         return mBinder;
     }
 
@@ -176,6 +181,7 @@ public class BluetoothService extends Service {
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
         close();
+        //EventBus.getDefault().unregister(this);//反注册EventBus  
         return super.onUnbind(intent);
     }
 
@@ -202,6 +208,8 @@ public class BluetoothService extends Service {
             SLog.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
         }
+        
+        //EventBus.getDefault().register(this);
 
         return true;
     }
@@ -231,6 +239,7 @@ public class BluetoothService extends Service {
                 return true;
             } else {
                 PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+                broadcastUpdate(ACTION_GATT_DISCONNECTED);
                 return false;
             }
         }
@@ -239,6 +248,7 @@ public class BluetoothService extends Service {
         if (device == null) {
             SLog.e(TAG, "Device not found.  Unable to connect.");
             PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+            broadcastUpdate(ACTION_GATT_DISCONNECTED);
             return false;
         }
         // We want to directly connect to the device, so we are setting the autoConnect
@@ -263,6 +273,7 @@ public class BluetoothService extends Service {
             return;
         }
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+        broadcastUpdate(ACTION_GATT_DISCONNECTED);
         mBluetoothGatt.disconnect();
     }
 
@@ -280,6 +291,7 @@ public class BluetoothService extends Service {
         mBluetoothGatt.close();
         mBluetoothGatt = null;
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+        broadcastUpdate(ACTION_GATT_DISCONNECTED);
     }
 
     /**
@@ -331,7 +343,6 @@ public class BluetoothService extends Service {
         }
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         return false;
-        
     }
     
     public void writeBaseRXCharacteristic(byte[] value)

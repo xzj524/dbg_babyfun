@@ -38,12 +38,7 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"/>
 	      
-	       <fragment 
-		        android:id="@+id/babybreathstopChartFragment"
-		        android:name="com.aizi.xiaohuhu.chart.BreathStopChart"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_marginTop="20dp"/>
+
 	       
 	        <fragment 
 		        android:id="@+id/babytemperatureChartFragment"

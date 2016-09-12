@@ -2,11 +2,11 @@ package com.aizi.xiaohuhu.login;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
@@ -36,15 +35,13 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
     private AutoCompleteTextView mRegiserPhoneView;
     private EditText mPasswordView;
     private EditText mCheckCodeView;
-    private View mProgressView;
-    private View mLoginFormView;
     private Button mSendCheckCodeButton;
     private Button mRegisterButton;
     EventHandler mEventHandler;
     // 国家号码规则
     private HashMap<String, String> mCountryRules;
     
-    private  TopBarView topbar;  
+    private TopBarView topbar;  
     private TimeCount time;
 
 
@@ -53,7 +50,7 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         
-        topbar = (TopBarView) findViewById(R.id.topbar);
+        topbar = (TopBarView) findViewById(R.id.registertopbar);
         topbar.setClickListener(this);
         
         time = new TimeCount(60000, 1000);//构造CountDownTimer对象
@@ -62,7 +59,7 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
         mCheckCodeView = (EditText) findViewById(R.id.register_check_code_text);
         mSendCheckCodeButton = (Button) findViewById(R.id.send_check_code);
         mPasswordView = (EditText) findViewById(R.id.register_password_text);
-        mRegisterButton = (Button) findViewById(R.id.phone_sign_in_button);
+        mRegisterButton = (Button) findViewById(R.id.phone_register_button);
         
         
         SMSSDK.initSDK(this, "16cac73c0585e", "5a43a8be5eaf2786403d854f39ce28f1");
@@ -92,9 +89,22 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                         Toast.makeText(getApplicationContext(), "该手机号已经注册过", Toast.LENGTH_SHORT).show();
                     }
                     
-                    finish();
+                   new Thread(new Runnable() {
                     
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        try {
+                            Thread.sleep(1000);
+                            finish();
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                     
+                
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                     SLog.e(TAG, " get check code ");
                 //获取验证码成功
@@ -103,6 +113,8 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                     if (result == SMSSDK.RESULT_COMPLETE) {
                         onCountryListGot((ArrayList<HashMap<String,Object>>) data);
                     } 
+                    
+                    SLog.e(TAG, " get support country code");
                 } 
               }else{                                                                 
                  ((Throwable)data).printStackTrace(); 
@@ -111,8 +123,6 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
         }; 
         
         SMSSDK.registerEventHandler(mEventHandler); //注册短信回调
-        
-     
         mSendCheckCodeButton.setOnClickListener(new View.OnClickListener() {
             
             @Override
@@ -146,8 +156,14 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
             
             @Override
             public void onClick(View v) {
-                SMSSDK.submitVerificationCode("86", mRegiserPhoneView.getText().toString(), 
-                        mCheckCodeView.getText().toString());
+                if (TextUtils.isEmpty(mPasswordView.getText().toString())) {
+                    Toast.makeText(getApplicationContext(), "请输入注册密码", Toast.LENGTH_SHORT).show();
+                } else if (mPasswordView.getText().toString().length() <= 4) {
+                    Toast.makeText(getApplicationContext(), "密码太短了", Toast.LENGTH_SHORT).show();
+                } else {
+                    SMSSDK.submitVerificationCode("86", mRegiserPhoneView.getText().toString(), 
+                            mCheckCodeView.getText().toString());
+                }               
             }
         });
     }

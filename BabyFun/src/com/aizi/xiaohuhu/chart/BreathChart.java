@@ -151,9 +151,7 @@ public class BreathChart extends Fragment{
         xAxis.setDrawAxisLine(false);
         xAxis.setEnabled(false);
         xAxis.setGridColor(Color.WHITE);
-        
-        
-        
+
         //左侧Y轴设置
         YAxis leftAxis = mBreathChart.getAxisLeft();  //得到图表的左侧Y轴实例
         leftAxis.setDrawAxisLine(true);

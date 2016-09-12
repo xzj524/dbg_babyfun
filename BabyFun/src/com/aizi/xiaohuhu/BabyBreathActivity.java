@@ -11,22 +11,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.aizi.xiaohuhu.R;
 import com.aizi.xiaohuhu.breath.BabyBreath;
 import com.aizi.xiaohuhu.chart.BreathChart;
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.logging.SLog;
+import com.aizi.xiaohuhu.view.TopBarView;
+import com.aizi.xiaohuhu.view.TopBarView.onTitleBarClickListener;
 
 import de.greenrobot.event.EventBus;
 
-public class BabyBreathActivity extends Activity implements OnClickListener{
+public class BabyBreathActivity extends Activity implements OnClickListener, onTitleBarClickListener{
     private static final String TAG = BabyBreathActivity.class.getSimpleName();
-    
-    private Button mFreshButton;
-    private Button mStartButton;
+
     private FragmentManager mFragmentMan;
     private BreathChart breathchartFragment;
     private TextView mBreathFreqData;
@@ -38,6 +36,8 @@ public class BabyBreathActivity extends Activity implements OnClickListener{
     Timer timer;
     int isbreath = 0;
     
+    TopBarView mTopBarView;
+    
     boolean breatfreq = false;
 
     @Override
@@ -46,40 +46,9 @@ public class BabyBreathActivity extends Activity implements OnClickListener{
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_baby_breath);
         
-
-        mFreshButton = (Button) findViewById(R.id.breathbtn);
-        mFreshButton.setOnClickListener(new View.OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //breathchartFragment.freshChart();
-                mPreValue = (int) Math.abs((Math.random() * 30));
-                
-                long curtime = System.currentTimeMillis();
-                if (mLastBreathTime == 0) {
-                    mLastBreathTime = curtime;
-                } else {
-                    mBreathPeriod = curtime - mLastBreathTime;
-                    mLastBreathTime = curtime;
-                }
-                
-                SLog.e(TAG, "mLastBreathTime = " + mLastBreathTime);
-                //updateBreathWave(mPreValue);
-              //  AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
-            }
-        });
-        
-        mStartButton = (Button) findViewById(R.id.breathstartbtn);
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                timer.schedule(task,1000, 1000); //延时1000ms后执行，1000ms执行一次
-            }
-        });
-        
+        mTopBarView = (TopBarView) findViewById(R.id.breathtopbar);
+        mTopBarView.setClickListener(this);
+               
         mFragmentMan = getFragmentManager();
         breathchartFragment = (BreathChart) mFragmentMan.findFragmentById(R.id.babybreathChartFragment);     
         timer = new Timer(true);
@@ -88,7 +57,6 @@ public class BabyBreathActivity extends Activity implements OnClickListener{
         mBreathRealValue = (TextView)findViewById(R.id.breathvaluedata);
         
         timer.schedule(task,1000, 1300); 
-        
         AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
     }
     
@@ -151,10 +119,6 @@ public class BabyBreathActivity extends Activity implements OnClickListener{
            mHandler.sendMessage(message);    
          }  
       };  
-      
-      public void onEvent(Object arg) {
-          
-      }
     
     public void onEventMainThread(final ArrayList<BabyBreath> breaths) { 
         long curtime = System.currentTimeMillis();
@@ -188,6 +152,18 @@ public class BabyBreathActivity extends Activity implements OnClickListener{
 
     @Override
     public void onClick(View v) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onBackClick() {
+        // TODO Auto-generated method stub
+        finish();
+    }
+
+    @Override
+    public void onRightClick() {
         // TODO Auto-generated method stub
         
     }

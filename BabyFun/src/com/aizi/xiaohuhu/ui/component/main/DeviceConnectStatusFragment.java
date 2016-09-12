@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,13 +42,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     private BluetoothService mService = null;
     OnDeviceConnectListener mListener;
     OnScanDeviceListener mScanDeviceListener;
-    private ScanDevicesService mScanService = null;
-
-    /** 路由名称 */
-    private TextView mDeviceNameTextView;
-
-    /** 速度 */
-    private TextView mDeviceSpeedTextView;
 
     /** 远程还是本地 */
     private TextView mDeviceOrLocalTextView;
@@ -72,8 +64,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     /** 正在连接的view group */
     private ViewGroup mConnectingInfoViewGroup;
 
-    /** 正在检查的image view */
-    private ImageView mCheckingItemImageView;
 
     /** 连接完成的状态view gourp */
     public ViewGroup mConnectedSucceedViewGroup;
@@ -81,29 +71,13 @@ public class DeviceConnectStatusFragment extends Fragment{
     /** 连接失败的状态view gourp */
     public ViewGroup mConnectedFailedViewGroup;
 
-    /** 连接状态标识image view */
-    private ImageView mConnectedStatusIndicatorImageView;
-
-    /** 设置的image view */
-    private ImageView mSettingImageView;
-    
-    /** 设置的image view */
-    private LinearLayout mStatusView;
 
     /** 正在检测的状态 */
     public static CheckingState mCurrentState;
 
-    /** 检测状态结果 */
-    private int[] mCheckStates;
-
     /** UI handler */
     private final Handler mUIHandler = new Handler(Looper.getMainLooper());
 
-    /** 是否显示了百度登陆 */
-    private boolean mIsBaiduLoginShow;
-
-    /** 是否destory */
-    private boolean mIsDestroyed;
 
     @Override
     public void onAttach(Activity activity) {
@@ -187,7 +161,6 @@ public class DeviceConnectStatusFragment extends Fragment{
 
     @Override
     public void onDestroy() {
-        mIsDestroyed = true;
         super.onDestroy();
     }
     /**

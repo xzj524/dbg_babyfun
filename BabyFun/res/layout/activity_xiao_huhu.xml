@@ -9,10 +9,10 @@
     
     
     <com.aizi.xiaohuhu.view.TopBarView  
-        android:id="@+id/topbar"  
+        android:id="@+id/xiaohuhutopbar"  
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
-        custom:titleText="@string/reset_user_password"   
+        custom:titleText="@string/title_activity_xiaohuhu"   
         custom:titleSize="8sp"   
         custom:titleColor="@android:color/white"   
         custom:leftBtn="@drawable/smarthome_add_device_back_nor"/> 
