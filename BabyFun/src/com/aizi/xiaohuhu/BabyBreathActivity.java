@@ -167,5 +167,11 @@ public class BabyBreathActivity extends Activity implements OnClickListener, onT
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public void onCalendarClick() {
+        // TODO Auto-generated method stub
+        
+    }
     
 }

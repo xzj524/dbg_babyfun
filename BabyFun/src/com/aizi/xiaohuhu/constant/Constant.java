@@ -39,4 +39,14 @@ public class Constant {
     
     /** 蓝牙连接是否准备好  */
     public static final String BLUETOOTH_IS_READY = "bluetooth_is_ready";
+    
+    /** 数据传输完成  */
+    public static final String DATA_TRANSFER_COMPLETED = "com.data.transfer.completed";
+    
+    /** 数据日期 年  */
+    public static final String DATA_DATE_YEAR = "calendar_year";
+    /** 数据日期 月  */
+    public static final String DATA_DATE_MONTH = "calendar_month";
+    /** 数据日期 日  */
+    public static final String DATA_DATE_DAY = "calendar_day";
 }

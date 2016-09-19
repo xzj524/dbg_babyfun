@@ -1,15 +1,11 @@
 package com.aizi.xiaohuhu.login;
 
+import android.app.Activity;
+import android.os.Bundle;
+
 import com.aizi.xiaohuhu.R;
 import com.aizi.xiaohuhu.view.TopBarView;
 import com.aizi.xiaohuhu.view.TopBarView.onTitleBarClickListener;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 public class ResetPasswordActivity extends Activity  implements onTitleBarClickListener{
     
@@ -31,6 +27,12 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
 
     @Override
     public void onRightClick() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onCalendarClick() {
         // TODO Auto-generated method stub
         
     }

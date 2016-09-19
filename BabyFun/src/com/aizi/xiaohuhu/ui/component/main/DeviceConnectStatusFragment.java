@@ -3,6 +3,11 @@
  */
 package com.aizi.xiaohuhu.ui.component.main;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import u.aly.v;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
@@ -11,19 +16,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizi.xiaohuhu.R;
 import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.service.BluetoothService;
-import com.aizi.xiaohuhu.service.ScanDevicesService;
 import com.aizi.xiaohuhu.service.ScanDevicesService.OnScanDeviceListener;
 
 /**
@@ -70,6 +74,10 @@ public class DeviceConnectStatusFragment extends Fragment{
     
     /** 连接失败的状态view gourp */
     public ViewGroup mConnectedFailedViewGroup;
+    
+    public ViewGroup mClickConnectViewGroup;
+    
+    public ViewGroup mSyncDataViewGroup;
 
 
     /** 正在检测的状态 */
@@ -107,9 +115,19 @@ public class DeviceConnectStatusFragment extends Fragment{
         mProgressImageView = (ImageView) deviceStatusView.findViewById(R.id.progressImageView);
         mProgressImageView.setOnClickListener(new UpdateStatusOnclickListener());
 
+        mSyncDataViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.syncDataLayout);
+        mClickConnectViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.clicktostart);
         mConnectingInfoViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectInfoLayout);
         mConnectedSucceedViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectedSucceedLayout);
         mConnectedFailedViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectedFailedLayout);
+        
+        Timer mTimer = new Timer(true);
+        TimerTask task = new TimerTask(){  
+            public void run() {  
+            doUpdateStatusClick();
+          }  
+        };  
+        mTimer.schedule(task,1000); 
         
         return deviceStatusView;
     }
@@ -122,6 +140,9 @@ public class DeviceConnectStatusFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (mCurrentState == CheckingState.IDEL) {
+            startConnectingAnimation();
+        }
     }
     
     /**
@@ -138,11 +159,10 @@ public class DeviceConnectStatusFragment extends Fragment{
             
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
+            mClickConnectViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.VISIBLE);
         }
     }
-
- 
 
     @Override
     public void onResume() {
@@ -183,9 +203,11 @@ public class DeviceConnectStatusFragment extends Fragment{
     public void doUpdateStatusClick() {
         if (mCurrentState == CheckingState.IDEL) {
             startConnectingAnimation();
-            mCurrentState = CheckingState.CHECKING;        
-            Intent Bluetoothenabler=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(Bluetoothenabler,REQUEST_ENABLE_BLUETOOTH);    
+            mCurrentState = CheckingState.CHECKING;     
+         /*   Intent intent = new Intent("com.babyfun.scandevices");
+            mListener.onDeviceConnected(intent);*/
+            Intent bluetoothIntent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(bluetoothIntent,REQUEST_ENABLE_BLUETOOTH);
         } else if (mCurrentState == CheckingState.CHECKING) {
             mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
@@ -196,15 +218,19 @@ public class DeviceConnectStatusFragment extends Fragment{
         } else if (mCurrentState == CheckingState.FATAL_DEVICE_NOT_CONNECT) {
             mCurrentState = CheckingState.CHECKING;
             startConnectingAnimation();
-        } else if (mCurrentState == CheckingState.SUCCEED) {
-           /* Intent closeIntent = new Intent();
-            closeIntent.putExtra("extra_method", "close_bluetooth");
-            mListener.onItemSelected(closeIntent);
-            mCurrentState = CheckingState.IDEL;*/
+        } else if (mCurrentState == CheckingState.CONNECTED) {
+         /*   mIsConnectingAnimation = false;
+            mProgressImageView.clearAnimation();*/
+            mSyncDataViewGroup.setVisibility(View.VISIBLE);
+            mClickConnectViewGroup.setVisibility(View.GONE);
+            mConnectedSucceedViewGroup.setVisibility(View.GONE);
+            mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mConnectedFailedViewGroup.setVisibility(View.GONE);
+        } else if (mCurrentState == CheckingState.SYNC_DATA_SUCCEED) {
             mIsConnectingAnimation = false;
-           // mCurrentState = CheckingState.IDEL;
-           // Toast.makeText(getActivity().getApplicationContext(), "设备已连接", Toast.LENGTH_SHORT).show();
             mProgressImageView.clearAnimation();
+            mSyncDataViewGroup.setVisibility(View.GONE);
+            mClickConnectViewGroup.setVisibility(View.GONE);
             mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
@@ -257,17 +283,22 @@ public class DeviceConnectStatusFragment extends Fragment{
     public static enum CheckingState {
         IDEL, // idel
         CHECKING, // 正在检查
-        FATAL_DEVICE_NOT_CONNECT, // 无法连接路由
+        FATAL_DEVICE_NOT_CONNECT, // 无法连接
         FAIL, // 失败
-        SUCCEED // 成功
+        CONNECTED, // 连接成功
+        SYNC_DATA_SUCCEED // 同步数据成功
     }
 
     public void setCurrentStateFailed(){
         mCurrentState = CheckingState.FAIL;    
     }
     
-    public void setCurrentStateSucceed(){
-        mCurrentState = CheckingState.SUCCEED;  
+    public void setCurrentStateConnected(){
+        mCurrentState = CheckingState.CONNECTED;  
+    }
+    
+    public void setCurSyncDataSucceed(){
+        mCurrentState = CheckingState.SYNC_DATA_SUCCEED;  
     }
     
     public CheckingState getCurrentState() {

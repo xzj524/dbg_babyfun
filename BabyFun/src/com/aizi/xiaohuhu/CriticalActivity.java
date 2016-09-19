@@ -2,6 +2,10 @@ package com.aizi.xiaohuhu;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import u.aly.da;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
+import com.aizi.xiaohuhu.fragment.SimpleCalendarDialogFragment;
 import com.aizi.xiaohuhu.utility.Utiliy;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -124,7 +129,7 @@ public class CriticalActivity extends Activity {
         });
     }
     
-    private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
+   /* private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
     
     public static class SimpleCalendarDialogFragment extends DialogFragment implements OnDateSelectedListener {
 
@@ -145,6 +150,10 @@ public class CriticalActivity extends Activity {
             MaterialCalendarView widget = (MaterialCalendarView) view.findViewById(R.id.calendarView);
 
             widget.setOnDateChangedListener(this);
+            Date date = new Date(System.currentTimeMillis());
+            widget.setDateSelected(date , true);
+            widget.refreshDrawableState();
+            
         }
 
         @Override
@@ -152,5 +161,5 @@ public class CriticalActivity extends Activity {
             textView.setText(FORMATTER.format(date.getDate()));
             
         }
-    }
+    }*/
 }

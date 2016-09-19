@@ -25,20 +25,52 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/lightline2" />
-
-       <LinearLayout
-            android:id="@+id/connectInfoLayout"
+        
+         <LinearLayout
+            android:id="@+id/clicktostart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical">
 
 	       <TextView
+	           android:id="@+id/clicktodeviceconnected"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_gravity="center_horizontal"
+	           android:text="@string/click_start" />
+        </LinearLayout>
+        
+          <LinearLayout
+            android:id="@+id/syncDataLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+	       <TextView
+	           android:id="@+id/syncDataTextView"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_gravity="center_horizontal"
+	           android:text="@string/sync_data" />
+        </LinearLayout>
+
+       <LinearLayout
+            android:id="@+id/connectInfoLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+	       <TextView
 	           android:id="@+id/checkingNetworkTextView"
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
 	           android:layout_gravity="center_horizontal"
-	           android:text="@string/start_breath" />
+	           android:text="@string/start_connect" />
         </LinearLayout>
         
         <LinearLayout

@@ -19,6 +19,7 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
     
     private ImageView backView;  
     private ImageView rightView;  
+    private ImageView calendarView;
     private TextView titleView;  
    
     private String titleTextStr;   
@@ -27,6 +28,7 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
    
     private Drawable leftImage ;  
     private Drawable rightImage ;  
+    private Drawable calendarImage ;  
 
     public TopBarView(Context context, AttributeSet attrs) {
         this(context, attrs, R.style.AppTheme);
@@ -57,11 +59,11 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
             switch (attr)    
             {    
             case R.styleable.Topbar_titleText:    
-             titleTextStr = ta.getString(R.styleable.Topbar_titleText);      
+                titleTextStr = ta.getString(R.styleable.Topbar_titleText);      
                 break;    
             case R.styleable.Topbar_titleColor:    
                 // 默认颜色设置为黑色    
-             titleTextColor = ta.getColor(attr, Color.BLACK);    
+                titleTextColor = ta.getColor(attr, Color.BLACK);    
                 break;    
             case R.styleable.Topbar_titleSize:    
                 // 默认设置为16sp，TypeValue也可以把sp转化为px    
@@ -69,10 +71,13 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
                         TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));    
                 break;    
             case R.styleable.Topbar_leftBtn:     
-             leftImage = ta.getDrawable(R.styleable.Topbar_leftBtn);    
+                leftImage = ta.getDrawable(R.styleable.Topbar_leftBtn);    
                 break;   
             case R.styleable.Topbar_rightBtn:    
-             rightImage = ta.getDrawable(R.styleable.Topbar_rightBtn);   
+                rightImage = ta.getDrawable(R.styleable.Topbar_rightBtn);   
+                break;   
+            case R.styleable.Topbar_calendarBtn:    
+                calendarImage = ta.getDrawable(R.styleable.Topbar_calendarBtn);   
                 break;   
             }   
         }  
@@ -89,16 +94,26 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
           
         backView = (ImageView) layout.findViewById(R.id.back_image);  
         titleView = (TextView) layout.findViewById(R.id.text_title);  
-        rightView = (ImageView) layout.findViewById(R.id.right_image);  
+        rightView = (ImageView) layout.findViewById(R.id.right_image);
+        calendarView = (ImageView) layout.findViewById(R.id.calendar_image);
+        
         backView.setOnClickListener(this);  
         rightView.setOnClickListener(this);  
+        calendarView.setOnClickListener(this);
           
-        if(null != leftImage)  
-        backView.setImageDrawable(leftImage);  
-        if(null != rightImage)  
-        rightView.setImageDrawable(rightImage);  
-        if(null != titleTextStr)  
-        {  
+        if(null != leftImage){
+            backView.setImageDrawable(leftImage);  
+        }
+        
+        if(null != rightImage) {
+            rightView.setImageDrawable(rightImage);  
+        }
+        
+        if (null != calendarImage) {
+            calendarView.setImageDrawable(calendarImage);
+        }
+        
+        if(null != titleTextStr) {  
          titleView.setText(titleTextStr);  
          titleView.setTextSize(titleTextSize);  
          titleView.setTextColor(titleTextColor);  
@@ -125,7 +140,9 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
       */  
      void onBackClick();  
 
-     void onRightClick();  
+     void onRightClick(); 
+     
+     void onCalendarClick();
  }
 
     @Override
@@ -141,6 +158,10 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
         case R.id.right_image:  
             if(null != onMyClickListener)  
             onMyClickListener.onRightClick();  
+            break;  
+        case R.id.calendar_image:  
+            if(null != onMyClickListener)  
+            onMyClickListener.onCalendarClick();  
             break;  
         }    
     }  

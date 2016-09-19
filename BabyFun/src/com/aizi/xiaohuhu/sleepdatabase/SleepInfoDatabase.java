@@ -201,16 +201,12 @@ public class SleepInfoDatabase {
                 values.put(BreathInfoEnum.BreathMinute.name(), breathinfo.mBreathMinute);
                 values.put(BreathInfoEnum.BreathSecond.name(), breathinfo.mBreathSecond);
 
-                Cursor cs = null;
                 try {
                     ret = db.insert(BreathInfoEnum.TABLE_NAME, null, values);
                     SLog.d(TAG, "BreathInfoEnum:  insert into database");
                 } catch (Exception e) {
                     SLog.e(TAG, e);
                 } finally {
-                    if (null != cs && !cs.isClosed()) {
-                        cs.close();
-                    }
                     if (db != null) {
                         db.close();
                     }
@@ -431,6 +427,67 @@ public class SleepInfoDatabase {
         }
     }
     
+    
+    /**
+     * 从数据库中取出某一天的睡眠数据
+     * 
+     * @param context
+     * @param year 年
+     * @param month 月
+     * @param day 日
+     *           
+     * @return SleepInfoEnumClass list
+     */
+    public static List<BreathInfoEnumClass> getBreathInfoEnumClassList(Context context, int year,
+            int month, int day) {
+        synchronized (myLock) {
+            SQLiteDatabase db = getDb(context);
+            if (db == null) {
+                return null;
+            }
+            List<BreathInfoEnumClass> values = new ArrayList<BreathInfoEnumClass>();
+
+            String selection = "SELECT * FROM " + SleepInfoEnum.TABLE_NAME
+                    + " WHERE " + BreathInfoEnum.BreathYear.name()
+                    + " = " + year
+                    + " AND " + BreathInfoEnum.BreathMonth.name()
+                    + " = " + month
+                    + " AND " + BreathInfoEnum.BreathDay.name()
+                    + " = " + day
+                    + ";";
+
+            Cursor cursor = null;
+            try {
+                cursor = db.rawQuery(selection, null);
+
+                while (cursor.moveToNext()) {
+                    BreathInfoEnumClass breathvalues = new BreathInfoEnumClass();
+                    breathvalues.setBreathTimestamp(cursor.getLong(cursor.getColumnIndex(BreathInfoEnum.BreathTimestamp.name())));
+                    breathvalues.setBreathIsAlarm(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathIsAlarm.name())));
+                    breathvalues.setBreathDuration(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathDuration.name())));
+                    breathvalues.setBreathYear(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathYear.name())));
+                    breathvalues.setBreathMonth(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathMonth.name())));
+                    breathvalues.setBreathDay(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathDay.name())));
+                    breathvalues.setBreathHour(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathHour.name())));
+                    breathvalues.setBreathMinute(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathMinute.name())));
+                    breathvalues.setBreathSecond(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathSecond.name())));
+                    
+                    values.add(breathvalues);
+                }
+            } catch (Exception e) {
+                SLog.d(TAG, "e getADBehaviorEnumClassList " + e.getMessage());
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+                if (db != null) {
+                    db.close();
+                }
+            }
+
+            return values;
+        }
+    }
     
     /**
      * 从数据库中取出TemperatureInfoEnumClass

@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 
 import com.aizi.xiaohuhu.baseheader.BaseL2Message;
@@ -56,15 +57,6 @@ public class MessageParse {
     public void onEvent(BaseL2Message bsl2Msg) {
         SLog.e(TAG, "bsl2Msg = " + Arrays.toString(bsl2Msg.toByte()));
         handleL2Msg(bsl2Msg);
-        
-       
-        String fileName = "/synclog.txt";
-        try {
-            writeSDFile(Environment.getExternalStorageDirectory() + fileName, bsl2Msg.toByte());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 
@@ -80,7 +72,6 @@ public class MessageParse {
                handleSettings(params);
                 break;
             case Constant.COMMAND_ID_BIND:
-                
                 break;
             case Constant.COMMAND_ID_DATA:
                 handleData(params);
@@ -128,6 +119,8 @@ public class MessageParse {
                 }
             } else if (kpload.key == 5) {
                 SLog.e(TAG, "receiver data complete " + kpload.keyLen);
+                Intent intent = new Intent(Constant.DATA_TRANSFER_COMPLETED);
+                EventBus.getDefault().post(intent); 
                 //handleSleepData(kpload.keyValue);
             } else if (kpload.key == 6) {
                 SLog.e(TAG, "receiver sleep data " + kpload.keyLen);

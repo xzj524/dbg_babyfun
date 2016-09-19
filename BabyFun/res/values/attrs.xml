@@ -8,6 +8,7 @@
           
         <attr name="leftBtn" format="reference"/>  
         <attr name="rightBtn" format=" reference"/>  
+        <attr name="calendarBtn" format=" reference"/> 
          
        </declare-styleable>  
     

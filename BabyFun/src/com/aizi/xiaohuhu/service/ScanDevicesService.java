@@ -65,6 +65,8 @@ public class ScanDevicesService extends Service{
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "手机不支持蓝牙", Toast.LENGTH_SHORT).show();
             stopSelf();
+        } else {
+            mBluetoothAdapter.enable();
         }
         
         /* Initialize device list container */

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.aizi.xiaohuhu.adapter.FragmentAdapter;
 import com.aizi.xiaohuhu.fragment.BreathFragment;
+import com.aizi.xiaohuhu.fragment.SimpleCalendarDialogFragment;
 import com.aizi.xiaohuhu.fragment.SleepFragment;
 import com.aizi.xiaohuhu.fragment.TemperatureFragment;
 import com.aizi.xiaohuhu.logging.SLog;
@@ -214,5 +215,11 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
 
     @Override
     public void onRightClick() {
+    }
+
+    @Override
+    public void onCalendarClick() {
+        SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
+        mFragment.show(getFragmentManager(), "simple-calendar");
     }  
 }

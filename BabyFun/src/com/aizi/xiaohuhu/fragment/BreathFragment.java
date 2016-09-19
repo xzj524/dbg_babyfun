@@ -1,6 +1,7 @@
 package com.aizi.xiaohuhu.fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,18 @@ import android.widget.TextView;
 
 import com.aizi.xiaohuhu.R;
 import com.aizi.xiaohuhu.breath.BabyBreath;
+import com.aizi.xiaohuhu.constant.Constant;
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.logging.SLog;
+import com.aizi.xiaohuhu.sleepdatabase.BreathInfoEnumClass;
+import com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase;
+import com.aizi.xiaohuhu.utility.PrivateParams;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -105,6 +111,7 @@ public class BreathFragment extends Fragment{
                       }  
                    };  
                     mTimer.schedule(task,1000, 1300); 
+                    
                     AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).startSendBreathData();
                     mControlBreathBtn.setText(R.string.action_stop_breath);
                 } else {
@@ -350,15 +357,34 @@ public class BreathFragment extends Fragment{
     */
    private void loadBreathStopBarChartData(BarChart chart) {
        //所有数据点的集合
-       ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+       //ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
        
-       for (int i = 0; i < 24; i++) {
+       int year =  PrivateParams.getSPInt(getActivity().getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
+       int month =  PrivateParams.getSPInt(getActivity().getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
+       int day =  PrivateParams.getSPInt(getActivity().getApplicationContext(), Constant.DATA_DATE_DAY, 0);
+       
+       if (year == 0 || month == 0 || day == 0) {
+           Time time = new Time("GMT+8");       
+           time.setToNow();      
+           year = time.year;      
+           month = time.month;      
+           day = time.monthDay;  
+       } 
+       
+       List<BreathInfoEnumClass> breathInfoEnumClasses = 
+               SleepInfoDatabase.getBreathInfoEnumClassList(getActivity().getApplicationContext(), 
+               year, month, day);
+       
+       ArrayList<BarEntry> entries = getBarEntry(breathInfoEnumClasses);
+      
+       
+    /*   for (int i = 0; i < 24; i++) {
            if (i > 13 && i < 18) {
                int yVlue = (int) (Math.random() * 30);
                entries.add(new BarEntry(yVlue, i));
            }
           
-       }
+       }*/
        //柱形数据的集合
        BarDataSet mBarDataSet = new BarDataSet(entries,"barDataSet");
        mBarDataSet.setBarSpacePercent(20f);
@@ -373,7 +399,146 @@ public class BreathFragment extends Fragment{
        chart.animateY(1500);//设置动画
    }
 
-   /**
+   private ArrayList<BarEntry> getBarEntry(List<BreathInfoEnumClass> breathInfoEnumClasses) {
+       ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+       int h0 = 0;
+       int h1 = 0;
+       int h2 = 0;
+       int h3 = 0;
+       int h4 = 0;
+       int h5 = 0;
+       int h6 = 0;
+       int h7 = 0;
+       int h8 = 0;
+       int h9 = 0;
+       int h10 = 0;
+       int h11 = 0;
+       int h12 = 0;
+       int h13 = 0;
+       int h14 = 0;
+       int h15 = 0;
+       int h16 = 0;
+       int h17 = 0;
+       int h18 = 0;
+       int h19 = 0;
+       int h20 = 0;
+       int h21 = 0;
+       int h22 = 0;
+       int h23 = 0;
+       
+       
+       
+       for (BreathInfoEnumClass breathInfoEnumClass : breathInfoEnumClasses) {
+            int tempHour = breathInfoEnumClass.getBreathHour();
+            switch (tempHour) {
+            case 0:
+                h0++;
+                break;
+            case 1:
+                h1++;
+                break;
+            case 2:
+                h2++;
+                break;
+            case 3:
+                h3++;
+                break;
+            case 4:
+                h4++;
+                break;
+            case 5:
+                h5++;
+                break;
+            case 6:
+                h6++;
+                break;
+            case 7:
+                h7++;
+                break;
+            case 8:
+                h8++;
+                break;
+            case 9:
+                h9++;
+                break;
+            case 10:
+                h10++;
+                break;
+            case 11:
+                h11++;
+                break;
+            case 12:
+                h12++;
+                break;
+            case 13:
+                h13++;
+                break;
+            case 14:
+                h14++;
+                break;
+            case 15:
+                h15++;
+                break;
+            case 16:
+                h16++;
+                break;
+            case 17:
+                h17++;
+                break;
+            case 18:
+                h18++;
+                break;
+            case 19:
+                h19++;
+                break;
+            case 20:
+                h20++;
+                break;
+            case 21:
+                h21++;
+                break;
+            case 22:
+                h22++;
+                break;
+            case 23:
+                h23++;
+                break;
+
+            default:
+                break;
+            }
+       }
+       
+       
+    entries.add(new BarEntry(h0, 0));
+    entries.add(new BarEntry(h1, 1));
+    entries.add(new BarEntry(h2, 2));
+    entries.add(new BarEntry(h3, 3));
+    entries.add(new BarEntry(h4, 4));
+    entries.add(new BarEntry(h5, 5));
+    entries.add(new BarEntry(h6, 6));
+    entries.add(new BarEntry(h7, 7));
+    entries.add(new BarEntry(h8, 8));
+    entries.add(new BarEntry(h9, 9));
+    entries.add(new BarEntry(h10, 10));
+    entries.add(new BarEntry(h11, 11));
+    entries.add(new BarEntry(h12, 12));
+    entries.add(new BarEntry(h13, 13));
+    entries.add(new BarEntry(h14, 14));
+    entries.add(new BarEntry(h15, 15));
+    entries.add(new BarEntry(h16, 16));
+    entries.add(new BarEntry(h17, 17));
+    entries.add(new BarEntry(h18, 18));
+    entries.add(new BarEntry(h19, 19));
+    entries.add(new BarEntry(h20, 20));
+    entries.add(new BarEntry(h21, 21));
+    entries.add(new BarEntry(h22, 22));
+    entries.add(new BarEntry(h23, 23));
+    
+    return entries;
+}
+
+/**
     * 设置柱形图的样式
     * @param chart
     */

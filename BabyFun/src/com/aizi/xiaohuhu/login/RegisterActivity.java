@@ -6,7 +6,6 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -221,4 +220,11 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
             mSendCheckCodeButton.setText(millisUntilFinished /1000+"秒");
         }
         }
+
+
+    @Override
+    public void onCalendarClick() {
+        // TODO Auto-generated method stub
+        
+    }
 }

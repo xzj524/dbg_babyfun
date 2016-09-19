@@ -29,7 +29,6 @@ import com.aizi.xiaohuhu.constant.Constant;
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.eventbus.AsycEvent;
 import com.aizi.xiaohuhu.logging.SLog;
-import com.aizi.xiaohuhu.login.LoginActivity;
 import com.aizi.xiaohuhu.service.BluetoothService;
 import com.aizi.xiaohuhu.service.ScanDevicesService;
 import com.aizi.xiaohuhu.service.ScanDevicesService.OnScanDeviceListener;
@@ -39,7 +38,6 @@ import com.aizi.xiaohuhu.ui.component.main.DeviceConnectStatusFragment;
 import com.aizi.xiaohuhu.ui.component.main.DeviceConnectStatusFragment.OnDeviceConnectListener;
 import com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment;
 import com.aizi.xiaohuhu.utility.MessageParse;
-import com.aizi.xiaohuhu.utility.PrivateParams;
 import com.aizi.xiaohuhu.view.TopBarView;
 import com.aizi.xiaohuhu.view.TopBarView.onTitleBarClickListener;
 import com.umeng.analytics.MobclickAgent;
@@ -66,7 +64,7 @@ onTitleBarClickListener {
     Button mBreathBtn;
     Fragment mContent;
     private FragmentManager mFragmentMan;
-    DeviceConnectStatusFragment deviceConnectfragment;
+    DeviceConnectStatusFragment mDeviceConnectFragment;
     SleepyChart chartFragment;
     BarChartFragment barChartFragment;
     RealTimeStatusFragment realTimeStatusFragment;
@@ -135,10 +133,16 @@ onTitleBarClickListener {
         initScanService();
 
         mFragmentMan = getFragmentManager();
-        deviceConnectfragment = (DeviceConnectStatusFragment) mFragmentMan.findFragmentById(R.id.routerStatusFragment);
+        mDeviceConnectFragment = (DeviceConnectStatusFragment) mFragmentMan.findFragmentById(R.id.deviceConnectFragment);
 
         topBarView = (TopBarView) findViewById(R.id.hometopbar);
         topBarView.setClickListener(this);
+        
+        if (mScanService != null) {
+            mScanService.startScanList();
+            SLog.e(TAG, "mScanService  startScanList");
+        }
+        
     }
     
     @Override
@@ -175,21 +179,18 @@ onTitleBarClickListener {
         
         switch (requestCode) {
 
-        case REQUEST_SELECT_DEVICE:
-            //When the DeviceListActivity return, with the selected device address
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
-                mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
-               
-                Log.e(TAG, "... onActivityResultdevice.address==" + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);
-         
-                mService.connect(deviceAddress);
-                            
-
-            }
-            break;
+            case REQUEST_SELECT_DEVICE:
+                //When the DeviceListActivity return, with the selected device address
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
+                    mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
+                    SLog.e(TAG, "... onActivityResultdevice.address==" 
+                    + mDevice + "deviceaddress "+ deviceAddress +" myserviceValue = " + mService);       
+                    mService.connect(deviceAddress);
+                }
+                break;
         default:
-            Log.e(TAG, "wrong request code"+ requestCode);
+            SLog.e(TAG, "wrong request code"+ requestCode);
             break;
         }
     }
@@ -227,6 +228,7 @@ onTitleBarClickListener {
         public void onServiceConnected(ComponentName name, IBinder service) {
             // TODO Auto-generated method stub
             mScanService = ((ScanDevicesService.ScanBinder) service).getService();
+            SLog.e(TAG, "onServiceConnected mScanService = " + mScanService);
             mScanService.setOnProgressListener(new OnScanDeviceListener() {
                 
                 @Override
@@ -235,7 +237,7 @@ onTitleBarClickListener {
                         List<BluetoothDevice> devicelist = new ArrayList<BluetoothDevice>();
                         devicelist = mScanService.getDeviceList();
                         for (BluetoothDevice listDev : devicelist) {
-                            Log.e(TAG, "LISTNAME = " + listDev.getName());
+                            SLog.e(TAG, "LISTNAME = " + listDev.getName());
                             if (listDev.getName() != null) {
                                 if (listDev.getName().equals("my_hrm")) {     
                                     String deviceAddress = listDev.getAddress();
@@ -251,8 +253,8 @@ onTitleBarClickListener {
                             }
                         }
                     } else if (touchid == 2) {
-                        deviceConnectfragment.setCurrentStateFailed();
-                        deviceConnectfragment.doUpdateStatusClick();
+                        mDeviceConnectFragment.setCurrentStateFailed();
+                        mDeviceConnectFragment.doUpdateStatusClick();
                     }
                 }
             });
@@ -263,7 +265,7 @@ onTitleBarClickListener {
     private void initScanService(){
         Intent bindIntent = new Intent(this, ScanDevicesService.class);
         boolean isbind = bindService(bindIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
-        SLog.e(TAG, "initScanService  " + isbind);
+        SLog.e(TAG, "initScanService  " + isbind + " mscanservice = " + mScanService);
     }
     
     
@@ -286,11 +288,18 @@ onTitleBarClickListener {
         
         String action = event.getAction();
         if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
-            deviceConnectfragment.setCurrentStateSucceed();
-            deviceConnectfragment.doUpdateStatusClick();
+            mDeviceConnectFragment.setCurrentStateConnected();
+            mDeviceConnectFragment.doUpdateStatusClick();
+            AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
         } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
-            deviceConnectfragment.setCurrentStateFailed();
-            deviceConnectfragment.doUpdateStatusClick();
+            mDeviceConnectFragment.setCurrentStateFailed();
+            mDeviceConnectFragment.doUpdateStatusClick();
+        } else if (action.equals(Constant.DATA_TRANSFER_COMPLETED)) {
+            mDeviceConnectFragment.setCurSyncDataSucceed();
+            mDeviceConnectFragment.doUpdateStatusClick();
+            finish();
+            Intent intent = new Intent(getApplicationContext(), XiaoHuhuActivity.class);
+            startActivity(intent);
         }
     } 
     
@@ -331,6 +340,12 @@ onTitleBarClickListener {
                 }
             }
         }
+    }
+
+    @Override
+    public void onCalendarClick() {
+        // TODO Auto-generated method stub
+        
     }
 
 }
