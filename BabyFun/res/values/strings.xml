@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">小呼呼</string>
+    <string name="app_name">呼吸保</string>
     <string name="strPoint">小圆点</string>
     <string name="title_activity_splash">SplashActivity</string>
-    <string name="title_activity_xiaohuhu">小呼呼</string>
+    <string name="title_activity_xiaohuhu">呼吸保</string>
     <string name="title_activity_breath">宝宝呼吸</string>
     <string name="title_search_bluetooth">搜索蓝牙设备</string>
     <string name="title_activity_device_list">DeviceListActivity</string>
 
     <!-- 主界面 -->
-    <string name="main_name">小呼呼</string>
+    <string name="main_name">呼吸保</string>
     <string name="click_start">点击进行连接同步数据</string>
     <string name="start_connect">正在连接设备</string>
     <string name="sync_data">正在同步数据</string>

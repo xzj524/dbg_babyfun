@@ -43,10 +43,17 @@ public class Constant {
     /** 数据传输完成  */
     public static final String DATA_TRANSFER_COMPLETED = "com.data.transfer.completed";
     
+    /** 数据传输接收  */
+    public static final String DATA_TRANSFER_RECEIVE = "com.data.transfer.receive";
+    
+    /** 数据传输发送  */
+    public static final String DATA_TRANSFER_SEND = "com.data.transfer.send";
+    
     /** 数据日期 年  */
     public static final String DATA_DATE_YEAR = "calendar_year";
     /** 数据日期 月  */
     public static final String DATA_DATE_MONTH = "calendar_month";
     /** 数据日期 日  */
     public static final String DATA_DATE_DAY = "calendar_day";
+    
 }

@@ -1,8 +1,10 @@
 package com.aizi.xiaohuhu;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import android.R.integer;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,13 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aizi.xiaohuhu.adapter.FragmentAdapter;
+import com.aizi.xiaohuhu.eventbus.AsycEvent;
 import com.aizi.xiaohuhu.fragment.BreathFragment;
 import com.aizi.xiaohuhu.fragment.SimpleCalendarDialogFragment;
 import com.aizi.xiaohuhu.fragment.SleepFragment;
 import com.aizi.xiaohuhu.fragment.TemperatureFragment;
 import com.aizi.xiaohuhu.logging.SLog;
+import com.aizi.xiaohuhu.synctime.DataTime;
 import com.aizi.xiaohuhu.view.TopBarView;
 import com.aizi.xiaohuhu.view.TopBarView.onTitleBarClickListener;
+
+import de.greenrobot.event.EventBus;
 
 public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarClickListener{
     
@@ -64,6 +70,11 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
         
         topbar = (TopBarView) findViewById(R.id.xiaohuhutopbar);
         topbar.setClickListener(this);
+        
+        topbar.setTitle("2016年9月20日");
+        
+        EventBus.getDefault().register(this);
+        
         
         findById();  
         init();  
@@ -132,7 +143,7 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv  
                         .getLayoutParams();  
   
-                SLog.e("offset:", offset + "");  
+                //SLog.e("offset:", offset + "");  
                 /** 
                  * 利用currentIndex(当前所在页面)和position(下一个页面)以及offset来 
                  * 设置mTabLineIv的左边距 滑动场景： 
@@ -221,5 +232,16 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
     public void onCalendarClick() {
         SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
         mFragment.show(getFragmentManager(), "simple-calendar");
+        
     }  
+    
+    public void onEventMainThread(DataTime dataTime) {  
+        //Date date = new Date(timemili);
+        int year = dataTime.year;
+        int month = dataTime.month;
+        int day = dataTime.day;
+        
+        topbar.setTitle(year+"年"+month+"月"+day+"日");
+    } 
+
 }

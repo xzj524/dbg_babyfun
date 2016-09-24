@@ -97,6 +97,14 @@ public class BaseMessageHandler {
     public static boolean sendL2Message(BaseL2Message bsl2msg) {
         boolean isSendL2Over = false;
         try {
+            
+            
+            String l2payload = MessageParse.printHexString(bsl2msg.toByte());
+            SLog.e(TAG, "HEX Send string l2load1 = " + l2payload);
+            Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
+            intent.putExtra("transferdata", l2payload);
+            EventBus.getDefault().post(intent); 
+            
             l2InputStream = new ByteArrayInputStream(bsl2msg.toByte());
             if (l2InputStream != null) {
                 isSendL2Over = sendL2Msg(true);

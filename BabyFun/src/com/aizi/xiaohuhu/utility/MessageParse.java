@@ -63,6 +63,13 @@ public class MessageParse {
     private void handleL2Msg(BaseL2Message bMsg) {
         // TODO Auto-generated method stub
         
+        //String l2payload = printHexString(bMsg.payload);
+        String l2payload = printHexString(bMsg.toByte());
+        SLog.e(TAG, "HEX string l2load1 = " + l2payload);
+        Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+        intent.putExtra("transferdata", l2payload);
+        EventBus.getDefault().post(intent); 
+        
         List<KeyPayload> params = getKeyPayloadList(bMsg.payload);
         if (params != null) {
             switch (bMsg.commanID) {
@@ -83,14 +90,38 @@ public class MessageParse {
             case Constant.COMMAND_ID_NOTIFY:
                 handleNotify(params);
             break;
-
-
             default:
                 break;
             }
         }
                 
       
+    }
+    
+    /**
+     * 将指定byte数组以16进制的形式打印到控制台
+     * 
+     * @param hint
+     *            String
+     * @param b
+     *            byte[]
+     * @return void
+     */
+    public static String printHexString(byte[] b)
+    {
+        String hexString = "";
+        for (int i = 0; i < b.length; i++)
+        {
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1)
+            {
+                hex = '0' + hex;
+            }
+            
+            hexString += " " + hex;
+           // System.out.print(hex.toUpperCase() + " ");
+        }
+        return hexString;
     }
 
   //写文件  
@@ -119,8 +150,8 @@ public class MessageParse {
                 }
             } else if (kpload.key == 5) {
                 SLog.e(TAG, "receiver data complete " + kpload.keyLen);
-                Intent intent = new Intent(Constant.DATA_TRANSFER_COMPLETED);
-                EventBus.getDefault().post(intent); 
+                /*Intent intent = new Intent(Constant.DATA_TRANSFER_COMPLETED);
+                EventBus.getDefault().post(intent); */
                 //handleSleepData(kpload.keyValue);
             } else if (kpload.key == 6) {
                 SLog.e(TAG, "receiver sleep data " + kpload.keyLen);
@@ -402,6 +433,7 @@ public class MessageParse {
                     devTime.second = BitSetConvert.getTimeValue(bSet, 26, 6);
                     
                     Calendar calendar = Calendar.getInstance(); 
+                   
                     calendar.set(devTime.year, devTime.month, devTime.day,
                             devTime.hour, devTime.min, devTime.second);
                     calendar.getTime().getTime();

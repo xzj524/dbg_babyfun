@@ -66,7 +66,7 @@ public class SleepInfoDatabase {
             if (mDbHelper == null) {
                 String dbName = null;
                 
-                File dbDir = new File(Environment.getDataDirectory().getAbsolutePath() + DATA_DIR + File.separator
+                File dbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + DATA_DIR + File.separator
                         + context.getPackageName() + DB_DIR);
                 SLog.d(TAG, "File Path is  " + Environment.getDataDirectory().getAbsolutePath() 
                         + DATA_DIR + File.separator
@@ -189,7 +189,7 @@ public class SleepInfoDatabase {
                 return -1;
             }
             
-            if (cursor.getCount() == 0) { // 此处表示没有重复的记录，插入数据
+            if (cursor.getCount() <= 0) { // 此处表示没有重复的记录，插入数据
                 ContentValues values = new ContentValues();
                 values.put(BreathInfoEnum.BreathTimestamp.name(), breathinfo.mBreathTimestamp);
                 values.put(BreathInfoEnum.BreathIsAlarm.name(), breathinfo.mBreathIsAlarm);
@@ -203,7 +203,7 @@ public class SleepInfoDatabase {
 
                 try {
                     ret = db.insert(BreathInfoEnum.TABLE_NAME, null, values);
-                    SLog.d(TAG, "BreathInfoEnum:  insert into database");
+                    SLog.e(TAG, "BreathInfoEnum:  insert into database");
                 } catch (Exception e) {
                     SLog.e(TAG, e);
                 } finally {
@@ -447,7 +447,7 @@ public class SleepInfoDatabase {
             }
             List<BreathInfoEnumClass> values = new ArrayList<BreathInfoEnumClass>();
 
-            String selection = "SELECT * FROM " + SleepInfoEnum.TABLE_NAME
+            String selection = "SELECT * FROM " + BreathInfoEnum.TABLE_NAME
                     + " WHERE " + BreathInfoEnum.BreathYear.name()
                     + " = " + year
                     + " AND " + BreathInfoEnum.BreathMonth.name()
@@ -475,7 +475,7 @@ public class SleepInfoDatabase {
                     values.add(breathvalues);
                 }
             } catch (Exception e) {
-                SLog.d(TAG, "e getADBehaviorEnumClassList " + e.getMessage());
+                SLog.e(TAG, e);
             } finally {
                 if (cursor != null) {
                     cursor.close();

@@ -290,7 +290,7 @@ onTitleBarClickListener {
         if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
             mDeviceConnectFragment.setCurrentStateConnected();
             mDeviceConnectFragment.doUpdateStatusClick();
-            AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
+            //AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
         } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
             mDeviceConnectFragment.setCurrentStateFailed();
             mDeviceConnectFragment.doUpdateStatusClick();

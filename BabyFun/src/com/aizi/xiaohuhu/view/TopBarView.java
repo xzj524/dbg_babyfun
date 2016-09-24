@@ -120,6 +120,9 @@ public class TopBarView extends RelativeLayout implements OnClickListener{
         }  
     } 
  
+ public void setTitle(String title) {
+    titleView.setText(title);
+}
  
  private onTitleBarClickListener onMyClickListener;  
  

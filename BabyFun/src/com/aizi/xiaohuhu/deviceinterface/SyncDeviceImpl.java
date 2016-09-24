@@ -3,6 +3,7 @@ package com.aizi.xiaohuhu.deviceinterface;
 import java.util.Calendar;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.aizi.xiaohuhu.baseheader.BaseL2Message;
 import com.aizi.xiaohuhu.baseheader.KeyPayload;
@@ -12,6 +13,8 @@ import com.aizi.xiaohuhu.service.BluetoothService;
 import com.aizi.xiaohuhu.synctime.DeviceTime;
 import com.aizi.xiaohuhu.utility.BaseMessageHandler;
 import com.aizi.xiaohuhu.utility.PrivateParams;
+
+import de.greenrobot.event.EventBus;
 
 public class SyncDeviceImpl implements SyncDevice{
     
@@ -157,6 +160,7 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
+        
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
         }
 

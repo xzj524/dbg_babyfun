@@ -1,6 +1,7 @@
 package com.aizi.xiaohuhu.fragment;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +26,7 @@ import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.logging.SLog;
 import com.aizi.xiaohuhu.sleepdatabase.BreathInfoEnumClass;
 import com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase;
+import com.aizi.xiaohuhu.synctime.DataTime;
 import com.aizi.xiaohuhu.utility.PrivateParams;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -143,8 +145,11 @@ public class BreathFragment extends Fragment{
         super.onDestroy();
         
         mBreatStart = false;
-        mTimer.purge();
-        mTimer.cancel();
+        if (mTimer != null) {
+            mTimer.purge();
+            mTimer.cancel();  
+        }
+        
         AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).stopSendBreathData();
         mControlBreathBtn.setText(R.string.action_start_breath);
     }
@@ -198,6 +203,10 @@ public class BreathFragment extends Fragment{
             }
         }
        
+    }
+    
+    public void onEventMainThread(DataTime dataTime) { 
+        loadBreathStopBarChartData(mBreathStopTimes);
     }
     
     @Override
@@ -510,8 +519,108 @@ public class BreathFragment extends Fragment{
        }
        
        
-    entries.add(new BarEntry(h0, 0));
-    entries.add(new BarEntry(h1, 1));
+    if (h0 != 0) {
+        entries.add(new BarEntry(h0, 0));
+    }
+    
+    if (h1 != 0) {
+        entries.add(new BarEntry(h1, 1));
+    }
+    
+    if (h2 != 0) {
+        entries.add(new BarEntry(h2, 2));
+    }
+    
+    if (h3 != 0) {
+        entries.add(new BarEntry(h3, 3));
+    }
+    
+    if (h4 != 0) {
+        entries.add(new BarEntry(h4, 4));
+    }
+    
+    if (h5 != 0) {
+        entries.add(new BarEntry(h5, 5));
+    }
+    
+    if (h6 != 0) {
+        entries.add(new BarEntry(h6, 6));
+    }
+    
+    if (h7 != 0) {
+        entries.add(new BarEntry(h7, 7));
+    }
+    
+    if (h8 != 0) {
+        entries.add(new BarEntry(h8, 8));
+    }
+    
+    if (h9 != 0) {
+        entries.add(new BarEntry(h9, 9));
+    }
+    
+    if (h10 != 0) {
+        entries.add(new BarEntry(h10, 10));
+    }
+    
+    if (h11 != 0) {
+        entries.add(new BarEntry(h11, 11));
+    }
+    
+    if (h12 != 0) {
+        entries.add(new BarEntry(h12, 12));
+    }
+    
+    
+    if (h13 != 0) {
+        entries.add(new BarEntry(h13, 13));
+    }
+    
+    if (h14 != 0) {
+        entries.add(new BarEntry(h14, 14));
+    }
+    
+    if (h15 != 0) {
+        entries.add(new BarEntry(h15, 15));
+    }
+    
+    if (h16 != 0) {
+        entries.add(new BarEntry(h16, 16));
+    }
+    
+    if (h17 != 0) {
+        entries.add(new BarEntry(h17, 17));
+    }
+    
+    if (h18 != 0) {
+        entries.add(new BarEntry(h18, 18));
+    }
+    
+    if (h19 != 0) {
+        entries.add(new BarEntry(h19, 19));
+    }
+
+    
+    if (h20 != 0) {
+        entries.add(new BarEntry(h20, 20));
+    }
+
+    
+    if (h21 != 0) {
+        entries.add(new BarEntry(h21, 21));
+    }
+
+    
+    if (h22 != 0) {
+        entries.add(new BarEntry(h22, 22));
+    }
+
+    
+    if (h23 != 0) {
+        entries.add(new BarEntry(h23, 23));
+    }
+    
+  /*  
     entries.add(new BarEntry(h2, 2));
     entries.add(new BarEntry(h3, 3));
     entries.add(new BarEntry(h4, 4));
@@ -533,7 +642,7 @@ public class BreathFragment extends Fragment{
     entries.add(new BarEntry(h20, 20));
     entries.add(new BarEntry(h21, 21));
     entries.add(new BarEntry(h22, 22));
-    entries.add(new BarEntry(h23, 23));
+    entries.add(new BarEntry(h23, 23));*/
     
     return entries;
 }

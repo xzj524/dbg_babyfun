@@ -9,10 +9,13 @@ import com.aizi.xiaohuhu.BabyBreathActivity;
 import com.aizi.xiaohuhu.BabyStatusActivity;
 import com.aizi.xiaohuhu.CriticalActivity;
 import com.aizi.xiaohuhu.R;
+import com.aizi.xiaohuhu.TestActivity;
 import com.aizi.xiaohuhu.XiaoHuhuActivity;
 import com.aizi.xiaohuhu.constant.Constant;
 import com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory;
 import com.aizi.xiaohuhu.login.LoginActivity;
+import com.aizi.xiaohuhu.sleepdatabase.BreathStopInfo;
+import com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase;
 import com.aizi.xiaohuhu.userdatabase.UserAccountDataBase;
 import com.aizi.xiaohuhu.userdatabase.UserAccountInfo;
 import com.aizi.xiaohuhu.utility.PrivateParams;
@@ -31,6 +34,7 @@ public class SlidingMenuHelper {
     
     ViewGroup mUserAccountGroup;
     ViewGroup mQuitUserAccountGroup;
+    ViewGroup mDataTestGroup;
     
 
     private SlidingMenu mSlidingMenu;
@@ -132,22 +136,13 @@ public class SlidingMenuHelper {
                 Intent intent = new Intent(mActivity.getApplicationContext(), XiaoHuhuActivity.class);
                 mActivity.startActivity(intent);
                 
-               /* AsyncDeviceFactory.getInstance(mActivity.getApplicationContext()).getBreathStopInfo();
+               // AsyncDeviceFactory.getInstance(mActivity.getApplicationContext()).getBreathStopInfo();
                 
-                BreathStopInfo breathStopInfo = new BreathStopInfo();
-                breathStopInfo.mBreathYear = 2016;
-                breathStopInfo.mBreathMonth = 8;
-                breathStopInfo.mBreathDay = 27;
-                breathStopInfo.mBreathHour = 20;
-                breathStopInfo.mBreathMinute = 36;
-                breathStopInfo.mBreathSecond = 0;
-                breathStopInfo.mBreathDuration = 10;
-                breathStopInfo.mBreathIsAlarm = 1;
-                breathStopInfo.mBreathTimestamp = System.currentTimeMillis();
                 
-                SleepInfoDatabase.insertBreathInfo(mActivity.getApplicationContext(), breathStopInfo);
                 
-                TemperatureInfo temperatureinfo = new TemperatureInfo();
+                
+                
+             /*   TemperatureInfo temperatureinfo = new TemperatureInfo();
                 temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
                 temperatureinfo.mTemperatureValue = "35.24";
                 temperatureinfo.mTemperatureYear = 2016;
@@ -177,9 +172,38 @@ public class SlidingMenuHelper {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                PrivateParams.setSPInt(mActivity.getApplicationContext(),
+               /* PrivateParams.setSPInt(mActivity.getApplicationContext(),
                         Constant.LOGIN_VALUE, 0);
                 Intent intent = new Intent(mActivity.getApplicationContext(), LoginActivity.class);
+                mActivity.startActivity(intent);
+*/                
+                BreathStopInfo breathStopInfo = new BreathStopInfo();
+                breathStopInfo.mBreathYear = 2016;
+                breathStopInfo.mBreathMonth = 7;
+                breathStopInfo.mBreathDay = 27;
+                breathStopInfo.mBreathHour = 20;
+                breathStopInfo.mBreathMinute = 36;
+                breathStopInfo.mBreathSecond = 0;
+                breathStopInfo.mBreathDuration = 10;
+                breathStopInfo.mBreathIsAlarm = 1;
+                breathStopInfo.mBreathTimestamp = System.currentTimeMillis();
+                
+                for (int i = 0; i < 5; i++) {
+                    breathStopInfo.mBreathMinute++;
+                    SleepInfoDatabase.insertBreathInfo(mActivity.getApplicationContext(), breathStopInfo);
+                }
+            }
+        });
+        
+        
+        
+        mDataTestGroup = (ViewGroup) findViewById(R.id.baby_data_test);
+        mDataTestGroup.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(mActivity.getApplicationContext(), TestActivity.class);
                 mActivity.startActivity(intent);
             }
         });

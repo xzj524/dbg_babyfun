@@ -219,11 +219,11 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCurrentState = CheckingState.CHECKING;
             startConnectingAnimation();
         } else if (mCurrentState == CheckingState.CONNECTED) {
-         /*   mIsConnectingAnimation = false;
-            mProgressImageView.clearAnimation();*/
-            mSyncDataViewGroup.setVisibility(View.VISIBLE);
+            mIsConnectingAnimation = false;
+            mProgressImageView.clearAnimation();
+            mSyncDataViewGroup.setVisibility(View.GONE);
             mClickConnectViewGroup.setVisibility(View.GONE);
-            mConnectedSucceedViewGroup.setVisibility(View.GONE);
+            mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
         } else if (mCurrentState == CheckingState.SYNC_DATA_SUCCEED) {

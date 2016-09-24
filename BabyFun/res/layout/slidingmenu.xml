@@ -224,5 +224,24 @@
 				 android:orientation="vertical">
 		 		</LinearLayout>
 
+          
+              <RelativeLayout
+                android:id="@+id/baby_data_test"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+                <TextView
+                    android:id="@+id/baby_data_test_text"
+                    android:layout_marginLeft="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:duplicateParentState="true"
+                    android:text="数据测试" />
+    
+            </RelativeLayout>
     
 </LinearLayout>
