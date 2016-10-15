@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res/com.aizi.yingerbao" 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <com.aizi.xiaohuhu.view.TopBarView  
+        android:id="@+id/breathtopbar"  
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"  
+        android:layout_marginTop="10dp"
+        custom:titleText="@string/title_activity_breath"   
+        custom:titleSize="6sp"   
+        custom:titleColor="@android:color/white"   
+        custom:leftBtn="@drawable/smarthome_add_device_back_nor"/> 
+        
+      <ScrollView 
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="10dp"
+         android:layout_below="@id/breathtopbar"> 
+         
+          <LinearLayout 
+            android:id="@+id/breathlist"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
+         
+     <fragment 
+        android:id="@+id/babybreathChartFragment"
+        android:name="com.aizi.xiaohuhu.chart.BreathChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
+     
+     <RelativeLayout 
+         android:id="@+id/breathfreq"
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal"
+         android:gravity="center_horizontal"
+         android:layout_marginTop="20dp">
+         
+           <TextView 
+	         android:id="@+id/breathfrequence"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="实时呼吸频率："
+	         android:textSize="64px"
+	         android:gravity="center_horizontal"/>
+           
+            <TextView 
+	         android:id="@+id/breathfrequencedata"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="0"
+	         android:textSize="80px"
+	         android:layout_toRightOf="@id/breathfrequence"
+	         android:gravity="center_horizontal"/>
+            
+           <TextView 
+	         android:id="@+id/breathfrequenceunit"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="  BPM"
+	         android:textSize="64px"
+	         android:layout_toRightOf="@id/breathfrequencedata"
+	         android:gravity="center_horizontal"/>
+         
+     </RelativeLayout>
+     
+     
+      <RelativeLayout 
+         android:id="@+id/breathvalue"
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="horizontal"
+         android:gravity="center_horizontal"
+         android:layout_marginTop="20dp"
+         android:layout_below="@id/breathfreq">
+         
+           <TextView 
+	         android:id="@+id/breathvaluetext"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="实时呼吸幅值："
+	         android:textSize="64px"
+	         android:gravity="center_horizontal"/>
+           
+            <TextView 
+	         android:id="@+id/breathvaluedata"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:text="0"
+	         android:textSize="80px"
+	         android:layout_toRightOf="@id/breathvaluetext"
+	         android:gravity="center_horizontal"/>  
+     </RelativeLayout>
+     
+      
+     <fragment 
+	    android:id="@+id/babybreathstopChartFragment"
+	    android:name="com.aizi.xiaohuhu.chart.BreathStopChart"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="20dp"/>
+
+	 </LinearLayout>
+       
+       
+   </ScrollView>
+    
+</RelativeLayout>

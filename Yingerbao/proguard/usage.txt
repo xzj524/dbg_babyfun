@@ -1,0 +1,1320 @@
+android.support.annotation.AnimRes
+android.support.annotation.AnimatorRes
+android.support.annotation.AnyRes
+android.support.annotation.ArrayRes
+android.support.annotation.AttrRes
+android.support.annotation.BinderThread
+android.support.annotation.BoolRes
+android.support.annotation.CallSuper
+android.support.annotation.CheckResult
+android.support.annotation.ColorInt
+android.support.annotation.ColorRes
+android.support.annotation.DimenRes
+android.support.annotation.DrawableRes
+android.support.annotation.FloatRange
+android.support.annotation.FractionRes
+android.support.annotation.IdRes
+android.support.annotation.IntDef
+android.support.annotation.IntRange
+android.support.annotation.IntegerRes
+android.support.annotation.InterpolatorRes
+android.support.annotation.Keep
+android.support.annotation.LayoutRes
+android.support.annotation.MainThread
+android.support.annotation.MenuRes
+android.support.annotation.NonNull
+android.support.annotation.Nullable
+android.support.annotation.PluralsRes
+android.support.annotation.RawRes
+android.support.annotation.RequiresPermission
+android.support.annotation.RequiresPermission$Read
+android.support.annotation.RequiresPermission$Write
+android.support.annotation.Size
+android.support.annotation.StringDef
+android.support.annotation.StringRes
+android.support.annotation.StyleRes
+android.support.annotation.StyleableRes
+android.support.annotation.TransitionRes
+android.support.annotation.UiThread
+android.support.annotation.VisibleForTesting
+android.support.annotation.WorkerThread
+android.support.annotation.XmlRes
+com.aizi.huxibao.BabyFunActivity:
+    android.bluetooth.BluetoothAdapter mAdapter
+    android.widget.Button mSearchBtnButton
+    android.widget.Button mMessageBtn
+    android.widget.Button mSettingBtn
+    android.widget.Button mStopBluetoothService
+    android.widget.Button mLogin
+    android.widget.Button mGetDevicetimeButton
+    android.widget.Button mSetDevicetimeButton
+    android.widget.Button mBreathBtn
+    android.app.Fragment mContent
+    com.aizi.xiaohuhu.chart.SleepyChart chartFragment
+    com.aizi.xiaohuhu.chart.BarChartFragment barChartFragment
+    com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment realTimeStatusFragment
+    com.aizi.xiaohuhu.ui.component.main.BabyStatusIndicateFragment babyStatusIndicateFragment
+    private static final int REQUEST_SELECT_DEVICE
+    android.view.ViewGroup mMessageCenterViewGroup
+    android.view.ViewGroup mBabyBreathViewGroup
+    android.view.ViewGroup mBabySleepViewGroup
+    android.view.ViewGroup mSettingsViewGroup
+    android.view.ViewGroup mSyncDataViewGroup
+    156:162:public void switchContent(android.app.Fragment,android.app.Fragment)
+    191:193:public void startdevlistactivity()
+    266:269:private void initBluetoothService()
+    272:272:public static int getTempValue()
+com.aizi.huxibao.BabyStatusActivity:
+    com.aizi.xiaohuhu.ui.component.main.BabyRealTimeStatusFragment realTimeStatusFragment
+    com.aizi.xiaohuhu.chart.BarChartFragment babyChartFragment
+    android.widget.ImageView mImageViewbigline
+    android.widget.ImageView mImageViewsmalline
+    android.widget.TextView mBabyStatus
+    android.widget.TextView mBabyPoint
+    com.aizi.huxibao.BabyStatusActivity$MyHandler mHandler
+    com.aizi.huxibao.BabyStatusActivity$MyThread m
+    148:149:public void SetBabyStatus(java.lang.String)
+    154:156:public void SetBabyPoint(java.lang.String)
+com.aizi.huxibao.BabyStatusActivity$MyHandler
+com.aizi.huxibao.BabyStatusActivity$MyThread
+com.aizi.huxibao.CriticalActivity:
+    android.widget.Button mBreathAbnormal
+    android.widget.Button mGetNoSyncData
+    android.widget.Button mGetAllData
+    android.widget.Button mStartBreathData
+    android.widget.Button mStopBreathData
+    android.widget.Button mGetBreathHistoryData
+    android.widget.Button mGetRealTimeData
+com.aizi.huxibao.DeviceListActivity:
+    public static final java.lang.String TAG
+    private static final long SCAN_PERIOD
+    314:315:private void showMessage(java.lang.String)
+com.aizi.huxibao.TestActivity:
+    android.widget.Button mTestButton
+com.aizi.huxibao.XiaoHuhuActivity:
+    private android.widget.TextView mTabSleepTv
+com.aizi.xiaohuhu.bluttooth.BluetoothApi:
+    private static boolean mIsBluetoothReady
+    private java.lang.String mAddress
+    58:61:private void unbindBluetoothService(android.content.Context)
+com.aizi.xiaohuhu.chart.BarChartFragment:
+    static android.graphics.Typeface mTf
+    57:107:public static void setupChart(com.github.mikephil.charting.data.BarData,int)
+    113:135:public static com.github.mikephil.charting.data.BarData getData(int)
+com.aizi.xiaohuhu.chart.BreathChart:
+    59:63:public void freshChart()
+com.aizi.xiaohuhu.chart.BreathStopChart:
+    static android.graphics.Typeface mTf
+com.aizi.xiaohuhu.chart.SleepyChart:
+    static android.graphics.Typeface mTf
+    141:141:public void onEvent()
+    287:318:public static com.github.mikephil.charting.data.LineData getData(int)
+    323:355:private static com.github.mikephil.charting.data.LineDataSet getDataSet(int,java.util.ArrayList)
+com.aizi.xiaohuhu.chart.SleepyChart$SetTextViewListener:
+    public abstract void SetBabyStatus(java.lang.String)
+    public abstract void SetBabyPoint(java.lang.String)
+com.aizi.xiaohuhu.chart.SleepyPieChart:
+    99:99:public void initPieChart()
+com.aizi.xiaohuhu.chart.TemperatureChart:
+    static android.graphics.Typeface mTf
+com.aizi.xiaohuhu.constant.Constant:
+    public static final java.lang.String LOG_PREFIX
+    public static final java.lang.String BASE_L2_MESSAGE
+    public static final java.lang.String EXTERNAL_FILE_ROOT
+    public static final java.lang.String EXTERNAL_FILE_LOC
+    public static final short COMMAND_ID_UPDATE_ROM
+    public static final short COMMAND_ID_SETTING
+    public static final short COMMAND_ID_BIND
+    public static final short COMMAND_ID_NOTIFY
+    public static final short COMMAND_ID_DATA
+    public static final short COMMAND_ID_MANUFACTURE_TEST
+    public static final short COMMAND_ID_CONTROL
+    public static final short COMMAND_ID_DUMP_STACK
+    public static final short COMMAND_ID_FLASH_TEST
+    public static final short BASE_VERSION_CODE
+    public static final java.lang.String SHARED_NAME_PRIVATE_SETTINGS
+    public static final java.lang.String SHARED_DEVICE_ADDRESS
+    public static final long DEVICE_TIME_OFFSET
+    public static final java.lang.String LOGIN_VALUE
+    public static final java.lang.String BLUETOOTH_IS_READY
+    public static final java.lang.String DATA_TRANSFER_COMPLETED
+    public static final java.lang.String DATA_TRANSFER_RECEIVE
+    public static final java.lang.String DATA_TRANSFER_SEND
+    public static final java.lang.String DATA_DATE_YEAR
+    public static final java.lang.String DATA_DATE_MONTH
+    public static final java.lang.String DATA_DATE_DAY
+    public static final java.lang.String DATA_REALTIME_TEMPERATURE
+    public static final java.lang.String BLUETOOTH_SCAN_FOUND
+    public static final java.lang.String BLUETOOTH_SCAN_NOT_FOUND
+    5:5:public Constant()
+com.aizi.xiaohuhu.crc.CRC16:
+    9:9:public CRC16()
+com.aizi.xiaohuhu.deviceinterface.AsyncDevice:
+    public abstract java.util.concurrent.Future setDeviceTime()
+    public abstract java.util.concurrent.Future getDeviceTime()
+    public abstract java.util.concurrent.Future getSleepInfo()
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceFactory:
+    16:17:private AsyncDeviceFactory()
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceImpl:
+    35:47:public java.util.concurrent.Future setDeviceTime()
+    54:66:public java.util.concurrent.Future getDeviceTime()
+    122:122:public java.util.concurrent.Future getSleepInfo()
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceImpl$1
+com.aizi.xiaohuhu.deviceinterface.AsyncDeviceImpl$2
+com.aizi.xiaohuhu.deviceinterface.DeviceApi
+com.aizi.xiaohuhu.deviceinterface.DeviceError
+com.aizi.xiaohuhu.deviceinterface.DeviceFactory:
+    16:18:private DeviceFactory()
+com.aizi.xiaohuhu.deviceinterface.DeviceInterface
+com.aizi.xiaohuhu.deviceinterface.DeviceListener
+com.aizi.xiaohuhu.deviceinterface.DeviceResponse:
+    public java.lang.Object result
+    public com.aizi.xiaohuhu.deviceinterface.DeviceError error
+    26:26:public static com.aizi.xiaohuhu.deviceinterface.DeviceResponse success(java.lang.Object)
+    39:39:public static com.aizi.xiaohuhu.deviceinterface.DeviceResponse error(com.aizi.xiaohuhu.deviceinterface.DeviceError)
+    50:53:public DeviceResponse(java.lang.Object,com.aizi.xiaohuhu.deviceinterface.DeviceError)
+    58:59:public DeviceResponse()
+com.aizi.xiaohuhu.deviceinterface.DeviceTimeListener
+com.aizi.xiaohuhu.deviceinterface.ServerError
+com.aizi.xiaohuhu.deviceinterface.SyncDevice:
+    public abstract com.aizi.xiaohuhu.deviceinterface.DeviceResponse setDeviceTime()
+    public abstract com.aizi.xiaohuhu.deviceinterface.DeviceResponse getDeviceTime()
+com.aizi.xiaohuhu.deviceinterface.SyncDeviceImpl:
+    private java.lang.String mAddress
+    37:53:public com.aizi.xiaohuhu.deviceinterface.DeviceResponse setDeviceTime()
+    60:69:private com.aizi.xiaohuhu.synctime.DeviceTime acqDeviceTime()
+    115:126:public com.aizi.xiaohuhu.deviceinterface.DeviceResponse getDeviceTime()
+com.aizi.xiaohuhu.deviceinterface.SyncDeviceRefactor
+com.aizi.xiaohuhu.dialog.CalendarDialog
+com.aizi.xiaohuhu.dialog.CalendarDialog$Builder
+com.aizi.xiaohuhu.fragment.BreathFragment:
+    private android.widget.TextView mBreathRealValue
+    237:241:public void freshChart()
+com.aizi.xiaohuhu.fragment.TemperatureFragment:
+    static android.graphics.Typeface mTf
+com.aizi.xiaohuhu.logging.SLog:
+    private static final java.lang.String TAG
+    public static final int FILE_LIMETE
+    public static final int FILE_NUMBER
+    53:54:private SLog()
+    66:74:public static void v(java.lang.String,java.lang.String)
+    88:89:public static void v(java.lang.String,java.lang.String,java.lang.Throwable)
+    100:108:public static void i(java.lang.String,java.lang.String)
+    122:123:public static void i(java.lang.String,java.lang.String,java.lang.Throwable)
+    156:157:public static void d(java.lang.String,java.lang.String,java.lang.Throwable)
+    190:191:public static void w(java.lang.String,java.lang.String,java.lang.Throwable)
+    240:243:public static void e(java.lang.String,java.lang.String,java.lang.Throwable)
+    269:276:private static java.lang.String getLogFileName()
+    287:342:private static java.lang.String getProcessNameForPid(int)
+    352:353:public static void setLogEnabled(boolean)
+    362:390:public static void setLog2File(boolean)
+com.aizi.xiaohuhu.login.LoginActivity:
+    181:181:private boolean isEmailValid(java.lang.String)
+com.aizi.xiaohuhu.login.LoginActivity$ProfileQuery:
+    public static final int ADDRESS
+    public static final int IS_PRIMARY
+com.aizi.xiaohuhu.math.MathMethod
+com.aizi.xiaohuhu.math.RunningVariance
+com.aizi.xiaohuhu.receiver.BabyStatusReceiver:
+    private static final java.lang.String TAG
+    48:49:public void setBRInteractionListener(com.aizi.xiaohuhu.receiver.BabyStatusReceiver$DataInteraction)
+com.aizi.xiaohuhu.service.BluetoothService:
+    private static final int STATE_DISCONNECTED
+    private static final int STATE_CONNECTING
+    private static final int STATE_CONNECTED
+    public static final java.lang.String ACTION_GATT_CONNECTED
+    public static final java.lang.String ACTION_GATT_DISCONNECTED
+    public static final java.lang.String ACTION_GATT_SERVICES_DISCOVERED
+    public static final java.lang.String ACTION_DATA_AVAILABLE
+    public static final java.lang.String EXTRA_TYPE
+    public static final java.lang.String DEVICE_DOES_NOT_SUPPORT_BLUETOOTH
+    163:163:private boolean isHeartRateInUINT16(byte)
+    305:311:public void readCharacteristic(android.bluetooth.BluetoothGattCharacteristic)
+    375:377:public java.util.List getSupportedGattServices()
+com.aizi.xiaohuhu.service.ScanDevicesService:
+    private static final long SCAN_PERIOD
+    private com.aizi.xiaohuhu.service.ScanDevicesService$OnScanDeviceListener mListener
+    46:47:public void setOnProgressListener(com.aizi.xiaohuhu.service.ScanDevicesService$OnScanDeviceListener)
+    92:95:public java.util.List getDeviceList()
+com.aizi.xiaohuhu.service.ScanDevicesService$OnScanDeviceListener
+com.aizi.xiaohuhu.sleepdatabase.BreathInfoEnumClass:
+    16:16:public long getBreathTimestamp()
+    24:24:public int getBreathIsAlarm()
+    32:32:public int getBreathDuration()
+    40:40:public int getBreathYear()
+    49:49:public int getBreathMonth()
+    57:57:public int getBreathDay()
+    73:73:public int getBreathMinute()
+    81:81:public int getBreathSecond()
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase:
+    private static final int DB_VERSION
+    private static final java.lang.String DB_DIR
+    private static final java.lang.String DATA_DIR
+    private static final java.lang.String TAG
+    private static final java.lang.String DB_NAME
+    22:22:public SleepInfoDatabase()
+    33:44:public static void close()
+    101:119:public static synchronized void initSleepInfoDataBase(android.content.Context)
+    288:288:public static java.util.List getSleepInfoEnumClassList(android.content.Context,long,long,int,int)
+    345:345:public static java.util.List getSleepInfoEnumList(android.content.Context,int,int,int)
+    404:404:public static java.util.List getBreathInfoEnumClassList(android.content.Context,long,long,int,int)
+    521:521:public static java.util.List getTemperatureInfoEnumClassList(android.content.Context,int,int,int)
+    580:580:public static java.util.List getTemperatureInfoEnumClassList(android.content.Context,long,long,int,int)
+    629:629:public static synchronized com.aizi.xiaohuhu.sleepdatabase.SleepInfoEnumClass getSleepInfoEnumClass(android.content.Context)
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase$BreathInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase$SleepInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoDatabase$TemperatureInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.sleepdatabase.SleepInfoEnumClass
+com.aizi.xiaohuhu.sleepdatabase.TemperatureInfoEnumClass
+com.aizi.xiaohuhu.slidingmenu.SlidingMenuHelper:
+    android.view.ViewGroup mMessageCenterViewGroup
+    android.view.ViewGroup mBabyBreathViewGroup
+    android.view.ViewGroup mBabySleepViewGroup
+    android.view.ViewGroup mSettingsViewGroup
+    android.view.ViewGroup mQuitUserAccountGroup
+    226:226:public com.jeremyfeinstein.slidingmenu.lib.SlidingMenu getSlidingMenu()
+    233:234:public void toggle()
+    240:241:public void showContent()
+    255:256:public void showSecondaryMenu()
+com.aizi.xiaohuhu.synctime.DeviceTime:
+    public long millisecondValue
+    private java.util.BitSet bitSet
+    26:43:public byte[] toByte()
+    49:59:private void calculateBitset(java.util.BitSet,int,int)
+    62:63:private boolean checkDeviceTimeCorrect()
+com.aizi.xiaohuhu.synctime.DeviceTimeHelper
+com.aizi.xiaohuhu.synctime.DeviceTimeHelper$devTimeListener
+com.aizi.xiaohuhu.synctime.DeviceTimeManager
+com.aizi.xiaohuhu.task.DispatcherFactory:
+    13:15:private DispatcherFactory()
+com.aizi.xiaohuhu.task.RequestTask:
+    private long id
+    21:21:public long getId()
+    31:32:public void setId(long)
+    40:40:public boolean isCanceled()
+    47:48:public void cancel()
+com.aizi.xiaohuhu.task.TaskDispatcher:
+    public abstract void shutdown()
+    public abstract void cancel(long)
+com.aizi.xiaohuhu.task.TaskDispatcherImpl:
+    38:39:public void shutdown()
+    44:44:public void cancel(long)
+com.aizi.xiaohuhu.titlefragment.HomePageTopTitleFragment:
+    android.widget.ImageView plusView
+com.aizi.xiaohuhu.ui.component.main.BabyRealTimeStatusFragment:
+    private android.widget.LinearLayout mTemptureView
+    private android.widget.LinearLayout mHumidityView
+    private android.widget.LinearLayout mSleepView
+    59:61:public static void setTemperature(java.lang.String)
+    64:66:public void setHumit(int)
+com.aizi.xiaohuhu.ui.component.main.BabyStatusIndicateFragment:
+    android.widget.TextView mBabyStatus
+com.aizi.xiaohuhu.ui.component.main.DeviceConnectStatusFragment:
+    public static final int ABNORMAL_REQUEST_CODE
+    private static final int REQUEST_SELECT_DEVICE
+    private static final int REQUEST_ENABLE_BLUETOOTH
+    com.aizi.xiaohuhu.service.ScanDevicesService$OnScanDeviceListener mScanDeviceListener
+    private android.widget.TextView mDeviceOrLocalTextView
+    315:315:public com.aizi.xiaohuhu.ui.component.main.DeviceConnectStatusFragment$CheckingState getCurrentState()
+com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment:
+    private android.widget.LinearLayout mTemptureView
+    private android.widget.LinearLayout mHumidityView
+    private android.widget.TextView mPM25TextView
+    com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment$OnStatusSelectedListener mListener
+    96:98:public void setHumit(int)
+    101:103:public void setPM25(int)
+com.aizi.xiaohuhu.ui.component.main.RealTimeStatusFragment$OnStatusSelectedListener
+com.aizi.xiaohuhu.userdatabase.UserAccountDataBase:
+    private static final int DB_VERSION
+    private static final java.lang.String DB_DIR
+    private static final java.lang.String DATA_DIR
+    private static final java.lang.String TAG
+    private static final java.lang.String DB_NAME
+    30:30:public UserAccountDataBase()
+    41:52:public static void close()
+    108:123:public static synchronized void initUserAccountInfoDataBase(android.content.Context)
+com.aizi.xiaohuhu.userdatabase.UserAccountDataBase$UserAccountInfoEnum:
+    static final java.lang.String TABLE_NAME
+com.aizi.xiaohuhu.utility.BaseMessageHandler:
+    private static final short BASE_DATA_HEAD
+    static byte[] baseTwobytes
+com.aizi.xiaohuhu.utility.BitSetConvert:
+    5:5:public BitSetConvert()
+    8:14:public static byte[] bitSet2ByteArray(java.util.BitSet)
+com.aizi.xiaohuhu.utility.LittleEndianDataIutputStream
+com.aizi.xiaohuhu.utility.LittleEndianDataOutputStream
+com.aizi.xiaohuhu.utility.MessageParse:
+    int mBreathCount
+    138:147:public void writeSDFile(java.lang.String,byte[])
+    364:364:private com.aizi.xiaohuhu.sleepdatabase.SleepInfo convertTosleepinfo(byte[])
+com.aizi.xiaohuhu.utility.NotificationBuilderManager:
+    public static final int MEDIA_BUILDER_ID
+    public static final java.lang.String MEDIA_NOFIFY_DESCRIPTION
+    12:12:public NotificationBuilderManager()
+com.aizi.xiaohuhu.utility.PrivateParams:
+    private static final java.lang.String TAG
+    16:16:public PrivateParams()
+    62:69:public static void setMutiproSPInt(android.content.Context,java.lang.String,int)
+    80:81:public static int getMutiproSPInt(android.content.Context,java.lang.String,int)
+    125:133:public static void setSPLong(android.content.Context,java.lang.String,long)
+    143:144:public static long getSPLong(android.content.Context,java.lang.String)
+com.aizi.xiaohuhu.utility.PushNotificationBuilder
+com.aizi.xiaohuhu.utility.Utiliy:
+    public static final java.lang.String ACTION_PRIVATE_NOTIFICATION_CLICK
+    public static final java.lang.String ACTION_PRIVATE_NOTIFICATION_DELETE
+    private static final java.lang.String TAG
+    29:29:public Utiliy()
+    101:108:public static void showBreathNotification(android.content.Context,java.lang.String,java.lang.String,java.lang.String)
+    194:197:private static boolean ableLogToFile(android.content.Context)
+    201:204:public static boolean checkPermission(android.content.Context,java.lang.String)
+com.aizi.xiaohuhu.utility.Utiliy$CheckingState
+com.aizi.yingerbao.BuildConfig
+com.aizi.yingerbao.R:
+    10:10:public R()
+com.github.mikephil.charting.animation.Easing$EasingFunctions:
+    108:108:private Easing$EasingFunctions()
+com.jeremyfeinstein.slidingmenu.lib.SlidingMenu$1:
+    public static final int POSITION_OPEN
+    public static final int POSITION_CLOSE
+    public static final int POSITION_SECONDARY_OPEN
+com.prolificinteractive.materialcalendarview.BuildConfig
+com.prolificinteractive.materialcalendarview.CalendarDay:
+    125:126:public CalendarDay(java.util.Date)
+    183:185:void copyToMonthOnly(java.util.Calendar)
+com.prolificinteractive.materialcalendarview.CalendarPager:
+    31:31:public boolean isPagingEnabled()
+com.prolificinteractive.materialcalendarview.CalendarPagerAdapter:
+    53:55:public void setDecorators(java.util.List)
+com.prolificinteractive.materialcalendarview.CalendarPagerView:
+    protected static final int DEFAULT_DAYS_IN_WEEK
+    protected static final int DEFAULT_MAX_WEEKS
+    protected static final int DAY_NAMES_ROW
+com.prolificinteractive.materialcalendarview.CalendarUtils:
+    17:17:public CalendarUtils()
+    48:52:public static void setToFirstDay(java.util.Calendar)
+com.prolificinteractive.materialcalendarview.DayViewFacade:
+    59:63:public void addSpan(java.lang.Object)
+    73:75:public void setDaysDisabled(boolean)
+com.prolificinteractive.materialcalendarview.DayViewFacade$Span:
+    131:133:public DayViewFacade$Span(java.lang.Object)
+com.prolificinteractive.materialcalendarview.Experimental
+com.prolificinteractive.materialcalendarview.MaterialCalendarView:
+    public static final int SELECTION_MODE_NONE
+    public static final int SELECTION_MODE_SINGLE
+    public static final int SELECTION_MODE_MULTIPLE
+    public static final int SELECTION_MODE_RANGE
+    public static final int SHOW_NONE
+    public static final int SHOW_OTHER_MONTHS
+    public static final int SHOW_OUT_OF_RANGE
+    public static final int SHOW_DECORATED_DISABLED
+    public static final int SHOW_DEFAULTS
+    public static final int SHOW_ALL
+    public static final int DEFAULT_TILE_SIZE_DP
+    private static final int DEFAULT_DAYS_IN_WEEK
+    private static final int DEFAULT_MAX_WEEKS
+    private static final int DAY_NAMES_ROW
+    508:508:public int getTileSize()
+    644:644:public int getArrowColor()
+    702:702:public android.graphics.drawable.Drawable getLeftArrowMask()
+    717:717:public android.graphics.drawable.Drawable getRightArrowMask()
+    1220:1220:public boolean isDynamicHeightEnabled()
+    1230:1236:public void addDecorators(java.util.Collection)
+    1244:1245:public varargs void addDecorators(com.prolificinteractive.materialcalendarview.DayViewDecorator[])
+    1253:1258:public void addDecorator(com.prolificinteractive.materialcalendarview.DayViewDecorator)
+    1264:1266:public void removeDecorators()
+    1274:1276:public void removeDecorator(com.prolificinteractive.materialcalendarview.DayViewDecorator)
+    1420:1426:public void selectRange(com.prolificinteractive.materialcalendarview.CalendarDay,com.prolificinteractive.materialcalendarview.CalendarDay)
+    1735:1735:public boolean isPagingEnabled()
+    1742:1742:public com.prolificinteractive.materialcalendarview.MaterialCalendarView$State state()
+com.prolificinteractive.materialcalendarview.MaterialCalendarView$SelectionMode
+com.prolificinteractive.materialcalendarview.MaterialCalendarView$ShowOtherDates
+com.prolificinteractive.materialcalendarview.MaterialCalendarView$State:
+    1769:1769:public com.prolificinteractive.materialcalendarview.MaterialCalendarView$StateBuilder edit()
+com.prolificinteractive.materialcalendarview.MaterialCalendarView$StateBuilder:
+    1783:1788:private MaterialCalendarView$StateBuilder(com.prolificinteractive.materialcalendarview.MaterialCalendarView,com.prolificinteractive.materialcalendarview.MaterialCalendarView$State)
+    1820:1821:public com.prolificinteractive.materialcalendarview.MaterialCalendarView$StateBuilder setMinimumDate(java.util.Calendar)
+    1828:1829:public com.prolificinteractive.materialcalendarview.MaterialCalendarView$StateBuilder setMinimumDate(java.util.Date)
+    1844:1845:public com.prolificinteractive.materialcalendarview.MaterialCalendarView$StateBuilder setMaximumDate(java.util.Calendar)
+    1852:1853:public com.prolificinteractive.materialcalendarview.MaterialCalendarView$StateBuilder setMaximumDate(java.util.Date)
+    1774:1774:synthetic MaterialCalendarView$StateBuilder(com.prolificinteractive.materialcalendarview.MaterialCalendarView,com.prolificinteractive.materialcalendarview.MaterialCalendarView$State,com.prolificinteractive.materialcalendarview.MaterialCalendarView$1)
+com.prolificinteractive.materialcalendarview.R:
+    9:9:public R()
+com.prolificinteractive.materialcalendarview.TitleChanger:
+    public static final int DEFAULT_ANIMATION_DELAY
+    public static final int DEFAULT_Y_TRANSLATION_DP
+    107:107:public com.prolificinteractive.materialcalendarview.format.TitleFormatter getTitleFormatter()
+com.prolificinteractive.materialcalendarview.WeekDayView:
+    46:47:public void setDayOfWeek(java.util.Calendar)
+com.prolificinteractive.materialcalendarview.WeekPagerAdapter:
+    9:9:public bridge synthetic void setDecorators(java.util.List)
+com.prolificinteractive.materialcalendarview.WeekPagerAdapter$Weekly:
+    private static final int DAYS_IN_WEEK
+com.prolificinteractive.materialcalendarview.format.DateFormatDayFormatter:
+    30:32:public DateFormatDayFormatter(java.text.DateFormat)
+com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter:
+    30:32:public DateFormatTitleFormatter(java.text.DateFormat)
+com.prolificinteractive.materialcalendarview.spans.DotSpan
+com.ta.utdid2.android.utils.AESUtils
+com.ta.utdid2.android.utils.Base64
+com.ta.utdid2.android.utils.Base64$Coder
+com.ta.utdid2.android.utils.Base64$Decoder
+com.ta.utdid2.android.utils.Base64$Encoder
+com.ta.utdid2.android.utils.IntUtils
+com.ta.utdid2.android.utils.NetworkUtils
+com.ta.utdid2.android.utils.PhoneInfoUtils
+com.ta.utdid2.android.utils.StringUtils
+com.ta.utdid2.android.utils.SystemUtils
+com.ta.utdid2.core.persistent.FastXmlSerializer
+com.ta.utdid2.core.persistent.MySharedPreferences
+com.ta.utdid2.core.persistent.MySharedPreferences$MyEditor
+com.ta.utdid2.core.persistent.MySharedPreferences$OnSharedPreferenceChangeListener
+com.ta.utdid2.core.persistent.PersistentConfiguration
+com.ta.utdid2.core.persistent.TransactionXMLFile
+com.ta.utdid2.core.persistent.TransactionXMLFile$MySharedPreferencesImpl
+com.ta.utdid2.core.persistent.TransactionXMLFile$MySharedPreferencesImpl$EditorImpl
+com.ta.utdid2.core.persistent.XmlUtils
+com.ta.utdid2.device.Device
+com.ta.utdid2.device.DeviceInfo
+com.ta.utdid2.device.UTDevice
+com.ta.utdid2.device.UTUtdid
+com.ta.utdid2.device.UTUtdidHelper
+com.ta.utdid2.device.UTUtdidHelper2
+com.umeng.analytics.AnalyticsConfig:
+    public static final boolean FLAG_INTERNATIONAL
+    16:16:public AnalyticsConfig()
+    54:55:static void a(boolean)
+    118:122:static void b(android.content.Context,java.lang.String)
+com.umeng.analytics.Gender
+com.umeng.analytics.Gender$1
+com.umeng.analytics.Gender$2
+com.umeng.analytics.Gender$3
+com.umeng.analytics.Gender$4
+com.umeng.analytics.MobclickAgent:
+    private static final java.lang.String a
+    25:25:public MobclickAgent()
+    49:50:public static void setLocation(double,double)
+    53:54:public static void setLatencyWindow(long)
+    62:63:public static void enableEncrypt(boolean)
+    69:70:public static void setCatchUncaughtExceptions(boolean)
+    79:80:public static void setWrapper(java.lang.String,java.lang.String)
+    91:92:public static void setSecret(android.content.Context,java.lang.String)
+    103:104:public static void setScenarioType(android.content.Context,com.umeng.analytics.MobclickAgent$EScenarioType)
+    116:117:public static void setSessionContinueMillis(long)
+    128:129:public static void setEnableEventBuffer(boolean)
+    132:132:public static com.umeng.analytics.d getAgent()
+    141:142:public static void setCheckDevice(boolean)
+    151:152:public static void setOpenGLContext(javax.microedition.khronos.opengles.GL10)
+    160:161:public static void openActivityDurationTrack(boolean)
+    171:176:public static void onPageStart(java.lang.String)
+    184:189:public static void onPageEnd(java.lang.String)
+    198:199:public static void setDebugMode(boolean)
+    236:237:public static void reportError(android.content.Context,java.lang.String)
+    250:251:public static void reportError(android.content.Context,java.lang.Throwable)
+    265:266:public static void onEvent(android.content.Context,java.util.List,int,java.lang.String)
+    278:279:public static void onEvent(android.content.Context,java.lang.String)
+    292:298:public static void onEvent(android.content.Context,java.lang.String,java.lang.String)
+    311:316:public static void onEvent(android.content.Context,java.lang.String,java.util.Map)
+    331:339:public static void onEventValue(android.content.Context,java.lang.String,java.util.Map,int)
+    355:361:public static varargs void onSocialEvent(android.content.Context,java.lang.String,com.umeng.analytics.social.UMPlatformData[])
+    372:378:public static varargs void onSocialEvent(android.content.Context,com.umeng.analytics.social.UMPlatformData[])
+    390:391:public static void onKillProcess(android.content.Context)
+    402:403:public static void onProfileSignIn(java.lang.String)
+    417:433:public static void onProfileSignIn(java.lang.String,java.lang.String)
+    441:442:public static void onProfileSignOff()
+com.umeng.analytics.MobclickAgent$UMAnalyticsConfig:
+    485:486:public MobclickAgent$UMAnalyticsConfig(android.content.Context,java.lang.String,java.lang.String)
+com.umeng.analytics.MobclickAgentJSInterface
+com.umeng.analytics.MobclickAgentJSInterface$a
+com.umeng.analytics.ReportPolicy:
+    public static final int REALTIME
+    public static final int BATCH_AT_LAUNCH
+    static final int a
+    static final int b
+    public static final int DAILY
+    public static final int WIFIONLY
+    public static final int BATCH_BY_INTERVAL
+    public static final int SMART_POLICY
+    17:17:public ReportPolicy()
+com.umeng.analytics.ReportPolicy$e:
+    131:131:public long b()
+    135:138:public static boolean a(int)
+com.umeng.analytics.ReportPolicy$f
+com.umeng.analytics.a:
+    public static final java.lang.String a
+    public static final java.lang.String b
+    public static final java.lang.String c
+    public static final java.lang.String d
+    public static final java.lang.String h
+    public static final long j
+    public static final long k
+    public static final boolean l
+    public static final int m
+    public static final int n
+    public static final int o
+    public static final int p
+    public static final int q
+    public static final java.lang.String r
+    public static final java.lang.String s
+    public static final java.lang.String t
+    public static final java.lang.String u
+    public static final java.lang.String w
+    public static final java.lang.String x
+    public static final java.lang.String y
+    public static final java.lang.String z
+    public static final java.lang.String A
+    10:10:public a()
+com.umeng.analytics.b:
+    26:26:public b()
+    106:110:public static byte[] b(byte[],byte[])
+    178:180:public static java.lang.String b(java.lang.String)
+com.umeng.analytics.d:
+    80:87:void a(java.lang.String)
+    90:97:void b(java.lang.String)
+    100:101:public void a(com.umeng.analytics.c)
+    108:110:public void a(java.lang.String,java.lang.String)
+    162:162:public u.aly.ar a()
+    167:173:public void a(android.content.Context,java.lang.String,java.util.HashMap)
+    176:197:void a(android.content.Context,java.lang.String)
+    206:215:void a(android.content.Context,java.lang.Throwable)
+    235:241:void c(android.content.Context)
+    253:259:public void a(android.content.Context,java.util.List,int,java.lang.String)
+    264:270:public void a(android.content.Context,java.lang.String,java.lang.String,long,int)
+    274:280:void a(android.content.Context,java.lang.String,java.util.Map,long)
+    284:292:void d(android.content.Context)
+    319:337:void b(java.lang.String,java.lang.String)
+    341:360:void b()
+    368:369:void a(boolean)
+    377:378:void b(boolean)
+    386:391:void a(javax.microedition.khronos.opengles.GL10)
+    399:400:void c(boolean)
+    408:409:void d(boolean)
+    417:419:void e(boolean)
+    427:428:void f(boolean)
+    437:443:void a(double,double)
+    446:447:void a(long)
+    471:475:void b(android.content.Context,java.lang.String)
+    505:506:void b(long)
+    34:34:static synthetic android.content.Context b(com.umeng.analytics.d)
+com.umeng.analytics.d$4
+com.umeng.analytics.d$5
+com.umeng.analytics.e:
+    13:13:public e()
+    17:22:public static void a(android.content.Context,java.lang.String,java.lang.String)
+    41:47:public static void b(android.content.Context)
+com.umeng.analytics.f:
+    20:20:public f()
+com.umeng.analytics.game.UMGameAgent
+com.umeng.analytics.game.a
+com.umeng.analytics.game.b
+com.umeng.analytics.game.b$a
+com.umeng.analytics.game.c
+com.umeng.analytics.game.c$1
+com.umeng.analytics.game.c$2
+com.umeng.analytics.h:
+    private static final java.lang.String g
+    private static final java.lang.String h
+    private static final java.lang.String i
+    private static final java.lang.String j
+    private static final java.lang.String k
+    86:94:public void a(java.lang.String,java.lang.String)
+    108:110:public void b()
+    128:132:java.lang.String d()
+    136:140:void b(java.lang.String)
+    151:155:void c(java.lang.String)
+    295:295:public android.content.SharedPreferences k()
+    299:299:public android.content.SharedPreferences l()
+    303:303:public android.content.SharedPreferences m()
+com.umeng.analytics.h$a:
+    409:415:public void b()
+    418:422:public int c()
+com.umeng.analytics.social.UMPlatformData
+com.umeng.analytics.social.UMPlatformData$1
+com.umeng.analytics.social.UMPlatformData$GENDER
+com.umeng.analytics.social.UMPlatformData$GENDER$1
+com.umeng.analytics.social.UMPlatformData$GENDER$2
+com.umeng.analytics.social.UMPlatformData$UMedia
+com.umeng.analytics.social.UMPlatformData$UMedia$1
+com.umeng.analytics.social.UMPlatformData$UMedia$2
+com.umeng.analytics.social.UMPlatformData$UMedia$3
+com.umeng.analytics.social.UMPlatformData$UMedia$4
+com.umeng.analytics.social.UMPlatformData$UMedia$5
+com.umeng.analytics.social.UMPlatformData$UMedia$6
+com.umeng.analytics.social.UMPlatformData$UMedia$7
+com.umeng.analytics.social.UMPlatformData$UMedia$8
+com.umeng.analytics.social.UMSocialService
+com.umeng.analytics.social.UMSocialService$a
+com.umeng.analytics.social.UMSocialService$b
+com.umeng.analytics.social.a
+com.umeng.analytics.social.b
+com.umeng.analytics.social.c
+com.umeng.analytics.social.d
+com.umeng.analytics.social.e
+com.umeng.analytics.social.f
+com.ut.device.UTDevice:
+    16:16:public static java.lang.String getUtdid(android.content.Context)
+de.greenrobot.event.EventBus$PostCallback
+u.aly.a:
+    24:24:public a()
+    34:41:public static boolean a(android.database.sqlite.SQLiteDatabase,java.lang.String)
+u.aly.aa:
+    private static final java.lang.String a
+u.aly.ab:
+    private static final java.lang.String a
+    private static final java.lang.String b
+u.aly.ac:
+    private static final java.lang.String a
+u.aly.ad$a:
+    543:545:public void a(int,int)
+u.aly.ae:
+    35:36:public void a(u.aly.ah)
+    51:56:public void a()
+u.aly.ae$2
+u.aly.ag:
+    51:81:public void a(java.lang.String,java.util.Map,long)
+    85:104:public void a(java.lang.String,java.lang.String,long,int)
+    108:131:public void a(java.lang.String,java.util.Map)
+    134:144:private boolean a(java.lang.String)
+    148:154:private boolean b(java.lang.String)
+    158:177:private boolean a(java.util.Map)
+    184:264:public boolean a(java.util.List,int,java.lang.String)
+    31:31:static synthetic android.content.Context a(u.aly.ag)
+u.aly.ag$1
+u.aly.ag$1$1
+u.aly.ah:
+    public abstract void a()
+u.aly.ak:
+    37:37:public android.content.Context a()
+    41:41:protected boolean a(int)
+u.aly.al:
+    63:95:private void a()
+u.aly.am
+u.aly.ap:
+    private static final java.lang.String a
+    16:17:private ap()
+    20:20:public static android.content.SharedPreferences a(android.content.Context,java.lang.String)
+u.aly.aq:
+    private static final int a
+    private static final int b
+    private static final int c
+u.aly.ar:
+    private static final java.lang.String a
+    private static final java.lang.String b
+    private static final java.lang.String c
+    private static final java.lang.String f
+    private static final java.lang.String g
+    private static final java.lang.String h
+u.aly.as:
+    private static final java.lang.String h
+    private static final java.lang.String i
+    private static final java.lang.String j
+    private static final java.lang.String k
+    private static final java.lang.String l
+    private static final java.lang.String m
+    56:56:public int e()
+u.aly.at:
+    private static final java.lang.String a
+u.aly.au
+u.aly.av:
+    private static final long d
+    408:411:public void b()
+u.aly.av$a
+u.aly.av$b:
+    private static final long b
+u.aly.av$c:
+    private static final long c
+u.aly.av$d:
+    private static final long c
+u.aly.av$e:
+    private static final long f
+u.aly.av$f:
+    private static final long d
+u.aly.av$g:
+    private static final long d
+u.aly.av$h:
+    private static final long c
+u.aly.av$i:
+    private static final long d
+u.aly.av$j:
+    private static final long g
+u.aly.av$k:
+    private static final long d
+u.aly.av$l:
+    private static final long e
+u.aly.av$m:
+    private static final long k
+u.aly.av$n:
+    private static final long P
+u.aly.av$o:
+    private static final long k
+u.aly.av$p:
+    private static final long c
+u.aly.aw:
+    234:234:public int c()
+    238:238:public int d()
+u.aly.ax:
+    private static final int a
+    private static final int b
+    private static final int c
+    private static final int d
+    private static final long e
+    private static final long f
+    private static final long g
+    100:100:public long b()
+u.aly.ay:
+    80:80:public long c()
+u.aly.az
+u.aly.ba:
+    private static final int l
+    151:156:public ba(java.lang.String,java.lang.String,long)
+    161:173:public ba(u.aly.ba)
+    176:176:public u.aly.ba a()
+    181:186:public void b()
+    189:189:public java.lang.String c()
+    198:199:public void d()
+    206:206:public boolean e()
+    216:216:public java.lang.String f()
+    225:226:public void g()
+    243:243:public java.lang.String i()
+    252:253:public void j()
+    260:260:public boolean k()
+    270:270:public long l()
+    280:281:public void m()
+    296:296:public u.aly.ba$e a(int)
+    365:370:private void a(java.io.ObjectOutputStream)
+    376:382:private void a(java.io.ObjectInputStream)
+    23:23:public synthetic u.aly.bp p()
+    23:23:public synthetic u.aly.bw b(int)
+u.aly.ba$e:
+    69:79:public static u.aly.ba$e a(int)
+    88:91:public static u.aly.ba$e b(int)
+    99:99:public static u.aly.ba$e a(java.lang.String)
+    111:111:public short a()
+u.aly.bb:
+    private static final int j
+    private static final int k
+    141:147:public bb(java.lang.String,long,int)
+    152:159:public bb(u.aly.bb)
+    162:162:public u.aly.bb a()
+    167:172:public void b()
+    184:185:public void d()
+    192:192:public boolean e()
+    212:213:public void g()
+    238:239:public void j()
+    254:254:public u.aly.bb$e c(int)
+    306:311:private void a(java.io.ObjectOutputStream)
+    317:323:private void a(java.io.ObjectInputStream)
+    22:22:public synthetic u.aly.bp p()
+    22:22:public synthetic u.aly.bw b(int)
+u.aly.bb$e:
+    65:73:public static u.aly.bb$e a(int)
+    82:85:public static u.aly.bb$e b(int)
+    93:93:public static u.aly.bb$e a(java.lang.String)
+    105:105:public short a()
+u.aly.bc:
+    148:150:public bc(java.util.Map)
+    155:181:public bc(u.aly.bc)
+    184:184:public u.aly.bc a()
+    189:192:public void b()
+    195:195:public int c()
+    199:203:public void a(java.lang.String,u.aly.bb)
+    215:216:public void e()
+    223:223:public boolean f()
+    233:233:public int g()
+    237:237:public java.util.Iterator h()
+    241:245:public void a(u.aly.ba)
+    257:258:public void j()
+    275:275:public java.lang.String l()
+    279:280:public u.aly.bc a(java.lang.String)
+    284:285:public void m()
+    302:302:public u.aly.bc$e a(int)
+    362:367:private void a(java.io.ObjectOutputStream)
+    371:376:private void a(java.io.ObjectInputStream)
+    24:24:public synthetic u.aly.bp p()
+    24:24:public synthetic u.aly.bw b(int)
+u.aly.bc$e:
+    67:75:public static u.aly.bc$e a(int)
+    84:87:public static u.aly.bc$e b(int)
+    95:95:public static u.aly.bc$e a(java.lang.String)
+    107:107:public short a()
+u.aly.bd:
+    private static final int j
+    144:149:public bd(java.util.Map,int,java.lang.String)
+    154:175:public bd(u.aly.bd)
+    178:178:public u.aly.bd a()
+    183:187:public void b()
+    190:190:public int c()
+    194:198:public void a(java.lang.String,u.aly.be)
+    205:206:public u.aly.bd a(java.util.Map)
+    210:211:public void e()
+    238:239:public void h()
+    263:264:public void k()
+    271:271:public boolean l()
+    281:281:public u.aly.bd$e c(int)
+    339:344:private void a(java.io.ObjectOutputStream)
+    350:356:private void a(java.io.ObjectInputStream)
+    22:22:public synthetic u.aly.bp p()
+    22:22:public synthetic u.aly.bw b(int)
+u.aly.bd$e:
+    64:72:public static u.aly.bd$e a(int)
+    81:84:public static u.aly.bd$e b(int)
+    92:92:public static u.aly.bd$e a(java.lang.String)
+    104:104:public short a()
+u.aly.be:
+    private static final int j
+    140:144:public be(long,java.lang.String)
+    149:158:public be(u.aly.be)
+    161:161:public u.aly.be a()
+    166:170:public void b()
+    177:178:public u.aly.be a(java.lang.String)
+    182:183:public void d()
+    204:206:public u.aly.be a(long)
+    210:211:public void g()
+    230:231:public u.aly.be b(java.lang.String)
+    235:236:public void j()
+    243:243:public boolean k()
+    253:253:public u.aly.be$e a(int)
+    309:314:private void a(java.io.ObjectOutputStream)
+    320:326:private void a(java.io.ObjectInputStream)
+    23:23:public synthetic u.aly.bp p()
+    23:23:public synthetic u.aly.bw b(int)
+u.aly.be$e:
+    66:74:public static u.aly.be$e a(int)
+    83:86:public static u.aly.be$e b(int)
+    94:94:public static u.aly.be$e a(java.lang.String)
+    106:106:public short a()
+u.aly.bf:
+    private static final int j
+    142:145:public bf(int)
+    150:159:public bf(u.aly.bf)
+    162:162:public u.aly.bf a()
+    167:171:public void b()
+    174:174:public int c()
+    178:180:public u.aly.bf a(int)
+    184:185:public void d()
+    204:205:public u.aly.bf a(java.lang.String)
+    209:210:public void g()
+    231:232:public u.aly.bf a(u.aly.bd)
+    236:237:public void j()
+    254:254:public u.aly.bf$e c(int)
+    311:316:private void a(java.io.ObjectOutputStream)
+    322:328:private void a(java.io.ObjectInputStream)
+    23:23:public synthetic u.aly.bp p()
+    23:23:public synthetic u.aly.bw b(int)
+u.aly.bf$e:
+    65:73:public static u.aly.bf$e a(int)
+    82:85:public static u.aly.bf$e b(int)
+    93:93:public static u.aly.bf$e a(java.lang.String)
+    105:105:public short a()
+u.aly.bg:
+    private static final int x
+    private static final int y
+    private static final int z
+    private static final int A
+    210:223:public bg(java.lang.String,java.lang.String,java.lang.String,int,int,int,java.nio.ByteBuffer,java.lang.String,java.lang.String)
+    228:253:public bg(u.aly.bg)
+    256:256:public u.aly.bg a()
+    261:275:public void b()
+    278:278:public java.lang.String c()
+    287:288:public void d()
+    295:295:public boolean e()
+    305:305:public java.lang.String f()
+    314:315:public void g()
+    322:322:public boolean h()
+    332:332:public java.lang.String i()
+    341:342:public void j()
+    349:349:public boolean k()
+    359:359:public int l()
+    369:370:public void m()
+    385:385:public int o()
+    395:396:public void q()
+    411:411:public int s()
+    421:422:public void t()
+    437:438:public byte[] v()
+    442:442:public java.nio.ByteBuffer w()
+    456:457:public void x()
+    464:464:public boolean y()
+    474:474:public java.lang.String z()
+    483:484:public void A()
+    491:491:public boolean B()
+    501:501:public java.lang.String C()
+    510:511:public void D()
+    518:518:public boolean E()
+    528:528:public int F()
+    538:539:public void G()
+    554:554:public u.aly.bg$e f(int)
+    685:690:private void a(java.io.ObjectOutputStream)
+    696:702:private void a(java.io.ObjectInputStream)
+    24:24:public synthetic u.aly.bp p()
+    24:24:public synthetic u.aly.bw b(int)
+u.aly.bg$e:
+    90:112:public static u.aly.bg$e a(int)
+    121:124:public static u.aly.bg$e b(int)
+    132:132:public static u.aly.bg$e a(java.lang.String)
+    144:144:public short a()
+u.aly.bh:
+    25:25:public bh()
+u.aly.bh$a:
+    41:41:public boolean a()
+u.aly.bi:
+    17:17:public bi()
+    31:33:public static byte[] a(java.lang.String,java.lang.String)
+    89:95:public static java.lang.String a(byte[],java.lang.String)
+    99:116:public static byte[] b(byte[])
+u.aly.bj:
+    public static final java.lang.String b
+    public static final java.lang.String c
+    public static final java.lang.String d
+    public static final int e
+    private static final java.lang.String f
+    80:88:public static boolean a(java.lang.String,android.content.Context)
+    99:100:public static boolean a(android.content.Context)
+    110:113:public static boolean b(android.content.Context)
+    187:195:public static java.lang.String e(android.content.Context)
+    207:215:public static java.lang.String[] a(javax.microedition.khronos.opengles.GL10)
+    395:400:public static java.lang.String j(android.content.Context)
+    433:444:public static java.lang.String l(android.content.Context)
+    523:526:public static boolean b()
+    690:704:public static java.lang.String t(android.content.Context)
+    755:766:public static java.lang.String v(android.content.Context)
+    831:835:public static java.lang.String x(android.content.Context)
+    845:847:public static java.lang.String a(java.util.Date)
+    856:859:public static java.lang.String c()
+    871:875:public static java.util.Date a(java.lang.String)
+    889:897:public static int a(java.util.Date,java.util.Date)
+    1019:1021:public static boolean C(android.content.Context)
+u.aly.bk:
+    private static final java.lang.String b
+    32:32:public bk()
+    101:120:public static java.lang.String a(java.io.File)
+    142:154:public static java.lang.String a(android.content.Context,long)
+    158:177:public static java.lang.String c(java.lang.String)
+    188:191:public static void a(android.content.Context,java.lang.String)
+    203:209:public static boolean b(android.content.Context,java.lang.String)
+    220:220:public static boolean d(java.lang.String)
+    233:237:public static boolean e(java.lang.String)
+    247:248:public static java.lang.String a()
+    257:260:public static java.lang.String a(java.util.Date)
+u.aly.bl:
+    21:23:private bl()
+    65:70:public static varargs void a(java.util.Locale,java.lang.String,java.lang.Object[])
+    106:111:public static varargs void b(java.util.Locale,java.lang.String,java.lang.Object[])
+    147:152:public static varargs void c(java.util.Locale,java.lang.String,java.lang.Object[])
+    188:193:public static varargs void d(java.util.Locale,java.lang.String,java.lang.Object[])
+    229:234:public static varargs void e(java.util.Locale,java.lang.String,java.lang.Object[])
+    310:324:public static varargs void b(java.lang.String,java.lang.Object[])
+    399:412:public static varargs void d(java.lang.String,java.lang.Object[])
+    461:462:public static void a(java.lang.Throwable)
+    465:466:public static void b(java.lang.Throwable)
+    469:470:public static void c(java.lang.Throwable)
+    473:474:public static void d(java.lang.Throwable)
+    487:488:public static void b(java.lang.String,java.lang.Throwable)
+    491:492:public static void c(java.lang.String,java.lang.Throwable)
+    495:496:public static void d(java.lang.String,java.lang.Throwable)
+    506:507:public static void a(java.lang.String)
+    528:549:public static void a(java.lang.String,java.lang.String,java.lang.Throwable)
+u.aly.bm:
+    25:25:public bm()
+    37:38:public static final void a(int,byte[])
+    52:56:public static final void a(int,byte[],int)
+    67:67:public static final int a(byte[])
+    81:81:public static final int a(byte[],int)
+    94:94:public static final boolean a(short,int)
+    102:102:public static final boolean a(long,int)
+    109:109:public static final byte b(byte,int)
+    113:113:public static final short b(short,int)
+    121:121:public static final long b(long,int)
+    132:132:public static final short a(short,int,boolean)
+    143:146:public static final long a(long,int,boolean)
+u.aly.bn:
+    53:53:public short b()
+u.aly.bo
+u.aly.bp:
+    public abstract u.aly.bw b(int)
+    public abstract u.aly.bp p()
+    public abstract void b()
+u.aly.bq:
+    34:34:private bq()
+    39:50:public static int a(java.lang.Object,java.lang.Object)
+    55:55:public static int a(boolean,boolean)
+    69:74:public static int a(short,short)
+    89:94:public static int a(long,long)
+    99:104:public static int a(double,double)
+    109:109:public static int a(java.lang.String,java.lang.String)
+    249:254:public static byte[] a(java.nio.ByteBuffer)
+    258:261:public static boolean b(java.nio.ByteBuffer)
+    265:271:public static int a(java.nio.ByteBuffer,byte[],int)
+    275:281:public static java.nio.ByteBuffer c(java.nio.ByteBuffer)
+    285:295:public static java.nio.ByteBuffer d(java.nio.ByteBuffer)
+    299:305:public static byte[] a(byte[])
+u.aly.br
+u.aly.bs:
+    88:94:public void a(u.aly.bp,java.lang.String,java.lang.String)
+    107:117:public varargs void a(u.aly.bp,byte[],u.aly.bw,u.aly.bw[])
+    128:128:public varargs java.lang.Boolean a(byte[],u.aly.bw,u.aly.bw[])
+    140:140:public varargs java.lang.Byte b(byte[],u.aly.bw,u.aly.bw[])
+    152:152:public varargs java.lang.Double c(byte[],u.aly.bw,u.aly.bw[])
+    164:164:public varargs java.lang.Short d(byte[],u.aly.bw,u.aly.bw[])
+    176:176:public varargs java.lang.Integer e(byte[],u.aly.bw,u.aly.bw[])
+    188:188:public varargs java.lang.Long f(byte[],u.aly.bw,u.aly.bw[])
+    200:200:public varargs java.lang.String g(byte[],u.aly.bw,u.aly.bw[])
+    213:213:public varargs java.nio.ByteBuffer h(byte[],u.aly.bw,u.aly.bw[])
+    226:236:public varargs java.lang.Short i(byte[],u.aly.bw,u.aly.bw[])
+    242:293:private varargs java.lang.Object a(byte,byte[],u.aly.bw,u.aly.bw[])
+    298:335:private varargs u.aly.cj j(byte[],u.aly.bw,u.aly.bw[])
+    346:347:public void a(u.aly.bp,java.lang.String)
+u.aly.bt
+u.aly.bu
+u.aly.bv:
+    private static final long a
+    43:44:public bv(java.lang.String,java.lang.Throwable)
+u.aly.bw
+u.aly.bx
+u.aly.by:
+    97:99:public java.lang.String a(u.aly.bp,java.lang.String)
+    112:112:public java.lang.String b(u.aly.bp)
+u.aly.bz
+u.aly.bz$1
+u.aly.bz$a
+u.aly.bz$b
+u.aly.bz$c
+u.aly.bz$d
+u.aly.c$a:
+    23:23:private c$a()
+u.aly.ca
+u.aly.cb:
+    63:72:public static java.util.Map a(java.lang.Class)
+u.aly.cc:
+    47:52:public cc(byte,java.lang.String)
+    55:55:public boolean a()
+    59:59:public java.lang.String b()
+    63:63:public boolean c()
+    67:67:public boolean d()
+    71:71:public boolean e()
+u.aly.cf
+u.aly.ch:
+    protected static final int a
+    protected static final int b
+    85:86:public ch(u.aly.dc)
+    95:105:public void a(u.aly.cm)
+    107:107:public void a()
+    140:142:public void a(u.aly.cs)
+    144:144:public void g()
+    147:148:public void a(boolean)
+    186:187:public void a(double)
+    210:221:public u.aly.cm h()
+    225:225:public void i()
+u.aly.ci:
+    private static final byte h
+    private static final byte i
+    private static final byte j
+    private static final byte k
+    private static final int l
+    152:153:public ci(u.aly.dc)
+    170:174:public void a(u.aly.cm)
+    266:267:public void a(u.aly.cs)
+    276:284:public void a(boolean)
+    318:321:public void a(double)
+    353:353:public void a()
+    356:356:public void g()
+    437:445:private void a(long,byte[],int)
+    473:485:public u.aly.cm h()
+    701:701:public void i()
+u.aly.ci$a:
+    74:76:public ci$a(int)
+u.aly.ci$b
+u.aly.cj:
+    46:46:public boolean a(u.aly.cj)
+u.aly.cm
+u.aly.cn
+u.aly.co:
+    41:41:private co()
+    59:59:public u.aly.dc C()
+    public abstract void a(u.aly.cm)
+    public abstract void a()
+    public abstract void a(u.aly.cs)
+    public abstract void g()
+    public abstract void a(boolean)
+    public abstract void a(byte)
+    public abstract void a(short)
+    public abstract void a(double)
+    public abstract u.aly.cm h()
+    public abstract void i()
+u.aly.cp:
+    private static final long h
+    public static final int a
+    public static final int b
+    public static final int c
+    public static final int d
+    public static final int e
+    public static final int f
+    46:48:public cp(int)
+    51:53:public cp(int,java.lang.String)
+    60:62:public cp(int,java.lang.Throwable)
+    65:66:public cp(java.lang.Throwable)
+    69:70:public cp(java.lang.String,java.lang.Throwable)
+    73:75:public cp(int,java.lang.String,java.lang.Throwable)
+    78:78:public int a()
+u.aly.cr:
+    29:29:public cr()
+    49:50:public static void a(int)
+    171:194:public static u.aly.cq a(byte[],u.aly.cq)
+u.aly.cu:
+    41:42:public cu(u.aly.dc)
+u.aly.cu$a
+u.aly.cv
+u.aly.d:
+    public static final java.lang.String a
+    public static final java.lang.String b
+    public static final java.lang.String c
+    public static final int d
+    public static final java.lang.String e
+    public static final java.lang.String f
+    11:11:public d()
+    133:142:public static java.util.List b(java.util.List)
+u.aly.d$a
+u.aly.d$a$a
+u.aly.d$a$b
+u.aly.d$b
+u.aly.d$b$a
+u.aly.d$b$b
+u.aly.d$c
+u.aly.d$c$a
+u.aly.d$c$b
+u.aly.da:
+    52:54:public da(java.io.InputStream)
+    71:74:public da(java.io.InputStream,java.io.OutputStream)
+    83:83:public boolean a()
+    89:89:public void b()
+    95:111:public void c()
+    150:158:public void d()
+u.aly.db:
+    30:32:public db(byte[])
+    34:36:public db(byte[],int,int)
+    53:53:public void c()
+    57:57:public boolean a()
+    61:61:public void b()
+u.aly.dc:
+    public abstract boolean a()
+    42:42:public boolean i()
+    public abstract void b()
+    public abstract void c()
+    125:125:public void d()
+u.aly.dd:
+    private static final long g
+    public static final int a
+    public static final int b
+    public static final int c
+    public static final int d
+    public static final int e
+    64:65:public dd(java.lang.Throwable)
+    68:69:public dd(java.lang.String,java.lang.Throwable)
+    72:74:public dd(int,java.lang.String,java.lang.Throwable)
+    77:77:public int a()
+u.aly.de
+u.aly.f:
+    27:27:public boolean a()
+    31:32:public void a(boolean)
+u.aly.g
+u.aly.h:
+    private static final long a
+    94:94:public long b()
+    98:99:public void a(long)
+    113:136:public void a(u.aly.f,u.aly.l)
+    146:150:public void a(u.aly.f,java.util.List,u.aly.l)
+    159:162:public boolean a(java.util.List)
+    170:176:public void a(u.aly.f)
+    179:182:public int c()
+    193:203:public boolean a(java.util.List,java.util.List)
+    218:239:public void a(u.aly.f,u.aly.l,java.util.List,java.util.List)
+    246:251:private void a(u.aly.f,u.aly.l,java.util.List)
+    21:21:static synthetic java.util.Map a(u.aly.h)
+u.aly.h$1
+u.aly.i:
+    private static final long a
+    32:39:public i(java.util.List,long,long,long,java.util.List,java.lang.String)
+    73:78:public void a(u.aly.f,u.aly.l)
+    88:94:public void a(u.aly.l)
+    117:117:public java.util.List b()
+u.aly.j
+u.aly.k:
+    private static final long a
+    18:19:public k(java.lang.String,long,long)
+    21:26:public k(java.lang.String,long,long,java.lang.String)
+    30:31:public u.aly.k a()
+    35:35:public java.lang.String b()
+    39:40:public void a(java.lang.String)
+    47:48:public void b(java.lang.String)
+    59:62:public u.aly.k a(u.aly.k)
+u.aly.l
+u.aly.m:
+    private static final int i
+    private static final int j
+    103:103:public boolean a()
+    196:245:public void a(u.aly.f,java.util.Map)
+    255:265:private void a(u.aly.l,java.util.List)
+    274:277:private boolean g()
+    285:293:private void h()
+    405:412:private void l()
+    515:516:public void b()
+    38:38:static synthetic u.aly.h a(u.aly.m,u.aly.h)
+    38:38:static synthetic void i(u.aly.m)
+    38:38:static synthetic u.aly.p a(u.aly.m,u.aly.p)
+u.aly.m$12
+u.aly.m$7
+u.aly.m$8
+u.aly.m$9
+u.aly.m$b:
+    40:40:private m$b()
+u.aly.n:
+    40:51:public boolean a(java.lang.String)
+    68:77:public boolean b(java.lang.String)
+    91:106:public boolean a(java.util.List)
+    117:123:private boolean a(java.lang.String,int)
+    151:151:public int d()
+    161:175:public boolean b(java.util.List)
+u.aly.n$a:
+    17:17:private n$a()
+u.aly.o$a:
+    28:28:private o$a()
+u.aly.p:
+    private static final long a
+    36:42:public void a(u.aly.f,java.lang.String)
+    61:62:public void a(java.util.Map)
+    71:82:public boolean a(java.lang.String)
+    92:95:private void b(java.lang.String)
+    103:106:private void c(java.lang.String)
+    114:119:public void a(u.aly.k)
+    127:130:private void b(u.aly.k)
+u.aly.q:
+    public static final int a
+    private static final int b
+    private static final int c
+    private static final int d
+    14:14:public q()
+u.aly.r:
+    81:82:public void a(u.aly.bb)
+u.aly.s:
+    private static final java.lang.String a
+u.aly.u:
+    private static final java.lang.String a
+u.aly.v:
+    81:82:public void a(long)
+    145:145:public java.lang.String c()
+u.aly.v$a:
+    253:254:public void c(java.lang.String)
+u.aly.w:
+    private static final java.lang.String a
+u.aly.x:
+    private static final java.lang.String a
+    259:260:public boolean e()
+u.aly.x$a:
+    281:283:x$a(u.aly.bd)
+    312:315:public java.lang.String a(java.lang.String)
+    325:328:public java.lang.String b(java.lang.String)
+u.aly.y:
+    private static final java.lang.String a
+u.aly.z:
+    private static final java.lang.String a
