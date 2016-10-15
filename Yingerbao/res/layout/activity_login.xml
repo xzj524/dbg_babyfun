@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/userloginbackground"
     android:alpha="80"
-    tools:context="com.aizi.huxibao.LoginActivity" >
+    tools:context="com.aizi.yingerbao.LoginActivity" >
 
     <!-- Login progress -->
 

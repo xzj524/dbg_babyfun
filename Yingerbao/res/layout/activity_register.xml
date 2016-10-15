@@ -11,7 +11,7 @@
     tools:context="${relativePackage}.${activityClass}" >
     
     
-     <com.aizi.xiaohuhu.view.TopBarView  
+     <com.aizi.yingerbao.view.TopBarView  
         android:id="@+id/registertopbar"  
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  

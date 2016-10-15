@@ -37,53 +37,53 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.aizi.huxibao.MainActivity"
+            android:name="com.aizi.yingerbao.MainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.SplashActivity"
+            android:name="com.aizi.yingerbao.SplashActivity"
             android:label="@string/title_activity_splash"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.BabyFunActivity"
+            android:name="com.aizi.yingerbao.BabyFunActivity"
             android:label="@string/title_activity_xiaohuhu"
             android:screenOrientation="portrait"  >
 
         </activity>
         <activity
-            android:name="com.aizi.huxibao.DeviceListActivity"
+            android:name="com.aizi.yingerbao.DeviceListActivity"
             android:label="@string/title_activity_device_list"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
 
         <service
-            android:name="com.aizi.xiaohuhu.service.BluetoothService"
+            android:name="com.aizi.yingerbao.service.BluetoothService"
             android:enabled="true" />
         <service
-            android:name="com.aizi.xiaohuhu.service.ScanDevicesService"
+            android:name="com.aizi.yingerbao.service.ScanDevicesService"
             android:enabled="true" />
 
         <activity
-            android:name="com.aizi.huxibao.BabyStatusActivity"
+            android:name="com.aizi.yingerbao.BabyStatusActivity"
             android:label="@string/title_activity_baby_status" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.TestActivity"
+            android:name="com.aizi.yingerbao.TestActivity"
             android:label="@string/title_activity_test" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.BabyBreathActivity"
+            android:name="com.aizi.yingerbao.BabyBreathActivity"
             android:label="@string/title_activity_baby_breath"
             android:screenOrientation="portrait"  >
         </activity>
 
-        <receiver android:name="com.aizi.xiaohuhu.receiver.BabyStatusReceiver" >
+        <receiver android:name="com.aizi.yingerbao.receiver.BabyStatusReceiver" >
             <intent-filter>
                 <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_SERVICES_DISCOVERED" />
                 <action android:name="com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE" />
@@ -101,27 +101,27 @@
         </meta-data>
 
         <activity
-            android:name="com.aizi.huxibao.CriticalActivity"
+            android:name="com.aizi.yingerbao.CriticalActivity"
             android:label="@string/title_activity_critical"
             android:screenOrientation="portrait"  >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.CalendarActivity"
+            android:name="com.aizi.yingerbao.CalendarActivity"
             android:label="@string/title_activity_calendar"
             android:screenOrientation="portrait"  >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.BabyExplainActivity"
+            android:name="com.aizi.yingerbao.BabyExplainActivity"
             android:label="@string/title_activity_baby_explain" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.SleepProblemActivity"
+            android:name="com.aizi.yingerbao.SleepProblemActivity"
             android:label="@string/title_activity_sleep_problem"
             android:screenOrientation="portrait"  >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.SleepAnalysisActivity"
+            android:name="com.aizi.yingerbao.SleepAnalysisActivity"
             android:label="@string/title_activity_sleep_analysis"
             android:screenOrientation="portrait"  >
         </activity>
@@ -131,22 +131,22 @@
             android:value="zGOG68GTMiC9vzx6dDa5kVEhg5S9i0x9" />
 
         <activity
-            android:name="com.aizi.huxibao.EmergencyMapActivity"
+            android:name="com.aizi.yingerbao.EmergencyMapActivity"
             android:label="@string/title_activity_emergency_map"
             android:screenOrientation="portrait"  >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.BabyEmergencyActivity"
+            android:name="com.aizi.yingerbao.BabyEmergencyActivity"
             android:label="@string/title_activity_baby_emergency" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.EmergencyPhoneNumberActivity"
+            android:name="com.aizi.yingerbao.EmergencyPhoneNumberActivity"
             android:label="@string/title_activity_emergency_phone_number" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.login.LoginActivity"
+            android:name="com.aizi.yingerbao.login.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible"
             android:screenOrientation="portrait"  >
@@ -160,17 +160,17 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
              />
         <activity
-            android:name="com.aizi.xiaohuhu.login.ResetPasswordActivity"
+            android:name="com.aizi.yingerbao.login.ResetPasswordActivity"
             android:label="@string/title_activity_reset_password" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.xiaohuhu.login.RegisterActivity"
+            android:name="com.aizi.yingerbao.login.RegisterActivity"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.huxibao.XiaoHuhuActivity"
+            android:name="com.aizi.yingerbao.XiaoHuhuActivity"
             android:label="@string/title_activity_xiao_huhu"
             android:screenOrientation="portrait"  >
             <intent-filter>

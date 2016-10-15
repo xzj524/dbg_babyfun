@@ -6,7 +6,7 @@
     android:background="@color/pink"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <com.aizi.xiaohuhu.view.TopBarView  
+    <com.aizi.yingerbao.view.TopBarView  
         android:id="@+id/breathtopbar"  
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
@@ -30,7 +30,7 @@
          
      <fragment 
         android:id="@+id/babybreathChartFragment"
-        android:name="com.aizi.xiaohuhu.chart.BreathChart"
+        android:name="com.aizi.yingerbao.chart.BreathChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"/>
@@ -107,7 +107,7 @@
       
      <fragment 
 	    android:id="@+id/babybreathstopChartFragment"
-	    android:name="com.aizi.xiaohuhu.chart.BreathStopChart"
+	    android:name="com.aizi.yingerbao.chart.BreathStopChart"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_marginTop="20dp"/>

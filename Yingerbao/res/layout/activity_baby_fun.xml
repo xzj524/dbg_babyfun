@@ -7,7 +7,7 @@
     tools:context="${relativePackage}.${activityClass}" >
     
         
-     <com.aizi.xiaohuhu.view.TopBarView  
+     <com.aizi.yingerbao.view.TopBarView  
         android:id="@+id/hometopbar"  
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
@@ -31,7 +31,7 @@
 		       android:orientation="vertical">
 		     <fragment
 		        android:id="@+id/deviceConnectFragment"
-		        android:name="com.aizi.xiaohuhu.ui.component.main.DeviceConnectStatusFragment"
+		        android:name="com.aizi.yingerbao.ui.component.main.DeviceConnectStatusFragment"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content" />
 	      

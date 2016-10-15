@@ -8,7 +8,7 @@
 
    <fragment 
         android:id="@+id/topViewFragment"
-        android:name="com.aizi.xiaohuhu.titlefragment.BabyStatusTopViewFragment"
+        android:name="com.aizi.yingerbao.titlefragment.BabyStatusTopViewFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
          android:layout_marginTop="20dp"/> 
@@ -27,14 +27,14 @@
            
            <fragment 
 		        android:id="@+id/babySleepPieChartFragment"
-		        android:name="com.aizi.xiaohuhu.chart.SleepyPieChart"
+		        android:name="com.aizi.yingerbao.chart.SleepyPieChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:tag="piechart"/>
 	           
 	      <fragment 
 		        android:id="@+id/babySleepChartFragment"
-		        android:name="com.aizi.xiaohuhu.chart.SleepyChart"
+		        android:name="com.aizi.yingerbao.chart.SleepyChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"/>
 	      
@@ -42,7 +42,7 @@
 	       
 	        <fragment 
 		        android:id="@+id/babytemperatureChartFragment"
-		        android:name="com.aizi.xiaohuhu.chart.TemperatureChart"
+		        android:name="com.aizi.yingerbao.chart.TemperatureChart"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="20dp"/>
