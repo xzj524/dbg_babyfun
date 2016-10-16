@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -170,7 +171,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.aizi.yingerbao.XiaoHuhuActivity"
+            android:name="com.aizi.yingerbao.YingerBaoActivity"
             android:label="@string/title_activity_xiao_huhu"
             android:screenOrientation="portrait"  >
             <intent-filter>
@@ -179,6 +180,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
            </intent-filter>
         </activity>
+        
+         <!-- 360 auto update sdk -->
+        <activity
+		    android:name="com.qihoo.appstore.common.updatesdk.lib.UpdateTipDialogActivity"
+		    android:configChanges="keyboardHidden|orientation|screenSize"
+		    android:exported="false"
+		    android:screenOrientation="portrait"
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        
+        <service 
+			android:name="com.qihoo.appstore.updatelib.CheckUpdateService" 
+			android:exported="false" />
+        
+        
         
         <meta-data android:value="57ca68af67e58ebc68003313" android:name="UMENG_APPKEY"></meta-data>
 		<meta-data android:value="360" android:name="UMENG_CHANNEL"/>

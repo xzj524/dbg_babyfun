@@ -13,7 +13,7 @@ import com.aizi.yingerbao.BabyStatusActivity;
 import com.aizi.yingerbao.CriticalActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.TestActivity;
-import com.aizi.yingerbao.XiaoHuhuActivity;
+import com.aizi.yingerbao.YingerBaoActivity;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.login.LoginActivity;
@@ -139,7 +139,7 @@ public class SlidingMenuHelper {
                             useraccountinfo );
                 }*/
                 
-                Intent intent = new Intent(mActivity.getApplicationContext(), XiaoHuhuActivity.class);
+                Intent intent = new Intent(mActivity.getApplicationContext(), YingerBaoActivity.class);
                 mActivity.startActivity(intent);
                 
                // AsyncDeviceFactory.getInstance(mActivity.getApplicationContext()).getBreathStopInfo();

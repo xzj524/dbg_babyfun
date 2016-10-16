@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizi.yingerbao.R;
-import com.aizi.yingerbao.XiaoHuhuActivity;
+import com.aizi.yingerbao.YingerBaoActivity;
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
@@ -352,7 +352,7 @@ public class DeviceConnectStatusFragment extends Fragment{
         } else if (action.equals(Constant.DATA_TRANSFER_COMPLETED)) {
             setCurSyncDataSucceed();
             doUpdateStatusClick();
-            Intent intent = new Intent(getActivity().getApplicationContext(), XiaoHuhuActivity.class);
+            Intent intent = new Intent(getActivity().getApplicationContext(), YingerBaoActivity.class);
             startActivity(intent);
         } else if (action.equals(Constant.BLUETOOTH_SCAN_FOUND)) {
             String deviceAddress = PrivateParams.getSPString(getActivity().getApplicationContext(),

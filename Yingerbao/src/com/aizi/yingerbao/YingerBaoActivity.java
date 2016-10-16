@@ -35,10 +35,11 @@ import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
+import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 
 import de.greenrobot.event.EventBus;
 
-public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarClickListener{
+public class YingerBaoActivity extends FragmentActivity  implements onTitleBarClickListener{
     
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();  
     private FragmentAdapter mFragmentAdapter;  
@@ -76,6 +77,12 @@ public class XiaoHuhuActivity extends FragmentActivity  implements onTitleBarCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xiao_huhu);
+        
+        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
+        UpdateHelper.getInstance().setDebugMode(true);
+        long intervalMillis = 10 * 1000L;           //第一次调用startUpdateSilent出现弹窗后，如果10秒内进行第二次调用不会查询更新
+        UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
+        //UpdateHelper.getInstance().manualUpdate(getPackageName());
         
         topbar = (TopBarView) findViewById(R.id.xiaohuhutopbar);
         topbar.setClickListener(this);
