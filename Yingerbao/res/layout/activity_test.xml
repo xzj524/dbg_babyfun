@@ -4,9 +4,7 @@
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}" >
     
-    
-    
-      <LinearLayout
+    <LinearLayout
         android:id="@+id/logtip_fra"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -45,7 +43,6 @@
          android:layout_width="match_parent"
          android:layout_height="300dp"
 	     android:layout_marginTop="40dp"
-	     android:layout_marginBottom="20dip"
 	     android:layout_marginLeft="10dip"
 	     android:layout_marginRight="10dip"
 	     android:background="#707070"
@@ -55,35 +52,23 @@
     </ListView>
     
     
-   <!--  
-     <ScrollView
+    <ScrollView
         android:id="@+id/scroll_text"
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:background="#707070" >
-        
-         
-         
-
-        <TextView
-            android:id="@+id/text_log"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="3dip"
-            android:textIsSelectable="true" />
-    </ScrollView> -->
-
-    <LinearLayout
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dip"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
-        android:orientation="vertical" 
         android:layout_below="@id/listMessage">
+        
+        <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="10dip"
+	        android:layout_marginRight="10dip"
+	        android:orientation="vertical" 
+	        android:layout_below="@id/listMessage">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -96,14 +81,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1.0"
-                android:text="获取未同步数据" />
+                android:text="获取未同步数据"
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/btn_getalldata"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="获取所有数据" />
+                android:text="获取所有数据" 
+                android:textSize="15sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -117,14 +104,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1.0"
-                android:text="启动发送呼吸数据" />
+                android:text="启动发送呼吸数据" 
+                android:textSize="15sp"/>
 
             <Button
                 android:id="@+id/btn_stopbreath"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="停止发送呼吸数据" />
+                android:text="停止发送呼吸数据" 
+                android:textSize="15sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -138,19 +127,80 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:layout_marginRight="10dip"
-                android:text="获取呼吸历史数据" />
+                android:text="获取呼吸历史数据" 
+                android:textSize="15sp"/>
 
             <Button
                 android:id="@+id/btn_getrealtimedata"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="请求实时数据" />
+                android:text="请求实时数据"
+                android:textSize="15sp" />
         </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/btn_getexceptionevent"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:layout_marginRight="10dip"
+                android:text="获取异常事件" 
+                android:textSize="15sp"/>
+            
+              <Button
+                android:id="@+id/btn_getbreathstopevent"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:layout_marginRight="10dip"
+                android:text="获取呼吸停滞事件"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+        
+        
+        
+         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_getdevicetemp"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:layout_marginRight="10dip"
+                android:text="获取温度" 
+                android:textSize="15sp"/>
+            
+               <Button
+                android:id="@+id/btn_getdevicetime"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:layout_marginRight="10dip"
+                android:text="获取设备时间" 
+                android:textSize="15sp"/>
+            
+
+        </LinearLayout>
+            </LinearLayout>
+         
+         </ScrollView>  
+
 
     
+
+
+
+<!--         </ScrollView>  -->
        
 
 </RelativeLayout>

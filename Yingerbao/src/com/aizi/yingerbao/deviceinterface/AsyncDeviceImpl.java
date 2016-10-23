@@ -172,4 +172,17 @@ public class AsyncDeviceImpl implements AsyncDevice {
         };
         return getDispatcher().dispatch(task);
     }
+
+    @Override
+    public Future<?> getExceptionEvent() {
+        // TODO Auto-generated method stub
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.getExceptionEvent();
+            }
+        };
+        return getDispatcher().dispatch(task);
+    }
 }

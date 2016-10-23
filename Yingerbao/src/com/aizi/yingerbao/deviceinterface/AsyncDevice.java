@@ -15,6 +15,7 @@ public interface AsyncDevice {
      */
     Future<?> setDeviceTime();
 
+    /***********获取内容接口*************/
     /**
      * @Description: 获取设备时间
      * @param dvtime
@@ -70,6 +71,14 @@ public interface AsyncDevice {
      * @return
      */
     Future<?> getBreathStopInfo();
+    
+    /**
+     * @Description: 获取异常事件内容
+     * @param dvtime
+     * @param listener
+     * @return
+     */
+    Future<?> getExceptionEvent();
     
     
     

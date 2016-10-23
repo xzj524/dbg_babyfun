@@ -13,7 +13,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
@@ -21,6 +20,7 @@ import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.sleepdatabase.BreathStopInfo;
+import com.aizi.yingerbao.sleepdatabase.ExceptionEvent;
 import com.aizi.yingerbao.sleepdatabase.SleepInfo;
 import com.aizi.yingerbao.sleepdatabase.SleepInfoDatabase;
 import com.aizi.yingerbao.sleepdatabase.TemperatureInfo;
@@ -64,19 +64,13 @@ public class MessageParse {
     private void handleL2Msg(BaseL2Message bMsg) {
         // TODO Auto-generated method stub
         
-        //String l2payload = printHexString(bMsg.payload);
         String l2payload = printHexString(bMsg.toByte());
         SLog.e(TAG, "HEX string l2load1 = " + l2payload);
-        Calendar calendar = Calendar.getInstance();
-        String currentDateTimeString = "[" + calendar.get(Calendar.HOUR) + ":"
-                + calendar.get(Calendar.MINUTE) + ":"
-                + calendar.get(Calendar.SECOND) + ":"
-                + calendar.get(Calendar.MILLISECOND)
-                + "]: ";
-        Utiliy.logToFile(currentDateTimeString + " RECV " + l2payload);
+        Utiliy.logToFile(" L2 " + " RECV " + l2payload);// 写入本地日志文件
+        
         Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
-        intent.putExtra("transferdata", l2payload);
-        EventBus.getDefault().post(intent); 
+        intent.putExtra("transferdata", "L2 " + l2payload);
+        EventBus.getDefault().post(intent); // 显示在界面上
         
         List<KeyPayload> params = getKeyPayloadList(bMsg.payload);
         if (params != null) {
@@ -94,10 +88,9 @@ public class MessageParse {
             case Constant.COMMAND_ID_MANUFACTURE_TEST:
                 handleManufature(params);
                 break;
-                
             case Constant.COMMAND_ID_NOTIFY:
                 handleNotify(params);
-            break;
+                break;
             default:
                 break;
             }
@@ -153,11 +146,11 @@ public class MessageParse {
             if (kpload.key == 2) { // 接收到实时数据
                 SLog.e(TAG, "receive  realtime data");
                 if (kpload.keyLen == 4) {
-                    acquireTemp(kpload.keyValue); //分析实时温度数据
+                    acquireTemp(kpload.keyValue); // 分析实时温度数据
                     //mBreathStartResult = kpload.keyValue[0] & 0x0f;
                 }
             } else if (kpload.key == 5) {
-                SLog.e(TAG, "receiver data complete " + kpload.keyLen);
+                SLog.e(TAG, "receive data complete " + kpload.keyLen);
                 /*Intent intent = new Intent(Constant.DATA_TRANSFER_COMPLETED);
                 EventBus.getDefault().post(intent); */
                 //handleSleepData(kpload.keyValue);
@@ -174,12 +167,53 @@ public class MessageParse {
                 SLog.e(TAG, "receiver realtime temp data " + + kpload.keyLen);
                 handleRealTimeTemperatureData(kpload.keyValue);
             } 
-            else if (kpload.key == 12) { //呼吸停滞数据
+            else if (kpload.key == 12) { // 呼吸停滞数据
                 SLog.e(TAG, "receiver breath stop data " + + kpload.keyLen);
                 handleBreathStopData(kpload.keyValue);
-            } else if (kpload.key == 13) { //呼吸停滞数据结束
+            } else if (kpload.key == 13) { // 呼吸停滞数据结束
                 SLog.e(TAG, "receiver breath stop data completed " + + kpload.keyLen);
                // handleBreathStopData(kpload.keyValue);
+            } else if (kpload.key == 15) {
+                handleExceptionData(kpload.keyValue);
+            }
+        }
+    }
+
+
+    private void handleExceptionData(byte[] keyValue) {
+        ExceptionEvent exEvent = new ExceptionEvent();
+        String exceptionlog = printHexString(keyValue);
+        SLog.e(TAG, "Exception Log = " + exceptionlog);
+        int exceptionlength = keyValue.length;
+        if (exceptionlength % 8 == 0) {
+            for (int i = 0; i < exceptionlength/8; i++) {
+                exEvent.mExceptionYear = (keyValue[i*8] & 0xfc) >> 2;
+                exEvent.mExceptionMonth = ((keyValue[i*8] & 0x03) << 2) | ((keyValue[1+i*8] & 0xc0) >> 6);
+                exEvent.mExceptionDay = (keyValue[1+i*8] & 0x3e) >> 1;
+                exEvent.mExceptionHour = ((keyValue[1+i*8] & 0x01)  << 4) | ((keyValue[2+i*8] & 0xf0) >> 4);
+                exEvent.mExceptionMinute = ((keyValue[2+i*8] & 0x0f) << 2) | ((keyValue[3+i*8] & 0xc0) >> 6);
+                exEvent.mExceptionSecond = (keyValue[3+i*8] & 0x3f);
+                
+                exEvent.mExceptionType = keyValue[4+i*8] & 0xff;
+                exEvent.mExceptionData1 = keyValue[5+i*8] & 0xff;
+                exEvent.mExceptionData2 = keyValue[6+i*8] & 0xff;
+                exEvent.mExceptionData3 = keyValue[7+i*8] & 0xff;
+            
+                String logStr = "Exception occured at " + exEvent.mExceptionYear 
+                            + "-" + exEvent.mExceptionMonth
+                            + "-" + exEvent.mExceptionDay
+                            + "-" + exEvent.mExceptionHour
+                            + "-" + exEvent.mExceptionMinute
+                            + "-" + exEvent.mExceptionSecond
+                            + " : " + exEvent.mExceptionType
+                            + "-" + exEvent.mExceptionData1
+                            + "-" + exEvent.mExceptionData2
+                            + "-" + exEvent.mExceptionData3;
+                Utiliy.logToFile(logStr);
+                SLog.e(TAG, "Exception Event = " + logStr);
+                Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+                intent.putExtra("transferdata", logStr);
+                EventBus.getDefault().post(intent); // 显示在界面上  
             }
         }
     }
@@ -209,13 +243,16 @@ public class MessageParse {
         // TODO Auto-generated method stub
         BreathStopInfo breathStopInfo = new BreathStopInfo();
         int breathstoplength = keyValue.length;
+        boolean breathalarm = false;
         if (breathstoplength % 4 == 0) {
             for (int i = 0; i < keyValue.length/4; i++) {
                 int isAlarm = (keyValue[i*4] & 0x80) >> 7;
                 if (isAlarm == 1) {
                     breathStopInfo.mBreathIsAlarm = isAlarm;
+                    breathalarm = true;
                 } else {
                     breathStopInfo.mBreathIsAlarm = 0;
+                    breathalarm = false;
                 }
                 
                 int year = (keyValue[i*4] & 0x7c) >> 2;
@@ -239,6 +276,16 @@ public class MessageParse {
                 breathStopInfo.mBreathHour = hour;
                 breathStopInfo.mBreathMinute = minu;
                 breathStopInfo.mBreathSecond = second;
+                
+                String breathstop = "Breath Stop Info : " 
+                                   + breathStopInfo.mBreathYear + "-" 
+                                   + breathStopInfo.mBreathMonth + "-"
+                                   + breathStopInfo.mBreathDay + "-"
+                                   + breathStopInfo.mBreathHour + "-"
+                                   + breathStopInfo.mBreathMinute + "-"
+                                   + breathStopInfo.mBreathSecond 
+                                   + " BreathAlarm = " + breathalarm; 
+                Utiliy.dataToFile(breathstop);
                 SleepInfoDatabase.insertBreathInfo(mContext, breathStopInfo);
             }
         }
@@ -285,7 +332,6 @@ public class MessageParse {
         temperatureinfo.mTemperatureDay = day;
         
         for (int i = 0; i < tempcount; i++) {
-           // SLog.e(TAG, "Temp value = " + keyValue[6+i]);
             
             int PNValue = (keyValue[6+i*2] & 0x80) >> 7;
             int tempHigh = keyValue[6+i*2] & 0x7f;
@@ -304,11 +350,13 @@ public class MessageParse {
             temperatureinfo.mTemperatureValue = tempString;
             temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
             
+            String tempinfo = "Time :" + temperatureinfo.mTemperatureMinute + " tempValue = " 
+                              + temperatureinfo.mTemperatureValue;  
+            Utiliy.dataToFile(tempinfo);
+            Utiliy.temperatureToFile(temperatureinfo.mTemperatureValue + "");
+            
             SleepInfoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
         }
-        
-        
-        
     }
 
 

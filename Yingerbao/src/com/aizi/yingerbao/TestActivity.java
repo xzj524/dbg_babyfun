@@ -1,6 +1,8 @@
 package com.aizi.yingerbao;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
@@ -34,6 +35,10 @@ public class TestActivity extends Activity {
     Button mGetBreathHistoryData;
     Button mGetRealTimeData;
     Button mGetClearLog;
+    Button mGetExceptionEvent;
+    Button mGetBreathStopEvent;
+    Button mGetTemperatureEvent;
+    Button mGetDeviceTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,6 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
               
             }
@@ -73,7 +77,6 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getAllSyncInfo();
                 
             }
@@ -84,7 +87,6 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
                 
             }
@@ -95,7 +97,6 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
                
             }
@@ -106,7 +107,6 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
               
             }
@@ -118,19 +118,67 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeData();
             }
         });
         
+        mGetExceptionEvent = (Button) findViewById(R.id.btn_getexceptionevent);
+        mGetExceptionEvent.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getExceptionEvent();
+            }
+        });
         
-       
+        
+        mGetBreathStopEvent = (Button) findViewById(R.id.btn_getbreathstopevent);
+        mGetBreathStopEvent.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
+            }
+        });
+        
+        
+        mGetTemperatureEvent = (Button) findViewById(R.id.btn_getdevicetemp);
+        mGetTemperatureEvent.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
+   /*             String tempinfo = "30";  
+                Utiliy.temperatureToFile(tempinfo);
+                
+                String breathstop = "Breath Stop Info : " 
+                        + "2016" + "-" 
+                        + "10" + "-"
+                        + "22" + "-"
+                        + "21" + "-"
+                        + "27" + "-"
+                        + "10" 
+                        + " BreathAlarm = " + true; 
+                Utiliy.dataToFile(breathstop);*/
+            }
+        });
+        
+        
+        mGetDeviceTime = (Button) findViewById(R.id.btn_getdevicetime);
+        mGetDeviceTime.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
+            }
+        });
     }
     
     public void onEventMainThread(Intent event) {  
         
+        String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
         Calendar calendar = Calendar.getInstance();
-        String currentDateTimeString = "[" + calendar.get(Calendar.HOUR) + ":"
+        String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
                 + calendar.get(Calendar.MINUTE) + ":"
                 + calendar.get(Calendar.SECOND) + ":"
                 + calendar.get(Calendar.MILLISECOND)
@@ -148,12 +196,11 @@ public class TestActivity extends Activity {
             SLog.e(TAG, "HEX Send string l2load2 = " + transferdata);
             // = DateFormat.getTimeInstance().format(new Date());
             //listAdapter.add(currentDateTimeString + " SEND: "+ transferdata);
-            datalog = currentDateTimeString + " RECV: "+ transferdata;
+            datalog = currentDateTimeString + " SEND: "+ transferdata;
         }
         
         listAdapter.add(datalog);
-        
-        
+
         messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
     } 
     

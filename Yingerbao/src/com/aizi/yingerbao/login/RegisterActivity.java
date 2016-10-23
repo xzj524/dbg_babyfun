@@ -61,7 +61,7 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
         mRegisterButton = (Button) findViewById(R.id.phone_register_button);
         
         
-        SMSSDK.initSDK(this, "16cac73c0585e", "5a43a8be5eaf2786403d854f39ce28f1");
+        SMSSDK.initSDK(this, "18320567edb8c", "099b55f2d0f7a8897a6fd1b70e0d4b55");
         mEventHandler = new EventHandler(){
             
             @Override
@@ -82,10 +82,10 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                         long res = UserAccountDataBase.insertUserAccountInfo(getApplicationContext(), 
                                 useraccountinfo );  
                         if (res != -1) {
-                            Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "该手机号已经注册过", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "该手机号已经注册过", Toast.LENGTH_SHORT).show();
                     }
                     
                    new Thread(new Runnable() {
@@ -96,9 +96,9 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                         try {
                             Thread.sleep(1000);
                             finish();
-                        } catch (InterruptedException e) {
+                        } catch (Exception e) {
                             // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            SLog.e(TAG, e);
                         }
                     }
                 }).start();

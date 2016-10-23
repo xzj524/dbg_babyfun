@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
 
 public class BabyStatusReceiver extends BroadcastReceiver{
@@ -21,11 +22,8 @@ public class BabyStatusReceiver extends BroadcastReceiver{
 
       //*********************//
         if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
-            Log.e(TAG, "ACTION_GATT_SERVICES_DISCOVERED 1");
-            
-            dataInteraction.startNotification(intent);
-          
-            
+            Log.e(TAG, "ACTION_GATT_SERVICES_DISCOVERED 1");     
+            dataInteraction.startNotification(intent);  
         } else if (action.equals(BluetoothService.ACTION_DATA_AVAILABLE)) {
             dataInteraction.setData(intent);
             if (dataStatusInteraction != null) {
@@ -34,7 +32,7 @@ public class BabyStatusReceiver extends BroadcastReceiver{
             
         } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
             dataInteraction.setData(intent);
-            Log.e(TAG, "UartService disconnect 2");
+            SLog.e(TAG, "UartService disconnect 2");
         }
      }
     

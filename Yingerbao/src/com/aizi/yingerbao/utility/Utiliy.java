@@ -119,7 +119,7 @@ public class Utiliy {
             new AlertDialog.Builder(context);
         normalDialog.setIcon(R.drawable.yingerbao_96);
         normalDialog.setTitle("连接设备");
-        normalDialog.setMessage("设备未连接，是否连接设备");
+        normalDialog.setMessage("设备未连接，是否连接设备,\n请先摇动设备保证能够正确连接。");
         normalDialog.setPositiveButton("确定", 
             new DialogInterface.OnClickListener() {
             @Override
@@ -164,7 +164,7 @@ public class Utiliy {
         try {
             String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
             Calendar calendar = Calendar.getInstance();
-            String currentDateTimeString = "[" + calendar.get(Calendar.HOUR) + ":"
+            String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
                     + calendar.get(Calendar.MINUTE) + ":"
                     + calendar.get(Calendar.SECOND) + ":"
                     + calendar.get(Calendar.MILLISECOND)
@@ -187,6 +187,57 @@ public class Utiliy {
         }
     }
 
+    
+    public static synchronized void dataToFile(String logStr) {
+
+        try {
+            String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
+            Calendar calendar = Calendar.getInstance();
+            String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                    + calendar.get(Calendar.MINUTE) + ":"
+                    + calendar.get(Calendar.SECOND) + ":"
+                    + calendar.get(Calendar.MILLISECOND)
+                    + "]: ";
+            String writeStr = time + " " + currentDateTimeString + " " + logStr + "\n\r";
+            String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+            File dir = new File(sdPath + "/" +Constant.EXTERNAL_FILE_DATA);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMdd");
+            Date today = new Date();
+            String date = dateformat.format(today);
+            File logFile = new File(sdPath, Constant.EXTERNAL_FILE_DATA + "/" + "aizi_data_" + date + ".log");
+            FileWriter fw = new FileWriter(logFile, true);
+            fw.write(writeStr);
+            fw.close();
+        } catch (Throwable e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+    
+    public static synchronized void temperatureToFile(String logStr) {
+
+        try {
+
+            String writeStr = logStr + "\n";
+            String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+            File dir = new File(sdPath + "/" +Constant.EXTERNAL_FILE_DATA);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMdd");
+            Date today = new Date();
+            String date = dateformat.format(today);
+            File logFile = new File(sdPath, Constant.EXTERNAL_FILE_DATA + "/" + "aizi_temperature_data_" + date + ".log");
+            FileWriter fw = new FileWriter(logFile, true);
+            fw.write(writeStr);
+            fw.close();
+        } catch (Throwable e) {
+            SLog.e(TAG, e);
+        }
+    }
     
     private static int logEanbled = -1;
 

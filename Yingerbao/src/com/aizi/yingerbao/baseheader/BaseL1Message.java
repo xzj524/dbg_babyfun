@@ -19,7 +19,12 @@ public class BaseL1Message {
     public byte[] tobyte() {
         byte[] arrayByteL1 = null;
         try {
-            arrayByteL1 = new byte[6 + payload.length];
+            if (payload != null) {
+                arrayByteL1 = new byte[6 + payload.length]; 
+            } else {
+                arrayByteL1 = new byte[6]; 
+            }
+            
             if (!isAiziBaseL1Head) {
                 return null;
             }
@@ -38,9 +43,11 @@ public class BaseL1Message {
             arrayByteL1[3] = (byte) (((sequenceId & 0x0f) << 4) & 0xf0);
             arrayByteL1[4] = (byte) ((CRC16 & 0xff00) >> 8);
             arrayByteL1[5] = (byte) (CRC16 & 0xff);
-            System.arraycopy(payload, 0, arrayByteL1, 6, payload.length);
+            if (payload != null) {
+                System.arraycopy(payload, 0, arrayByteL1, 6, payload.length);
+            }
+            
         } catch (Exception e) {
-            // TODO: handle exception
             SLog.e(TAG, e);
         }
        

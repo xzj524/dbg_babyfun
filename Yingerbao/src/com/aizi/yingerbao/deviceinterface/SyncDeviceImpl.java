@@ -221,4 +221,21 @@ public class SyncDeviceImpl implements SyncDevice{
         return null;
     }
 
+
+    @Override
+    public DeviceResponse<?> getExceptionEvent() {
+        SLog.e(TAG, " getExceptionEvent ");
+        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 14;
+            keyPayload.keyLen = 0;
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
 }

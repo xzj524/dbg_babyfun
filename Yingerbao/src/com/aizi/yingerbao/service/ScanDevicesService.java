@@ -32,7 +32,7 @@ public class ScanDevicesService extends Service{
     private boolean mScanning;
     List<BluetoothDevice> mDeviceList;
     Map<String, Integer> devRssiValues;
-    private static final long SCAN_PERIOD = 2 * 1000; //10 seconds
+    private static final long SCAN_PERIOD = 5 * 1000; //10 seconds
     
     /** 
      * 更新进度的回调接口 
@@ -107,7 +107,6 @@ public class ScanDevicesService extends Service{
                 public void run() {
                    if (mScanning) {
                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                       //mListener.OnScanDeviceSucceed(2);
                        Intent intent = new Intent(Constant.BLUETOOTH_SCAN_NOT_FOUND);
                        EventBus.getDefault().post(intent); 
                    }

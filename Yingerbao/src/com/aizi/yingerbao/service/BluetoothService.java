@@ -231,7 +231,7 @@ public class BluetoothService extends Service {
         }
 
         // Previously connected device.  Try to reconnect.
-        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
+    /*    if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
             SLog.e(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
@@ -242,7 +242,7 @@ public class BluetoothService extends Service {
                 broadcastUpdate(ACTION_GATT_DISCONNECTED);
                 return false;
             }
-        }
+        }*/
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
@@ -347,20 +347,20 @@ public class BluetoothService extends Service {
     
     public void writeBaseRXCharacteristic(byte[] value)
     {
-        BluetoothGattService RxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
-        if (RxService == null) {
+        BluetoothGattService TxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
+        if (TxService == null) {
             SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_SERVICE not found!");
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
             return;
         }
-        BluetoothGattCharacteristic RxChar = RxService.getCharacteristic(BLE_UUID_NUS_TX_CHARACTERISTIC);
-        if (RxChar == null) {
+        BluetoothGattCharacteristic TxChar = TxService.getCharacteristic(BLE_UUID_NUS_TX_CHARACTERISTIC);
+        if (TxChar == null) {
             SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_TX_CHARACTERISTIC not found!");
             broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
             return;
         }
-        RxChar.setValue(value);
-        boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
+        TxChar.setValue(value);
+        boolean status = mBluetoothGatt.writeCharacteristic(TxChar);
         
         SLog.e(TAG, "write TXchar status = " + status);  
     }

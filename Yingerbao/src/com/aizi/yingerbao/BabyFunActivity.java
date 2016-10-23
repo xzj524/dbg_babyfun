@@ -116,13 +116,7 @@ onTitleBarClickListener {
      
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
-        
-       
-        
-        //注册EventBus  
-      //  EventBus.getDefault().register(this);
-        
-        //initBluetoothService();
+
         initScanService();
 
         mFragmentMan = getFragmentManager();
@@ -273,27 +267,16 @@ onTitleBarClickListener {
         return tempValue;
     }
     
-  /*  public void onEventMainThread(AsycEvent event) {  
-        mService.writeBaseRXCharacteristic(event.getByte());
-    } */
-    
-  
-    
     
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        /*unbindService(mBluetoothServiceConnection);
-        unbindService(mScanServiceConnection);
-        mService.disconnect();*/
         EventBus.getDefault().unregister(this);//反注册EventBus  
     }
 
     @Override
     public void onBackClick() {
-        /*mSlidingMenuHelper.showMenu();
-        SLog.e(TAG, "SlidingMenuHelper  showing");*/
         finish();
     }
 

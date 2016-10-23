@@ -42,8 +42,15 @@ public class BaseMessageHandler {
             SLog.e(TAG, "print base l1 log  = " + Arrays.toString(baseData));
             if (baseData.length >= BASE_DATA_HEAD) {
                 BaseL1Message bsL1Msg = getBaseL1Msg(baseData); // 生成L1数据
+                String l1payload = MessageParse.printHexString(bsL1Msg.tobyte());
+
                 if (bsL1Msg.ackFlag == 1) { //收到设备的ack信息
                     SLog.e(TAG, "receive ACK");
+                    Utiliy.logToFile(" L1 " + " RECV ACK: " + l1payload); // 写入日志文件
+                    Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+                    intent.putExtra("transferdata", " L1 " + " ACK: " + l1payload);
+                    EventBus.getDefault().post(intent); // 显示到测试界面上
+                    
                     if (bsL1Msg.errFlag == 0) {
                         if (isWriteSuccess) {
                             SLog.e(TAG, "isWriteSuccess = true");
@@ -58,7 +65,11 @@ public class BaseMessageHandler {
                         int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
                         SLog.e(TAG, "ACK crc16 = " + crc16 + " bsL1Msg = " + bsL1Msg.CRC16);
                         if (bsL1Msg.CRC16 == (short)crc16) {
-                            SLog.e(TAG, "send ACK");
+                            Utiliy.logToFile(" L1 " + " RECV DATA: " + l1payload);
+                            Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+                            intent.putExtra("transferdata", " L1 " + " DATA: " + l1payload);
+                            EventBus.getDefault().post(intent); // 显示到测试界面上
+                            
                             sendACKBaseL1Msg(baseData);
                         } else {
                             SLog.e(TAG, "not send ACK");
@@ -92,6 +103,12 @@ public class BaseMessageHandler {
         ACKMsg[4] = (byte) (baseData[4] & 0);
         ACKMsg[5] = (byte) (baseData[5] & 0);
         
+        String l1ack = MessageParse.printHexString(ACKMsg);
+        Utiliy.logToFile(" L1 " + " SEND ACK: " + l1ack); // 写入日志文件
+        Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
+        intent.putExtra("transferdata", " L1 " + " ACK: " + l1ack);
+        EventBus.getDefault().post(intent); // 显示到测试界面上
+        
         EventBus.getDefault().post(new AsycEvent(ACKMsg)); 
     }
     
@@ -99,22 +116,13 @@ public class BaseMessageHandler {
         boolean isSendL2Over = false;
         try {
             
-            
             String l2payload = MessageParse.printHexString(bsl2msg.toByte());
             SLog.e(TAG, "HEX Send string l2load1 = " + l2payload);
             Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
-            intent.putExtra("transferdata", l2payload);
-            EventBus.getDefault().post(intent); 
-            
-            Calendar calendar = Calendar.getInstance();
-            String currentDateTimeString = "[" + calendar.get(Calendar.HOUR) + ":"
-                    + calendar.get(Calendar.MINUTE) + ":"
-                    + calendar.get(Calendar.SECOND) + ":"
-                    + calendar.get(Calendar.MILLISECOND)
-                    + "]: ";
-            Utiliy.logToFile(currentDateTimeString + " SEND " + l2payload);
-            
-            
+            intent.putExtra("transferdata", "L2 " + l2payload);
+            EventBus.getDefault().post(intent);  // 在测试界面显示出来
+            Utiliy.logToFile(" L2 " + " SEND: " + l2payload); // 写入日志文件
+   
             l2InputStream = new ByteArrayInputStream(bsl2msg.toByte());
             if (l2InputStream != null) {
                 isSendL2Over = sendL2Msg(true);
@@ -212,8 +220,15 @@ public class BaseMessageHandler {
             bsL1Msg.CRC16 = (short) CRC16.calcCrc16(bsL1Msg.payload);
             
             byte[] bsl1buffer = bsL1Msg.tobyte();
+            String l1payload = MessageParse.printHexString(bsl1buffer);
+            Utiliy.logToFile(" L1 " + " SEND: " + l1payload); // 写入日志文件
+            
+            Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
+            intent.putExtra("transferdata", " L1 " + l1payload);
+            EventBus.getDefault().post(intent); // 显示到测试界面上
+            
             SLog.e(TAG, "write BASE character readcount = " + buffer.length);
-            EventBus.getDefault().post(new AsycEvent(bsL1Msg.tobyte()));
+            EventBus.getDefault().post(new AsycEvent(bsL1Msg.tobyte())); // 通过蓝牙传输数据
         }
     }
 

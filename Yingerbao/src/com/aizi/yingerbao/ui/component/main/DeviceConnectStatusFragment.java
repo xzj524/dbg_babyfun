@@ -30,7 +30,6 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
-import com.aizi.yingerbao.service.ScanDevicesService;
 import com.aizi.yingerbao.service.ScanDevicesService.OnScanDeviceListener;
 import com.aizi.yingerbao.utility.PrivateParams;
 
@@ -114,7 +113,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View deviceStatusView = inflater.inflate(R.layout.babyfun_status_fragment, container, false);
         
-       // service_init();
         mCheckNetworkConnectingTextView = (TextView) deviceStatusView.findViewById(R.id.checkingNetworkTextView);
         mConnectedStatusTextView = (TextView) deviceStatusView.findViewById(R.id.connectedStatusTextView);
         
@@ -136,9 +134,6 @@ public class DeviceConnectStatusFragment extends Fragment{
         mTimer.schedule(task,1000); 
         
         EventBus.getDefault().register(this);
-        
-       
-        
         return deviceStatusView;
     }
 
@@ -214,17 +209,15 @@ public class DeviceConnectStatusFragment extends Fragment{
         if (mCurrentState == CheckingState.IDEL) {
             startConnectingAnimation();
             mCurrentState = CheckingState.CHECKING;     
-         /*   Intent intent = new Intent("com.babyfun.scandevices");
-            mListener.onDeviceConnected(intent);*/
             Intent bluetoothIntent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(bluetoothIntent,REQUEST_ENABLE_BLUETOOTH);
         } else if (mCurrentState == CheckingState.CHECKING) {
-            mIsConnectingAnimation = false;
+          /*  mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
             mProgressImageView.clearAnimation();
             mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
-            mConnectedFailedViewGroup.setVisibility(View.GONE);
+            mConnectedFailedViewGroup.setVisibility(View.GONE);*/
         } else if (mCurrentState == CheckingState.FATAL_DEVICE_NOT_CONNECT) {
             mCurrentState = CheckingState.CHECKING;
             startConnectingAnimation();

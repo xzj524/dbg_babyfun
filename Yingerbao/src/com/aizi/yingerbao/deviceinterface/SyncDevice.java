@@ -31,5 +31,7 @@ public interface SyncDevice {
 
     DeviceResponse<?> getRealTimeTempData();
 
+    DeviceResponse<?> getExceptionEvent();
+
 
 }

@@ -14,6 +14,7 @@ public class Constant {
     
     public static final String EXTERNAL_FILE_ROOT = "com.aizi.yingerbao";
     public static final String EXTERNAL_FILE_LOC = EXTERNAL_FILE_ROOT + "/files";
+    public static final String EXTERNAL_FILE_DATA = EXTERNAL_FILE_ROOT + "/data";
     
     public static final short COMMAND_ID_UPDATE_ROM = 1;
     public static final short COMMAND_ID_SETTING = 2;

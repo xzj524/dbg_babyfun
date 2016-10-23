@@ -66,4 +66,10 @@ public class SyncDeviceRefactor implements SyncDevice{
         return null;
     }
 
+    @Override
+    public DeviceResponse<?> getExceptionEvent() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
