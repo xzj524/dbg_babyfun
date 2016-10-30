@@ -5,14 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.text.TextUtils;
 
-import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.eventbus.AsycEvent;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
 import com.aizi.yingerbao.utility.BaseMessageHandler;
-import com.aizi.yingerbao.utility.PrivateParams;
 
 import de.greenrobot.event.EventBus;
 
@@ -21,22 +18,11 @@ public class BluetoothApi {
     private static final String TAG = BluetoothApi.class.getSimpleName();
     
     private static BluetoothApi mInstance;
-    
     public BluetoothService mBluetoothService = null;
-    private static boolean mIsBluetoothReady;
-    private String mAddress;
     
     public BluetoothApi(Context context) {
-        // TODO Auto-generated constructor stub
         EventBus.getDefault().register(this);
         bindBluetoothService(context);
-        /*bindBluetoothService(context);
-        mAddress = PrivateParams.getSPString(context, Constant.SHARED_DEVICE_NAME);
-        if (!TextUtils.isEmpty(mAddress)) {
-            mBluetoothService.connect(mAddress);
-        }else {
-            
-        }*/
     }
 
     public static BluetoothApi getInstance(Context context) {
@@ -48,10 +34,9 @@ public class BluetoothApi {
         }
     }
     
-    
     private void bindBluetoothService(Context context) {
-        Intent bindIntent = new Intent(context, BluetoothService.class);
-        boolean isbind = context.bindService(bindIntent, mBluetoothServiceConnection, Context.BIND_AUTO_CREATE);
+        Intent bindblueIntent = new Intent(context, BluetoothService.class);
+        context.bindService(bindblueIntent, mBluetoothServiceConnection, Context.BIND_AUTO_CREATE);
      }
     
     private void unbindBluetoothService(Context context) {
@@ -77,7 +62,6 @@ public class BluetoothApi {
     
     
     public void onEvent(AsycEvent event) {   
-        //mBluetoothService.writeBaseRXCharacteristic(event.getByte());
         writeByte(event.getByte());
      } 
     
@@ -87,7 +71,5 @@ public class BluetoothApi {
             mBluetoothService.writeBaseRXCharacteristic(wrByte);
             BaseMessageHandler.isWriteSuccess = false;
         }
-       
     }
-
 }

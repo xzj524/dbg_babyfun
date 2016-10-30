@@ -277,35 +277,15 @@ public class DeviceListActivity extends Activity {
             }
 
             BluetoothDevice device = devices.get(position);
-            final TextView tvadd = ((TextView) vg.findViewById(R.id.address));
             final TextView tvname = ((TextView) vg.findViewById(R.id.name));
-            final TextView tvpaired = (TextView) vg.findViewById(R.id.paired);
-            final TextView tvrssi = (TextView) vg.findViewById(R.id.rssi);
-
-            tvrssi.setVisibility(View.VISIBLE);
-            byte rssival = (byte) devRssiValues.get(device.getAddress()).intValue();
-            if (rssival != 0) {
-                tvrssi.setText("Rssi = " + String.valueOf(rssival));
-            }
 
             tvname.setText(device.getName());
-            tvadd.setText(device.getAddress());
             if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                 Log.i(TAG, "device::"+device.getName());
                 tvname.setTextColor(Color.WHITE);
-                tvadd.setTextColor(Color.WHITE);
-                tvpaired.setTextColor(Color.GRAY);
-                tvpaired.setVisibility(View.VISIBLE);
-                tvpaired.setText("配对");
-                tvrssi.setVisibility(View.VISIBLE);
-                tvrssi.setTextColor(Color.WHITE);
                 
             } else {
                 tvname.setTextColor(Color.WHITE);
-                tvadd.setTextColor(Color.WHITE);
-                tvpaired.setVisibility(View.GONE);
-                tvrssi.setVisibility(View.VISIBLE);
-                tvrssi.setTextColor(Color.WHITE);
             }
             return vg;
         }

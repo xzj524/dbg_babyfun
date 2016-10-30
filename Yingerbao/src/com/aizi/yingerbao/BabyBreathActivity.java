@@ -122,7 +122,7 @@ public class BabyBreathActivity extends Activity implements OnClickListener, onT
          }  
       };  
     
-    public void onEventMainThread(final ArrayList<BabyBreath> breaths) { 
+   /* public void onEventMainThread(final ArrayList<BabyBreath> breaths) { 
         long curtime = System.currentTimeMillis();
         SLog.e(TAG, "curtime = " + curtime);
         if (mLastBreathTime == 0) {
@@ -137,7 +137,7 @@ public class BabyBreathActivity extends Activity implements OnClickListener, onT
             mPreValue = breaths.get(0).mBreathValue;
             mBreathRealValue.setText(mPreValue+"");
             SLog.e(TAG, "BabyBreathActivity receive REAL BREATH DATA " + mPreValue);
-        } /*else if (breaths.size() == 2) {
+        } else if (breaths.size() == 2) {
             mPreValue = breaths.get(0).mBreathValue;
             int timelen = breaths.get(1).mBreathTime - breaths.get(0).mBreathTime;
             Handler mHandler = new Handler(getMainLooper());
@@ -149,8 +149,8 @@ public class BabyBreathActivity extends Activity implements OnClickListener, onT
                     mPreValue = breaths.get(1).mBreathValue;
                 }
             }, timelen * 1000);
-        }*/
-    }
+        }
+    }*/
 
     @Override
     public void onClick(View v) {

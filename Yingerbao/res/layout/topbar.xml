@@ -35,11 +35,10 @@
         
     <ImageView  
         android:id="@+id/calendar_image"  
-        android:layout_width="24dp"  
+        android:layout_width="wrap_content"  
         android:layout_height="24dp"  
-        android:scaleType="centerInside"  
         android:layout_centerVertical="true"  
-        android:layout_marginRight="12dp"
+        android:paddingLeft="32dp"
         android:layout_toRightOf="@id/text_title"/>  
 
 </RelativeLayout>

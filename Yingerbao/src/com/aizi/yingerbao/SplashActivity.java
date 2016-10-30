@@ -39,7 +39,7 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 /* Create an Intent that will start the Main WordPress Activity. */
-                Intent mainIntent = new Intent(SplashActivity.this, BabyFunActivity.class);
+                Intent mainIntent = new Intent(SplashActivity.this, ConnectDeviceActivity.class);
                 SplashActivity.this.startActivity(mainIntent);
                 SplashActivity.this.finish();
             }

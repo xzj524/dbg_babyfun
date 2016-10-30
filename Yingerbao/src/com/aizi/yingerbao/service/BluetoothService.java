@@ -253,7 +253,9 @@ public class BluetoothService extends Service {
         }
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
+        
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+       
     
         SLog.e(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;

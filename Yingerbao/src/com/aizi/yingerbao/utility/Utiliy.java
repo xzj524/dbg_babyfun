@@ -17,7 +17,7 @@ import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.provider.SyncStateContract.Constants;
 
-import com.aizi.yingerbao.BabyFunActivity;
+import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
@@ -124,7 +124,7 @@ public class Utiliy {
             new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(context, BabyFunActivity.class);
+                Intent intent = new Intent(context, ConnectDeviceActivity.class);
                 context.startActivity(intent);
             }
         });

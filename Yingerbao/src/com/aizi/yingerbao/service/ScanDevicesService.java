@@ -27,11 +27,12 @@ import de.greenrobot.event.EventBus;
 public class ScanDevicesService extends Service{
     
     private static final String TAG = ScanDevicesService.class.getSimpleName();
-    BluetoothAdapter mBluetoothAdapter;
     private Handler mHandler;
     private boolean mScanning;
+    BluetoothAdapter mBluetoothAdapter;
     List<BluetoothDevice> mDeviceList;
     Map<String, Integer> devRssiValues;
+    
     private static final long SCAN_PERIOD = 5 * 1000; //10 seconds
     
     /** 
@@ -62,7 +63,9 @@ public class ScanDevicesService extends Service{
         
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        
         mBluetoothAdapter = bluetoothManager.getAdapter();
+        
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
@@ -89,9 +92,6 @@ public class ScanDevicesService extends Service{
     }  
     
     public  List<BluetoothDevice> getDeviceList() {
-        for (BluetoothDevice listDev : mDeviceList) {
-            SLog.e(TAG, "devicelist = " + listDev.getName());
-        }
         return mDeviceList;
     }
 
@@ -115,6 +115,8 @@ public class ScanDevicesService extends Service{
 
             mScanning = true;
             mBluetoothAdapter.startLeScan(mBLEScanCallback);
+            
+            
             SLog.e(TAG, "start Scan bluetooth devices");
         } else {
             mScanning = false;
@@ -128,12 +130,17 @@ public class ScanDevicesService extends Service{
         @Override
         public void onLeScan(final BluetoothDevice device, 
                 final int rssi, byte[] scanRecord) {
-            addDevice(device,rssi);
+            boolean isdiscovery = isDiscoveryDevice(device,rssi);
+            if (isdiscovery) {
+                Intent intent = new Intent(Constant.BLUETOOTH_SCAN_FOUND);
+                EventBus.getDefault().post(intent);
+            }
+             
         }
     };
 
     
-    private void addDevice(BluetoothDevice device, int rssi) {
+    private boolean isDiscoveryDevice(BluetoothDevice device, int rssi) {
         boolean isDeviceFound = false;
         for (BluetoothDevice listDev : mDeviceList) {
             if (listDev.getAddress().equals(device.getAddress())) {
@@ -142,24 +149,22 @@ public class ScanDevicesService extends Service{
             }
         }    
         SLog.e(TAG, "address = " + device.getAddress() 
-                + " name = " + device.getName() 
-                +  "  rssi = " + rssi);
+                  + " name = " + device.getName() 
+                  + " rssi = " + rssi);
         devRssiValues.put(device.getAddress(), rssi);
         if (!isDeviceFound) {
             if (!TextUtils.isEmpty(device.getName())) {
                 if (device.getName().equals("my_hrm")) {
                     mDeviceList.add(device);
+                    isDeviceFound = true;
                     PrivateParams.setSPString(getApplicationContext(), 
                             Constant.SHARED_DEVICE_ADDRESS, device.getAddress());
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                    
-                    Intent intent = new Intent(Constant.BLUETOOTH_SCAN_FOUND);
-                    EventBus.getDefault().post(intent); 
-                    //mListener.OnScanDeviceSucceed(1);
                 }
             }
         }
+        return isDeviceFound;
     }
     
     @Override

@@ -6,6 +6,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_xiaohuhu">婴儿保</string>
     <string name="title_activity_breath">宝宝呼吸</string>
+    <string name="title_activity_temperature">温度计</string>
     <string name="title_search_bluetooth">搜索蓝牙设备</string>
     <string name="title_activity_device_list">DeviceListActivity</string>
 
@@ -17,7 +18,10 @@
     <string name="show_device_status">宝宝状态</string>
     <string name="reset_user_password">重置密码</string>
     <string name="register_user_account">注册账号</string>
-  
+
+    <!-- 搜索设备界面 -->
+    <string name="select_device">请选择设备：</string>
+    <string name="scanning">正在扫描中...</string>
     <string name="setting">设置</string>
     <string name="connecting_device_success">设备已连接\n数据同步完成</string>
     <string name="connecting_device_fail">找不到设备\n请重新检测</string>
@@ -39,5 +43,6 @@
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_xiao_huhu">婴儿保</string>
+    <string name="title_activity_user">婴儿保</string>
 
 </resources>

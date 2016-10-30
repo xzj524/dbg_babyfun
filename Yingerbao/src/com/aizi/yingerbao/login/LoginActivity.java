@@ -29,7 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizi.yingerbao.BabyFunActivity;
+import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
@@ -334,7 +334,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             if (success) {
                 finish();
-                Intent intent = new Intent(getApplicationContext(), BabyFunActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ConnectDeviceActivity.class);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

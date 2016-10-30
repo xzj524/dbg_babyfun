@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res/com.aizi.yingerbao"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    tools:context="${relativePackage}.${activityClass}" >
+    
+    <com.aizi.yingerbao.view.TopBarView  
+        android:id="@+id/userxiaohuhutopbar"  
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"  
+        custom:titleText="@string/title_activity_xiaohuhu"   
+        custom:titleSize="8sp"   
+        custom:titleColor="@android:color/white"   
+        custom:leftBtn="@drawable/settings"/> 
+
+  
+    <LinearLayout
+        android:id="@+id/funcbtn"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_below="@id/userxiaohuhutopbar">
+
+        <com.aizi.yingerbao.view.CircleButton
+            android:id="@+id/button0"
+            android:layout_width="164dip"
+            android:layout_height="164dip"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dip"
+            app:cb_text="呼吸"
+            app:cb_color="#99CC00" />
+
+        <com.aizi.yingerbao.view.CircleButton
+            android:id="@+id/button1"
+            android:layout_width="164dip"
+            android:layout_height="164dip"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dip"
+            app:cb_text="温度计"
+            app:cb_color="#FFBB03" />
+       
+
+    </LinearLayout>
+    
+    <com.aizi.yingerbao.view.BatteryView
+        android:id="@+id/battery_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/funcbtn"/>
+
+</RelativeLayout>

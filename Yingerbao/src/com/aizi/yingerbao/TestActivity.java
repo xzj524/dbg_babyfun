@@ -170,6 +170,9 @@ public class TestActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), UserActivity.class);
+                startActivity(intent);
             }
         });
     }

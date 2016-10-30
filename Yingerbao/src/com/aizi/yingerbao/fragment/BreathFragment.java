@@ -204,7 +204,7 @@ public class BreathFragment extends Fragment{
        }
        
     
-    public void onEventMainThread(final ArrayList<BabyBreath> breaths) { 
+   /* public void onEventMainThread(final ArrayList<BabyBreath> breaths) { 
         long curtime = System.currentTimeMillis();
         SLog.e(TAG, "breath receivre data curtime = " + curtime);
         if (mBreatStart) {
@@ -221,7 +221,7 @@ public class BreathFragment extends Fragment{
             }
         }
        
-    }
+    }*/
     
     public void onEventMainThread(DataTime dataTime) { 
         loadBreathStopBarChartData(mBreathStopTimes);

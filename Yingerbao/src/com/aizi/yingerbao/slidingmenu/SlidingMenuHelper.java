@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aizi.yingerbao.BabyBreathActivity;
-import com.aizi.yingerbao.BabyFunActivity;
+import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.BabyStatusActivity;
 import com.aizi.yingerbao.CriticalActivity;
 import com.aizi.yingerbao.R;
@@ -178,7 +178,7 @@ public class SlidingMenuHelper {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(mActivity.getApplicationContext(), BabyFunActivity.class);
+                Intent intent = new Intent(mActivity.getApplicationContext(), ConnectDeviceActivity.class);
                 mActivity.startActivity(intent);
             }
         });

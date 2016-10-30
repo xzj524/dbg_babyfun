@@ -211,13 +211,6 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCurrentState = CheckingState.CHECKING;     
             Intent bluetoothIntent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(bluetoothIntent,REQUEST_ENABLE_BLUETOOTH);
-        } else if (mCurrentState == CheckingState.CHECKING) {
-          /*  mIsConnectingAnimation = false;
-            mCurrentState = CheckingState.IDEL;
-            mProgressImageView.clearAnimation();
-            mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
-            mConnectingInfoViewGroup.setVisibility(View.GONE);
-            mConnectedFailedViewGroup.setVisibility(View.GONE);*/
         } else if (mCurrentState == CheckingState.FATAL_DEVICE_NOT_CONNECT) {
             mCurrentState = CheckingState.CHECKING;
             startConnectingAnimation();
@@ -238,7 +231,6 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
         } else if (mCurrentState == CheckingState.FAIL) {
-            
             SLog.e(TAG, "Bluetooth Service disconnect");
             mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
@@ -250,24 +242,24 @@ public class DeviceConnectStatusFragment extends Fragment{
     }
   
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
        if (requestCode == REQUEST_SELECT_DEVICE) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
+            if (resultCode == Activity.RESULT_OK && intent != null) {
+                String deviceAddress = intent.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
                 mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
                
-                SLog.e(TAG, "onActivityResultdevice.address = " + mDevice 
-                        + "deviceaddress = "+ deviceAddress 
-                        +" myserviceValue = " + mService);
+                SLog.e(TAG, "onActivityResultdevice = " + mDevice 
+                          + " deviceaddress = "+ deviceAddress 
+                          + " myserviceValue = " + mService);
              
-                mListener.onDeviceConnected(data);
+                mListener.onDeviceConnected(intent);
                 doUpdateStatusClick();
 
             }
         } else if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
-            Intent intent = new Intent("com.babyfun.scandevices");
-            mListener.onDeviceConnected(intent);
+            Intent enableintent = new Intent("com.babyfun.scandevices");
+            mListener.onDeviceConnected(enableintent);
         }
     }
     
@@ -307,30 +299,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     public CheckingState getCurrentState() {
         return mCurrentState;
     }
-
-   /* @Override
-    public void OnScanDeviceSucceed(int touchid) {
-        if (touchid == 1) {    
-            String deviceAddress = PrivateParams.getSPString(getActivity().getApplicationContext(),
-                    Constant.SHARED_DEVICE_ADDRESS);
-            if (TextUtils.isEmpty(deviceAddress)) {
-                return;
-            }
-            mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
-            SLog.e(TAG, "... onActivityResultdevice.address==" + mDevice 
-                    + "deviceaddress "+ deviceAddress 
-                    +" myserviceValue = " + mService);
-            BluetoothApi.getInstance(getActivity().getApplicationContext())
-                        .mBluetoothService.connect(deviceAddress);
-            //mService.connect(deviceAddress);
-                        
-        } else if (touchid == 2) {
-            setCurrentStateFailed();
-            doUpdateStatusClick();
-        }
-        
-    }*/
-    
     
   public void onEventMainThread(Intent event) {  
         

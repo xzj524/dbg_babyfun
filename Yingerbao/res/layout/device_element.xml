@@ -22,23 +22,6 @@
     android:textColor="@color/black"
     >
 
-    <TextView
-        android:id="@+id/paired"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:text="配对"
-        android:textSize="12dp" />
-
-    <TextView
-        android:id="@+id/rssi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_below="@+id/paired"
-        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/name"
@@ -46,12 +29,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:textSize="14dp" />
-
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/name"
-        android:textSize="10dp" />
 
 </RelativeLayout>
