@@ -44,5 +44,27 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_xiao_huhu">婴儿保</string>
     <string name="title_activity_user">婴儿保</string>
+    
+    
+      <!-- 登录注册界面 -->
+    <string name="prompt_phonenumber">请输入手机号码</string>
+    <string name="prompt_password">请输入密码 </string>
+    <string name="prompt_reset_password">请输入新密码 </string>
+    <string name="prompt_register_password">请输入密码 </string>
+    <string name="prompt_checkcode">请输入校验码</string>
+    <string name="action_sign_in"> 登录</string>
+    <string name="action_reset_passcode">重置密码</string>
+    <string name="action_register">完成注册</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="error_invalid_password">密码太短了</string>
+    <string name="error_incorrect_password">用户名或密码错误</string>
+    <string name="error_field_required">请输入正确手机号码</string>
+    
+    
+    <!-- 功能相关内容 -->
+    <string name="action_start_breath">实时呼吸监测</string>
+    <string name="action_start_temp">实时温度监测</string>
+    <string name="action_stop">停止</string>
+    <string name="date_no_data">该日无数据</string>
 
 </resources>

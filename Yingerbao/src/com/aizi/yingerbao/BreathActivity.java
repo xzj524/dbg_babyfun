@@ -1,6 +1,7 @@
 package com.aizi.yingerbao;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,19 +15,18 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.database.BreathInfoEnumClass;
+import com.aizi.yingerbao.database.BreathStopInfo;
+import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.sleepdatabase.BreathInfoEnumClass;
-import com.aizi.yingerbao.sleepdatabase.BreathStopInfo;
-import com.aizi.yingerbao.sleepdatabase.SleepInfoDatabase;
 import com.aizi.yingerbao.synctime.DataTime;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
@@ -35,9 +35,9 @@ import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -57,9 +57,8 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     static Typeface mTf; // 自定义显示字体  
     
     static LineChart mBreathChart;
-    BarChart mBreathStopTimes;
+    BarChart mBreathStopChart;
     private TextView mBreathFreqData;
-    private TextView mBreathRealValue;
     
     int mPreValue = 5;
     long mLastBreathTime;
@@ -71,11 +70,11 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     
     Button mControlBreathBtn;
     
-    private  TopBarView topbar;
+    private  TopBarView mBreathTopbar;
     
     static int[] mColors = new int[] {
         Color.rgb(137, 230, 81), 
-        Color.rgb(240, 240, 30),//  
+        Color.rgb(240, 240, 30), 
         Color.rgb(89, 199, 250), 
         Color.rgb(250, 104, 104), 
         Color.rgb(4, 158, 255),
@@ -92,11 +91,11 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_breath);
         
-        topbar = (TopBarView) findViewById(R.id.xiaohuhutopbar);
-        topbar.setClickListener(this);
+        mBreathTopbar = (TopBarView) findViewById(R.id.breathtopbar);
+        mBreathTopbar.setClickListener(this);
         
         mBreathChart = (LineChart) findViewById(R.id.breath_line_chart);
-        mBreathStopTimes = (BarChart) findViewById(R.id.breath_stop_barchart);
+        mBreathStopChart = (BarChart) findViewById(R.id.breath_stop_barchart);
         mControlBreathBtn = (Button) findViewById(R.id.control_breath_button);
         
         mControlBreathBtn.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +120,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 public void run() {  
                                 Message message = new Message();      
                                 message.what = 1; 
-                                //mPreValue = (int) (Math.random() * 30);
                                 message.arg1 = mPreValue;
                                 mHandler.sendMessage(message);    
                               }  
@@ -153,13 +151,17 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         
         initBreathChart();
         LineData initData = initData(50);
-        setupChart(initData, mColors[5]);
+        setupRealTimeBreathChart(initData, mColors[5]);
         
-        initBreathStopBarChart(mBreathStopTimes);
-        loadBreathStopBarChartData(mBreathStopTimes);
+        initBreathStopBarChart();
+        DataTime dataTime = new DataTime();
+        dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
+        dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
+        dataTime.day = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
+        updateBreathStopBarChartData(dataTime);
     }
     
-public void showNormalDialog(){
+    public void showNormalDialog(){
         
         final AlertDialog.Builder normalDialog = 
             new AlertDialog.Builder(this);
@@ -244,19 +246,17 @@ public void showNormalDialog(){
                  SLog.e(TAG, "BabyBreathActivity receive REAL BREATH DATA " + mPreValue);
              }
          }
-        
      }
      
      public void onEventMainThread(DataTime dataTime) { 
-         loadBreathStopBarChartData(mBreathStopTimes);
+         updateBreathStopBarChartData(dataTime);
      }
      
      
      public void freshChart() {
-         // TODO Auto-generated method stub
          if (mData != null) {
              mData = initData(5);
-             setupChart(mData, mColors[5]);
+             setupRealTimeBreathChart(mData, mColors[5]);
          }
      }
      
@@ -293,7 +293,7 @@ public void showNormalDialog(){
                  xVals.add(i + "");
              }
              LineData data = new LineData(xVals, dataSets);    
-             setupChart(data, mColors[5]);
+             setupRealTimeBreathChart(data, mColors[5]);
          }   
      }
      
@@ -334,7 +334,7 @@ public void showNormalDialog(){
      }
      
      // 设置显示的样式  
-     public static void setupChart(LineData data, int color) {        
+     public static void setupRealTimeBreathChart(LineData data, int color) {        
          mBreathChart.clear();
          mBreathChart.setData(data); // 设置数据  
      }  
@@ -402,44 +402,45 @@ public void showNormalDialog(){
      * 加载并设置柱形图的数据
      * @param chart
      */
-    private void loadBreathStopBarChartData(BarChart chart) {
+    private void updateBreathStopBarChartData(DataTime dataTime) {
         //所有数据点的集合
         //ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
         
-        int year =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
+        int year = dataTime.year;
+        int month = dataTime.month;
+        int day = dataTime.day;
+        
+      /*  int year =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
         int month =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
-        int day =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
+        int day =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);*/
         
         if (year == 0 || month == 0 || day == 0) {
-            Time time = new Time("GMT+8");       
-            time.setToNow();      
-            year = time.year;      
-            month = time.month;      
-            day = time.monthDay;  
+            Calendar calendar = Calendar.getInstance();   
+            year = calendar.get(Calendar.YEAR);      
+            month = calendar.get(Calendar.MONTH) + 1;     
+            day = calendar.get(Calendar.DAY_OF_MONTH);   
         } 
         
-        BreathStopInfo breathinfo = new BreathStopInfo();
+  /*      BreathStopInfo breathinfo = new BreathStopInfo();
         breathinfo.mBreathYear = year;
         breathinfo.mBreathMonth = month;
         breathinfo.mBreathDay = day;
         
         for (int i = 0; i < 24; i++) {
-            if (i%5 == 5) {
-                breathinfo.mBreathHour = i;
-         }
+             breathinfo.mBreathHour = i;
          
-         if (i%4 == 4) {
-             breathinfo.mBreathMinute = i;
-         }else {
-             breathinfo.mBreathMinute = 0;
-         }
-         SleepInfoDatabase.insertBreathInfo(getApplicationContext(), breathinfo);
+             if (i%4 == 3) {
+                 breathinfo.mBreathMinute = i;
+             }else {
+                 breathinfo.mBreathMinute = 0;
+             }
+             YingerbaoDatabase.insertBreathInfo(getApplicationContext(), breathinfo);
         }
-
+*/
         
         
         List<BreathInfoEnumClass> breathInfoEnumClasses = 
-                SleepInfoDatabase.getBreathInfoEnumClassList(getApplicationContext(), 
+                YingerbaoDatabase.getBreathInfoEnumClassList(getApplicationContext(), 
                 year, month, day);
         
         ArrayList<BarEntry> entries = getBarEntry(breathInfoEnumClasses);
@@ -454,8 +455,8 @@ public void showNormalDialog(){
         mBarDataSet.setColor(mColors[0]);
         //BarData表示挣个柱形图的数据
         BarData mBarData = new BarData(getXAxisShowLable(),mBarDataSet);
-        chart.setData(mBarData);
-        chart.animateY(1500);//设置动画
+        mBreathStopChart.setData(mBarData);
+        mBreathStopChart.animateY(1500);//设置动画
     }
 
     private ArrayList<BarEntry> getBarEntry(List<BreathInfoEnumClass> breathInfoEnumClasses) {
@@ -669,9 +670,7 @@ public void showNormalDialog(){
      if (h23 != 0) {
          entries.add(new BarEntry(h23, 23));
      }
-     
-
-     
+          
      return entries;
  }
 
@@ -679,12 +678,13 @@ public void showNormalDialog(){
      * 设置柱形图的样式
      * @param chart
      */
-    private void initBreathStopBarChart(BarChart chart) {
-        chart.setDescription("");
-        chart.setDrawGridBackground(false);//设置网格背景
-        chart.setScaleEnabled(true);//设置缩放
-        chart.setDoubleTapToZoomEnabled(false);//设置双击不进行缩放
-        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+    private void initBreathStopBarChart() {
+        mBreathStopChart.setDescription("");
+        mBreathStopChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
+        mBreathStopChart.setDrawGridBackground(false);//设置网格背景
+        mBreathStopChart.setScaleEnabled(true);//设置缩放
+        mBreathStopChart.setDoubleTapToZoomEnabled(false);//设置双击不进行缩放
+        mBreathStopChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             
             @Override
             public void onValueSelected(Entry arg0, int arg1, Highlight arg2) {
@@ -701,23 +701,27 @@ public void showNormalDialog(){
         });
 
         //设置X轴
-        XAxis xAxis = chart.getXAxis();
+        XAxis xAxis = mBreathStopChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置
         
         xAxis.setDrawGridLines(true);
         xAxis.setDrawAxisLine(true);
 
         //获得左侧侧坐标轴
-        YAxis leftAxis = chart.getAxisLeft();
+        YAxis leftAxis = mBreathStopChart.getAxisLeft();
         leftAxis.setLabelCount(5);
+        leftAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
 
         //设置右侧坐标轴
-        YAxis rightAxis = chart.getAxisRight();
+        YAxis rightAxis = mBreathStopChart.getAxisRight();
 //        rightAxis.setDrawAxisLine(false);//右侧坐标轴线
         rightAxis.setDrawLabels(false);//右侧坐标轴数组Lable
         rightAxis.setLabelCount(5);
+        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
         
-        Legend mLegend = chart.getLegend(); // 设置标示，就是那个一组y的value的  
+        Legend mLegend = mBreathStopChart.getLegend(); // 设置标示，就是那个一组y的value的  
         mLegend.setEnabled(false);
     }
     

@@ -19,9 +19,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:windowAnimationStyle">@style/CommonAnimationActivity</item>
     </style>
-
-
-
+    
 
     <style name="NetDisk" />
 
@@ -483,5 +481,33 @@
         <item name="android:windowNoTitle">true</item>  
         <item name="android:windowIsFloating">true</item>  
     </style>  
+    
+    
+     <style name="ActivityAnimation">
+	    <item name="android:activityOpenEnterAnimation">@anim/main_special_activity_open_enter</item>
+	    <item name="android:activityOpenExitAnimation">@anim/main_special_activity_open_exit</item>
+	    <item name="android:activityCloseEnterAnimation">@anim/main_special_activity_close_enter</item>
+	    <item name="android:activityCloseExitAnimation">@anim/main_special_activity_close_exit</item>
+	</style>
+
+    
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity" mce_bogus="1">    
+
+		<item name="android:activityOpenEnterAnimation">@anim/main_special_activity_open_enter</item>          
+		
+		<item name="android:activityOpenExitAnimation">@anim/main_special_activity_open_exit</item>          
+		
+		<item name="android:activityCloseEnterAnimation">@anim/main_special_activity_close_enter</item>   
+		
+		<item name="android:activityCloseExitAnimation">@anim/main_special_activity_close_exit</item>      
+
+    </style>
+    
+    <style name="CommonAnimationActivity" mce_bogus="1" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+    </style>
 
 </resources>

@@ -69,4 +69,7 @@ public class Constant {
     /** 蓝牙扫描失败  */
     public static final String BLUETOOTH_SCAN_NOT_FOUND = "bluetooth_scan_not_found";
     
+    /** 保存用户账号  */
+    public static final String AIZI_USER_ACCOUNT = "aizi_user_account";
+    
 }

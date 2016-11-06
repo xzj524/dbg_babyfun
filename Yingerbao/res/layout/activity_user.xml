@@ -12,7 +12,7 @@
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
         custom:titleText="@string/title_activity_xiaohuhu"   
-        custom:titleSize="8sp"   
+        custom:titleSize="12sp"   
         custom:titleColor="@android:color/white"   
         custom:leftBtn="@drawable/settings"/> 
 

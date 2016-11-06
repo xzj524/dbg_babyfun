@@ -22,11 +22,11 @@ import android.widget.TextView;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.database.BreathInfoEnumClass;
+import com.aizi.yingerbao.database.BreathStopInfo;
+import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.sleepdatabase.BreathInfoEnumClass;
-import com.aizi.yingerbao.sleepdatabase.BreathStopInfo;
-import com.aizi.yingerbao.sleepdatabase.SleepInfoDatabase;
 import com.aizi.yingerbao.synctime.DataTime;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
@@ -404,23 +404,22 @@ public class BreathFragment extends Fragment{
        breathinfo.mBreathDay = day;
        
        for (int i = 0; i < 24; i++) {
-           if (i%5 == 5) {
-               breathinfo.mBreathHour = i;
-        }
+
+        breathinfo.mBreathHour = i;
         
         if (i%4 == 4) {
             breathinfo.mBreathMinute = i;
         }else {
             breathinfo.mBreathMinute = 0;
         }
-        SleepInfoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo);
+        YingerbaoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo);
        }
 
        
    // SleepInfoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo );
        
        List<BreathInfoEnumClass> breathInfoEnumClasses = 
-               SleepInfoDatabase.getBreathInfoEnumClassList(getActivity().getApplicationContext(), 
+               YingerbaoDatabase.getBreathInfoEnumClassList(getActivity().getApplicationContext(), 
                year, month, day);
        
        ArrayList<BarEntry> entries = getBarEntry(breathInfoEnumClasses);

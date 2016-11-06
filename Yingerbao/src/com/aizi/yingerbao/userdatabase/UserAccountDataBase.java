@@ -19,13 +19,13 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.widget.TextView;
 
+import com.aizi.yingerbao.database.BreathInfoEnumClass;
+import com.aizi.yingerbao.database.BreathStopInfo;
+import com.aizi.yingerbao.database.SleepInfo;
+import com.aizi.yingerbao.database.SleepInfoEnumClass;
+import com.aizi.yingerbao.database.TemperatureInfo;
+import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.sleepdatabase.BreathInfoEnumClass;
-import com.aizi.yingerbao.sleepdatabase.BreathStopInfo;
-import com.aizi.yingerbao.sleepdatabase.SleepInfo;
-import com.aizi.yingerbao.sleepdatabase.SleepInfoEnumClass;
-import com.aizi.yingerbao.sleepdatabase.TemperatureInfo;
-import com.aizi.yingerbao.sleepdatabase.TemperatureInfoEnumClass;
 
 public class UserAccountDataBase {
     private static InfoDbOpenHelper mDbHelper = null;

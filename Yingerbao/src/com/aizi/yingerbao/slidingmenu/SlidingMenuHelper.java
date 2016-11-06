@@ -1,28 +1,20 @@
 package com.aizi.yingerbao.slidingmenu;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.aizi.yingerbao.BabyBreathActivity;
 import com.aizi.yingerbao.ConnectDeviceActivity;
-import com.aizi.yingerbao.BabyStatusActivity;
-import com.aizi.yingerbao.CriticalActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.TestActivity;
 import com.aizi.yingerbao.YingerBaoActivity;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
+import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.login.LoginActivity;
-import com.aizi.yingerbao.sleepdatabase.BreathStopInfo;
-import com.aizi.yingerbao.sleepdatabase.SleepInfoDatabase;
-import com.aizi.yingerbao.userdatabase.UserAccountDataBase;
-import com.aizi.yingerbao.userdatabase.UserAccountInfo;
 import com.aizi.yingerbao.utility.PrivateParams;
-import com.aizi.yingerbao.utility.Utiliy;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class SlidingMenuHelper {
@@ -40,6 +32,8 @@ public class SlidingMenuHelper {
     ViewGroup mQuitUserAccountGroup;
     ViewGroup mDataTestGroup;
     ViewGroup mSearchGroup;
+    
+    TextView mUserAccountTextView;
     
 
     private SlidingMenu mSlidingMenu;
@@ -65,12 +59,23 @@ public class SlidingMenuHelper {
        //为侧滑菜单设置布局  
         mSlidingMenu.setMenu(R.layout.slidingmenu); 
         
-        mUserAccountGroup = (ViewGroup) findViewById(R.id.useraccount);
+        mUserAccountTextView = (TextView) findViewById(R.id.useraccount);
+        
+        String useraccount = PrivateParams.getSPString(mActivity, Constant.AIZI_USER_ACCOUNT);
+        
+        if (!TextUtils.isEmpty(useraccount)) {
+            mUserAccountTextView.setText(useraccount);
+            SLog.e(TAG, "useraccount = " + useraccount);
+        } else {
+            mUserAccountTextView.setText("用户登录");
+            SLog.e(TAG, "useraccount = " + "用户登录");
+        }
+        
+        mUserAccountGroup = (ViewGroup) findViewById(R.id.user);
         mUserAccountGroup.setOnClickListener(new View.OnClickListener() {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent(mActivity.getApplicationContext(), LoginActivity.class);
                 mActivity.startActivity(intent);
             }
@@ -254,6 +259,8 @@ public class SlidingMenuHelper {
     public void showSecondaryMenu() {
         mSlidingMenu.showSecondaryMenu();
     }
-
-
+    
+    public void setUserAccount(String useraccount) {
+        mUserAccountTextView.setText(useraccount);
+    }
 }

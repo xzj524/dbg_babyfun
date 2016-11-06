@@ -6,7 +6,7 @@
     android:background="@drawable/slidingmenubkg" >
     
    <LinearLayout 
-       android:id="@+id/useraccount"
+       android:id="@+id/user"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:gravity="center"
@@ -22,7 +22,7 @@
         android:src="@drawable/headicon"/>
     
     <TextView 
-        android:id="@+id/title"
+        android:id="@+id/useraccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -38,11 +38,6 @@
         android:src="@drawable/rightarrow"/>
        
    </LinearLayout>
-   
-
-    
-    
-    
     
       <LinearLayout
             android:layout_width="match_parent"

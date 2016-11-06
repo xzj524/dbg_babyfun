@@ -7,7 +7,9 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -59,6 +61,13 @@ public class TestActivity extends Activity {
             public void onClick(View v) {
              listAdapter.clear();
               
+             WindowManager mWm = (WindowManager) getApplicationContext()
+                     .getSystemService(getApplicationContext().WINDOW_SERVICE);
+             Display display = mWm.getDefaultDisplay();
+             int width = display.getWidth();
+             int height = display.getHeight();
+             String resolution = height + "_" + width;
+             SLog.e(TAG, "resolution = " + resolution);
             }
         });
         

@@ -11,6 +11,7 @@ import java.util.BitSet;
 import java.util.Calendar;
 import java.util.List;
 
+import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 
@@ -18,12 +19,12 @@ import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.database.BreathStopInfo;
+import com.aizi.yingerbao.database.ExceptionEvent;
+import com.aizi.yingerbao.database.SleepInfo;
+import com.aizi.yingerbao.database.YingerbaoDatabase;
+import com.aizi.yingerbao.database.TemperatureInfo;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.sleepdatabase.BreathStopInfo;
-import com.aizi.yingerbao.sleepdatabase.ExceptionEvent;
-import com.aizi.yingerbao.sleepdatabase.SleepInfo;
-import com.aizi.yingerbao.sleepdatabase.SleepInfoDatabase;
-import com.aizi.yingerbao.sleepdatabase.TemperatureInfo;
 import com.aizi.yingerbao.synctime.DeviceTime;
 
 import de.greenrobot.event.EventBus;
@@ -95,8 +96,6 @@ public class MessageParse {
                 break;
             }
         }
-                
-      
     }
     
     /**
@@ -151,9 +150,6 @@ public class MessageParse {
                 }
             } else if (kpload.key == 5) {
                 SLog.e(TAG, "receive data complete " + kpload.keyLen);
-                /*Intent intent = new Intent(Constant.DATA_TRANSFER_COMPLETED);
-                EventBus.getDefault().post(intent); */
-                //handleSleepData(kpload.keyValue);
             } else if (kpload.key == 6) {
                 SLog.e(TAG, "receiver sleep data " + kpload.keyLen);
                 handleSleepData(kpload.keyValue);
@@ -172,7 +168,6 @@ public class MessageParse {
                 handleBreathStopData(kpload.keyValue);
             } else if (kpload.key == 13) { // 呼吸停滞数据结束
                 SLog.e(TAG, "receiver breath stop data completed " + + kpload.keyLen);
-               // handleBreathStopData(kpload.keyValue);
             } else if (kpload.key == 15) {
                 handleExceptionData(kpload.keyValue);
             }
@@ -240,7 +235,6 @@ public class MessageParse {
 
 
     private void handleBreathStopData(byte[] keyValue) {
-        // TODO Auto-generated method stub
         BreathStopInfo breathStopInfo = new BreathStopInfo();
         int breathstoplength = keyValue.length;
         boolean breathalarm = false;
@@ -286,7 +280,7 @@ public class MessageParse {
                                    + breathStopInfo.mBreathSecond 
                                    + " BreathAlarm = " + breathalarm; 
                 Utiliy.dataToFile(breathstop);
-                SleepInfoDatabase.insertBreathInfo(mContext, breathStopInfo);
+                YingerbaoDatabase.insertBreathInfo(mContext, breathStopInfo);
             }
         }
     }
@@ -310,15 +304,13 @@ public class MessageParse {
             SLog.e(TAG, "Humbit value = " + keyValue[6+i]);
         }
     }
-
-
+    
     private void handleTempData(byte[] keyValue) {
-        // TODO Auto-generated method stub
         TemperatureInfo temperatureinfo = new TemperatureInfo();
         int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
         int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
         int day = keyValue[1] & 0x1f;
-        int minu = keyValue[2] << 8 | keyValue[3];
+        int minu = ((((keyValue[2] & 0xff) << 8) & 0xff00) + (keyValue[3] & 0x0ff)) & 0x0fff;
         int tempcount = keyValue[4] << 8 | keyValue[5];
         
         SLog.e(TAG, "Temp year = " + year 
@@ -327,7 +319,7 @@ public class MessageParse {
                 + " minu = " + minu 
                 + " sleepcount = " + tempcount );
         
-        temperatureinfo.mTemperatureYear = year;
+        temperatureinfo.mTemperatureYear = year + 2000;
         temperatureinfo.mTemperatureMonth = month;
         temperatureinfo.mTemperatureDay = day;
         
@@ -346,7 +338,7 @@ public class MessageParse {
                 tempString = tempHigh + "." + tempLow;
             }
             
-            temperatureinfo.mTemperatureMinute = minu + i;
+            temperatureinfo.mTemperatureMinute = minu + i * 10;
             temperatureinfo.mTemperatureValue = tempString;
             temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
             
@@ -355,7 +347,7 @@ public class MessageParse {
             Utiliy.dataToFile(tempinfo);
             Utiliy.temperatureToFile(temperatureinfo.mTemperatureValue + "");
             
-            SleepInfoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
+            YingerbaoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
         }
     }
 
@@ -364,9 +356,9 @@ public class MessageParse {
         // TODO Auto-generated method stub
         if (keyValue.length > 6) {
             List<SleepInfo> sleepInfos = getSleepInfoList(keyValue);
-            for (SleepInfo sleepinfo : sleepInfos) {
-                SleepInfoDatabase.insertSleepInfo(mContext, sleepinfo);
-            }
+            /*for (SleepInfo sleepinfo : sleepInfos) {
+                YingerbaoDatabase.insertSleepInfo(mContext, sleepinfo);
+            }*/
         } else {
             SLog.e(TAG, "There is no Sleep Data");
         }
@@ -379,7 +371,8 @@ public class MessageParse {
         int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
         int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
         int day = keyValue[1] & 0x1f;
-        int minu = keyValue[2] << 8 | keyValue[3];
+        //int minu = keyValue[2] << 8 | keyValue[3];
+        int minu = ((((keyValue[2] & 0xff) << 8) & 0xff00) + (keyValue[3] & 0x0ff)) & 0x0fff;
         int sleepcount = keyValue[4] << 8 | keyValue[5];
         
         SleepInfo sleepInfo = new SleepInfo();
@@ -396,22 +389,20 @@ public class MessageParse {
                    sleepInfo.mSleepMonth = month;
                    sleepInfo.mSleepDay = day;
                    sleepInfo.mSleepMinute = minu+i;
-                   sleepInfo.mSleepValue = keyValue[6+i];
+                   sleepInfo.mSleepValue = keyValue[6+i] & 0x0ff;
+                   
+                   YingerbaoDatabase.insertSleepInfo(mContext, sleepInfo);
                    sleepInfos.add(sleepInfo);
-                  
-                   SLog.e(TAG, "sleep value = " + keyValue[6+i]);
+                   SLog.e(TAG, "sleep date  year = " + year 
+                           + " month = " + month 
+                           + " day = " + day 
+                           + " min = " + minu
+                           + "  sleep value = " + (keyValue[6+i] & 0x0ff));
                }
            } 
         }
         return sleepInfos;
     }
-
-
-    private SleepInfo convertTosleepinfo(byte[] keyValue) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 
     private void acquireTemp(byte[] keyValue) {
         // TODO Auto-generated method stub
@@ -432,7 +423,6 @@ public class MessageParse {
         }
         
         EventBus.getDefault().post(tempString);
-        //RealTimeStatusFragment.setTemperature(tempString);
        
         SLog.e(TAG, "humbit = " + humbit);
         SLog.e(TAG, "energy = " + energy);
@@ -440,7 +430,6 @@ public class MessageParse {
 
 
     private void handleNotify(List<KeyPayload> params) {
-        // TODO Auto-generated method stub
         for (KeyPayload kpload:params) {
             if (kpload.key == 1) { // 正反状态报警
                 SLog.e(TAG, "正反状态 ALARM");

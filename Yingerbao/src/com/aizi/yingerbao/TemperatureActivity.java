@@ -2,12 +2,12 @@ package com.aizi.yingerbao;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,8 +18,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
+import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
+import com.aizi.yingerbao.logging.SLog;
+import com.aizi.yingerbao.synctime.DataTime;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.TopBarView;
@@ -68,8 +72,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             mTimer.purge();
             mTimer.cancel();
         }
-
-
     }
 
     @Override
@@ -82,38 +84,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         mTemperatureChart = (LineChart) findViewById(R.id.temperature_linechart);
         mTempButton = (Button) findViewById(R.id.control_temp_button);
-       // mTempButton.setVisibility(View.GONE);
-        
-       /* if (mTempStart) {
-            mTempStart = false;
-            mTimer.purge();
-            mTimer.cancel();
-           // mTempButton.setText(R.string.action_start_temp);
-        } else {
-            if (Utiliy.isBluetoothReady(getApplicationContext())) {
-                if (!mTempStart) {
-                    mTempStart = true;
-                    mTimer = new Timer(true);
-                    TimerTask task = new TimerTask(){  
-                        public void run() {  
-                        AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
-                      }  
-                   };  
-                    mTimer.schedule(task,1000, 3000); 
-                    //mTempButton.setText(R.string.action_stop);
-                } else {
-                    mTempStart = false;
-                    mTimer.purge();
-                    mTimer.cancel();
-                   // mTempButton.setText(R.string.action_start_temp);
-                }
-            } else {
-                showNormalDialog();
-            }
-        }
-        */
-        
-        
         mTempButton.setOnClickListener(new View.OnClickListener() {
             
             @Override
@@ -156,7 +126,11 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         mTempValue = (TextView) findViewById(R.id.tempvalue);
         
-        initTempStatus();
+        DataTime dataTime = new DataTime();
+        dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
+        dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
+        dataTime.day = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
+        updateTempStatus(dataTime );
         EventBus.getDefault().register(this);
     }
     
@@ -165,22 +139,20 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     public void onEventMainThread(Intent intent) { 
         String action = intent.getAction();
         if (Constant.DATA_REALTIME_TEMPERATURE.equals(action)) {
+            // 获取实时温度值
            String str = intent.getStringExtra("realtime_temperature"); 
            mTempValue.setText(str);
-           
         }
     }
     
-    private void initTempStatus() {
+    private void updateTempStatus(DataTime dataTime) {
         if (yValsTem.size() > 0) {
             yValsTem.clear();
         }
         
-       
-        
-        int year =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
-        int month =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
-        int day =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
+        int year =  dataTime.year;
+        int month = dataTime.month;
+        int day = dataTime.day;
         
         if (year == 0 || month == 0 || day == 0) {
             Calendar calendar = Calendar.getInstance();   
@@ -189,7 +161,33 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             day = calendar.get(Calendar.DAY_OF_MONTH);   
         } 
         
-        for (int i = 0; i < 24; i++) {
+        List<TemperatureInfoEnumClass> temperatureinfos 
+            = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
+        
+        
+       for (int i = 0; i < temperatureinfos.size(); i++) {
+           float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
+           SLog.e(TAG, "tempvalue from database = " + tempvalue);
+           yValsTem.add(new Entry(tempvalue, i));
+       }
+        
+       /* for (int j = 0; j < 1440; j++) {
+            for (int i = 0; i < temperatureinfos.size(); i++) {
+                if (j == temperatureinfos.get(i).getTemperatureMinute()) {
+                    yValsTem.add(new Entry(Float.parseFloat(temperatureinfos.get(i).getTemperatureValue()), j));
+                }
+                
+            }
+        }*/
+        
+        if (xVals.size() > 0) {
+            xVals.clear();
+        }  
+        for (int i = 0; i < temperatureinfos.size(); i++) {
+            xVals.add(i + "");
+        }
+        
+/*        for (int i = 0; i < 24; i++) {
             if (i < 6) {
                 yValsTem.add(new Entry((float) (70 - (Math.random() * 10)), i));
             } else if (i > 5 && i < 12) {
@@ -199,15 +197,10 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             }else if (i > 17 && i < 24) {
                 yValsTem.add(new Entry((float) (70 - (Math.random() * 10)), i));
             }
-        }
+        }*/
         
         
-        if (xVals.size() > 0) {
-            xVals.clear();
-        }  
-        for (int i = 0; i < 24; i++) {
-            xVals.add(i + "");
-        }
+      
         
         LineDataSet SleepySet = new LineDataSet(yValsTem, null);
         SleepySet.setDrawCubic(true);
@@ -226,20 +219,21 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
    
         XAxis xAxis = mTemperatureChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGridColor(Color.RED);
         
         
         YAxis leftAxis = mTemperatureChart.getAxisLeft();  //得到图表的左侧Y轴实例
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawLabels(false);
-        leftAxis.setAxisMaxValue(100); // 设置Y轴最大值
-        leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
+        leftAxis.setAxisMaxValue(40); // 设置Y轴最大值
+        leftAxis.setAxisMinValue(20);// 设置Y轴最小值。
         leftAxis.setStartAtZero(true);   //设置图表起点从0开始
         
         YAxis rightAxis = mTemperatureChart.getAxisRight();  //得到图表的右侧Y轴实例
         rightAxis.setDrawAxisLine(true);
         rightAxis.setDrawLabels(false);
-        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
-        rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
+        rightAxis.setAxisMaxValue(40); // 设置Y轴最大值
+        rightAxis.setAxisMinValue(20);// 设置Y轴最小值。
         rightAxis.setStartAtZero(true);   //设置图表起点从0开始
   
         // no description text  
@@ -247,16 +241,19 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
        
      
         // enable / disable grid background  
-        mTemperatureChart.setDrawGridBackground(false); // 是否显示表格颜色  
+        mTemperatureChart.setDrawGridBackground(true); // 是否显示表格颜色  
        
         // enable touch gestures  
         mTemperatureChart.setTouchEnabled(false); // 设置是否可以触摸  
   
-        mTemperatureChart.setDoubleTapToZoomEnabled(false);//设置双击不进行缩放
+        mTemperatureChart.setDoubleTapToZoomEnabled(true);//设置双击不进行缩放
+        //mTemperatureChart.set
   
         // if disabled, scaling can be done on x- and y-axis separately  
         mTemperatureChart.setPinchZoom(false);//   
-      
+        // enable scaling and dragging  
+        mTemperatureChart.setDragEnabled(false);// 是否可以拖拽  
+        mTemperatureChart.setScaleEnabled(false);// 是否可以缩放  
   
         mTemperatureChart.setBackgroundColor(color);// 设置背景  
         // add data  
@@ -295,23 +292,27 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         normalDialog.show();
     }
 
-@Override
-public void onBackClick() {
-    // TODO Auto-generated method stub
-    finish();
-}
-
-@Override
-public void onRightClick() {
-    // TODO Auto-generated method stub
+    @Override
+    public void onBackClick() {
+        // TODO Auto-generated method stub
+        finish();
+    }
     
-}
-
-@Override
-public void onCalendarClick() {
-    // TODO Auto-generated method stub
-    SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
-    mFragment.show(getFragmentManager(), "simple-calendar");
-
-}
+    @Override
+    public void onRightClick() {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    @Override
+    public void onCalendarClick() {
+        // TODO Auto-generated method stub
+        SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
+        mFragment.show(getFragmentManager(), "simple-calendar");
+    
+    }
+    
+    public void onEventMainThread(DataTime dataTime) { 
+        updateTempStatus(dataTime);
+    }
 }

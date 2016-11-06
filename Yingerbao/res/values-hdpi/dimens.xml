@@ -8,6 +8,10 @@
     <dimen name="startup_undirect_layout_margin_top">16dp</dimen>
     <dimen name="startup_undirect_btn_margin_top">16dp</dimen>
     
+    
+    <!-- 顶部导航栏字体 -->
+    <dimen name="common_layout_top_text_size">12sp</dimen>
+    
     <!-- 公共间距 -->
     <dimen name="common_layout_margin_top_small">12dp</dimen>
     <dimen name="common_layout_margin_top_super">48dp</dimen>

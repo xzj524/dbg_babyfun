@@ -66,7 +66,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
       
-
         // Set up the login form.
         mPhoneView = (AutoCompleteTextView) findViewById(R.id.phonenumber);
         populateAutoComplete();
@@ -157,11 +156,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             focusView = mPhoneView;
             cancel = true;
         }
-       /* else if (!isEmailValid(email)) {
-            mPhoneView.setError(getString(R.string.error_invalid_email));
-            focusView = mPhoneView;
-            cancel = true;
-        }*/
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -314,16 +308,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             } catch (InterruptedException e) {
                 return false;
             }
-
-       /*     for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mPhoneNumber)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-*/
-            // TODO: register the new account here.
             return true;
         }
 
@@ -333,6 +317,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) {
+                PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USER_ACCOUNT, mPhoneNumber);
                 finish();
                 Intent intent = new Intent(getApplicationContext(), ConnectDeviceActivity.class);
                 startActivity(intent);

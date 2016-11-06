@@ -1,4 +1,4 @@
-package com.aizi.yingerbao.sleepdatabase;
+package com.aizi.yingerbao.database;
 
 public class BreathStopInfo {
     public long mBreathTimestamp = 0;

@@ -1,4 +1,4 @@
-package com.aizi.yingerbao.sleepdatabase;
+package com.aizi.yingerbao.database;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,15 +19,15 @@ import android.util.Pair;
 
 import com.aizi.yingerbao.logging.SLog;
 
-public class SleepInfoDatabase {
+public class YingerbaoDatabase {
     private static InfoDbOpenHelper mDbHelper = null;
     private static DbErrorHandler mDbErrorHandler = null;
     private static Object myLock = new Object();
     private static final int DB_VERSION = 1;
     private static final String DB_DIR = "/database";
     private static final String DATA_DIR = "/data";
-    private static final String TAG = "SleepInfoDatabase";
-    private static final String DB_NAME = "sleepinfo.db";
+    private static final String TAG = "YingerbaoDatabase";
+    private static final String DB_NAME = "yingerbaoinfo.db";
 
     public static void close() {
         synchronized (myLock) {
@@ -68,7 +68,7 @@ public class SleepInfoDatabase {
                 
                 File dbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + DATA_DIR + File.separator
                         + context.getPackageName() + DB_DIR);
-                SLog.d(TAG, "File Path is  " + Environment.getDataDirectory().getAbsolutePath() 
+                SLog.d(TAG, "File Path is  " + Environment.getExternalStorageDirectory().getAbsolutePath() 
                         + DATA_DIR + File.separator
                         + context.getPackageName() + DB_DIR);
 
@@ -142,9 +142,8 @@ public class SleepInfoDatabase {
             long ret = -1;
             Cursor cs = null;
             try {
-              
                 ret = db.insert(SleepInfoEnum.TABLE_NAME, null, values);
-                SLog.d(TAG, "SleepInfoEnum:  insert into database");
+                SLog.d(TAG, "SleepInfoEnum:  insert into database = " + values);
             } catch (Exception e) {
                 SLog.e(TAG, e);
             } finally {
@@ -230,14 +229,12 @@ public class SleepInfoDatabase {
             if (db == null) {
                 return -1;
             }
-            
-            
             String selection = TemperatureInfoEnum.TemperatureYear.name() + " = " + temperatureinfo.mTemperatureYear 
                               + " AND " + TemperatureInfoEnum.TemperatureMonth.name() + " = " + temperatureinfo.mTemperatureMonth 
                               + " AND " + TemperatureInfoEnum.TemperatureDay.name() + " = " + temperatureinfo.mTemperatureDay
                               + " AND " + TemperatureInfoEnum.TemperatureMinute.name() + " = " + temperatureinfo.mTemperatureMinute
                               + ";";
-            // 查询数据库中的msgId
+            
             Cursor cursor = db.query(TemperatureInfoEnum.TABLE_NAME, null,
                     selection, null, null, null, null);
             if (cursor == null) {

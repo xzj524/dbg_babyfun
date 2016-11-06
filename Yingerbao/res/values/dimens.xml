@@ -5,5 +5,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="slidingmenu_offset">100dp</dimen>
     <dimen name="shadow_width">2dp</dimen>
+    
+      <!-- 顶部导航栏字体 -->
+    <dimen name="common_layout_top_text_size">12sp</dimen>
 
 </resources>

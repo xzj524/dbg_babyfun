@@ -1,4 +1,4 @@
-package com.aizi.yingerbao.sleepdatabase;
+package com.aizi.yingerbao.database;
 
 public class TemperatureInfo {
     public long mTemperatureTimestamp = 0;
