@@ -1,7 +1,5 @@
 package com.aizi.yingerbao;
 
-import java.util.ArrayList;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,8 +12,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.aizi.yingerbao.R;
-import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.chart.BreathChart;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;

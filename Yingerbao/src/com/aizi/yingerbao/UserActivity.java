@@ -2,6 +2,7 @@ package com.aizi.yingerbao;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,6 +14,7 @@ import com.aizi.yingerbao.view.BatteryView;
 import com.aizi.yingerbao.view.CircleButton;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
+import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 
 public class UserActivity extends Activity implements onTitleBarClickListener {
     
@@ -26,6 +28,12 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        
+        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
+        UpdateHelper.getInstance().setDebugMode(true);
+        long intervalMillis = 100 * 1000L; //第一次调用startUpdateSilent出现弹窗后，如果100秒内进行第二次调用不会查询更新
+        UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
+
         
         mCircleButtonBreath = (CircleButton) findViewById(R.id.button0);
         mCircleButtonTemp = (CircleButton) findViewById(R.id.button1);

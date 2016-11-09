@@ -78,12 +78,11 @@ public class YingerBaoActivity extends FragmentActivity  implements onTitleBarCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xiao_huhu);
         
-        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
+        /*UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
         UpdateHelper.getInstance().setDebugMode(true);
-        long intervalMillis = 10 * 1000L;           //第一次调用startUpdateSilent出现弹窗后，如果10秒内进行第二次调用不会查询更新
+        long intervalMillis = 100 * 1000L;           //第一次调用startUpdateSilent出现弹窗后，如果10秒内进行第二次调用不会查询更新
         UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
-        //UpdateHelper.getInstance().manualUpdate(getPackageName());
-        
+*/        
         topbar = (TopBarView) findViewById(R.id.xiaohuhutopbar);
         topbar.setClickListener(this);
         
