@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Calendar;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -24,6 +23,7 @@ public class BaseMessageHandler {
     
     private static final String TAG = BaseMessageHandler.class.getSimpleName();
     private final static short BASE_DATA_HEAD = 6;
+    private static Object mYingerbaoLock = new Object();
     
     private static boolean isOver;
     public static ByteArrayOutputStream l2OutputStream = new ByteArrayOutputStream();
@@ -114,24 +114,25 @@ public class BaseMessageHandler {
     
     public static boolean sendL2Message(BaseL2Message bsl2msg) {
         boolean isSendL2Over = false;
-        try {
-            
-            String l2payload = MessageParse.printHexString(bsl2msg.toByte());
-            SLog.e(TAG, "HEX Send string l2load1 = " + l2payload);
-            Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
-            intent.putExtra("transferdata", "L2 " + l2payload);
-            EventBus.getDefault().post(intent);  // 在测试界面显示出来
-            Utiliy.logToFile(" L2 " + " SEND: " + l2payload); // 写入日志文件
-   
-            l2InputStream = new ByteArrayInputStream(bsl2msg.toByte());
-            if (l2InputStream != null) {
-                isSendL2Over = sendL2Msg(true);
+        synchronized (mYingerbaoLock) {
+            try {
+                /****在测试界面显示出来,写入日志文件*****/
+                String l2payload = MessageParse.printHexString(bsl2msg.toByte());
+                SLog.e(TAG, "HEX Send string l2load1 = " + l2payload);
+                Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
+                intent.putExtra("transferdata", "L2 " + l2payload);
+                EventBus.getDefault().post(intent);
+                Utiliy.logToFile(" L2 " + " SEND: " + l2payload); 
+                /****在测试界面显示出来,写入日志文件*****/
+                
+                l2InputStream = new ByteArrayInputStream(bsl2msg.toByte());
+                if (l2InputStream != null) {
+                    isSendL2Over = sendL2Msg(true);
+                }
+            } catch (Exception e) {
+                SLog.e(TAG, e);
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            SLog.e(TAG, e);
         }
-        
         return isSendL2Over;
     }
     
@@ -175,32 +176,6 @@ public class BaseMessageHandler {
         return isSendL2Over;     
     }
     
-/*    public static void sendL2EndMsg() {
-        // TODO Auto-generated method stub
-        BaseL1Message bsOMsg = new BaseL1Message();
-        byte[] buffer = new byte[14];
-        int readcount = in.read(buffer, 0, 14);
-        SLog.e(TAG, "readcount = " + readcount);
-        bsOMsg.payload = new byte[readcount];
-        System.arraycopy(buffer, 0, bsOMsg.payload, 0, readcount);
-        if (readcount < 14) {
-            bsOMsg.errFlag = 2;
-        } else {
-            bsOMsg.errFlag = 1;
-        }
-        bsOMsg.isAiziBaseL1Head = true;
-        bsOMsg.isNeedAck = true;
-        bsOMsg.ackFlag = 0;
-        bsOMsg.version = 0;
-        bsOMsg.payloadLength = (short) readcount;
-        bsOMsg.sequenceId = (short) ++squenceID;
-        bsOMsg.CRC16 = (short) CRC16.calcCrc16(bsOMsg.payload);
-        
-        SLog.e(TAG, "write BASE character readcount = " + readcount);
-        if (readcount > 0) {
-            EventBus.getDefault().post(new AsycEvent(bsOMsg.tobyte()));
-        }
-    }*/
     
     public static void sendL1Msg(byte[] buffer, int flag) {
         // TODO Auto-generated method stub
@@ -221,11 +196,11 @@ public class BaseMessageHandler {
             
             byte[] bsl1buffer = bsL1Msg.tobyte();
             String l1payload = MessageParse.printHexString(bsl1buffer);
-            Utiliy.logToFile(" L1 " + " SEND: " + l1payload); // 写入日志文件
             
             Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
             intent.putExtra("transferdata", " L1 " + l1payload);
             EventBus.getDefault().post(intent); // 显示到测试界面上
+            Utiliy.logToFile(" L1 " + " SEND: " + l1payload); // 写入日志文件
             
             SLog.e(TAG, "write BASE character readcount = " + buffer.length);
             EventBus.getDefault().post(new AsycEvent(bsL1Msg.tobyte())); // 通过蓝牙传输数据
@@ -262,12 +237,15 @@ public class BaseMessageHandler {
     public static BaseL2Message generateBaseL2Msg(short commanid, short version, 
             KeyPayload keyPayload){
         BaseL2Message bsl2Msg = new BaseL2Message();
-        bsl2Msg.commanID = commanid;
-        bsl2Msg.versionCode = version;
-        bsl2Msg.payload = new byte[keyPayload.keyLen + 3];
-        System.arraycopy(keyPayload.toByte(), 0, bsl2Msg.payload, 0, keyPayload.keyLen + 3);
+        try {
+            bsl2Msg.commanID = commanid;
+            bsl2Msg.versionCode = version;
+            bsl2Msg.payload = new byte[keyPayload.keyLen + 3];
+            System.arraycopy(keyPayload.toByte(), 0, bsl2Msg.payload, 0, keyPayload.keyLen + 3);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
         return bsl2Msg;
-        
     }
 
     private static BaseL2Message getBaseL2Msg(byte[] l2data) {

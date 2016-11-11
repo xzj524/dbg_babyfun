@@ -70,18 +70,18 @@ public class BluetoothService extends Service {
     private static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
     public final static String ACTION_GATT_CONNECTED =
-            "com.aizi.xiaohuhu.ACTION_GATT_CONNECTED";
+            "com.aizi.yingerbao.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
-            "com.aizi.xiaohuhu.ACTION_GATT_DISCONNECTED";
+            "com.aizi.yingerbao.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
-            "com.aizi.xiaohuhu.ACTION_GATT_SERVICES_DISCOVERED";
+            "com.aizi.yingerbao.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
-            "com.aizi.xiaohuhu.ACTION_DATA_AVAILABLE";
+            "com.aizi.yingerbao.ACTION_DATA_AVAILABLE";
 
     public final static String EXTRA_TYPE =
-            "com.aizi.xiaohuhu.EXTRA_TYPE";
+            "com.aizi.yingerbao.EXTRA_TYPE";
     public final static String DEVICE_DOES_NOT_SUPPORT_BLUETOOTH =
-            "com.aizi.xiaohuhu.DEVICE_DOES_NOT_SUPPORT_BLUETOOTH";
+            "com.aizi.yingerbao.DEVICE_DOES_NOT_SUPPORT_BLUETOOTH";
     
     
    
@@ -102,15 +102,14 @@ public class BluetoothService extends Service {
                 mConnectionState = STATE_DISCONNECTED;
                 SLog.e(TAG, "Disconnected from GATT server.");   
                 PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+                broadcastUpdate(connectionAction);
             }
-            broadcastUpdate(connectionAction);
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                boolean isEnable = enableDataNotification();
-                if (isEnable) { // 蓝牙已经连接并且准备好数据传输
+                if (enableDataNotification()) { // 蓝牙已经连接并且准备好数据传输
                     SLog.e(TAG, "Bluetooth  is Ready, mBluetoothGatt = " + mBluetoothGatt );
                     PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 1);
                     broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
@@ -158,10 +157,6 @@ public class BluetoothService extends Service {
             EventBus.getDefault().post(intent); 
         }
     }
-    
-    private boolean isHeartRateInUINT16(final byte value) {
-		return ((value & 0x01) != 0);
-	}
 
     public class LocalBinder extends Binder {
            public BluetoothService getService() {
@@ -208,9 +203,6 @@ public class BluetoothService extends Service {
             SLog.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
         }
-        
-        //EventBus.getDefault().register(this);
-
         return true;
     }
 
@@ -231,9 +223,9 @@ public class BluetoothService extends Service {
         }
 
         // Previously connected device.  Try to reconnect.
-    /*    if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
+        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
-            SLog.e(TAG, "Trying to use an existing mBluetoothGatt for connection.");
+            SLog.e(TAG, "Trying to use an existing mBluetoothGatt for connection. address = " + address);
             if (mBluetoothGatt.connect()) {
                 mConnectionState = STATE_CONNECTING;
                 return true;
@@ -242,7 +234,7 @@ public class BluetoothService extends Service {
                 broadcastUpdate(ACTION_GATT_DISCONNECTED);
                 return false;
             }
-        }*/
+        }
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
@@ -255,8 +247,6 @@ public class BluetoothService extends Service {
         // parameter to false.
         
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
-       
-    
         SLog.e(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
@@ -271,12 +261,16 @@ public class BluetoothService extends Service {
      */
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.e(TAG, "BluetoothAdapter not initialized");
+            SLog.e(TAG, "BluetoothAdapter not initialized");
             return;
         }
+        
+        SLog.e(TAG, "BluetoothAdapter DISCONNECT");
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         broadcastUpdate(ACTION_GATT_DISCONNECTED);
         mBluetoothGatt.disconnect();
+        mBluetoothGatt.close();
+        mBluetoothGatt = null;
     }
 
     /**
@@ -318,67 +312,65 @@ public class BluetoothService extends Service {
      * @return 
      */
     public boolean  enableDataNotification() {
+        boolean notificationresult = false;
         try {
-            mDataService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
-            if (mDataService == null) {
-                SLog.e(TAG, "enableDataNotification BLE_UUID_NUS_SERVICE not found!");
-                broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-                PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-                return false;
+            if (mBluetoothGatt != null) {
+                mDataService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
+                if (mDataService == null) {
+                    SLog.e(TAG, "enableDataNotification BLE_UUID_NUS_SERVICE not found!");
+                    broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
+                    PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+                    return notificationresult;
+                }
+                mCharacterChar = mDataService.getCharacteristic(BLE_UUID_NUS_RX_CHARACTERISTIC);
+                if (mCharacterChar == null) {
+                    SLog.e(TAG, "enableDataNotification BLE_UUID_NUS_RX_CHARACTERISTIC not found!");
+                    broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
+                    PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+                    return notificationresult;
+                }
+                mBluetoothGatt.setCharacteristicNotification(mCharacterChar,true);
+                BluetoothGattDescriptor descriptor = mCharacterChar.getDescriptor(CCCD);
+                if (descriptor != null) {
+                    descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                    notificationresult = mBluetoothGatt.writeDescriptor(descriptor);
+                }
             }
-            mCharacterChar = mDataService.getCharacteristic(BLE_UUID_NUS_RX_CHARACTERISTIC);
-            if (mCharacterChar == null) {
-                SLog.e(TAG, "enableDataNotification BLE_UUID_NUS_RX_CHARACTERISTIC not found!");
-                broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-                PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-                return false;
-            }
-            mBluetoothGatt.setCharacteristicNotification(mCharacterChar,true);
-            BluetoothGattDescriptor descriptor = mCharacterChar.getDescriptor(CCCD);
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-            mBluetoothGatt.writeDescriptor(descriptor);
-
-            return true;
         } catch (Exception e) {
-            // TODO: handle exception
             SLog.e(TAG, e);
         }
-        PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-        return false;
+        if (!notificationresult) {
+            PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+        }
+        return notificationresult;
     }
     
-    public void writeBaseRXCharacteristic(byte[] value)
-    {
-        BluetoothGattService TxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
-        if (TxService == null) {
-            SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_SERVICE not found!");
-            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-            return;
+    public boolean writeBaseRXCharacteristic(byte[] value) {
+        boolean status = false;
+        try {
+            if (mBluetoothGatt != null) {
+                BluetoothGattService TxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
+                if (TxService == null) {
+                    SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_SERVICE not found!");
+                    SLog.e(TAG, "write TXchar status = " + status);
+                    broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
+                    return status;
+                }
+                BluetoothGattCharacteristic TxChar = TxService.getCharacteristic(BLE_UUID_NUS_TX_CHARACTERISTIC);
+                if (TxChar == null) {
+                    SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_TX_CHARACTERISTIC not found!");
+                    SLog.e(TAG, "write TXchar status = " + status);
+                    broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
+                    return status;
+                }
+                TxChar.setValue(value);
+                status = mBluetoothGatt.writeCharacteristic(TxChar);
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
         }
-        BluetoothGattCharacteristic TxChar = TxService.getCharacteristic(BLE_UUID_NUS_TX_CHARACTERISTIC);
-        if (TxChar == null) {
-            SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_TX_CHARACTERISTIC not found!");
-            broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-            return;
-        }
-        TxChar.setValue(value);
-        boolean status = mBluetoothGatt.writeCharacteristic(TxChar);
-        
-        SLog.e(TAG, "write TXchar status = " + status);  
-    }
-    
-    /**
-     * Retrieves a list of supported GATT services on the connected device. This should be
-     * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
-     *
-     * @return A {@code List} of supported services.
-     */
-    public List<BluetoothGattService> getSupportedGattServices() {
-        if (mBluetoothGatt == null) return null;
 
-        return mBluetoothGatt.getServices();
+        SLog.e(TAG, "write TXchar status = " + status);
+        return status;  
     }
-    
-    
-    
 }

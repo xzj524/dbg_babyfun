@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathInfoEnumClass;
-import com.aizi.yingerbao.database.BreathStopInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;

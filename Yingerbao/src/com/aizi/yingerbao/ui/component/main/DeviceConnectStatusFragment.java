@@ -3,6 +3,7 @@
  */
 package com.aizi.yingerbao.ui.component.main;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,7 +31,7 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
-import com.aizi.yingerbao.service.ScanDevicesService.OnScanDeviceListener;
+import com.aizi.yingerbao.utility.ListDataSave;
 import com.aizi.yingerbao.utility.PrivateParams;
 
 import de.greenrobot.event.EventBus;
@@ -48,9 +49,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     private static final int REQUEST_SELECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BLUETOOTH = 101;
     private BluetoothDevice mDevice = null;
-    private BluetoothService mService = null;
     OnDeviceConnectListener mListener;
-    OnScanDeviceListener mScanDeviceListener;
 
     /** 远程还是本地 */
     private TextView mDeviceOrLocalTextView;
@@ -244,20 +243,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-       if (requestCode == REQUEST_SELECT_DEVICE) {
-            if (resultCode == Activity.RESULT_OK && intent != null) {
-                String deviceAddress = intent.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
-                mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
-               
-                SLog.e(TAG, "onActivityResultdevice = " + mDevice 
-                          + " deviceaddress = "+ deviceAddress 
-                          + " myserviceValue = " + mService);
-             
-                mListener.onDeviceConnected(intent);
-                doUpdateStatusClick();
-
-            }
-        } else if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
+       if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
             Intent enableintent = new Intent("com.babyfun.scandevices");
             mListener.onDeviceConnected(enableintent);
         }
@@ -306,7 +292,7 @@ public class DeviceConnectStatusFragment extends Fragment{
         if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
             setCurrentStateConnected();
             doUpdateStatusClick();
-            AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).getAllNoSyncInfo();
+            //AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).getAllNoSyncInfo();
         } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
             setCurrentStateFailed();
             doUpdateStatusClick();
@@ -316,17 +302,32 @@ public class DeviceConnectStatusFragment extends Fragment{
             Intent intent = new Intent(getActivity().getApplicationContext(), YingerBaoActivity.class);
             startActivity(intent);
         } else if (action.equals(Constant.BLUETOOTH_SCAN_FOUND)) {
-            String deviceAddress = PrivateParams.getSPString(getActivity().getApplicationContext(),
-                    Constant.SHARED_DEVICE_ADDRESS);
-            if (TextUtils.isEmpty(deviceAddress)) {
-                return;
+            SLog.e(TAG, "...BLUETOOTH_SCAN_FOUND");
+            /*ListDataSave listDataSave = new ListDataSave(getActivity().getApplicationContext(),
+                    Constant.AIZI_DEVICE_PRIVATE_SETTINGS);
+            // 获取已扫描的设备列表
+            List<BluetoothDevice> mDeviceList = listDataSave.getDataList(Constant.AIZI_DEVICE_ADDRESS);*/
+            String devaddress = PrivateParams.getSPString(getActivity().getApplicationContext(), 
+                    Constant.AIZI_DEVICE_ADDRESS);
+            if (!TextUtils.isEmpty(devaddress)) {
+                BluetoothApi.getInstance(getActivity().getApplicationContext())
+                .mBluetoothService.connect(devaddress);
+                mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(devaddress);
+                SLog.e(TAG, "... onActivityResultdevice.address==" + mDevice 
+                        + "deviceaddress "+ devaddress);
             }
-            mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
-            SLog.e(TAG, "... onActivityResultdevice.address==" + mDevice 
-                    + "deviceaddress "+ deviceAddress 
-                    +" myserviceValue = " + mService);
-            BluetoothApi.getInstance(getActivity().getApplicationContext())
-                        .mBluetoothService.connect(deviceAddress);
+            /*for (BluetoothDevice device : mDeviceList) {
+                if (!TextUtils.isEmpty(device.getName()) 
+                        && device.getName().equals(Constant.AIZI_DEVICE_TAG)) {
+                    devaddress = device.getAddress();
+                    SLog.e(TAG, "... onActivityResultdevice.address==" + mDevice 
+                            + "deviceaddress "+ devaddress 
+                            +" myserviceValue = " + mService);
+                    BluetoothApi.getInstance(getActivity().getApplicationContext())
+                                .mBluetoothService.connect(devaddress);
+                    break;
+                }
+            }          */  
         } else if (action.equals(Constant.BLUETOOTH_SCAN_NOT_FOUND)) {
             setCurrentStateFailed();
             doUpdateStatusClick();

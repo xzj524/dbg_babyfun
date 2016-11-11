@@ -22,7 +22,6 @@ public class KeyPayload {
             }
             
         } catch (Exception e) {
-            // TODO: handle exception
             SLog.e(TAG, e);
         }   
         return keyPayload;

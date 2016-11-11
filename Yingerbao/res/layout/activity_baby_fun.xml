@@ -24,7 +24,7 @@
 	       android:layout_height="wrap_content"
 	       android:layout_below="@id/hometopbar">
 	
-		     <LinearLayout 
+		    <LinearLayout 
 		       android:id="@+id/showdata"
 		       android:layout_width="match_parent"
 		       android:layout_height="wrap_content"
@@ -42,13 +42,7 @@
 		            android:layout_height="wrap_content"
 		            android:layout_marginTop="50dip"
 		            android:padding="5dp" />
-			      
-			      <zrc.widget.ZrcListView
-			        android:id="@+id/zListView"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content" 
-			        android:layout_marginTop="50dip">
-    			  </zrc.widget.ZrcListView>
+
 	
 	    	 </LinearLayout> 
 	    </ScrollView>

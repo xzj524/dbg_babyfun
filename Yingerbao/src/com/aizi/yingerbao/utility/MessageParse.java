@@ -11,7 +11,6 @@ import java.util.BitSet;
 import java.util.Calendar;
 import java.util.List;
 
-import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 
@@ -22,8 +21,8 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathStopInfo;
 import com.aizi.yingerbao.database.ExceptionEvent;
 import com.aizi.yingerbao.database.SleepInfo;
-import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.database.TemperatureInfo;
+import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DeviceTime;
 

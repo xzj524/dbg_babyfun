@@ -28,11 +28,19 @@ public class Constant {
     
     public static final short BASE_VERSION_CODE = 1;
     
+    /** 爱子科技设备标识 */
+    public static final String AIZI_DEVICE_TAG = "my_hrm";
+    
     /** 存储app私有的shared preference */
     public static final String SHARED_NAME_PRIVATE_SETTINGS = "aizi_pst";
     
+    
+    /** 存储私设备信息的shared preference */
+    public static final String AIZI_DEVICE_PRIVATE_SETTINGS = "aizi_device_pst";
+    
+    
     /** 存储DeviceAddress  */
-    public static final String SHARED_DEVICE_ADDRESS = "dev_address";
+    public static final String AIZI_DEVICE_ADDRESS = "aizi_dev_address";
     
     /** 设备时间与手机端偏差限制  */
     public static final long DEVICE_TIME_OFFSET = 60 * 60 * 1000;

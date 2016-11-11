@@ -15,6 +15,9 @@ import com.aizi.yingerbao.view.CircleButton;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
 import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.analytics.MobclickAgent.EScenarioType;
+import com.umeng.analytics.MobclickAgent.UMAnalyticsConfig;
 
 public class UserActivity extends Activity implements onTitleBarClickListener {
     
@@ -33,6 +36,12 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         UpdateHelper.getInstance().setDebugMode(true);
         long intervalMillis = 100 * 1000L; //第一次调用startUpdateSilent出现弹窗后，如果100秒内进行第二次调用不会查询更新
         UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
+        
+        MobclickAgent.setScenarioType(getApplicationContext(), EScenarioType.E_UM_NORMAL);
+        MobclickAgent.startWithConfigure(
+                new UMAnalyticsConfig(getApplicationContext(), 
+                "582580076e27a45a8a00000c", "Umeng", 
+                EScenarioType.E_UM_NORMAL));
 
         
         mCircleButtonBreath = (CircleButton) findViewById(R.id.button0);

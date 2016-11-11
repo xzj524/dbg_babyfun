@@ -3,10 +3,6 @@ package com.aizi.yingerbao;
 import java.util.ArrayList;
 import java.util.List;
 
-import zrc.widget.SimpleFooter;
-import zrc.widget.SimpleHeader;
-import zrc.widget.ZrcListView;
-import zrc.widget.ZrcListView.OnStartListener;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -47,8 +43,6 @@ import com.aizi.yingerbao.view.HorizontalProgressBarWithNumber;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.analytics.MobclickAgent.EScenarioType;
-import com.umeng.analytics.MobclickAgent.UMAnalyticsConfig;
 
 import de.greenrobot.event.EventBus;
 
@@ -85,18 +79,11 @@ onTitleBarClickListener {
     boolean mTemHide = false;
     boolean mSleepHide = false;
     
-    private ZrcListView listView;
-    private Handler handler;
-    private ArrayList<String> msgs;
-    private int pageId = -1;
-    private MyAdapter adapter;
-    
-    private static final String[][] names = new String[][]{
-        {"加拿大","瑞典","澳大利亚","瑞士","新西兰","挪威","丹麦","芬兰","奥地利","荷兰","德国","日本","比利时","意大利","英国"},
-        {"德国","西班牙","爱尔兰","法国","葡萄牙","新加坡","希腊","巴西","美国","阿根廷","波兰","印度","秘鲁","阿联酋","泰国"},
-        {"智利","波多黎各","南非","韩国","墨西哥","土耳其","埃及","委内瑞拉","玻利维亚","乌克兰"},
-        {"以色列","海地","中国","沙特阿拉伯","俄罗斯","哥伦比亚","尼日利亚","巴基斯坦","伊朗","伊拉克"}
-    };
+    //private ZrcListView listView;
+    //private Handler handler;
+    //private ArrayList<String> msgs;
+    //private int pageId = -1;
+    //private MyAdapter adapter;
     
     ViewGroup mMessageCenterViewGroup;
     ViewGroup mBabyBreathViewGroup;
@@ -139,66 +126,16 @@ onTitleBarClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baby_fun);
-        
-        listView = (ZrcListView) findViewById(R.id.zListView);
-        handler = new Handler();
 
-        // 设置默认偏移量，主要用于实现透明标题栏功能。（可选）
-        float density = getResources().getDisplayMetrics().density;
-        listView.setFirstTopOffset((int) (50 * density));
-        
-        
-     // 设置下拉刷新的样式（可选，但如果没有Header则无法下拉刷新）
-        SimpleHeader header = new SimpleHeader(this);
-        header.setTextColor(0xff0066aa);
-        header.setCircleColor(0xff33bbee);
-        listView.setHeadable(header);
-
-        // 设置加载更多的样式（可选）
-        SimpleFooter footer = new SimpleFooter(this);
-        footer.setCircleColor(0xff33bbee);
-        listView.setFootable(footer);
-
-        // 设置列表项出现动画（可选）
-        listView.setItemAnimForTopIn(R.anim.topitem_in);
-        listView.setItemAnimForBottomIn(R.anim.bottomitem_in);
-
-        // 下拉刷新事件回调（可选）
-        listView.setOnRefreshStartListener(new OnStartListener() {
-            @Override
-            public void onStart() {
-                refresh();
-            }
-        });
-
-        // 加载更多事件回调（可选）
-        listView.setOnLoadMoreStartListener(new OnStartListener() {
-            @Override
-            public void onStart() {
-                loadMore();
-            }
-        });
-        
-        adapter = new MyAdapter();
-        listView.setAdapter(adapter);
-        listView.refresh(); // 主动下拉刷新
-
-     
    /*     if (PrivateParams.getSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 0) == 0) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
         }*/
-        
-        
+
         mProgressBar = (HorizontalProgressBarWithNumber) findViewById(R.id.id_progressbar01);
         mHandler.sendEmptyMessage(MSG_PROGRESS_UPDATE);
         
-        MobclickAgent.startWithConfigure(
-                new UMAnalyticsConfig(getApplicationContext(), 
-                "57ca68af67e58ebc68003313", "Umeng", 
-                EScenarioType.E_UM_NORMAL));
-     
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
 
@@ -211,7 +148,7 @@ onTitleBarClickListener {
         topBarView.setClickListener(this);
         
         if (mScanService != null) {
-            mScanService.startScanList();
+            mScanService.startScanDevice();
             SLog.e(TAG, "mScanService  startScanList");
         }
         
@@ -230,17 +167,6 @@ onTitleBarClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             BluetoothDevice device = mDeviceList.get(position);
-            // mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            // 停止扫描设备
-  
-/*            Bundle b = new Bundle();
-            b.putString(BluetoothDevice.EXTRA_DEVICE, mDeviceList.get(position).getAddress());
-
-            Intent result = new Intent();
-            result.putExtras(b);
-            setResult(Activity.RESULT_OK, result);
-            finish();*/
-            
         }
     };
     
@@ -306,21 +232,16 @@ onTitleBarClickListener {
         bindService(bindscanIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private void initBluetoothService() {
-        Intent bindIntent = new Intent(this, BluetoothService.class);
-        boolean isbind = bindService(bindIntent, mBluetoothServiceConnection, Context.BIND_AUTO_CREATE);
-        SLog.e(TAG, "service_init  " + isbind);
-     }
     
     public static int getTempValue() {
         return tempValue;
     }
-    
-    
+
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
+        unbindService(mScanServiceConnection);
         EventBus.getDefault().unregister(this);//反注册EventBus  
     }
 
@@ -339,12 +260,12 @@ onTitleBarClickListener {
         String action = intent.getAction();
         if (action.equals("com.babyfun.scandevices")) {
             if (mScanService != null) {
-                mScanService.startScanList();
+                mScanService.startScanDevice();
             } else {
                 Intent bindIntent = new Intent(this, ScanDevicesService.class);
                 if (bindService(bindIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE)) {
                     if (mScanService != null) {
-                        mScanService.startScanList();
+                        mScanService.startScanDevice();
                     }
                 }
             }
@@ -409,7 +330,7 @@ onTitleBarClickListener {
         }
     }
     
-    
+  /*  
     private void refresh(){
         handler.postDelayed(new Runnable() {
             @Override
@@ -475,6 +396,6 @@ onTitleBarClickListener {
             textView.setText(msgs.get(position));
             return textView;
         }
-    }
+    }*/
 
 }
