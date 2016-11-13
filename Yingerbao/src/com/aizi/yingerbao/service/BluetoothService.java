@@ -16,9 +16,9 @@
 
 package com.aizi.yingerbao.service;
 
-import java.util.List;
 import java.util.UUID;
 
+import android.R.bool;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -108,19 +108,29 @@ public class BluetoothService extends Service {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            boolean notifyres = false;
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                if (enableDataNotification()) { // 蓝牙已经连接并且准备好数据传输
+                for (int i = 0; i < 3; i++) {
+                    notifyres = enableDataNotification();
+                    if (notifyres) {
+                        SLog.e(TAG, "enableDataNotification success");
+                        break;
+                    } else {
+                        SLog.e(TAG, "enableDataNotification failed");
+                    }
+                }
+                
+                if (notifyres) { //使能数据成功
                     SLog.e(TAG, "Bluetooth  is Ready, mBluetoothGatt = " + mBluetoothGatt );
                     PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 1);
                     broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                     return;
+                } else {
+                    disconnect();
                 }
             } else {  
                 SLog.e(TAG, "Bluetooth  is not Discovered ");
             }
-            
-            broadcastUpdate(ACTION_GATT_DISCONNECTED);
-            PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         }
 
         @Override
@@ -142,6 +152,7 @@ public class BluetoothService extends Service {
             if (BLE_UUID_NUS_TX_CHARACTERISTIC.equals(characteristic.getUuid())) {
                 if (BluetoothGatt.GATT_SUCCESS == status) {
                     BaseMessageHandler.isWriteSuccess = true;
+                    BaseMessageHandler.repeattime = 0;
                     SLog.e(TAG, "onCharacteristicWrite isWriteSuccess = true");
                 } else {
                     BaseMessageHandler.isWriteSuccess = false;
@@ -175,7 +186,7 @@ public class BluetoothService extends Service {
         // After using a given device, you should make sure that BluetoothGatt.close() is called
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
-        close();
+        disconnect();
         //EventBus.getDefault().unregister(this);//反注册EventBus  
         return super.onUnbind(intent);
     }
@@ -199,6 +210,8 @@ public class BluetoothService extends Service {
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
+        
+        int a2dp = mBluetoothAdapter.getProfileConnectionState(BluetoothProfile.GATT);
         if (mBluetoothAdapter == null) {
             SLog.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
@@ -268,6 +281,8 @@ public class BluetoothService extends Service {
         SLog.e(TAG, "BluetoothAdapter DISCONNECT");
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         broadcastUpdate(ACTION_GATT_DISCONNECTED);
+        
+        mBluetoothDeviceAddress = null;
         mBluetoothGatt.disconnect();
         mBluetoothGatt.close();
         mBluetoothGatt = null;
@@ -346,31 +361,29 @@ public class BluetoothService extends Service {
     }
     
     public boolean writeBaseRXCharacteristic(byte[] value) {
-        boolean status = false;
+        boolean wrstatus = false;
         try {
             if (mBluetoothGatt != null) {
                 BluetoothGattService TxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
                 if (TxService == null) {
                     SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_SERVICE not found!");
-                    SLog.e(TAG, "write TXchar status = " + status);
                     broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-                    return status;
+                    return wrstatus;
                 }
                 BluetoothGattCharacteristic TxChar = TxService.getCharacteristic(BLE_UUID_NUS_TX_CHARACTERISTIC);
                 if (TxChar == null) {
                     SLog.e(TAG, "writeBaseRXCharacteristic BLE_UUID_NUS_TX_CHARACTERISTIC not found!");
-                    SLog.e(TAG, "write TXchar status = " + status);
                     broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_BLUETOOTH);
-                    return status;
+                    return wrstatus;
                 }
                 TxChar.setValue(value);
-                status = mBluetoothGatt.writeCharacteristic(TxChar);
+                wrstatus = mBluetoothGatt.writeCharacteristic(TxChar);
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
 
-        SLog.e(TAG, "write TXchar status = " + status);
-        return status;  
+        SLog.e(TAG, "write TXchar status = " + wrstatus);
+        return wrstatus;  
     }
 }

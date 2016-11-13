@@ -80,6 +80,13 @@ public class ScanDevicesService extends Service{
     public void startScanDevice() {
         scanBLEDevice(true);
     }
+    
+    public void stopScanDevice() {
+        mScanning = false;
+        if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.stopLeScan(mBLEScanCallback);
+        }
+    }
 
     private void scanBLEDevice(final boolean enable) {
         if (enable) {
@@ -127,6 +134,7 @@ public class ScanDevicesService extends Service{
                 if (listDev.getAddress().equals(device.getAddress())) {
                     // 设备已经发现
                     isDeviceFound = true;
+                    stopScanDevice();
                     SLog.e(TAG, "device is already in the device list ");
                     break;
                 }

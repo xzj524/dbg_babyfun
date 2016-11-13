@@ -3,7 +3,6 @@
  */
 package com.aizi.yingerbao.ui.component.main;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,11 +27,10 @@ import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.YingerBaoActivity;
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
-import com.aizi.yingerbao.utility.ListDataSave;
 import com.aizi.yingerbao.utility.PrivateParams;
+import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
 
@@ -64,7 +62,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     private ImageView mProgressImageView;
 
     /** 正在连接动画 */
-    private boolean mIsConnectingAnimation;
+    private boolean mIsConnectingAnimation = false;
 
     /** 适配器 提供数据 */
 //    private RouterAdapter mRouterAdapter;
@@ -124,13 +122,12 @@ public class DeviceConnectStatusFragment extends Fragment{
         mConnectedSucceedViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectedSucceedLayout);
         mConnectedFailedViewGroup = (ViewGroup) deviceStatusView.findViewById(R.id.connectedFailedLayout);
         
-        Timer mTimer = new Timer(true);
-        TimerTask task = new TimerTask(){  
-            public void run() {  
+        if (!Utiliy.isBluetoothConnected(getActivity().getApplicationContext())) {
             doUpdateStatusClick();
-          }  
-        };  
-        mTimer.schedule(task,1000); 
+        } else {
+            mCurrentState = CheckingState.CONNECTED;
+            doUpdateStatusClick();
+        }
         
         EventBus.getDefault().register(this);
         return deviceStatusView;
@@ -141,14 +138,6 @@ public class DeviceConnectStatusFragment extends Fragment{
         super.onStart();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mCurrentState == CheckingState.IDEL) {
-            startConnectingAnimation();
-        }
-    }
-    
     /**
      * 开始检查连接
      */

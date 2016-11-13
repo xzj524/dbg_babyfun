@@ -45,6 +45,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Highlight;
+import com.umeng.analytics.MobclickAgent;
 
 import de.greenrobot.event.EventBus;
 
@@ -750,6 +751,20 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
         mFragment.show(getFragmentManager(), "simple-calendar");
 
+    }
+    
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
 }

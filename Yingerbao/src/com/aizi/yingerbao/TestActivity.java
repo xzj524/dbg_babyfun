@@ -7,6 +7,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,7 +18,6 @@ import android.widget.ListView;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.utility.MessageParse;
 import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
@@ -27,7 +27,7 @@ public class TestActivity extends Activity {
     Button mTestButton;
     private ListView messageListView;
     
-    private static final String TAG = MessageParse.class.getSimpleName();
+    private static final String TAG = TestActivity.class.getSimpleName();
     private ArrayAdapter<String> listAdapter;
     
     Button mGetNoSyncData;
@@ -60,7 +60,7 @@ public class TestActivity extends Activity {
             @Override
             public void onClick(View v) {
              listAdapter.clear();
-              
+
              WindowManager mWm = (WindowManager) getApplicationContext()
                      .getSystemService(getApplicationContext().WINDOW_SERVICE);
              Display display = mWm.getDefaultDisplay();
@@ -157,18 +157,7 @@ public class TestActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
-   /*             String tempinfo = "30";  
-                Utiliy.temperatureToFile(tempinfo);
-                
-                String breathstop = "Breath Stop Info : " 
-                        + "2016" + "-" 
-                        + "10" + "-"
-                        + "22" + "-"
-                        + "21" + "-"
-                        + "27" + "-"
-                        + "10" 
-                        + " BreathAlarm = " + true; 
-                Utiliy.dataToFile(breathstop);*/
+ 
             }
         });
         
@@ -180,8 +169,13 @@ public class TestActivity extends Activity {
             public void onClick(View v) {
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
                 Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), UserActivity.class);
-                startActivity(intent);
+                
+                if (Utiliy.isBluetoothConnected(getApplicationContext())) {
+                    SLog.e(TAG, "BlueTooth is ready");
+                   
+                } else {
+                    SLog.e(TAG, "BlueTooth is not ready");
+                }
             }
         });
     }
@@ -202,18 +196,16 @@ public class TestActivity extends Activity {
         String datalog = null;
         if (Constant.DATA_TRANSFER_RECEIVE.equals(action)) {
             SLog.e(TAG, "HEX Receive string l2load2 = " + transferdata);
-            //listAdapter.add(currentDateTimeString + " RECV: "+ transferdata);
             datalog = currentDateTimeString + " RECV: "+ transferdata;
         } else if (Constant.DATA_TRANSFER_SEND.equals(action)) {
             SLog.e(TAG, "HEX Send string l2load2 = " + transferdata);
-            // = DateFormat.getTimeInstance().format(new Date());
-            //listAdapter.add(currentDateTimeString + " SEND: "+ transferdata);
             datalog = currentDateTimeString + " SEND: "+ transferdata;
         }
         
-        listAdapter.add(datalog);
-
-        messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+        if (!TextUtils.isEmpty(datalog)) {
+            listAdapter.add(datalog);
+            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+        }  
     } 
     
 }

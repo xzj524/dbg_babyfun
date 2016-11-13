@@ -13,6 +13,7 @@ import com.aizi.yingerbao.service.BluetoothService;
 import com.aizi.yingerbao.synctime.DeviceTime;
 import com.aizi.yingerbao.utility.BaseMessageHandler;
 import com.aizi.yingerbao.utility.PrivateParams;
+import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
 
@@ -35,7 +36,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> setDeviceTime() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " setDeviceTime ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 1;
             keyPayload.keyLen = 4; 
@@ -75,7 +76,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> startSendBreathData() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " startSendBreathData ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 1;
             keyPayload.keyLen = 0;
@@ -94,7 +95,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> stopSendBreathData() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " stopSendBreathData ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 4;
             keyPayload.keyLen = 0;
@@ -113,7 +114,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getDeviceTime() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getDeviceTime ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 3;
             keyPayload.keyLen = 0;
@@ -132,7 +133,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getRealTimeData() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getRealTimeData ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 1;
             keyPayload.keyLen = 0;
@@ -152,7 +153,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getAllNoSyncInfo() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getAllNoSyncInfo ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 3;
             keyPayload.keyLen = 0;
@@ -173,7 +174,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getAllSyncInfo() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getAllSyncInfo ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 4;
             keyPayload.keyLen = 0;
@@ -191,7 +192,7 @@ public class SyncDeviceImpl implements SyncDevice{
     public DeviceResponse<?> getBreahStopInfo() {
         // TODO Auto-generated method stub
         SLog.e(TAG, " getBreahStopInfo ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 11;
             keyPayload.keyLen = 0;
@@ -208,7 +209,7 @@ public class SyncDeviceImpl implements SyncDevice{
     @Override
     public DeviceResponse<?> getRealTimeTempData() {
         SLog.e(TAG, " getRealTimeTempData ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 9;
             keyPayload.keyLen = 0;
@@ -225,7 +226,7 @@ public class SyncDeviceImpl implements SyncDevice{
     @Override
     public DeviceResponse<?> getExceptionEvent() {
         SLog.e(TAG, " getExceptionEvent ");
-        if (PrivateParams.getSPInt(mContext, Constant.BLUETOOTH_IS_READY, 0) == 1) {
+        if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 14;
             keyPayload.keyLen = 0;

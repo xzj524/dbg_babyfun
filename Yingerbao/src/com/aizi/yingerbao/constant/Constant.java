@@ -80,4 +80,7 @@ public class Constant {
     /** 保存用户账号  */
     public static final String AIZI_USER_ACCOUNT = "aizi_user_account";
     
+    /** 保存用户账号  */
+    public static final String AIZI_SEND_DATA = "aizi_send_data";
+    
 }

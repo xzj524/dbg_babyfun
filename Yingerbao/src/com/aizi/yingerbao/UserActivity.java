@@ -10,6 +10,7 @@ import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.slidingmenu.SlidingMenuHelper;
 import com.aizi.yingerbao.utility.PrivateParams;
+import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.BatteryView;
 import com.aizi.yingerbao.view.CircleButton;
 import com.aizi.yingerbao.view.TopBarView;
@@ -37,10 +38,9 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         long intervalMillis = 100 * 1000L; //第一次调用startUpdateSilent出现弹窗后，如果100秒内进行第二次调用不会查询更新
         UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
         
-        MobclickAgent.setScenarioType(getApplicationContext(), EScenarioType.E_UM_NORMAL);
         MobclickAgent.startWithConfigure(
                 new UMAnalyticsConfig(getApplicationContext(), 
-                "582580076e27a45a8a00000c", "Umeng", 
+                "582580076e27a45a8a00000c", "360", 
                 EScenarioType.E_UM_NORMAL));
 
         
@@ -64,7 +64,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), TemperatureActivity.class);
                 startActivity(intent);
-                
             }
         });
         
@@ -78,6 +77,10 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         mSlidingMenuHelper.initSlidingMenu();
         
         BluetoothApi.getInstance(getApplicationContext());
+        
+        if (!Utiliy.isBluetoothConnected(getApplicationContext())) {
+            Utiliy.showNormalDialog(this);
+        }
     }
 
     @Override
@@ -104,5 +107,19 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         super.onDestroy();
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect();
+    }
+    
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

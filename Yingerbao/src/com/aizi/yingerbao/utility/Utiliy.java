@@ -6,10 +6,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
+import android.R.transition;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -254,5 +261,32 @@ public class Utiliy {
                 .checkPermission(permission, context.getPackageName()));
         return granted;
     }
+    
+    
+    public static boolean isBluetoothConnected(Context context) {
+        boolean isConnected = false;
+        try {
+            BluetoothManager mBluetoothManager 
+                = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+            if (mBluetoothManager == null) {
+                SLog.e(TAG, "Unable to initialize BluetoothManager.");
+                return isConnected;
+            }
+            
+            List<BluetoothDevice> devices = mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
+            for (BluetoothDevice device : devices) {
+                SLog.e(TAG, "pairedDevices name = " + device.getName());
+                if (device.getName().equals(Constant.AIZI_DEVICE_TAG)) {
+                    int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
+                    if (state == BluetoothProfile.STATE_CONNECTED) {
+                        isConnected = true;
+                    }
+                }
+              }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return isConnected;  
+  }
 
 }

@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -25,12 +27,16 @@ public class BaseMessageHandler {
     private final static short BASE_DATA_HEAD = 6;
     private static Object mYingerbaoLock = new Object();
     
-    private static boolean isOver;
+    public static boolean mIsReceOver;
     public static ByteArrayOutputStream l2OutputStream = new ByteArrayOutputStream();
     public static ByteArrayInputStream l2InputStream;
-    public static boolean isWriteSuccess;
+    public static boolean isWriteSuccess = true;
+    public static int repeattime = 0;
     static byte[] baseTwobytes;
     public static int squenceID = 1;
+    private static int l1squenceid = -1;
+    private static final long WAIT_PERIOD = 10 * 1000; //10 seconds
+    static Timer mTimer;  
     
     public static void acquireBaseData(BluetoothDevice bluetoothDevice, 
             BluetoothGattCharacteristic characteristic) {
@@ -62,37 +68,78 @@ public class BaseMessageHandler {
                     }
                 }else {
                     if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) { //收到设备发过来的信息，需要返回ACK
+                        
                         int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
-                        SLog.e(TAG, "ACK crc16 = " + crc16 + " bsL1Msg = " + bsL1Msg.CRC16);
                         if (bsL1Msg.CRC16 == (short)crc16) {
-                            Utiliy.logToFile(" L1 " + " RECV DATA: " + l1payload);
-                            Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
-                            intent.putExtra("transferdata", " L1 " + " DATA: " + l1payload);
-                            EventBus.getDefault().post(intent); // 显示到测试界面上
-                            
                             sendACKBaseL1Msg(baseData);
+                            if (bsL1Msg.sequenceId != l1squenceid) {
+                                if (bsL1Msg.errFlag == 2) { // 标识结束位
+                                    l1squenceid = -1;
+                                } else {
+                                    l1squenceid = bsL1Msg.sequenceId;
+                                }
+                                
+                                handleL1Msg(bsL1Msg);
+                                
+                                Utiliy.logToFile(" L1 " + " RECV DATA: " + l1payload);
+                                Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+                                intent.putExtra("transferdata", " L1 " + " DATA: " + l1payload);
+                                EventBus.getDefault().post(intent); // 显示到测试界面上
+                            }                   
                         } else {
                             SLog.e(TAG, "not send ACK");
                         }
                     }  
-                    generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
-                    if (isOver) {
-                        isOver = false;
-                        if (l2OutputStream.size() > 0) {
-                            BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
-                            l2OutputStream.reset();
-                            
-                            Intent l2intent = new Intent();
-                            l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
-                            EventBus.getDefault().post(bsl2Msg);
-                            SLog.e(TAG, "receive L2 DATA");
-                        }            
-                    }
                 } 
                 
             }
         }  
     }
+
+    private static void handleL1Msg(BaseL1Message bsL1Msg) {
+        try {
+            mIsReceOver = generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
+            if (mIsReceOver) {
+                //mIsReceOver = false;
+                if (mTimer != null) {
+                    mTimer.purge();
+                    mTimer.cancel();
+                    mTimer = null;
+                } 
+                if (l2OutputStream.size() > 0) {
+                    BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
+                    l2OutputStream.reset();
+                    
+                    Intent l2intent = new Intent();
+                    l2intent.putExtra(Constant.BASE_L2_MESSAGE, bsl2Msg);
+                    EventBus.getDefault().post(bsl2Msg);
+                    SLog.e(TAG, "receive L2 DATA");
+                }            
+            } else {
+                if (mTimer != null) {
+                    mTimer.purge();
+                    mTimer.cancel();
+                    mTimer = null;
+                } 
+                mTimer = new Timer(true);
+                mTimer.schedule(task, WAIT_PERIOD); 
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+    
+    
+    static TimerTask task = new TimerTask(){    
+             public void run(){    
+                 if (!mIsReceOver) {
+                     l1squenceid = -1;
+                     SLog.e(TAG, "delay task is running###############");
+                 }
+             }    
+         };    
+        
+        
 
     private static void sendACKBaseL1Msg(byte[] baseData) {
         // TODO Auto-generated method stub
@@ -124,10 +171,10 @@ public class BaseMessageHandler {
                 EventBus.getDefault().post(intent);
                 Utiliy.logToFile(" L2 " + " SEND: " + l2payload); 
                 /****在测试界面显示出来,写入日志文件*****/
-                
+
                 l2InputStream = new ByteArrayInputStream(bsl2msg.toByte());
                 if (l2InputStream != null) {
-                    isSendL2Over = sendL2Msg(true);
+                    sendL2Msg(true, bsl2msg);
                 }
             } catch (Exception e) {
                 SLog.e(TAG, e);
@@ -136,6 +183,47 @@ public class BaseMessageHandler {
         return isSendL2Over;
     }
     
+    private static boolean sendL2Msg(boolean isstart, BaseL2Message bsl2msg) {
+        byte[] buffer = new byte[14];
+        byte[] sendbuff = null;
+        int flag = 0;
+        boolean isSendL2Over = false;
+        ByteArrayInputStream inputStream 
+                = new ByteArrayInputStream(bsl2msg.toByte());
+        try {
+            if (inputStream.available() > 0) {
+                int readcount = inputStream.read(buffer, 0, 14);
+                if (readcount > 0 && readcount <= 14) {
+                    sendbuff = new byte[readcount];
+                    System.arraycopy(buffer, 0, sendbuff, 0, readcount);
+                    if (inputStream.available() > 0) { //读取14个字符之后还有内容
+                        if (isstart) {
+                            flag = 0; //开始帧
+                        } else {
+                            flag = 1; //中间帧
+                        }
+                    } else {
+                        flag = 2;//结束帧
+                        inputStream.close();
+                        isSendL2Over = true;
+                    }
+                    sendL1Msg(sendbuff, flag);
+                }
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e1) {
+                SLog.e(TAG, e1);
+            }
+        }
+        return isSendL2Over;     
+    }
+
     public static boolean sendL2Msg(boolean isstart) {
         byte[] buffer = new byte[14];
         byte[] sendbuff = null;
@@ -180,8 +268,7 @@ public class BaseMessageHandler {
     public static void sendL1Msg(byte[] buffer, int flag) {
         // TODO Auto-generated method stub
         BaseL1Message bsL1Msg = new BaseL1Message();
-        if (buffer.length > 0) {
-            SLog.e(TAG, "readcount = " + buffer.length);
+        if (buffer != null && buffer.length > 0) {
             bsL1Msg.payload = new byte[buffer.length];
             System.arraycopy(buffer, 0, bsL1Msg.payload, 0, buffer.length);
             
@@ -191,47 +278,48 @@ public class BaseMessageHandler {
             bsL1Msg.ackFlag = 0;
             bsL1Msg.version = 0;
             bsL1Msg.payloadLength = (short) buffer.length;
+            if (squenceID > 65536) {
+                squenceID = 0;
+            }
             bsL1Msg.sequenceId = (short) ++squenceID;
             bsL1Msg.CRC16 = (short) CRC16.calcCrc16(bsL1Msg.payload);
             
-            byte[] bsl1buffer = bsL1Msg.tobyte();
-            String l1payload = MessageParse.printHexString(bsl1buffer);
+            // 通过蓝牙传输数据
+            EventBus.getDefault().post(new AsycEvent(bsL1Msg.tobyte())); 
             
+            byte[] bsl1buffer = bsL1Msg.tobyte();
             Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
+            String l1payload = MessageParse.printHexString(bsl1buffer);
             intent.putExtra("transferdata", " L1 " + l1payload);
             EventBus.getDefault().post(intent); // 显示到测试界面上
             Utiliy.logToFile(" L1 " + " SEND: " + l1payload); // 写入日志文件
-            
-            SLog.e(TAG, "write BASE character readcount = " + buffer.length);
-            EventBus.getDefault().post(new AsycEvent(bsL1Msg.tobyte())); // 通过蓝牙传输数据
         }
     }
 
-    private static void generateBaseL2MsgByteArray(BaseL1Message bsL1Msg) {
+    private static boolean generateBaseL2MsgByteArray(BaseL1Message bsL1Msg) {
+        boolean isover = false;
         try {
             if (bsL1Msg.isAiziBaseL1Head) {
                 if (bsL1Msg.errFlag == 0) { // 标识起始位
                     l2OutputStream.reset();
                     l2OutputStream.write(bsL1Msg.payload);
-                    isOver =false;
                 } else if (bsL1Msg.errFlag == 1) { // 标识中间位
                     l2OutputStream.write(bsL1Msg.payload);
-                    isOver =false;
                 } else if (bsL1Msg.errFlag == 2) { // 标识结束位
-                    isOver = true;
-                  //  l2OutputStream.reset();
+                    isover = true;
                     l2OutputStream.write(bsL1Msg.payload);
                 } else {
-                    isOver = false;
+                    isover = false;
                 }
                 l2OutputStream.close();
             } else {
-                isOver = false;
+                isover = false;
             }
         } catch (Exception e) {
-            // TODO: handle exception
+            isover = false;
             SLog.e(TAG, e);
         }  
+        return isover;
     }
 
     public static BaseL2Message generateBaseL2Msg(short commanid, short version, 

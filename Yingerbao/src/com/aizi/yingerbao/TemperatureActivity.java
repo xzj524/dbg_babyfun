@@ -35,6 +35,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.umeng.analytics.MobclickAgent;
 
 import de.greenrobot.event.EventBus;
 
@@ -314,5 +315,19 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     
     public void onEventMainThread(DataTime dataTime) { 
         updateTempStatus(dataTime);
+    }
+    
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }
