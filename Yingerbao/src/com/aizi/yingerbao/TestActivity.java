@@ -41,6 +41,8 @@ public class TestActivity extends Activity {
     Button mGetBreathStopEvent;
     Button mGetTemperatureEvent;
     Button mGetDeviceTime;
+    Button mActiviteDev;
+    Button mCheckDev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +180,27 @@ public class TestActivity extends Activity {
                 }
             }
         });
+        
+        mActiviteDev = (Button) findViewById(R.id.btn_activitedev);
+        mActiviteDev.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                AsyncDeviceFactory.getInstance(getApplicationContext()).activateDevice();
+              
+            }
+        });
+        
+        mCheckDev = (Button) findViewById(R.id.btn_checkdev);
+        mCheckDev.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
+              
+            }
+        });
+        
     }
     
     public void onEventMainThread(Intent event) {  

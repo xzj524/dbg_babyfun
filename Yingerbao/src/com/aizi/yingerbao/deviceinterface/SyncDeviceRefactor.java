@@ -2,8 +2,6 @@ package com.aizi.yingerbao.deviceinterface;
 
 import android.content.Context;
 
-import com.aizi.yingerbao.synctime.DeviceTime;
-
 public class SyncDeviceRefactor implements SyncDevice{
 
     SyncDeviceImpl mSyncDeviceImpl;
@@ -71,5 +69,18 @@ public class SyncDeviceRefactor implements SyncDevice{
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public DeviceResponse<?> checkDeviceValid() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DeviceResponse<?> activateDevice() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 
 }

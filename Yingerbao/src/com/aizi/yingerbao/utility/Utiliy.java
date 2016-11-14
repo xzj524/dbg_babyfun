@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.provider.SyncStateContract.Constants;
+import android.text.TextUtils;
 
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
@@ -227,7 +228,6 @@ public class Utiliy {
     public static synchronized void temperatureToFile(String logStr) {
 
         try {
-
             String writeStr = logStr + "\n";
             String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
             File dir = new File(sdPath + "/" +Constant.EXTERNAL_FILE_DATA);
@@ -280,6 +280,9 @@ public class Utiliy {
                     int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
                     if (state == BluetoothProfile.STATE_CONNECTED) {
                         isConnected = true;
+                        PrivateParams.setSPString(context, Constant.AIZI_DEVICE_ADDRESS, 
+                                device.getAddress());
+                        break;
                     }
                 }
               }
@@ -288,5 +291,84 @@ public class Utiliy {
         }
         return isConnected;  
   }
+    
+    
+    /**
+     * 把16进制字符串转换成字节数组
+     * @param hexString
+     * @return byte[]
+     */
+    public static byte[] hexStringToByte(String hex) {
+            byte[] result = null;
+            try {
+                if (!TextUtils.isEmpty(hex)) {
+                    hex = hex.toUpperCase(); 
+                    int len = (hex.length() / 2);
+                    result = new byte[len];
+                    char[] achar = hex.toCharArray();
+                    if (achar != null) {
+                        for (int i = 0; i < len; i++) {
+                            int pos = i * 2;
+                            if (pos >= 0 && pos + 1 < achar.length) {
+                                if (i >= 0 && i < len) {
+                                    result[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1]));
+                                }
+                           } 
+                       }
+                    }
+                }
+            } catch (Exception e) {
+                SLog.e(TAG, e);
+            }
+            return result;
+       }
+      
+      private static int toByte(char c) {
+         byte b = (byte) "0123456789ABCDEF".indexOf(c);
+         return b;
+      }
+
+      
+      /**
+       * 将指定byte数组以16进制的形式打印到控制台
+       * 
+       * @param hint
+       *            String
+       * @param b
+       *            byte[]
+       * @return void
+       */
+      public static String printHexString(byte[] b) {
+          String hexString = "";
+          for (int i = 0; i < b.length; i++)
+          {
+              String hex = Integer.toHexString(b[i] & 0xFF);
+              if (hex.length() == 1)
+              {
+                  hex = '0' + hex;
+              }
+              
+              hexString += " " + hex;
+          }
+          return hexString;
+      }
+      
+      
+      private String getPhoneBlueAddress(Context context) {
+          String phoneaddress = null;
+          try {
+              BluetoothManager mBluetoothManager 
+                  = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+              if (mBluetoothManager == null) {
+                  SLog.e(TAG, "Unable to initialize BluetoothManager.");
+                  return phoneaddress;
+              }
+              
+              phoneaddress = mBluetoothManager.getAdapter().getAddress();
+          } catch (Exception e) {
+              SLog.e(TAG, e);
+          }
+          return phoneaddress;  
+      }
 
 }

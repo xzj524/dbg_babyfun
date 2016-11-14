@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.utility.ListDataSave;
 import com.aizi.yingerbao.utility.PrivateParams;
 
 import de.greenrobot.event.EventBus;
@@ -155,6 +154,9 @@ public class ScanDevicesService extends Service{
                         
                         PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_DEVICE_ADDRESS, 
                                 device.getAddress());
+                        
+                        PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_PHONE_ADDRESS, 
+                                mBluetoothAdapter.getAddress());
                         
                         mScanning = false;
                         mBluetoothAdapter.stopLeScan(mBLEScanCallback);

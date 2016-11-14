@@ -4,6 +4,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -97,6 +98,7 @@ public class BluetoothApi {
         // 发送数据队列，能容纳一百个数据
         //BlockingQueue<String> basket = new LinkedBlockingQueue<String>(3);
         BlockingQueue<AsycEvent> asyceventqueue = new LinkedBlockingQueue<AsycEvent>(100);
+        //PriorityBlockingQueue<AsycEvent> priorityBlockingQueue = new PriorityBlockingQueue<AsycEvent>(100);
 
         // 生产数据
         public void produce(AsycEvent event) throws InterruptedException {
@@ -144,7 +146,7 @@ public class BluetoothApi {
         }
     }
 
-    // 定义苹果消费者
+    // 定义消费者
     class Consumer implements Runnable {
         private String instance;
         private SendDataQueue sendqueue;
@@ -160,10 +162,10 @@ public class BluetoothApi {
                 int waittimes = 0;
                 while (true) {
                     if (BaseMessageHandler.isWriteSuccess) {
-                        BaseMessageHandler.mIsReceOver = false;
                         waittimes = 0;
                         event =  sendqueue.consume();
                         writeByte(event.getByte());
+                        Thread.sleep(100);
                         SLog.e(TAG, "write data byte*****************");
                     } else {
                         waittimes++;

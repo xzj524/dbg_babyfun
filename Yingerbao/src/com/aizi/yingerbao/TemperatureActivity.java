@@ -13,9 +13,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
@@ -47,6 +49,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     TextView mTempValue;
     Timer mTimer;
     boolean mTempStart = false;
+    boolean mIsTempMeasuring = false;
     
     TopBarView mTopView;
 
@@ -83,14 +86,50 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         mTopView = (TopBarView) findViewById(R.id.xiaohuhutopbar);
         mTopView.setClickListener(this);
         
+        
         mTemperatureChart = (LineChart) findViewById(R.id.temperature_linechart);
         mTempButton = (Button) findViewById(R.id.control_temp_button);
         mTempButton.setOnClickListener(new View.OnClickListener() {
             
             @Override
             public void onClick(View v) {
+                try {
+                    if (Utiliy.isBluetoothConnected(getApplicationContext())) {
+                        if (!mTempStart) {
+                            if (!mIsTempMeasuring) {
+                                mTempStart = true;
+                                mTempButton.setText(R.string.action_measure_temp);
+                                AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
+                                mIsTempMeasuring = true;
+                                
+                                new Handler().postDelayed(new Runnable() {
+                                    
+                                    @Override
+                                    public void run() {
+                                        mIsTempMeasuring = false; 
+                                    }
+                                }, 10000);
+                                
+                            } else {
+                                Toast.makeText(getApplicationContext(), "10秒内请勿重复读取！", Toast.LENGTH_SHORT).show();
+                            }
+                           
+                        } else {
+                            mTempStart = false;
+                            mTempButton.setText(R.string.action_start_breath);
+                        }
+                    } else {
+                        showNormalDialog();
+                    }
+                    
+                } catch (Exception e) {
+                    SLog.e(TAG, e);
+                }
+                
+                
+                
                 // 首先检测蓝牙是否连接
-                if (mTempStart) {
+                /*if (mTempStart) {
                     mTempStart = false;
                     if (mTimer != null) {
                         mTimer.purge();
@@ -98,7 +137,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                     }   
                     mTempButton.setText(R.string.action_start_temp);
                 } else {
-                    if (Utiliy.isBluetoothReady(getApplicationContext())) {
+                    if (Utiliy.isBluetoothConnected(getApplicationContext())) {
                         if (!mTempStart) {
                             mTempStart = true;
                             mTimer = new Timer(true);
@@ -120,7 +159,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                     } else {
                         showNormalDialog();
                     }
-                }
+                }*/
                 
             }
         });
@@ -136,6 +175,15 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     }
     
     
+    TimerTask task = new TimerTask(){  
+        public void run() {  
+            mIsTempMeasuring = false; 
+            if (mTimer != null) {
+                mTimer.purge();
+                mTimer.cancel();
+            } 
+      }  
+   };  
     
     public void onEventMainThread(Intent intent) { 
         String action = intent.getAction();
@@ -143,6 +191,8 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             // 获取实时温度值
            String str = intent.getStringExtra("realtime_temperature"); 
            mTempValue.setText(str);
+           mTempStart = false;
+           mTempButton.setText(R.string.action_start_breath);
         }
     }
     

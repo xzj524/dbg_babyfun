@@ -42,6 +42,9 @@ public class Constant {
     /** 存储DeviceAddress  */
     public static final String AIZI_DEVICE_ADDRESS = "aizi_dev_address";
     
+    /** 存储手机蓝牙Address  */
+    public static final String AIZI_PHONE_ADDRESS = "aizi_phone_address";
+    
     /** 设备时间与手机端偏差限制  */
     public static final long DEVICE_TIME_OFFSET = 60 * 60 * 1000;
     

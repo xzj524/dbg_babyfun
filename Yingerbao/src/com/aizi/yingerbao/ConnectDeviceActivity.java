@@ -149,9 +149,8 @@ onTitleBarClickListener {
         
         if (mScanService != null) {
             mScanService.startScanDevice();
-            SLog.e(TAG, "mScanService  startScanList");
+            SLog.e(TAG, "mScanService %%%%%%%%%%%%%%% startScanList");
         }
-        
         
       /*  mDeviceList = new ArrayList<BluetoothDevice>();
         mDeviceAdapter = new DeviceAdapter(this, mDeviceList);
@@ -214,8 +213,20 @@ onTitleBarClickListener {
     
  
     private void initScanService(){
-        Intent bindscanIntent = new Intent(this, ScanDevicesService.class);
-        bindService(bindscanIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
+        try {
+            for (int i = 0; i < 3; i++) {
+                Intent bindscanIntent = new Intent(this, ScanDevicesService.class);
+                bindService(bindscanIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
+                if (mScanService != null) {
+                    SLog.e(TAG, "mScanService = " + mScanService);
+                    break;
+                }
+            }
+            
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+       
     }
 
     
@@ -255,6 +266,10 @@ onTitleBarClickListener {
                     }
                 }
             }
+        } else if (action.equals("com.aizi.finish")) {
+            finish();
+        } else if (action.equals("com.aizi.transfer")) {
+            
         }
     }
 

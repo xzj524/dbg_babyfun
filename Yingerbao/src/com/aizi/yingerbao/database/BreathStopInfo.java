@@ -4,6 +4,7 @@ public class BreathStopInfo {
     public long mBreathTimestamp = 0;
     public int mBreathIsAlarm = 0;
     public int mBreathDuration = 0;
+    
     public int mBreathYear = 0;
     public int mBreathMonth = 0;
     public int mBreathDay = 0;

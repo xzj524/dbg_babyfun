@@ -64,6 +64,7 @@
     <!-- 功能相关内容 -->
     <string name="action_start_breath">实时呼吸监测</string>
     <string name="action_start_temp">实时温度监测</string>
+    <string name="action_measure_temp">正在检测温度</string>
     <string name="action_stop">停止</string>
     <string name="date_no_data">该日无数据</string>
 

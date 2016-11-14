@@ -18,7 +18,6 @@ package com.aizi.yingerbao.service;
 
 import java.util.UUID;
 
-import android.R.bool;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -210,8 +209,6 @@ public class BluetoothService extends Service {
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
-        
-        int a2dp = mBluetoothAdapter.getProfileConnectionState(BluetoothProfile.GATT);
         if (mBluetoothAdapter == null) {
             SLog.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
@@ -234,6 +231,8 @@ public class BluetoothService extends Service {
             SLog.e(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
         }
+        
+        disconnect();
 
         // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)

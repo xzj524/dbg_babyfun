@@ -1,5 +1,7 @@
 package com.aizi.yingerbao.deviceinterface;
 
+import android.content.Context;
+
 
 
 public interface SyncDevice {
@@ -32,6 +34,10 @@ public interface SyncDevice {
     DeviceResponse<?> getRealTimeTempData();
 
     DeviceResponse<?> getExceptionEvent();
+
+    DeviceResponse<?> checkDeviceValid();
+
+    DeviceResponse<?> activateDevice();
 
 
 }

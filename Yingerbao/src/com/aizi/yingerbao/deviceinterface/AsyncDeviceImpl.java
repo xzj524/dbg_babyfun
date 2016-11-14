@@ -185,4 +185,28 @@ public class AsyncDeviceImpl implements AsyncDevice {
         };
         return getDispatcher().dispatch(task);
     }
+
+    @Override
+    public Future<?> checkDeviceValid() {
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.checkDeviceValid();
+            }
+        };
+        return getDispatcher().dispatch(task);
+    }
+
+    @Override
+    public Future<?> activateDevice() {
+        RequestTask task = new RequestTask() {
+
+            @Override
+            public void run() {
+                DeviceResponse<?> response = mSyncDevice.activateDevice();
+            }
+        };
+        return getDispatcher().dispatch(task);
+    }
 }

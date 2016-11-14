@@ -27,6 +27,7 @@ import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.YingerBaoActivity;
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
 import com.aizi.yingerbao.utility.PrivateParams;
@@ -46,6 +47,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     public static final int ABNORMAL_REQUEST_CODE = 1;
     private static final int REQUEST_SELECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BLUETOOTH = 101;
+    private static final long SCAN_PERIOD = 10 * 1000; //10 seconds
     private BluetoothDevice mDevice = null;
     OnDeviceConnectListener mListener;
 
@@ -88,6 +90,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     /** UI handler */
     private final Handler mUIHandler = new Handler(Looper.getMainLooper());
 
+    Timer mTimer;
 
     @Override
     public void onAttach(Activity activity) {
@@ -124,6 +127,16 @@ public class DeviceConnectStatusFragment extends Fragment{
         
         if (!Utiliy.isBluetoothConnected(getActivity().getApplicationContext())) {
             doUpdateStatusClick();
+            
+            new Handler().postDelayed(new Runnable(){   
+
+                public void run() {   
+                    if (mCurrentState == CheckingState.IDEL) {
+                        mCurrentState = CheckingState.FAIL;
+                        doUpdateStatusClick();
+                    }
+                }   
+             }, SCAN_PERIOD);   
         } else {
             mCurrentState = CheckingState.CONNECTED;
             doUpdateStatusClick();
@@ -169,12 +182,18 @@ public class DeviceConnectStatusFragment extends Fragment{
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        super.onDestroyView();  
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        
+        if (mTimer != null) {
+            mTimer.purge();
+            mTimer.cancel(); 
+            mTimer = null;
+        }
     }
     /**
      * 更新状态的OnClick
@@ -210,6 +229,14 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
+            
+         /*   SLog.e(TAG, "START DEVICE1");
+            mTimer = new Timer();
+            mTimer.schedule(task,800);*/
+            SLog.e(TAG, "CheckingState.CONNECTED!!!!!!!!!!!!!!!!!!!!!");
+            Intent intent = new Intent("com.aizi.transfer");
+           // EventBus.getDefault().post(intent);
+           
         } else if (mCurrentState == CheckingState.SYNC_DATA_SUCCEED) {
             mIsConnectingAnimation = false;
             mProgressImageView.clearAnimation();
@@ -218,6 +245,9 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
+            
+         
+            
         } else if (mCurrentState == CheckingState.FAIL) {
             SLog.e(TAG, "Bluetooth Service disconnect");
             mIsConnectingAnimation = false;
@@ -228,6 +258,24 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
         }
     }
+    
+    
+    TimerTask task = new TimerTask(){  
+        public void run() {  
+            try {
+                
+                
+                SLog.e(TAG, "START DEVICE2");
+               /* AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).checkDeviceValid();
+                Thread.sleep(1000);
+                AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).getAllNoSyncInfo();
+                Thread.sleep(1000);
+                AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).getBreathStopInfo();*/
+            } catch (Exception e) {
+                SLog.e(TAG, e);
+            }
+      }  
+   };
   
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {

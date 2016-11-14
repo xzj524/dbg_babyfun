@@ -60,7 +60,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     BarChart mBreathStopChart;
     private TextView mBreathFreqData;
     
-    int mPreValue = 5;
+    int mBreValue = 5;
     long mLastBreathTime;
     long mBreathPeriod;
     int mBreathFreq;
@@ -112,7 +112,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                     mControlBreathBtn.setText(R.string.action_start_breath);
                 } else {
                     // 首先检测蓝牙是否连接
-                    if (Utiliy.isBluetoothReady(getApplicationContext())) {
+                    if (Utiliy.isBluetoothConnected(getApplicationContext())) {
                         if (!mBreatStart) {
                             mBreatStart = true;
                             mTimer = new Timer(true);
@@ -120,8 +120,13 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 public void run() {  
                                 Message message = new Message();      
                                 message.what = 1; 
-                                message.arg1 = mPreValue;
-                                mHandler.sendMessage(message);    
+                                message.arg1 = mBreValue;
+                                message.arg2 = mBreathFreq;
+                                mHandler.sendMessage(message);  
+                                
+                                /*updateBreathWave(mBreValue);
+                                mBreValue = 5;
+                                mBreathFreqData.setText(mBreathFreq + "");*/
                               }  
                            };  
                             mTimer.schedule(task,1000, 1300); 
@@ -204,14 +209,15 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
              switch (msg.what) {      
                  case 1:      
                      updateBreathWave(msg.arg1);
-                     mPreValue = 5;
-                     if (mBreatfreq) {
+                     mBreValue = 5;
+                     mBreathFreqData.setText(msg.arg2 + "");
+                    /* if (mBreatfreq) {
                         mBreatfreq = false;
                         if (mBreathPeriod > 0) {
                             mBreathFreq = (int)((60 * 1000) / mBreathPeriod); 
                             mBreathFreqData.setText(mBreathFreq + "");
                         }
-                    }
+                    }*/
                      break;      
                  }      
                  super.handleMessage(msg);  
@@ -230,22 +236,12 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         }
         
      
-     public void onEventMainThread(final ArrayList<BabyBreath> breaths) { 
-         long curtime = System.currentTimeMillis();
-         SLog.e(TAG, "breath receivre data curtime = " + curtime);
-         if (mBreatStart) {
-             if (mLastBreathTime == 0) {
-                 mLastBreathTime = curtime;
-             } else {
-                 mBreathPeriod = curtime - mLastBreathTime;
-                 mLastBreathTime = curtime;
-             }
-             mBreatfreq = true;
-             if (breaths.size() == 1) {
-                 mPreValue = breaths.get(0).mBreathValue + 100;
-                 SLog.e(TAG, "BabyBreathActivity receive REAL BREATH DATA " + mPreValue);
-             }
-         }
+     public void onEventMainThread(final BabyBreath breaths) { 
+         SLog.e(TAG, "breath receivre data  mBreValue = " + mBreValue 
+                 + " mBreathFreq = " + mBreathFreq);
+         
+         mBreValue = breaths.mBreathValue;
+         mBreathFreq = breaths.mBreathFreq;
      }
      
      public void onEventMainThread(DataTime dataTime) { 
@@ -334,9 +330,14 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
      }
      
      // 设置显示的样式  
-     public static void setupRealTimeBreathChart(LineData data, int color) {        
-         mBreathChart.clear();
-         mBreathChart.setData(data); // 设置数据  
+     public static void setupRealTimeBreathChart(LineData data, int color) {   
+         try {
+             mBreathChart.clear();
+             mBreathChart.setData(data); // 设置数据  
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        
      }  
 
     private void initBreathChart() {

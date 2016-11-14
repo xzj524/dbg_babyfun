@@ -3,7 +3,7 @@ package com.aizi.yingerbao.deviceinterface;
 import java.util.Calendar;
 
 import android.content.Context;
-import android.content.Intent;
+import android.text.TextUtils;
 
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
@@ -14,8 +14,6 @@ import com.aizi.yingerbao.synctime.DeviceTime;
 import com.aizi.yingerbao.utility.BaseMessageHandler;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
-
-import de.greenrobot.event.EventBus;
 
 public class SyncDeviceImpl implements SyncDevice{
     
@@ -34,7 +32,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
     @Override
     public DeviceResponse<?> setDeviceTime() {
-        // TODO Auto-generated method stub
         SLog.e(TAG, " setDeviceTime ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
@@ -239,4 +236,90 @@ public class SyncDeviceImpl implements SyncDevice{
         return null;
     }
 
+
+    @Override
+    public DeviceResponse<?> checkDeviceValid() {
+        SLog.e(TAG, " checkDeviceValid ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 5;
+            keyPayload.keyLen = 7;
+            keyPayload.keyValue = getDeviceAddress(mContext);
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_BIND, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
+
+    private byte[] getDeviceAddress(Context context) {
+        byte[] checkinfo = new byte[7];
+        byte[] devaddress = new byte[6];
+        try {
+            //String address = getPhoneBlueAddress(context);
+            String connectaddress = PrivateParams.getSPString(context, Constant.AIZI_DEVICE_ADDRESS);
+            if (!TextUtils.isEmpty(connectaddress)) {
+                String[] blueadd = connectaddress.split(":");
+                String converstr = "";
+                if (blueadd != null && 6 == blueadd.length) {
+                    for (int i = 0; i < blueadd.length; i++) {
+                        converstr = converstr + blueadd[i];
+                    }
+                    SLog.e(TAG, "converstr = " + converstr);
+                    SLog.e(TAG, "connectaddress = " + connectaddress);
+                    devaddress = Utiliy.hexStringToByte(converstr);
+                    devaddress[0] = (byte) (devaddress[0] + 0x01);
+                    devaddress[1] = (byte) (devaddress[1] + 0x11);
+                    devaddress[2] = (byte) (devaddress[2] + 0x21);
+                    devaddress[3] = (byte) (devaddress[3] + 0x31);
+                    devaddress[4] = (byte) (devaddress[4] + 0x41);
+                    devaddress[5] = (byte) (devaddress[5] + 0x51);
+                    
+                    String devstr = Utiliy.printHexString(devaddress);
+                    SLog.e(TAG, "devaddress = " + devstr);
+                    System.arraycopy(devaddress, 0, checkinfo, 0, blueadd.length);
+                    checkinfo[6] = 0x0; // 表示Android系统
+                }
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return checkinfo;
+    }
+
+
+    @Override
+    public DeviceResponse<?> activateDevice() {
+        SLog.e(TAG, " activateDevice ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 5;
+            keyPayload.keyLen = 3;
+            keyPayload.keyValue = getProfileInfo(mContext);
+            
+            BaseL2Message bsl2Msg 
+            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+        }
+        return null;
+    }
+
+
+    private byte[] getProfileInfo(Context context) {
+        byte[] profileinfo = new byte[3];
+        try {
+            profileinfo[0] = (byte) (profileinfo[0] & 0x00);
+            profileinfo[0] = (byte) (profileinfo[0] | (0xff8 << 2));
+            profileinfo[0] = (byte) (profileinfo[0] & 0xfe);
+            profileinfo[1] = (byte) (profileinfo[1] | 0x00);
+            profileinfo[2] = (byte) (profileinfo[2] | 0x00);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return profileinfo;
+    }
 }

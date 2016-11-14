@@ -19,10 +19,12 @@ import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathStopInfo;
+import com.aizi.yingerbao.database.DevCheckInfo;
 import com.aizi.yingerbao.database.ExceptionEvent;
 import com.aizi.yingerbao.database.SleepInfo;
 import com.aizi.yingerbao.database.TemperatureInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
+import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DeviceTime;
 
@@ -81,6 +83,7 @@ public class MessageParse {
                handleSettings(params);
                 break;
             case Constant.COMMAND_ID_BIND:
+                handleBind(params);
                 break;
             case Constant.COMMAND_ID_DATA:
                 handleData(params);
@@ -97,6 +100,88 @@ public class MessageParse {
         }
     }
     
+    private void handleBind(List<KeyPayload> params) {
+        try {
+            for (KeyPayload kpload:params) {
+                if (kpload.key == 6) { // 收到连接合法性返回
+                    SLog.e(TAG, "receive  check device data");
+                    if (kpload.keyLen == 8) {
+                        handlecheckinfo(kpload.keyValue); // 分析校验返回
+                    }
+                } 
+            } 
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+
+    private void handlecheckinfo(byte[] keyValue) {
+        try {
+            DevCheckInfo devCheckInfo = new DevCheckInfo();
+            devCheckInfo.mCheckInfoYear = (keyValue[0] & 0xfc) >> 2;
+            devCheckInfo.mCheckInfoMonth = ((keyValue[0] & 0x03) << 2) | ((keyValue[1] & 0xc0) >> 6);
+            devCheckInfo.mCheckInfoDay = (keyValue[1] & 0x3e) >> 1;
+            devCheckInfo.mCheckInfoHour = ((keyValue[1] & 0x01)  << 4) | ((keyValue[2] & 0xf0) >> 4);
+            devCheckInfo.mCheckInfoMinute = ((keyValue[2] & 0x0f) << 2) | ((keyValue[3] & 0xc0) >> 6);
+            devCheckInfo.mCheckInfoSecond = (keyValue[3] & 0x3f);
+            
+            devCheckInfo.mNoSyncDataLength = ((keyValue[4] << 8) & 0xff00) | (keyValue[5] & 0xff);
+            devCheckInfo.mDeviceCharge = keyValue[6] & 0xff;
+            devCheckInfo.mDeviceStatus = keyValue[7];
+            
+            PrivateParams.setSPInt(mContext, "NoSyncDataLength", devCheckInfo.mNoSyncDataLength);
+            
+            SLog.e(TAG, "mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength
+                     + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
+                     + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus);
+            
+           // AsyncDeviceFactory.getInstance(mContext).activateDevice();
+            AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
+            //setDeviceTime(devCheckInfo);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+
+    private void setDeviceTime(DevCheckInfo devCheckInfo) {
+        
+        try {
+            Calendar calendar = Calendar.getInstance(); 
+            int year = calendar.get(Calendar.YEAR) - 2000;
+            int month = calendar.get(Calendar.MONTH)+1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int min = calendar.get(Calendar.MINUTE);
+            int second = calendar.get(Calendar.SECOND);
+            
+            SLog.e(TAG, "phonetime  year = " + year 
+                    + " month = " + month
+                    + " day = " + day
+                    + " hour = " + hour
+                    + " minu = " + min
+                    + " second = " + second);
+            SLog.e(TAG, "devicetime  year = " + devCheckInfo.mCheckInfoYear 
+                    + " month = " + devCheckInfo.mCheckInfoMonth
+                    + " day = " + devCheckInfo.mCheckInfoDay
+                    + " hour = " + devCheckInfo.mCheckInfoHour
+                    + " minu = " + devCheckInfo.mCheckInfoMinute
+                    + " second = " + devCheckInfo.mCheckInfoSecond);
+            
+            if (year != devCheckInfo.mCheckInfoYear
+                    || month != devCheckInfo.mCheckInfoMonth
+                    || day != devCheckInfo.mCheckInfoDay
+                    || hour != devCheckInfo.mCheckInfoHour
+                    || Math.abs(min - devCheckInfo.mCheckInfoMinute) > 5) {
+                AsyncDeviceFactory.getInstance(mContext).setDeviceTime();
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+
     /**
      * 将指定byte数组以16进制的形式打印到控制台
      * 
@@ -118,7 +203,6 @@ public class MessageParse {
             }
             
             hexString += " " + hex;
-           // System.out.print(hex.toUpperCase() + " ");
         }
         return hexString;
     }
@@ -237,9 +321,24 @@ public class MessageParse {
         BreathStopInfo breathStopInfo = new BreathStopInfo();
         int breathstoplength = keyValue.length;
         boolean breathalarm = false;
-        if (breathstoplength % 4 == 0) {
-            for (int i = 0; i < keyValue.length/4; i++) {
-                int isAlarm = (keyValue[i*4] & 0x80) >> 7;
+        if (breathstoplength % 8 == 0) {
+            for (int i = 0; i < keyValue.length/8; i++) {
+            
+                int year = (keyValue[i*8] & 0xfc) >> 2;
+                int month = ((keyValue[i*8] & 0x03) << 2) | ((keyValue[1+i*8] & 0xc0) >> 6);
+                int day = (keyValue[1+i*8] & 0x3e) >> 1;
+                int hour = ((keyValue[1+i*8] & 0x01)  << 4) | ((keyValue[2+i*8] & 0xf0) >> 4);
+                int minu = ((keyValue[2+i*8] & 0x0f) << 2) | ((keyValue[3+i*8] & 0xc0) >> 2);
+                int second = (keyValue[3+i*8] & 0x3f);
+
+                breathStopInfo.mBreathYear = year + 2000;
+                breathStopInfo.mBreathMonth = month;
+                breathStopInfo.mBreathDay = day;
+                breathStopInfo.mBreathHour = hour;
+                breathStopInfo.mBreathMinute = minu;
+                breathStopInfo.mBreathSecond = second;
+                
+                int isAlarm = (keyValue[4 + i*8] & 0xff);
                 if (isAlarm == 1) {
                     breathStopInfo.mBreathIsAlarm = isAlarm;
                     breathalarm = true;
@@ -248,12 +347,8 @@ public class MessageParse {
                     breathalarm = false;
                 }
                 
-                int year = (keyValue[i*4] & 0x7c) >> 2;
-                int month = ((keyValue[i*4] & 0x03) << 2) | ((keyValue[1+i*4] & 0xc0) >> 6);
-                int day = (keyValue[1+i*4] & 0x3e) >> 1;
-                int hour = ((keyValue[1+i*4] & 0x01)  << 4) | ((keyValue[2+i*4] & 0xf0) >> 4);
-                int minu = ((keyValue[2+i*4] & 0x0f) << 2) | ((keyValue[3+i*4] & 0xc0) >> 2);
-                int second = (keyValue[3+i*4] & 0x3f);
+                breathStopInfo.mBreathDuration = keyValue[5 + i*8] & 0xff;
+                breathStopInfo.mBreathTimestamp = System.currentTimeMillis();
                 
                 SLog.e(TAG, "breathstop  year = " + year 
                         + " month = " + month
@@ -261,14 +356,9 @@ public class MessageParse {
                         + " hour = " + hour
                         + " minu = " + minu
                         + " second = " + second
-                        + " isAlarm = " + isAlarm);
+                        + " isAlarm = " + isAlarm
+                        + " duration = " + breathStopInfo.mBreathDuration);
                 
-                breathStopInfo.mBreathYear = year;
-                breathStopInfo.mBreathMonth = month;
-                breathStopInfo.mBreathDay = day;
-                breathStopInfo.mBreathHour = hour;
-                breathStopInfo.mBreathMinute = minu;
-                breathStopInfo.mBreathSecond = second;
                 
                 String breathstop = "Breath Stop Info : " 
                                    + breathStopInfo.mBreathYear + "-" 
@@ -467,77 +557,118 @@ public class MessageParse {
                 }
             } else if (kpload.key == 3) { // 呼吸测试数据
                 SLog.e(TAG, "START REAL BREATH DATA");
-                ArrayList<BabyBreath> babyBreaths = getBabyBreaths(kpload.keyValue);
-                if (babyBreaths != null) {
-                    updateBreathWave(babyBreaths);
+                BabyBreath babyBre = getBabyBreath(kpload.keyValue);
+                if (babyBre != null) {
+                    updateBreathWave(babyBre);
                 }
             }
         }
     }
 
-
-    private void updateBreathWave(ArrayList<BabyBreath> babyBreaths) {
-        // TODO Auto-generated method stub
-        EventBus.getDefault().post(babyBreaths);
+    private void updateBreathWave(BabyBreath babyBreath) {
+        EventBus.getDefault().post(babyBreath);
     }
 
 
-    private ArrayList<BabyBreath> getBabyBreaths(byte[] keyValue) {
-        // TODO Auto-generated method stub
-        ArrayList<BabyBreath> babyBreaths = new ArrayList<BabyBreath>();
-        int BreathCount = keyValue[0] & 0xff;
-        if (BreathCount <= 0 || keyValue.length < 4) {
-            return null;
-        }
-        for (int i = 0; i < BreathCount; i++) {
-            BabyBreath breath = new BabyBreath();
-            byte[] tmp = new byte[3];
-            System.arraycopy(keyValue, i+1 + 3*i, tmp, 0, 3);
-            breath.mBreathValue = tmp[2] & 0xff;
-            breath.mBreathTime = (tmp[1] & 0xff) | (((tmp[0] & 0xff) << 8) & 0xff00);
-            babyBreaths.add(breath);
-        }
-        return babyBreaths;
+    private BabyBreath getBabyBreath(byte[] keyValue) {
+        
+        BabyBreath breath = null;
+        if (keyValue.length  == 4) {
+            breath = new BabyBreath();
+            breath.mBreathTime = (keyValue[1] & 0xff) | (((keyValue[0] & 0xff) << 8) & 0xff00);
+            breath.mBreathValue = keyValue[2] & 0xff;
+            breath.mBreathFreq = keyValue[3] & 0xff;
+        }    
+        return breath;
     }
 
-    public static void handleSettings(List<KeyPayload> params) {
+    public void handleSettings(List<KeyPayload> params) {
         // TODO Auto-generated method stub 
-        for (KeyPayload kpload : params) {
-            if (kpload.key == 4) { // 请求时间返回
-                if (kpload.keyLen == 4) { //时间长度4个字节
-                    DeviceTime devTime = new DeviceTime();     
-                    BitSet bSet = BitSetConvert.byteArray2BitSet(kpload.keyValue);
-                    devTime.year = BitSetConvert.getTimeValue(bSet, 0, 6) + 2000;
-                    devTime.month = BitSetConvert.getTimeValue(bSet, 6, 4);
-                    devTime.day = BitSetConvert.getTimeValue(bSet, 10, 5);
-                    devTime.hour = BitSetConvert.getTimeValue(bSet, 15, 5);
-                    devTime.min = BitSetConvert.getTimeValue(bSet, 20, 6);
-                    devTime.second = BitSetConvert.getTimeValue(bSet, 26, 6);
-                    
-                    Calendar calendar = Calendar.getInstance(); 
-                   
-                    calendar.set(devTime.year, devTime.month, devTime.day,
-                            devTime.hour, devTime.min, devTime.second);
-                    calendar.getTime().getTime();
-                    
-                    SLog.e(TAG, "year = " + devTime.year 
-                            + " month = " + devTime.month
-                            + " day = " + devTime.day
-                            + " hour = " + devTime.hour
-                            + " min = " + devTime.min
-                            + " second = " + devTime.second);                     
-                }
-            } else if (kpload.key == 2) { //设置时间返回结果
-                if (kpload.keyLen == 1) {
-                    int settimeresult = kpload.keyValue[0] & 0x0f;
-                    SLog.e(TAG, "settimeresult = " + settimeresult);
+        try {
+            for (KeyPayload kpload : params) {
+                if (kpload.key == 4) { // 请求时间返回
+                    if (kpload.keyLen == 4) { //时间长度4个字节
+                        DeviceTime devTime = new DeviceTime();     
+                        BitSet bSet = BitSetConvert.byteArray2BitSet(kpload.keyValue);
+                        devTime.year = BitSetConvert.getTimeValue(bSet, 0, 6);
+                        devTime.month = BitSetConvert.getTimeValue(bSet, 6, 4);
+                        devTime.day = BitSetConvert.getTimeValue(bSet, 10, 5);
+                        devTime.hour = BitSetConvert.getTimeValue(bSet, 15, 5);
+                        devTime.min = BitSetConvert.getTimeValue(bSet, 20, 6);
+                        devTime.second = BitSetConvert.getTimeValue(bSet, 26, 6);
+                        
+                        //setDeviceTime(devTime);
+                        
+                        SLog.e(TAG, "year = " + (devTime.year  + 2000)
+                                + " month = " + devTime.month
+                                + " day = " + devTime.day
+                                + " hour = " + devTime.hour
+                                + " min = " + devTime.min
+                                + " second = " + devTime.second);   
+                        
+                       /* if (PrivateParams.getSPInt(mContext, "NoSyncDataLength", 0) > 200) {
+                            AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
+                            Thread.sleep(300);
+                            AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
+                        }*/
+                    }
+                } else if (kpload.key == 2) { //设置时间返回结果
+                    if (kpload.keyLen == 1) {
+                        int settimeresult = kpload.keyValue[0] & 0x0f;
+                        SLog.e(TAG, "settimeresult = " + settimeresult);
+                    }
+                } else if (kpload.key == 6) { // 激活设备返回
+                    if (kpload.keyLen == 1) {
+                        int activateresult = kpload.keyValue[0] & 0x0f;
+                        if (activateresult == 0) { // 激活设备成功
+                            AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
+                        }
+                    }
                 }
             }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
         }
     }
+
+    private void setDeviceTime(DeviceTime devTime) {
+        try {
+            Calendar calendar = Calendar.getInstance(); 
+            int year = calendar.get(Calendar.YEAR) - 2000;
+            int month = calendar.get(Calendar.MONTH)+1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int min = calendar.get(Calendar.MINUTE);
+            int second = calendar.get(Calendar.SECOND);
+            
+            SLog.e(TAG, "phonetime  year = " + year 
+                    + " month = " + month
+                    + " day = " + day
+                    + " hour = " + hour
+                    + " minu = " + min
+                    + " second = " + second);
+            SLog.e(TAG, "devicetime  year = " + devTime.year 
+                    + " month = " + devTime.month
+                    + " day = " + devTime.day
+                    + " hour = " + devTime.hour
+                    + " minu = " + devTime.min
+                    + " second = " + devTime.second);
+            
+            if (year != devTime.year
+                    || month != devTime.month
+                    || day != devTime.day
+                    || hour != devTime.hour
+                    || Math.abs(min - devTime.min) > 5) {
+                AsyncDeviceFactory.getInstance(mContext).setDeviceTime();
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        
+    }
+
 
     private List<KeyPayload> getKeyPayloadList(byte[] payload) {
-        // TODO Auto-generated method stub
         List<KeyPayload> params = new ArrayList<KeyPayload>();
         ByteArrayInputStream settingInputStream = new ByteArrayInputStream(payload);
         mDis = new DataInputStream(settingInputStream);
@@ -553,8 +684,7 @@ public class MessageParse {
                 params.add(keyPd);
              }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            SLog.e(TAG, e);
         }
 
         return params;

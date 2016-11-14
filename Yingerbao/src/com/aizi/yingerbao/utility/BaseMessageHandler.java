@@ -27,7 +27,7 @@ public class BaseMessageHandler {
     private final static short BASE_DATA_HEAD = 6;
     private static Object mYingerbaoLock = new Object();
     
-    public static boolean mIsReceOver;
+    public static boolean mIsReceOver = true;
     public static ByteArrayOutputStream l2OutputStream = new ByteArrayOutputStream();
     public static ByteArrayInputStream l2InputStream;
     public static boolean isWriteSuccess = true;
@@ -91,7 +91,6 @@ public class BaseMessageHandler {
                         }
                     }  
                 } 
-                
             }
         }  
     }
@@ -100,10 +99,9 @@ public class BaseMessageHandler {
         try {
             mIsReceOver = generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
             if (mIsReceOver) {
-                //mIsReceOver = false;
                 if (mTimer != null) {
-                    mTimer.purge();
                     mTimer.cancel();
+                    mTimer.purge();
                     mTimer = null;
                 } 
                 if (l2OutputStream.size() > 0) {
@@ -117,8 +115,8 @@ public class BaseMessageHandler {
                 }            
             } else {
                 if (mTimer != null) {
-                    mTimer.purge();
                     mTimer.cancel();
+                    mTimer.purge();
                     mTimer = null;
                 } 
                 mTimer = new Timer(true);
@@ -133,6 +131,7 @@ public class BaseMessageHandler {
     static TimerTask task = new TimerTask(){    
              public void run(){    
                  if (!mIsReceOver) {
+                     mIsReceOver = true;
                      l1squenceid = -1;
                      SLog.e(TAG, "delay task is running###############");
                  }
@@ -251,12 +250,10 @@ public class BaseMessageHandler {
                 }
             }
         } catch (Exception e) {
-            // TODO: handle exception
             SLog.e(TAG, e);
             try {
                 l2InputStream.close();
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -266,7 +263,6 @@ public class BaseMessageHandler {
     
     
     public static void sendL1Msg(byte[] buffer, int flag) {
-        // TODO Auto-generated method stub
         BaseL1Message bsL1Msg = new BaseL1Message();
         if (buffer != null && buffer.length > 0) {
             bsL1Msg.payload = new byte[buffer.length];
@@ -293,6 +289,7 @@ public class BaseMessageHandler {
             intent.putExtra("transferdata", " L1 " + l1payload);
             EventBus.getDefault().post(intent); // 显示到测试界面上
             Utiliy.logToFile(" L1 " + " SEND: " + l1payload); // 写入日志文件
+            SLog.e(TAG, " L1 " + " SEND: " + l1payload);
         }
     }
 

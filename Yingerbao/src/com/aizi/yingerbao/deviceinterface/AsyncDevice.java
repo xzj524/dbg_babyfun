@@ -2,9 +2,26 @@ package com.aizi.yingerbao.deviceinterface;
 
 import java.util.concurrent.Future;
 
-import com.aizi.yingerbao.synctime.DeviceTime;
+import android.content.Context;
 
 public interface AsyncDevice {
+    
+    
+    /***********验证接口*************/
+    
+    /**
+     * @Description: 验证设备合法性
+     * @param listener
+     * @return
+     */
+    Future<?> checkDeviceValid();
+    
+    /**
+     * @Description: 设备激活接口
+     * @param listener
+     * @return
+     */
+    Future<?> activateDevice();
     
     /***********设置接口*************/
     /**
