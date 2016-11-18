@@ -131,13 +131,14 @@ public class MessageParse {
             devCheckInfo.mDeviceStatus = keyValue[7];
             
             PrivateParams.setSPInt(mContext, "NoSyncDataLength", devCheckInfo.mNoSyncDataLength);
+            PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
             
             SLog.e(TAG, "mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength
                      + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
                      + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus);
             
            // AsyncDeviceFactory.getInstance(mContext).activateDevice();
-            AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
+           // AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
             //setDeviceTime(devCheckInfo);
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -520,14 +521,15 @@ public class MessageParse {
 
     private void handleNotify(List<KeyPayload> params) {
         for (KeyPayload kpload:params) {
-            if (kpload.key == 1) { // 正反状态报警
+           /* if (kpload.key == 1) { // 正反状态报警
                 SLog.e(TAG, "正反状态 ALARM");
                 if (kpload.keyLen == 1) {
                     //mBreathStartResult = kpload.keyValue[0] & 0x0f;
                 }
-            } else if (kpload.key == 2) { // 温度报警
+            }*/ 
+            if (kpload.key == 2) { // 温度报警
                 SLog.e(TAG, "TEMP ALARM");
-                int babytemp = getBabyTemp(kpload.keyValue);
+                String babytemp = getBabyTemp(kpload.keyValue);
                 
                 Utiliy.showFeverNotification(mContext, 
                         "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + babytemp + " 请及时就医。", null);
@@ -541,9 +543,21 @@ public class MessageParse {
     }
 
 
-    private int getBabyTemp(byte[] keyValue) {
+    private String getBabyTemp(byte[] keyValue) {
         // TODO Auto-generated method stub
-        return 0;
+        int PNValue = (keyValue[4] & 0x80) >> 7;
+        int tempHigh = keyValue[4] & 0x7f;
+        int tempLow = keyValue[5] & 0xff;
+        
+        String tempString = "";
+        if (PNValue == 1) {
+            SLog.e(TAG, "temp = " + "-" + tempHigh + "." + tempLow);
+            tempString = "-" + tempHigh + "." + tempLow;
+        } else {
+            SLog.e(TAG, "temp = " + tempHigh + "." + tempLow);
+            tempString = tempHigh + "." + tempLow;
+        }
+        return tempString;
     }
 
 
@@ -578,6 +592,10 @@ public class MessageParse {
             breath.mBreathTime = (keyValue[1] & 0xff) | (((keyValue[0] & 0xff) << 8) & 0xff00);
             breath.mBreathValue = keyValue[2] & 0xff;
             breath.mBreathFreq = keyValue[3] & 0xff;
+            SLog.e(TAG, "breathtime = " + breath.mBreathTime 
+                    + "  value = " + breath.mBreathValue
+                    + " freq = " + breath.mBreathFreq);
+            
         }    
         return breath;
     }
@@ -606,22 +624,23 @@ public class MessageParse {
                                 + " min = " + devTime.min
                                 + " second = " + devTime.second);   
                         
-                       /* if (PrivateParams.getSPInt(mContext, "NoSyncDataLength", 0) > 200) {
-                            AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
-                            Thread.sleep(300);
-                            AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
-                        }*/
+                        //if (PrivateParams.getSPInt(mContext, "NoSyncDataLength", 0) > 200) {
+                         //   AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
+                         //   Thread.sleep(500);
+                            //AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
+                        //}
                     }
                 } else if (kpload.key == 2) { //设置时间返回结果
                     if (kpload.keyLen == 1) {
                         int settimeresult = kpload.keyValue[0] & 0x0f;
                         SLog.e(TAG, "settimeresult = " + settimeresult);
+                        PrivateParams.setSPInt(mContext, "SetTimeinfo" , 1);
                     }
                 } else if (kpload.key == 6) { // 激活设备返回
                     if (kpload.keyLen == 1) {
                         int activateresult = kpload.keyValue[0] & 0x0f;
                         if (activateresult == 0) { // 激活设备成功
-                            AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
+                            //AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
                         }
                     }
                 }

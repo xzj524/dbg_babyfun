@@ -147,10 +147,10 @@ onTitleBarClickListener {
         topBarView = (TopBarView) findViewById(R.id.hometopbar);
         topBarView.setClickListener(this);
         
-        if (mScanService != null) {
+      /*  if (mScanService != null) {
             mScanService.startScanDevice();
             SLog.e(TAG, "mScanService %%%%%%%%%%%%%%% startScanList");
-        }
+        }*/
         
       /*  mDeviceList = new ArrayList<BluetoothDevice>();
         mDeviceAdapter = new DeviceAdapter(this, mDeviceList);
@@ -207,6 +207,9 @@ onTitleBarClickListener {
         public void onServiceConnected(ComponentName name, IBinder service) {
             // TODO Auto-generated method stub
             mScanService = ((ScanDevicesService.ScanBinder) service).getService();
+            if (mScanService != null) {
+                mScanService.startScanDevice();
+            }
             SLog.e(TAG, "onServiceConnected mScanService = " + mScanService);
         }
     };
@@ -345,6 +348,8 @@ onTitleBarClickListener {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+    
+    
     
   /*  
     private void refresh(){

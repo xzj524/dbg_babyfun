@@ -297,7 +297,7 @@ public class SyncDeviceImpl implements SyncDevice{
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 5;
-            keyPayload.keyLen = 3;
+            keyPayload.keyLen = 2;
             keyPayload.keyValue = getProfileInfo(mContext);
             
             BaseL2Message bsl2Msg 
@@ -310,13 +310,13 @@ public class SyncDeviceImpl implements SyncDevice{
 
 
     private byte[] getProfileInfo(Context context) {
-        byte[] profileinfo = new byte[3];
+        byte[] profileinfo = new byte[2];
         try {
             profileinfo[0] = (byte) (profileinfo[0] & 0x00);
             profileinfo[0] = (byte) (profileinfo[0] | (0xff8 << 2));
             profileinfo[0] = (byte) (profileinfo[0] & 0xfe);
             profileinfo[1] = (byte) (profileinfo[1] | 0x00);
-            profileinfo[2] = (byte) (profileinfo[2] | 0x00);
+            //profileinfo[2] = (byte) (profileinfo[2] | 0x00);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

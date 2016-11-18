@@ -158,7 +158,8 @@
 				 android:layout_width="match_parent" 
 				 android:layout_height="1dp"
 				 android:background="#000000"
-				 android:orientation="vertical">
+				 android:orientation="vertical"
+				 android:visibility="gone" >
 		 		</LinearLayout>
         </LinearLayout>
         
@@ -168,7 +169,8 @@
                 android:layout_height="@dimen/setting_item_height"
                 android:background="@drawable/setting_item_bottom_selector"
                 android:clickable="true"
-                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+                android:paddingRight="@dimen/setting_item_icon_title_padding"
+                android:visibility="gone"   >
 
                 <TextView
                     android:id="@+id/baby_sync_data"
@@ -216,7 +218,7 @@
 				 android:layout_width="match_parent" 
 				 android:layout_height="1dp"
 				 android:background="#000000"
-				 android:orientation="vertical">
+				 android:orientation="vertical" >
 		 		</LinearLayout>
 
           
@@ -235,7 +237,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:duplicateParentState="true"
-                    android:text="数据测试" />
+                    android:text="数据测试"
+                     />
     
             </RelativeLayout>
     

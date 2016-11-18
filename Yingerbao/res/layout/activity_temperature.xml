@@ -104,19 +104,19 @@
 	            android:id="@+id/templist3"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_marginTop="16dp"
+	            android:layout_marginTop="20dp"
 	            android:text="30℃"/>
 	        <TextView 
 	            android:id="@+id/templist4"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_marginTop="12dp"
+	            android:layout_marginTop="20dp"
 	            android:text="25℃"/>
 	        <TextView 
 	            android:id="@+id/templist5"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_marginTop="16dp"
+	            android:layout_marginTop="20dp"
 	            android:text="20℃"/>
     </LinearLayout>
     
@@ -134,15 +134,14 @@
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
          android:orientation="horizontal"
-         android:layout_marginLeft="10dp"
-         android:visibility="gone">
+         android:layout_marginLeft="60dp">
      
            <TextView 
                  android:id="@+id/temperature_time_0"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="0"/>
-            <TextView 
+ <!--            <TextView 
                  android:id="@+id/temperature_time_1"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
@@ -151,13 +150,14 @@
                  android:id="@+id/temperature_time_2"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="2"/>
+             	 android:text="2"/> -->
               <TextView 
                  android:id="@+id/temperature_time_3"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="3"/>
-               <TextView 
+             	 android:text="3"
+             	 android:layout_marginLeft="24dp"/>
+<!--                <TextView 
                  android:id="@+id/temperature_time_4"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
@@ -166,14 +166,15 @@
                  android:id="@+id/temperature_time_5"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="5"/>
+             	 android:text="5"/> -->
                  <TextView 
                  android:id="@+id/temperature_time_6"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="6"/>
-                  <TextView 
-                 android:id="@+id/temperature_time_7"
+             	 android:text="6"
+             	 android:layout_marginLeft="24dp"/>
+     <!--               <TextView 
+                android:id="@+id/temperature_time_7"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="7"/>
@@ -181,13 +182,14 @@
                  android:id="@+id/temperature_time_8"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="8"/>
+             	 android:text="8"/> -->
                     <TextView 
                  android:id="@+id/temperature_time_9"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="9"/>
-                     <TextView 
+             	 android:text="9"
+             	 android:layout_marginLeft="24dp"/>
+     <!--                 <TextView 
                  android:id="@+id/temperature_time_10"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
@@ -196,15 +198,16 @@
                  android:id="@+id/temperature_time_11"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="11"/>
+             	 android:text="11"/> -->
                        <TextView 
                  android:id="@+id/temperature_time_12"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="12"/>
+             	 android:text="12"
+             	 android:layout_marginLeft="24dp"/>
       
                         
-                         <TextView 
+        <!--                  <TextView 
                  android:id="@+id/temperature_time_13"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
@@ -213,13 +216,14 @@
                  android:id="@+id/temperature_time_14"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="14"/>
+             	 android:text="14"/> -->
                            <TextView 
                  android:id="@+id/temperature_time_15"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="15"/>
-                            <TextView 
+             	 android:text="15"
+             	 android:layout_marginLeft="24dp"/>
+  <!--                           <TextView 
                  android:id="@+id/temperature_time_16"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
@@ -228,13 +232,14 @@
                  android:id="@+id/temperature_time_17"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="17"/>
+             	 android:text="17"/> -->
                               <TextView 
                  android:id="@+id/temperature_time_18"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="18"/>
-                               <TextView 
+             	 android:text="18"
+             	 android:layout_marginLeft="24dp"/>
+     <!--                           <TextView 
                  android:id="@+id/temperature_time_19"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
@@ -243,13 +248,14 @@
                  android:id="@+id/temperature_time_20"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="20"/>
+             	 android:text="20"/> -->
                                  <TextView 
                  android:id="@+id/temperature_time_21"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="21"/>
-                                  <TextView 
+             	 android:text="21"
+             	 android:layout_marginLeft="24dp"/>
+       <!--                            <TextView 
                  android:id="@+id/temperature_time_22"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
@@ -258,7 +264,7 @@
                  android:id="@+id/temperature_time_23"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="23"/>
+             	 android:text="23"/> -->
         
      </LinearLayout>
 

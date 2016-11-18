@@ -97,7 +97,7 @@
 			        android:layout_width="wrap_content"
 			        android:layout_marginLeft="20dp"
 			        android:layout_marginTop="20dp"
-			        android:text="呼吸停止分布："
+			        android:text="呼吸停止分布(次数/小时)："
 			        android:textSize="30px"
 			        android:textColor="@color/white"/>
 		    

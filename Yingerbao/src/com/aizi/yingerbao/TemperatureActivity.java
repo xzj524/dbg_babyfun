@@ -86,7 +86,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         mTopView = (TopBarView) findViewById(R.id.xiaohuhutopbar);
         mTopView.setClickListener(this);
         
-        
         mTemperatureChart = (LineChart) findViewById(R.id.temperature_linechart);
         mTempButton = (Button) findViewById(R.id.control_temp_button);
         mTempButton.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +115,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                            
                         } else {
                             mTempStart = false;
-                            mTempButton.setText(R.string.action_start_breath);
+                            mTempButton.setText(R.string.action_start_temp);
                         }
                     } else {
                         showNormalDialog();
@@ -166,6 +165,15 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         mTempValue = (TextView) findViewById(R.id.tempvalue);
         
+        AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
+        
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            SLog.e(TAG, e);
+        }
+        
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
         dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
@@ -192,7 +200,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
            String str = intent.getStringExtra("realtime_temperature"); 
            mTempValue.setText(str);
            mTempStart = false;
-           mTempButton.setText(R.string.action_start_breath);
+           mTempButton.setText(R.string.action_start_temp);
         }
     }
     
@@ -216,10 +224,16 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
         
         
-       for (int i = 0; i < temperatureinfos.size(); i++) {
-           float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
-           SLog.e(TAG, "tempvalue from database = " + tempvalue);
-           yValsTem.add(new Entry(tempvalue, i));
+       for (int i = 0; i < 144; i++) {
+           if (i < temperatureinfos.size()) {
+               float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
+               
+               SLog.e(TAG, "tempvalue from database = " + tempvalue);
+               yValsTem.add(new Entry(tempvalue -10, i));
+           }/* else {
+               yValsTem.add(new Entry(0, i));
+           }*/
+           
        }
         
        /* for (int j = 0; j < 1440; j++) {
@@ -234,7 +248,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         if (xVals.size() > 0) {
             xVals.clear();
         }  
-        for (int i = 0; i < temperatureinfos.size(); i++) {
+        for (int i = 0; i < 144; i++) {
             xVals.add(i + "");
         }
         
@@ -253,13 +267,14 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
       
         
-        LineDataSet SleepySet = new LineDataSet(yValsTem, null);
-        SleepySet.setDrawCubic(true);
-        SleepySet.setDrawValues(false);
-        SleepySet.setDrawCircles(false);
+        LineDataSet TemperatureSet = new LineDataSet(yValsTem, null);
+        TemperatureSet.setDrawCubic(true);
+        TemperatureSet.setDrawValues(false);
+        TemperatureSet.setDrawCircles(false);
+        TemperatureSet.setColor(Color.RED);
         
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        dataSets.add(SleepySet);
+        dataSets.add(TemperatureSet);
         LineData data = new LineData(xVals, dataSets);
         setupChart(data, mColors[4]);
     }
@@ -270,26 +285,27 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
    
         XAxis xAxis = mTemperatureChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGridColor(Color.RED);
+        xAxis.setDrawLabels(false);
+        //xAxis.setGridColor(Color.RED);
         
         
         YAxis leftAxis = mTemperatureChart.getAxisLeft();  //得到图表的左侧Y轴实例
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawLabels(false);
         leftAxis.setAxisMaxValue(40); // 设置Y轴最大值
-        leftAxis.setAxisMinValue(20);// 设置Y轴最小值。
+        leftAxis.setAxisMinValue(25);// 设置Y轴最小值。
         leftAxis.setStartAtZero(true);   //设置图表起点从0开始
         
         YAxis rightAxis = mTemperatureChart.getAxisRight();  //得到图表的右侧Y轴实例
         rightAxis.setDrawAxisLine(true);
         rightAxis.setDrawLabels(false);
         rightAxis.setAxisMaxValue(40); // 设置Y轴最大值
-        rightAxis.setAxisMinValue(20);// 设置Y轴最小值。
+        rightAxis.setAxisMinValue(25);// 设置Y轴最小值。
         rightAxis.setStartAtZero(true);   //设置图表起点从0开始
   
         // no description text  
         mTemperatureChart.setDescription("");// 数据描述  
-       
+        mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
      
         // enable / disable grid background  
         mTemperatureChart.setDrawGridBackground(true); // 是否显示表格颜色  
@@ -360,7 +376,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         // TODO Auto-generated method stub
         SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
         mFragment.show(getFragmentManager(), "simple-calendar");
-    
     }
     
     public void onEventMainThread(DataTime dataTime) { 

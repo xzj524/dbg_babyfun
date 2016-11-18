@@ -101,7 +101,6 @@ public class BaseMessageHandler {
             if (mIsReceOver) {
                 if (mTimer != null) {
                     mTimer.cancel();
-                    mTimer.purge();
                     mTimer = null;
                 } 
                 if (l2OutputStream.size() > 0) {
@@ -116,7 +115,7 @@ public class BaseMessageHandler {
             } else {
                 if (mTimer != null) {
                     mTimer.cancel();
-                    mTimer.purge();
+                    /*mTimer.purge();*/
                     mTimer = null;
                 } 
                 mTimer = new Timer(true);

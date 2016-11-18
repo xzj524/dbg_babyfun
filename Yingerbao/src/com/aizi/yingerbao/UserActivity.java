@@ -3,9 +3,6 @@ package com.aizi.yingerbao;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import u.aly.ac;
-
-import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,9 +13,8 @@ import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
+import com.aizi.yingerbao.login.LoginActivity;
 import com.aizi.yingerbao.slidingmenu.SlidingMenuHelper;
-import com.aizi.yingerbao.synctime.DataTime;
-import com.aizi.yingerbao.ui.component.main.DeviceConnectStatusFragment.OnDeviceConnectListener;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.BatteryView;
@@ -49,7 +45,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         
-        SLog.e(TAG, "BlueTooth is connected&&&&&&&&&&&&&&111");
         
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
         UpdateHelper.getInstance().setDebugMode(true);
@@ -74,6 +69,9 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), BreathActivity.class);
                 startActivity(intent);
+                
+                AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+                
             }
         });
         mCircleButtonTemp.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +85,8 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             }
         });
         
+
+        
         mBatteryView = (BatteryView) findViewById(R.id.battery_view);
         mBatteryView.setPower(95);
         
@@ -98,23 +98,15 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         
         BluetoothApi.getInstance(getApplicationContext());
         
-        if (!Utiliy.isBluetoothConnected(getApplicationContext())) {
-            Utiliy.showNormalDialog(this);
+        if (PrivateParams.getSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 0) == 0) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         } else {
-            SLog.e(TAG, "BlueTooth is connected&&&&&&&&&&&&&&");
-           
+            if (!Utiliy.isBluetoothConnected(getApplicationContext())) {
+                Utiliy.showNormalDialog(this);
+            }
         }
     }
-    
-    @Override
-    public void onBackPressed() {
-        // TODO Auto-generated method stub
-        super.onBackPressed();
-        
-       
-    }
-  
- 
 
     @Override
     public void onBackClick() {
@@ -146,10 +138,8 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         try {
             String action = intent.getAction();
             if (action.equals("com.aizi.transfer")) {
-                if (Utiliy.isBluetoothConnected(getApplicationContext())) {
-                    Thread.sleep(200);
-                    AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
-                }
+               Thread.sleep(200);
+               AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -177,26 +167,38 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         super.onResume();
         MobclickAgent.onResume(this);
         
-       /* try {
+        try {
             if (Utiliy.isBluetoothConnected(getApplicationContext())) {
-                Thread.sleep(200);
-                AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
+                //PrivateParams.setSPInt(mContext, "SetTimeinfo" , 1);
+                if (PrivateParams.getSPInt(getApplicationContext(), "SetTimeinfo", 0) != 1 ) {
+                    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+                }
+                
+                //PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
+              /*  if (PrivateParams.getSPInt(getApplicationContext(), "GetCheckinfo", 0) != 1) {
+                    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+                } else {
+                    //AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+                }*/
+                
                // Thread.sleep(500);
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
+                /*AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
                 Thread.sleep(500);
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
+                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();*/
             }
             
         } catch (Exception e) {
             SLog.e(TAG, e);
-        }*/
+        }
     }
+   
     
     @Override
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
         MobclickAgent.onPause(this);
+     //   AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
 
     }
 }

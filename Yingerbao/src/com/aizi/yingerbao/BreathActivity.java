@@ -158,6 +158,14 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         LineData initData = initData(50);
         setupRealTimeBreathChart(initData, mColors[5]);
         
+        AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            SLog.e(TAG, e);
+        }
+        
         initBreathStopBarChart();
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
@@ -240,7 +248,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
          SLog.e(TAG, "breath receivre data  mBreValue = " + mBreValue 
                  + " mBreathFreq = " + mBreathFreq);
          
-         mBreValue = breaths.mBreathValue;
+         mBreValue = breaths.mBreathValue + 60;
          mBreathFreq = breaths.mBreathFreq;
      }
      
@@ -353,7 +361,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
          YAxis leftAxis = mBreathChart.getAxisLeft();  //得到图表的左侧Y轴实例
          leftAxis.setDrawAxisLine(true);
          //leftAxis.setAxisLineColor(Color.RED);
-         leftAxis.setAxisMaxValue(150); // 设置Y轴最大值
+         leftAxis.setAxisMaxValue(100); // 设置Y轴最大值
          leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
          leftAxis.setStartAtZero(false);   //设置图表起点从0开始
          //leftAxis.enableGridDashedLine(10f, 10f, 0f); //设置横向表格为虚线
@@ -362,7 +370,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
          
          //右侧Y轴设置
          YAxis rightAxis = mBreathChart.getAxisRight();
-         rightAxis.setAxisMaxValue(150); // 设置Y轴最大值
+         rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
          rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
          rightAxis.setStartAtZero(false);   //设置图表起点从0开始
          rightAxis.setDrawLabels(false);

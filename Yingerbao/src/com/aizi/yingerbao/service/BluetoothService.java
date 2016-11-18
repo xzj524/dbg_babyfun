@@ -113,6 +113,7 @@ public class BluetoothService extends Service {
                     notifyres = enableDataNotification();
                     if (notifyres) {
                         SLog.e(TAG, "enableDataNotification success");
+                        
                         break;
                     } else {
                         SLog.e(TAG, "enableDataNotification failed");

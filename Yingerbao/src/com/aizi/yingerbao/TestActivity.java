@@ -43,6 +43,7 @@ public class TestActivity extends Activity {
     Button mGetDeviceTime;
     Button mActiviteDev;
     Button mCheckDev;
+    Button mFixDevtime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +198,16 @@ public class TestActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
+              
+            }
+        });
+        
+        mFixDevtime = (Button) findViewById(R.id.btn_setdevicetime);
+        mFixDevtime.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
               
             }
         });
