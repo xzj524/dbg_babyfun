@@ -412,7 +412,7 @@ public class BreathFragment extends Fragment{
         }else {
             breathinfo.mBreathMinute = 0;
         }
-        YingerbaoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo);
+       // YingerbaoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo);
        }
 
        

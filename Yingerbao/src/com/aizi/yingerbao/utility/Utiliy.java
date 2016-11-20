@@ -7,13 +7,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import android.R.transition;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -22,7 +19,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.provider.SyncStateContract.Constants;
 import android.text.TextUtils;
 
 import com.aizi.yingerbao.ConnectDeviceActivity;
@@ -212,14 +208,12 @@ public class Utiliy {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMdd");
-            Date today = new Date();
-            String date = dateformat.format(today);
-            File logFile = new File(sdPath, Constant.EXTERNAL_FILE_DATA + "/" + "aizi_data_" + date + ".log");
+           
+            File logFile = new File(sdPath, Constant.EXTERNAL_FILE_DATA + "/" + "aizi_data_" + time + ".log");
             FileWriter fw = new FileWriter(logFile, true);
             fw.write(writeStr);
             fw.close();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             SLog.e(TAG, e);
         }
     }

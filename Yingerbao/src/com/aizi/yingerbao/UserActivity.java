@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
+import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
@@ -51,6 +52,8 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         long intervalMillis = 100 * 1000L; //第一次调用startUpdateSilent出现弹窗后，如果100秒内进行第二次调用不会查询更新
         UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
         
+        CommandCenter.getInstance(getApplicationContext());
+        
         MobclickAgent.startWithConfigure(
                 new UMAnalyticsConfig(getApplicationContext(), 
                 "582580076e27a45a8a00000c", "360", 
@@ -65,13 +68,11 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), BreathActivity.class);
                 startActivity(intent);
                 
                 AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-                
             }
         });
         mCircleButtonTemp.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +111,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
 
     @Override
     public void onBackClick() {
-        // TODO Auto-generated method stub
         mSlidingMenuHelper.showMenu();
     }
 
@@ -127,7 +127,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect();
@@ -150,7 +149,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     TimerTask task = new TimerTask(){  
         public void run() {  
             try {
-                SLog.e(TAG, "START DEVICE2");
                 AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
                 Thread.sleep(1000);
                 AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
@@ -169,7 +167,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         
         try {
             if (Utiliy.isBluetoothConnected(getApplicationContext())) {
-                //PrivateParams.setSPInt(mContext, "SetTimeinfo" , 1);
                 if (PrivateParams.getSPInt(getApplicationContext(), "SetTimeinfo", 0) != 1 ) {
                     AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
                 }
@@ -195,10 +192,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     
     @Override
     protected void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
         MobclickAgent.onPause(this);
-     //   AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-
     }
 }

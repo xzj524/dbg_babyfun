@@ -64,6 +64,9 @@ public class Constant {
     /** 数据传输发送  */
     public static final String DATA_TRANSFER_SEND = "com.data.transfer.send";
     
+    /** 数据传输单实例  */
+    public static final String ACITON_DATA_TRANSFER = "com.aizi.yingerbao.datatransfer";
+    
     /** 数据日期 年  */
     public static final String DATA_DATE_YEAR = "calendar_year";
     /** 数据日期 月  */
@@ -83,7 +86,22 @@ public class Constant {
     /** 保存用户账号  */
     public static final String AIZI_USER_ACCOUNT = "aizi_user_account";
     
-    /** 保存用户账号  */
+    /** 数据传输标识  */
     public static final String AIZI_SEND_DATA = "aizi_send_data";
+
+    public static final String REQUEST_KEY_SEND_CODE = "request_key_send_code";
+
+    public static final String REQUEST_KEY_RESULT_CODE = "request_key_result_code";
+    
+    
+    /** 数据传输类型  */
+    
+    public static final String DATA_TRANSFER_TYPE = "com.aizi.yingerbao.datatransfer.TYPE";
+    
+    public static final int TRANSFER_TYPE_SUCCEED = 1;
+
+    public static final int TRANSFER_TYPE_NOT_COMPLETED = 2;
+    
+    public static final int TRANSFER_TYPE_ERROR = 3;
     
 }

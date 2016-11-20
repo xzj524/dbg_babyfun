@@ -17,6 +17,7 @@ import android.content.Intent;
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.breath.BabyBreath;
+import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathStopInfo;
 import com.aizi.yingerbao.database.DevCheckInfo;
@@ -64,7 +65,6 @@ public class MessageParse {
 
 
     private void handleL2Msg(BaseL2Message bMsg) {
-        // TODO Auto-generated method stub
         
         String l2payload = printHexString(bMsg.toByte());
         SLog.e(TAG, "HEX string l2load1 = " + l2payload);
@@ -100,6 +100,14 @@ public class MessageParse {
         }
     }
     
+    private void sendCallback(Context context, Intent intent, int sendCode, int resultCode) {
+        intent.putExtra(Constant.REQUEST_KEY_SEND_CODE, sendCode);
+        //intent.setClass(context, CommandService.class);
+        intent.putExtra(Constant.REQUEST_KEY_RESULT_CODE,
+                resultCode);
+        context.startService(intent);
+    }
+    
     private void handleBind(List<KeyPayload> params) {
         try {
             for (KeyPayload kpload:params) {
@@ -133,9 +141,13 @@ public class MessageParse {
             PrivateParams.setSPInt(mContext, "NoSyncDataLength", devCheckInfo.mNoSyncDataLength);
             PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
             
-            SLog.e(TAG, "mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength
-                     + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
-                     + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus);
+            String result = "Check Device return mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength
+                    + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
+                    + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus;
+            
+            SLog.e(TAG, result);
+            
+            Utiliy.dataToFile(result);
             
            // AsyncDeviceFactory.getInstance(mContext).activateDevice();
            // AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
@@ -230,7 +242,6 @@ public class MessageParse {
                 SLog.e(TAG, "receive  realtime data");
                 if (kpload.keyLen == 4) {
                     acquireTemp(kpload.keyValue); // 分析实时温度数据
-                    //mBreathStartResult = kpload.keyValue[0] & 0x0f;
                 }
             } else if (kpload.key == 5) {
                 SLog.e(TAG, "receive data complete " + kpload.keyLen);
@@ -246,8 +257,7 @@ public class MessageParse {
             } else if (kpload.key == 10) { // 实时温度数据
                 SLog.e(TAG, "receiver realtime temp data " + + kpload.keyLen);
                 handleRealTimeTemperatureData(kpload.keyValue);
-            } 
-            else if (kpload.key == 12) { // 呼吸停滞数据
+            } else if (kpload.key == 12) { // 呼吸停滞数据
                 SLog.e(TAG, "receiver breath stop data " + + kpload.keyLen);
                 handleBreathStopData(kpload.keyValue);
             } else if (kpload.key == 13) { // 呼吸停滞数据结束
@@ -288,7 +298,7 @@ public class MessageParse {
                             + "-" + exEvent.mExceptionData1
                             + "-" + exEvent.mExceptionData2
                             + "-" + exEvent.mExceptionData3;
-                Utiliy.logToFile(logStr);
+                Utiliy.dataToFile(logStr);
                 SLog.e(TAG, "Exception Event = " + logStr);
                 Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
                 intent.putExtra("transferdata", logStr);
@@ -315,6 +325,10 @@ public class MessageParse {
         intent.putExtra("realtime_temperature", tempString);
         EventBus.getDefault().post(intent);
         
+        String result = "Receiver RealTime Temperature = " + tempString;
+        SLog.e(TAG, result);
+        Utiliy.dataToFile(result);
+        
     }
 
 
@@ -329,7 +343,7 @@ public class MessageParse {
                 int month = ((keyValue[i*8] & 0x03) << 2) | ((keyValue[1+i*8] & 0xc0) >> 6);
                 int day = (keyValue[1+i*8] & 0x3e) >> 1;
                 int hour = ((keyValue[1+i*8] & 0x01)  << 4) | ((keyValue[2+i*8] & 0xf0) >> 4);
-                int minu = ((keyValue[2+i*8] & 0x0f) << 2) | ((keyValue[3+i*8] & 0xc0) >> 2);
+                int minu = ((keyValue[2+i*8] & 0x0f) << 2) | (((keyValue[3+i*8] & 0xc0) >> 6) & 0x03);
                 int second = (keyValue[3+i*8] & 0x3f);
 
                 breathStopInfo.mBreathYear = year + 2000;
@@ -432,10 +446,12 @@ public class MessageParse {
             temperatureinfo.mTemperatureValue = tempString;
             temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
             
-            String tempinfo = "Time :" + temperatureinfo.mTemperatureMinute + " tempValue = " 
-                              + temperatureinfo.mTemperatureValue;  
+            String tempinfo = "Device Time : " + temperatureinfo.mTemperatureYear 
+                    + "-" + temperatureinfo.mTemperatureMonth 
+                    + "-" + temperatureinfo.mTemperatureDay 
+                    + "-" + temperatureinfo.mTemperatureMinute 
+                    + " tempValue = " + temperatureinfo.mTemperatureValue;  
             Utiliy.dataToFile(tempinfo);
-            Utiliy.temperatureToFile(temperatureinfo.mTemperatureValue + "");
             
             YingerbaoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
         }
@@ -516,6 +532,10 @@ public class MessageParse {
        
         SLog.e(TAG, "humbit = " + humbit);
         SLog.e(TAG, "energy = " + energy);
+        
+        String result = "Receiver RealTime Temperature = " + tempString;
+        SLog.e(TAG, result);
+        Utiliy.dataToFile(result);
     }
 
 
@@ -617,12 +637,18 @@ public class MessageParse {
                         
                         //setDeviceTime(devTime);
                         
-                        SLog.e(TAG, "year = " + (devTime.year  + 2000)
+                        String  curDeviceTime = "get Current Device Time : year = "
+                                + (devTime.year  + 2000)
                                 + " month = " + devTime.month
                                 + " day = " + devTime.day
                                 + " hour = " + devTime.hour
                                 + " min = " + devTime.min
-                                + " second = " + devTime.second);   
+                                + " second = " + devTime.second;
+                        
+                        CommandCenter.getInstance(mContext).handleIntent(mContext, new Intent());
+                        
+                        SLog.e(TAG, curDeviceTime);   
+                        Utiliy.dataToFile(curDeviceTime);
                         
                         //if (PrivateParams.getSPInt(mContext, "NoSyncDataLength", 0) > 200) {
                          //   AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
@@ -633,14 +659,20 @@ public class MessageParse {
                 } else if (kpload.key == 2) { //设置时间返回结果
                     if (kpload.keyLen == 1) {
                         int settimeresult = kpload.keyValue[0] & 0x0f;
-                        SLog.e(TAG, "settimeresult = " + settimeresult);
                         PrivateParams.setSPInt(mContext, "SetTimeinfo" , 1);
+                        
+                        String result =  "settimeresult = " + settimeresult;
+                        SLog.e(TAG, result);
+                        Utiliy.dataToFile(result);
                     }
                 } else if (kpload.key == 6) { // 激活设备返回
                     if (kpload.keyLen == 1) {
                         int activateresult = kpload.keyValue[0] & 0x0f;
                         if (activateresult == 0) { // 激活设备成功
                             //AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
+                            String result =  "activate device success ";
+                            SLog.e(TAG, result);
+                            Utiliy.dataToFile(result);
                         }
                     }
                 }

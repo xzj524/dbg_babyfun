@@ -64,8 +64,9 @@ public class ThreadPool {
             try {
                 mExeServ.getQueue().clear();
                 mExeServ.shutdown();
+                mExeServ.shutdownNow();
             } catch (Exception e) {
-                SLog.d(TAG, " ThreadPool shutdown e: " + e);
+                SLog.e(TAG, e);
             }
         }
     }

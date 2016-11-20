@@ -206,6 +206,9 @@ public class YingerbaoDatabase {
                 } catch (Exception e) {
                     SLog.e(TAG, e);
                 } finally {
+                    if (null != cursor && !cursor.isClosed()) {
+                        cursor.close();
+                    }
                     if (db != null) {
                         db.close();
                     }
@@ -251,15 +254,14 @@ public class YingerbaoDatabase {
                 values.put(TemperatureInfoEnum.TemperatureDay.name(), temperatureinfo.mTemperatureDay);
                 values.put(TemperatureInfoEnum.TemperatureMinute.name(), temperatureinfo.mTemperatureMinute);
 
-                Cursor cs = null;
                 try {
                     ret = db.insert(TemperatureInfoEnum.TABLE_NAME, null, values);
                     SLog.e(TAG, "temperatureinfo:  insert into database");
                 } catch (Exception e) {
                     SLog.e(TAG, e);
                 } finally {
-                    if (null != cs && !cs.isClosed()) {
-                        cs.close();
+                    if (null != cursor && !cursor.isClosed()) {
+                        cursor.close();
                     }
                     if (db != null) {
                         db.close();

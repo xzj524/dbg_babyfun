@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
+import com.aizi.yingerbao.command.CommandSendRequest;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
@@ -45,6 +46,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "setDeviceTime";
+            Utiliy.dataToFile(str);
             mIsBluetoothReady = true;
         }
         
@@ -82,6 +85,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "startSendBreathData";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
@@ -101,6 +106,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "stopSendBreathData";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
@@ -119,7 +126,9 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
+            String str = "getDeviceTime";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
@@ -139,6 +148,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "getRealTimeData";
+            Utiliy.dataToFile(str);
         }
 
         return null;
@@ -160,6 +171,8 @@ public class SyncDeviceImpl implements SyncDevice{
                     Constant.BASE_VERSION_CODE, keyPayload);
         
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "getAllNoSyncInfo";
+            Utiliy.dataToFile(str);
         }
 
         return null;
@@ -169,7 +182,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
     @Override
     public DeviceResponse<?> getAllSyncInfo() {
-        // TODO Auto-generated method stub
         SLog.e(TAG, " getAllSyncInfo ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
@@ -180,6 +192,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "getAllSyncInfo";
+            Utiliy.dataToFile(str);
         }
 
         return null;
@@ -198,6 +212,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "getBreahStopInfo";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
@@ -215,6 +231,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "getRealTimeTempData";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
@@ -232,6 +250,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "getExceptionEvent";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
@@ -250,6 +270,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_BIND, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "checkDeviceValid";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
@@ -259,7 +281,6 @@ public class SyncDeviceImpl implements SyncDevice{
         byte[] checkinfo = new byte[7];
         byte[] devaddress = new byte[6];
         try {
-            //String address = getPhoneBlueAddress(context);
             String connectaddress = PrivateParams.getSPString(context, Constant.AIZI_DEVICE_ADDRESS);
             if (!TextUtils.isEmpty(connectaddress)) {
                 String[] blueadd = connectaddress.split(":");
@@ -304,6 +325,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            String str = "activateDevice";
+            Utiliy.dataToFile(str);
         }
         return null;
     }
