@@ -1,17 +1,16 @@
 package com.aizi.yingerbao.utility;
 
-import com.aizi.yingerbao.BabyEmergencyActivity;
-import com.aizi.yingerbao.BabyExplainActivity;
-import com.aizi.yingerbao.R;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.aizi.yingerbao.BabyEmergencyActivity;
+import com.aizi.yingerbao.R;
+
 
 public class NotificationBuilderManager {
     public static final int MEDIA_BUILDER_ID = 8888;
-    public static final String MEDIA_NOFIFY_DESCRIPTION = "富媒体消息：点击后下载与查看";
     private static String TAG = "NotificationBuilderManager";
     private static String SHARE_PRE_FILE = "notification_builder_storage";
     private static Object notification_builder_lock = new Object();
@@ -20,19 +19,15 @@ public class NotificationBuilderManager {
     public static Notification createNotification(Context context, int id,
             String title, String content, boolean noDisturb) {
         synchronized (notification_builder_lock) {
-          //  PushNotificationBuilder builder = getBuilder(context, id);
-          //  Builder builder = new Builder(context);
-            
             Intent intent = new Intent(context, BabyEmergencyActivity.class);
             intent.putExtra("title", title);
             intent.putExtra("content", content);
-           // startActivity(intent);
             int req = Long.valueOf(System.currentTimeMillis()).intValue();
             PendingIntent pendingIntent = PendingIntent.getActivity(context, req,  
                     intent, 0);  
             
             Notification notify = new Notification.Builder(context)  
-            .setSmallIcon(R.drawable.ic_launcher_sleep)
+            .setSmallIcon(R.drawable.yingerbao_512)
             .setTicker(content)  
             .setContentTitle(title)  
             .setContentText(content)  

@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
@@ -26,16 +25,16 @@ public class CommandCenter {
     private static int SLEEP_TIME = 10 * 1000;
     private static int mRetryTimes = 0;
     
-    public CommandCenter(Context context) {
+    public CommandCenter() {
         //EventBus.getDefault().register(this);
         mExecutorService.submit(consumer);
     }
 
-    public static CommandCenter getInstance(Context context) {
+    public static CommandCenter getInstance() {
         if (mInstance != null) {
             return mInstance;
         } else {
-            mInstance = new CommandCenter(context);
+            mInstance = new CommandCenter();
             return mInstance;
         }
     }
@@ -55,7 +54,7 @@ public class CommandCenter {
         }
     }
 
-    public static void handleIntent(Context context, Intent intent) {
+    public void handleIntent(Intent intent) {
         SLog.d(TAG, "receiveIntent: " + intent.toUri(0));
         try {
             String action = intent.getAction();
@@ -63,34 +62,46 @@ public class CommandCenter {
                 if (action.equals(Constant.ACITON_DATA_TRANSFER)) {
                     int trantype = intent.getIntExtra(Constant.DATA_TRANSFER_TYPE, 0);
                     switch (trantype) {
-                    case Constant.TRANSFER_TYPE_SUCCEED: //数据传输成功
-                        synchronized (synchronizedLock) { //传输成功之后继续下一个
-                            synchronizedLock.notifyAll();
-                        }
-                        mRetryTimes = 0;
-                        break;
-                    case Constant.TRANSFER_TYPE_NOT_COMPLETED: // 数据传输未完成
-                        ThreadPool.getInstance().shutDown();
-                        ThreadPool.getInstance().submitRunnable(timeOutRunnable);
-                        break;
-                    case Constant.TRANSFER_TYPE_ERROR: // 数据传输出错
-                        synchronized (synchronizedLock) { //传输失败之后继续下一个
-                            synchronizedLock.notifyAll();
-                            if (mRetryTimes < 3) {
-                                // 重新加入任务队列
-                                mSendDataQueue.produce(mCommandSendRequest);
-                                mRetryTimes++;
-                            } else {
-                                mRetryTimes = 0;
+                        case Constant.TRANSFER_TYPE_SUCCEED: //数据传输成功
+                            synchronized (synchronizedLock) { //传输成功之后继续下一个
+                                synchronizedLock.notifyAll();
+                                SLog.e(TAG, "CommandCenter mCommandSendRequest  completed notifyALL");
+                                ThreadPool.getInstance().shutDown();
                             }
-                        }
-                        break;
-                    default:
-                        break;
+                            mRetryTimes = 0;
+                            break;
+                        case Constant.TRANSFER_TYPE_NOT_COMPLETED: // 数据传输未完成
+                            ThreadPool.getInstance().shutDown();
+                            ThreadPool.getInstance().submitRunnable(timeOutRunnable);
+                            break;
+                        case Constant.TRANSFER_TYPE_ERROR: // 数据传输出错
+                            synchronized (synchronizedLock) { //传输失败之后继续下一个
+                                synchronizedLock.notifyAll();
+                                if (mRetryTimes < 3) {
+                                    // 重新加入任务队列
+                                    mSendDataQueue.produce(mCommandSendRequest);
+                                    mRetryTimes++;
+                                } else {
+                                    mRetryTimes = 0;
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
         } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+    
+    
+    public void clearInterfaceQueue() {
+        try {
+            mSendDataQueue.clear();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
             SLog.e(TAG, e);
         }
     }
@@ -103,7 +114,7 @@ public class CommandCenter {
                 Thread.sleep(SLEEP_TIME);
                 synchronized (synchronizedLock) {
                     synchronizedLock.notifyAll();
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest  notifyALL");
+                    SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
                 }
             } catch (Exception e) {
                 SLog.e(TAG, e);
@@ -125,17 +136,15 @@ public class CommandCenter {
         public void run() {
             try {
                 while (true) {
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest3");
                     mCommandSendRequest =  sendqueue.consume();
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest6");
                     mCommandSendRequest.send();
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest5");
+                    SLog.e(TAG, "CommandCenter mCommandSendRequest send");
                     ThreadPool.getInstance().submitRunnable(timeOutRunnable);
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest1");
+                    SLog.e(TAG, "CommandCenter mCommandSendRequest set alarm timer");
                     synchronized (synchronizedLock) {
                         try {
                             synchronizedLock.wait();
-                            SLog.e(TAG, "CommandCenter mCommandSendRequest2");
+                            SLog.e(TAG, "CommandCenter mCommandSendRequest completed");
                         } catch (Exception e) {
                             SLog.e(TAG, e);
                         }
@@ -179,6 +188,12 @@ public class CommandCenter {
         // wait
         public void waitfor() throws InterruptedException {
             commandqueue.wait();
+        }
+        
+
+        // wait
+        public void clear() throws InterruptedException {
+            commandqueue.clear();
         }
     }
 }

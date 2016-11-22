@@ -164,8 +164,6 @@ public class BluetoothApi {
                         waittimes = 0;
                         event =  sendqueue.consume();
                         writeByte(event.getByte());
-                        Thread.sleep(100);
-                        SLog.e(TAG, "write data byte*****************");
                     } else {
                         waittimes++;
                         if (waittimes > 10) {

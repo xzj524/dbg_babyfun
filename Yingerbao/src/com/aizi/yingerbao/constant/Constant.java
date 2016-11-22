@@ -104,4 +104,10 @@ public class Constant {
     
     public static final int TRANSFER_TYPE_ERROR = 3;
     
+    
+
+    public static final String ACTIVATE_RESULT = "activate_device_result";
+
+    public static final String NOT_SYNC_DATA_LEN = "not_sync_data_name";
+    
 }

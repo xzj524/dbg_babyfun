@@ -50,11 +50,19 @@
             android:visibility="gone">
 
 	       <TextView
+	           android:id="@+id/devconnectTextView"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_gravity="center_horizontal"
+	           android:text="@string/connect_device_done" 
+	           android:visibility="gone"/>
+	       
+	       <TextView
 	           android:id="@+id/syncDataTextView"
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
 	           android:layout_gravity="center_horizontal"
-	           android:text="@string/sync_data" />
+	           android:text="@string/connecting_device_sync_data" />
         </LinearLayout>
 
        <LinearLayout
@@ -92,6 +100,28 @@
 				android:lineSpacingMultiplier="1"
                 android:gravity="center_horizontal"
                 android:text="@string/connecting_device_success" />
+
+        </LinearLayout>
+        
+         <LinearLayout
+            android:id="@+id/syncdataLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+             <TextView
+                android:id="@+id/syncdataTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_gravity="center_horizontal"
+                android:lineSpacingExtra="2dp"
+				android:lineSpacingMultiplier="1"
+                android:gravity="center_horizontal"
+                android:text="@string/connecting_device_sync_data" />
 
         </LinearLayout>
         

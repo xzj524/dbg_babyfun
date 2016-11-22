@@ -52,7 +52,6 @@ public class ScanDevicesService extends Service{
             Toast.makeText(this, "手机不支持蓝牙", Toast.LENGTH_SHORT).show();
             stopSelf();
         } else {
-            // 打开蓝牙
             mBluetoothAdapter.enable();
         }
         
@@ -130,9 +129,8 @@ public class ScanDevicesService extends Service{
         boolean isDeviceFound = false;
         try {
             for (BluetoothDevice listDev : mDeviceList) {
-                if (listDev.getAddress().equals(device.getAddress())) {
-                    // 设备已经发现
-                    isDeviceFound = true;
+                if (listDev.getAddress().equals(device.getAddress())) {  
+                    isDeviceFound = true;  // 设备已经发现
                     stopScanDevice();
                     SLog.e(TAG, "device is already in the device list ");
                     break;
@@ -148,10 +146,6 @@ public class ScanDevicesService extends Service{
                         mDeviceList.add(device);
                         devRssiValues.put(device.getAddress(), rssi);
                         isDeviceFound = true;
-                        /*ListDataSave listDataSave = new ListDataSave(getApplicationContext(),
-                                Constant.AIZI_DEVICE_PRIVATE_SETTINGS);
-                        listDataSave.setDataList(Constant.AIZI_DEVICE_ADDRESS, mDeviceList);*/
-                        
                         PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_DEVICE_ADDRESS, 
                                 device.getAddress());
                         

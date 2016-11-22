@@ -1,4 +1,4 @@
-package com.aizi.yingerbao.ui.component.main;
+package com.aizi.yingerbao.device.fragment;
 
 import java.util.Timer;
 import java.util.TimerTask;

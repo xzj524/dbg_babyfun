@@ -17,7 +17,6 @@ import android.content.Intent;
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.breath.BabyBreath;
-import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathStopInfo;
 import com.aizi.yingerbao.database.DevCheckInfo;
@@ -145,13 +144,22 @@ public class MessageParse {
                     + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
                     + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus;
             
+            
+            // 校验设备成功
+            Utiliy.reflectTranDataType(0);
+            
             SLog.e(TAG, result);
-            
             Utiliy.dataToFile(result);
+            SLog.e(TAG, "devCheckInfo.mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength);
+            PrivateParams.setSPInt(mContext, Constant.NOT_SYNC_DATA_LEN, devCheckInfo.mNoSyncDataLength);
             
-           // AsyncDeviceFactory.getInstance(mContext).activateDevice();
-           // AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
-            //setDeviceTime(devCheckInfo);
+            if (PrivateParams.getSPInt(mContext, Constant.ACTIVATE_RESULT, 0) == 0) {
+                // 如果没有激活过设备则进行激活
+                AsyncDeviceFactory.getInstance(mContext).activateDevice();
+            }
+                      
+            AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
+            
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -245,6 +253,7 @@ public class MessageParse {
                 }
             } else if (kpload.key == 5) {
                 SLog.e(TAG, "receive data complete " + kpload.keyLen);
+                handledatacompleted(kpload.keyValue);
             } else if (kpload.key == 6) {
                 SLog.e(TAG, "receiver sleep data " + kpload.keyLen);
                 handleSleepData(kpload.keyValue);
@@ -262,9 +271,56 @@ public class MessageParse {
                 handleBreathStopData(kpload.keyValue);
             } else if (kpload.key == 13) { // 呼吸停滞数据结束
                 SLog.e(TAG, "receiver breath stop data completed " + + kpload.keyLen);
+                handleBreathStoprefect(kpload.keyValue);
             } else if (kpload.key == 15) {
                 handleExceptionData(kpload.keyValue);
+            } else if (kpload.key == 16) {
+                handleExceptionComplete(kpload.keyValue);
             }
+        }
+    }
+
+
+    private void handleExceptionComplete(byte[] keyValue) {
+        try {
+            int exceptionresult = keyValue[0] & 0xff;
+            if (exceptionresult == 0 || exceptionresult == 1) {
+                Utiliy.reflectTranDataType(0);
+            } else if (exceptionresult == 2) {
+                Utiliy.reflectTranDataType(2);
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+
+    private void handleBreathStoprefect(byte[] keyValue) {
+        try {
+            int datastopresult = keyValue[0] & 0xff;
+            if (datastopresult == 0 || datastopresult == 1) {
+                Utiliy.reflectTranDataType(0);
+            } else if (datastopresult == 2) {
+                Utiliy.reflectTranDataType(2);
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+
+    private void handledatacompleted(byte[] keyValue) {
+        try {
+            int datatransresult = keyValue[0] & 0xff;
+            if (datatransresult == 0 
+                    || datatransresult == 2
+                    || datatransresult == 4) {
+                Utiliy.reflectTranDataType(0);
+            } else if (datatransresult == 1 || datatransresult == 3) {
+                Utiliy.reflectTranDataType(2);
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
         }
     }
 
@@ -324,6 +380,9 @@ public class MessageParse {
         Intent intent = new Intent(Constant.DATA_REALTIME_TEMPERATURE);
         intent.putExtra("realtime_temperature", tempString);
         EventBus.getDefault().post(intent);
+        
+        
+        Utiliy.reflectTranDataType(0);
         
         String result = "Receiver RealTime Temperature = " + tempString;
         SLog.e(TAG, result);
@@ -533,7 +592,9 @@ public class MessageParse {
         SLog.e(TAG, "humbit = " + humbit);
         SLog.e(TAG, "energy = " + energy);
         
-        String result = "Receiver RealTime Temperature = " + tempString;
+        Utiliy.reflectTranDataType(0);
+        
+        String result = "Receiver RealTime Temperature 1 = " + tempString;
         SLog.e(TAG, result);
         Utiliy.dataToFile(result);
     }
@@ -588,12 +649,24 @@ public class MessageParse {
                 SLog.e(TAG, "START BREATH RETURN");
                 if (kpload.keyLen == 1) {
                     mBreathStartResult = kpload.keyValue[0] & 0x0f;
+                    if (mBreathStartResult == 0) {
+                        Utiliy.reflectTranDataType(0);
+                    } else if (mBreathStartResult == 1) {
+                        Utiliy.reflectTranDataType(2);
+                    }
                 }
             } else if (kpload.key == 3) { // 呼吸测试数据
                 SLog.e(TAG, "START REAL BREATH DATA");
                 BabyBreath babyBre = getBabyBreath(kpload.keyValue);
                 if (babyBre != null) {
                     updateBreathWave(babyBre);
+                }
+            } else if (kpload.key == 5) { // 呼吸测试关闭返回
+                int breathstopresult = kpload.keyValue[0] & 0x0f;
+                if (breathstopresult == 0) {
+                    Utiliy.reflectTranDataType(0);
+                } else if (breathstopresult == 1) {
+                    Utiliy.reflectTranDataType(2);
                 }
             }
         }
@@ -645,16 +718,19 @@ public class MessageParse {
                                 + " min = " + devTime.min
                                 + " second = " + devTime.second;
                         
-                        CommandCenter.getInstance(mContext).handleIntent(mContext, new Intent());
                         
+                        //请求时间成功
+                        Utiliy.reflectTranDataType(0);
                         SLog.e(TAG, curDeviceTime);   
                         Utiliy.dataToFile(curDeviceTime);
                         
-                        //if (PrivateParams.getSPInt(mContext, "NoSyncDataLength", 0) > 200) {
-                         //   AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
-                         //   Thread.sleep(500);
-                            //AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
-                        //}
+                        setDeviceTime(devTime);
+                        
+                        AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
+                        AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
+                        
+                        
+                        
                     }
                 } else if (kpload.key == 2) { //设置时间返回结果
                     if (kpload.keyLen == 1) {
@@ -662,18 +738,34 @@ public class MessageParse {
                         PrivateParams.setSPInt(mContext, "SetTimeinfo" , 1);
                         
                         String result =  "settimeresult = " + settimeresult;
+                        if (settimeresult == 0 || settimeresult == 1) {
+                            //设置时间成功
+                            Utiliy.reflectTranDataType(0);
+                        } else if (settimeresult == 2) {
+                          //设置时间失败
+                            Utiliy.reflectTranDataType(2);
+                        }
                         SLog.e(TAG, result);
                         Utiliy.dataToFile(result);
                     }
                 } else if (kpload.key == 6) { // 激活设备返回
                     if (kpload.keyLen == 1) {
                         int activateresult = kpload.keyValue[0] & 0x0f;
+                        String result = null;
                         if (activateresult == 0) { // 激活设备成功
                             //AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
-                            String result =  "activate device success ";
-                            SLog.e(TAG, result);
-                            Utiliy.dataToFile(result);
+                            PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 1);
+                            result =  "activate device success ";
+                            //激活设备成功
+                            Utiliy.reflectTranDataType(0);
+                        } else if (activateresult == 1) {
+                            PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 0);
+                            result =  "activate device failed ";
+                            //激活设备成功
+                            Utiliy.reflectTranDataType(3);
                         }
+                        SLog.e(TAG, result);
+                        Utiliy.dataToFile(result);
                     }
                 }
             }

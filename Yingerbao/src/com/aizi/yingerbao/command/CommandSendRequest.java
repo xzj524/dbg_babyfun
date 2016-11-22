@@ -44,7 +44,7 @@ public class CommandSendRequest {
     public void addSendTask() {
         try {
             SLog.e(TAG, "add addCallbackRequest");
-            CommandCenter.getInstance(mContext).addCallbackRequest(this);   
+            CommandCenter.getInstance().addCallbackRequest(this);   
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

@@ -204,6 +204,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
+        AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
         if (mTimer != null) {
             mTimer.purge();
             mTimer.cancel();

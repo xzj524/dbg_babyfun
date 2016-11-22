@@ -23,6 +23,7 @@ import android.text.TextUtils;
 
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
+import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 
@@ -57,46 +58,9 @@ public class Utiliy {
             String customcontent) {
         NotificationManager nmNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        /*Intent clickIntent = new Intent();
-        clickIntent.setClassName(pkgName, serviceName);
-        clickIntent.setAction(ACTION_PRIVATE_NOTIFICATION_CLICK);
-        clickIntent.setData(Uri.parse("content://" + msgId));
-        //clickIntent.putExtra(Constants.EXTRA_PUBLIC_MSG, pMsg);
-        clickIntent.putExtra("app_id", appId);
-        clickIntent.putExtra("msg_id", msgId);
-        PendingIntent clickPendingIntent = PendingIntent.getService(context, 0,
-                clickIntent, 0);
-
-        Intent deleteIntent = new Intent();
-        deleteIntent.setClassName(pkgName, serviceName);
-        deleteIntent.setAction(ACTION_PRIVATE_NOTIFICATION_DELETE);
-        deleteIntent.setData(Uri.parse("content://" + msgId));
-        //deleteIntent.putExtra(Constants.EXTRA_PUBLIC_MSG, pMsg);
-        deleteIntent.putExtra("app_id", appId);
-        deleteIntent.putExtra("msg_id", msgId);
-        PendingIntent deletePendingIntent = PendingIntent.getService(context,
-                0, deleteIntent, 0);
-*/
         Notification notif = null;
-        //boolean noDisturb = Utility.isNoDisturb(context, pMsg.mPkgName);
-   /*     if (pMsg.mNotificationBuilder == 0) {
-            notif = NotificationBuilderManager.createNotification(context,
-                    pMsg.mNotificationBuilder, pMsg.mNotificationBasicStyle,
-                    pMsg.mTitle, pMsg.mDescription, noDisturb);
-        } else {
-            notif = NotificationBuilderManager.createNotification(context,
-                    pMsg.mNotificationBuilder, pMsg.mTitle, pMsg.mDescription,
-                    noDisturb);
-        }*/
-        
         notif = NotificationBuilderManager.createNotification(context, 0, title, content, false);
-        //notif.contentIntent = clickPendingIntent;
-        //notif.deleteIntent = deletePendingIntent;
-        //nmNotificationManager.notify(0, notif);
         nmNotificationManager.notify(System.currentTimeMillis() + "", 0, notif);
-        //nmNotificationManager.notify("1232", 0, notif);
-        // send a broadcast when notifications arrive at client
-       // sendNotificationArrivedReceiver(context, pkgName, pMsg);
     }
     
     public static void showBreathNotification(Context context,
@@ -274,8 +238,6 @@ public class Utiliy {
                     int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
                     if (state == BluetoothProfile.STATE_CONNECTED) {
                         isConnected = true;
-                        PrivateParams.setSPString(context, Constant.AIZI_DEVICE_ADDRESS, 
-                                device.getAddress());
                         break;
                     }
                 }
@@ -364,5 +326,29 @@ public class Utiliy {
           }
           return phoneaddress;  
       }
+
+    public static void reflectTranDataType(int res) {
+        try {
+            Intent intent = new Intent(Constant.ACITON_DATA_TRANSFER);
+            switch (res) {
+            case 0:
+                intent.putExtra(Constant.DATA_TRANSFER_TYPE, Constant.TRANSFER_TYPE_SUCCEED);
+                break;
+            case 1:
+                intent.putExtra(Constant.DATA_TRANSFER_TYPE, Constant.TRANSFER_TYPE_NOT_COMPLETED);
+                break;
+            case 2:
+                intent.putExtra(Constant.DATA_TRANSFER_TYPE, Constant.TRANSFER_TYPE_ERROR);
+                break;
+
+            default:
+                break;
+            }
+            
+            CommandCenter.getInstance().handleIntent(intent);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
 
 }

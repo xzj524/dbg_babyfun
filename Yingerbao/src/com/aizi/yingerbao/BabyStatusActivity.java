@@ -19,12 +19,12 @@ import com.aizi.yingerbao.chart.BarChartFragment;
 import com.aizi.yingerbao.chart.SleepyChart;
 import com.aizi.yingerbao.chart.SleepyPieChart;
 import com.aizi.yingerbao.chart.SleepyChart.SetTextViewListener;
+import com.aizi.yingerbao.device.fragment.BabyRealTimeStatusFragment;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.receiver.BabyStatusReceiver;
 import com.aizi.yingerbao.receiver.BabyStatusReceiver.DataStatusInteraction;
 import com.aizi.yingerbao.service.BluetoothService;
-import com.aizi.yingerbao.ui.component.main.BabyRealTimeStatusFragment;
 import com.aizi.yingerbao.utility.Utiliy;
 
 public class BabyStatusActivity extends Activity implements DataStatusInteraction, SetTextViewListener{

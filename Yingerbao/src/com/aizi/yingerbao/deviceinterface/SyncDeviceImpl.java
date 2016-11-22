@@ -45,7 +45,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "setDeviceTime";
             Utiliy.dataToFile(str);
             mIsBluetoothReady = true;
@@ -84,7 +85,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "startSendBreathData";
             Utiliy.dataToFile(str);
         }
@@ -105,7 +107,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "stopSendBreathData";
             Utiliy.dataToFile(str);
         }
@@ -147,7 +150,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getRealTimeData";
             Utiliy.dataToFile(str);
         }
@@ -170,7 +174,8 @@ public class SyncDeviceImpl implements SyncDevice{
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
         
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getAllNoSyncInfo";
             Utiliy.dataToFile(str);
         }
@@ -191,7 +196,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getAllSyncInfo";
             Utiliy.dataToFile(str);
         }
@@ -211,7 +217,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getBreahStopInfo";
             Utiliy.dataToFile(str);
         }
@@ -230,7 +237,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getRealTimeTempData";
             Utiliy.dataToFile(str);
         }
@@ -249,7 +257,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getExceptionEvent";
             Utiliy.dataToFile(str);
         }
@@ -269,7 +278,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_BIND, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "checkDeviceValid";
             Utiliy.dataToFile(str);
         }
@@ -324,7 +334,8 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "activateDevice";
             Utiliy.dataToFile(str);
         }

@@ -1,7 +1,7 @@
 package com.aizi.yingerbao.titlefragment;
 
 import com.aizi.yingerbao.R;
-import com.aizi.yingerbao.ui.component.main.RealTimeStatusFragment.OnStatusSelectedListener;
+import com.aizi.yingerbao.device.fragment.RealTimeStatusFragment.OnStatusSelectedListener;
 
 import android.app.Activity;
 import android.app.Fragment;

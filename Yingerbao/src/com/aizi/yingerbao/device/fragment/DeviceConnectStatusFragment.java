@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2014 Baidu Inc. All rights reserved.
+ * Copyright (C) 2016 Aizi Inc. All rights reserved.
  */
-package com.aizi.yingerbao.ui.component.main;
+package com.aizi.yingerbao.device.fragment;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -13,7 +12,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,14 +43,10 @@ public class DeviceConnectStatusFragment extends Fragment{
     private static final String TAG = DeviceConnectStatusFragment.class.getSimpleName();
 
     public static final int ABNORMAL_REQUEST_CODE = 1;
-    private static final int REQUEST_SELECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BLUETOOTH = 101;
     private static final long SCAN_PERIOD = 10 * 1000; //10 seconds
     private BluetoothDevice mDevice = null;
     OnDeviceConnectListener mListener;
-
-    /** 远程还是本地 */
-    private TextView mDeviceOrLocalTextView;
 
     /** 检查网络 */
     private TextView mCheckNetworkConnectingTextView;
@@ -65,9 +59,6 @@ public class DeviceConnectStatusFragment extends Fragment{
 
     /** 正在连接动画 */
     private boolean mIsConnectingAnimation = false;
-
-    /** 适配器 提供数据 */
-//    private RouterAdapter mRouterAdapter;
 
     /** 正在连接的view group */
     private ViewGroup mConnectingInfoViewGroup;
@@ -87,8 +78,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     /** 正在检测的状态 */
     public static CheckingState mCurrentState;
 
-    /** UI handler */
-    private final Handler mUIHandler = new Handler(Looper.getMainLooper());
 
     Timer mTimer;
 
@@ -98,23 +87,20 @@ public class DeviceConnectStatusFragment extends Fragment{
         try{  
             mListener =(OnDeviceConnectListener)activity;  
         }catch(ClassCastException e){  
-            throw new ClassCastException(activity.toString()+"must implement OnArticleSelectedListener");  
+            throw new ClassCastException(activity.toString()+"must implement OnDeviceConnectListener");  
         }  
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         mCurrentState = CheckingState.IDEL;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View deviceStatusView = inflater.inflate(R.layout.babyfun_status_fragment, container, false);
+        View deviceStatusView = inflater.inflate(R.layout.yingerbao_status_fragment, container, false);
         
-        mCheckNetworkConnectingTextView = (TextView) deviceStatusView.findViewById(R.id.checkingNetworkTextView);
-        mConnectedStatusTextView = (TextView) deviceStatusView.findViewById(R.id.connectedStatusTextView);
         
         mProgressImageView = (ImageView) deviceStatusView.findViewById(R.id.progressImageView);
         mProgressImageView.setOnClickListener(new UpdateStatusOnclickListener());
@@ -218,24 +204,23 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCurrentState = CheckingState.CHECKING;     
             Intent bluetoothIntent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(bluetoothIntent,REQUEST_ENABLE_BLUETOOTH);
+            //Intent intent = new Intent("com.aizi.yingerbao.scandevices");
+            //mListener.onDeviceConnected(intent);
         } else if (mCurrentState == CheckingState.FATAL_DEVICE_NOT_CONNECT) {
             mCurrentState = CheckingState.CHECKING;
             startConnectingAnimation();
         } else if (mCurrentState == CheckingState.CONNECTED) {
-            mIsConnectingAnimation = false;
-            mProgressImageView.clearAnimation();
-            mSyncDataViewGroup.setVisibility(View.GONE);
+            //mIsConnectingAnimation = false;
+            //mProgressImageView.clearAnimation();
+            mSyncDataViewGroup.setVisibility(View.VISIBLE);
             mClickConnectViewGroup.setVisibility(View.GONE);
-            mConnectedSucceedViewGroup.setVisibility(View.VISIBLE);
+            mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             
-         /*   SLog.e(TAG, "START DEVICE1");
-            mTimer = new Timer();
-            mTimer.schedule(task,800);*/
-            SLog.e(TAG, "CheckingState.CONNECTED!!!!!!!!!!!!!!!!!!!!!");
-            Intent intent = new Intent("com.aizi.transfer");
-           // EventBus.getDefault().post(intent);
+            AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).checkDeviceValid();
+          //同步数据，将未同步数据设置为0
+            PrivateParams.setSPInt(getActivity().getApplicationContext(), Constant.NOT_SYNC_DATA_LEN, 0);
            
         } else if (mCurrentState == CheckingState.SYNC_DATA_SUCCEED) {
             mIsConnectingAnimation = false;
@@ -246,42 +231,23 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectingInfoViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             
-         
-            
         } else if (mCurrentState == CheckingState.FAIL) {
-            SLog.e(TAG, "Bluetooth Service disconnect");
+            SLog.e(TAG, "Scan Bluetooth Service failed or disconnect");
             mIsConnectingAnimation = false;
             mCurrentState = CheckingState.IDEL;
             mProgressImageView.clearAnimation();
             mConnectedSucceedViewGroup.setVisibility(View.INVISIBLE);
             mConnectingInfoViewGroup.setVisibility(View.INVISIBLE);
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
+            mSyncDataViewGroup.setVisibility(View.GONE);
         }
     }
-    
-    
-    TimerTask task = new TimerTask(){  
-        public void run() {  
-            try {
-                
-                
-                SLog.e(TAG, "START DEVICE2");
-               /* AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).checkDeviceValid();
-                Thread.sleep(1000);
-                AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).getAllNoSyncInfo();
-                Thread.sleep(1000);
-                AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).getBreathStopInfo();*/
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            }
-      }  
-   };
   
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
        if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
-            Intent enableintent = new Intent("com.babyfun.scandevices");
+            Intent enableintent = new Intent("com.aizi.yingerbao.scandevices");
             mListener.onDeviceConnected(enableintent);
         }
     }
@@ -301,6 +267,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     public static enum CheckingState {
         IDEL, // idel
         CHECKING, // 正在检查
+        SYNC_DATA,
         FATAL_DEVICE_NOT_CONNECT, // 无法连接
         FAIL, // 失败
         CONNECTED, // 连接成功
@@ -319,6 +286,10 @@ public class DeviceConnectStatusFragment extends Fragment{
         mCurrentState = CheckingState.SYNC_DATA_SUCCEED;  
     }
     
+    public void setCurSyncData(){
+        mCurrentState = CheckingState.SYNC_DATA;  
+    }
+    
     public CheckingState getCurrentState() {
         return mCurrentState;
     }
@@ -329,7 +300,6 @@ public class DeviceConnectStatusFragment extends Fragment{
         if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
             setCurrentStateConnected();
             doUpdateStatusClick();
-            //AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).getAllNoSyncInfo();
         } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
             setCurrentStateFailed();
             doUpdateStatusClick();
@@ -339,11 +309,6 @@ public class DeviceConnectStatusFragment extends Fragment{
             Intent intent = new Intent(getActivity().getApplicationContext(), YingerBaoActivity.class);
             startActivity(intent);
         } else if (action.equals(Constant.BLUETOOTH_SCAN_FOUND)) {
-            SLog.e(TAG, "...BLUETOOTH_SCAN_FOUND");
-            /*ListDataSave listDataSave = new ListDataSave(getActivity().getApplicationContext(),
-                    Constant.AIZI_DEVICE_PRIVATE_SETTINGS);
-            // 获取已扫描的设备列表
-            List<BluetoothDevice> mDeviceList = listDataSave.getDataList(Constant.AIZI_DEVICE_ADDRESS);*/
             String devaddress = PrivateParams.getSPString(getActivity().getApplicationContext(), 
                     Constant.AIZI_DEVICE_ADDRESS);
             if (!TextUtils.isEmpty(devaddress)) {
@@ -353,23 +318,9 @@ public class DeviceConnectStatusFragment extends Fragment{
                 SLog.e(TAG, "... onActivityResultdevice.address==" + mDevice 
                         + "deviceaddress "+ devaddress);
             }
-            /*for (BluetoothDevice device : mDeviceList) {
-                if (!TextUtils.isEmpty(device.getName()) 
-                        && device.getName().equals(Constant.AIZI_DEVICE_TAG)) {
-                    devaddress = device.getAddress();
-                    SLog.e(TAG, "... onActivityResultdevice.address==" + mDevice 
-                            + "deviceaddress "+ devaddress 
-                            +" myserviceValue = " + mService);
-                    BluetoothApi.getInstance(getActivity().getApplicationContext())
-                                .mBluetoothService.connect(devaddress);
-                    break;
-                }
-            }          */  
         } else if (action.equals(Constant.BLUETOOTH_SCAN_NOT_FOUND)) {
             setCurrentStateFailed();
             doUpdateStatusClick();
         }
     } 
-
-
 }

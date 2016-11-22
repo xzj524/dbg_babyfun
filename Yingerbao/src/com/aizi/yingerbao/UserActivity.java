@@ -16,6 +16,7 @@ import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.login.LoginActivity;
 import com.aizi.yingerbao.slidingmenu.SlidingMenuHelper;
+import com.aizi.yingerbao.utility.MessageParse;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.BatteryView;
@@ -46,13 +47,16 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         
+        AsyncDeviceFactory.getInstance(getApplicationContext());
+        MessageParse.getInstance(getApplicationContext());
+        
         
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
         UpdateHelper.getInstance().setDebugMode(true);
         long intervalMillis = 100 * 1000L; //第一次调用startUpdateSilent出现弹窗后，如果100秒内进行第二次调用不会查询更新
         UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
         
-        CommandCenter.getInstance(getApplicationContext());
+        CommandCenter.getInstance();
         
         MobclickAgent.startWithConfigure(
                 new UMAnalyticsConfig(getApplicationContext(), 
@@ -130,6 +134,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         super.onDestroy();
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect();
+        CommandCenter.getInstance().clearInterfaceQueue();
        
     }
     

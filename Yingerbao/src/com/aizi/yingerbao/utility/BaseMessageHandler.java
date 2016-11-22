@@ -14,6 +14,7 @@ import android.content.Intent;
 import com.aizi.yingerbao.baseheader.BaseL1Message;
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
+import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.crc.CRC16;
 import com.aizi.yingerbao.eventbus.AsycEvent;
@@ -56,16 +57,7 @@ public class BaseMessageHandler {
                     Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
                     intent.putExtra("transferdata", " L1 " + " ACK: " + l1payload);
                     EventBus.getDefault().post(intent); // 显示到测试界面上
-                    
-                    if (bsL1Msg.errFlag == 0) {
-                        if (isWriteSuccess) {
-                            SLog.e(TAG, "isWriteSuccess = true");
-                           // boolean isSendL2Over = sendL2Msg(false);
-                        }else {
-                            //重写接口
-                            
-                        }
-                    }
+  
                 }else {
                     if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) { //收到设备发过来的信息，需要返回ACK
                         
@@ -99,10 +91,6 @@ public class BaseMessageHandler {
         try {
             mIsReceOver = generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
             if (mIsReceOver) {
-                if (mTimer != null) {
-                    mTimer.cancel();
-                    mTimer = null;
-                } 
                 if (l2OutputStream.size() > 0) {
                     BaseL2Message bsl2Msg = getBaseL2Msg(l2OutputStream.toByteArray()); 
                     l2OutputStream.reset();
@@ -113,13 +101,7 @@ public class BaseMessageHandler {
                     SLog.e(TAG, "receive L2 DATA");
                 }            
             } else {
-                if (mTimer != null) {
-                    mTimer.cancel();
-                    /*mTimer.purge();*/
-                    mTimer = null;
-                } 
-                mTimer = new Timer(true);
-                mTimer.schedule(task, WAIT_PERIOD); 
+                Utiliy.reflectTranDataType(1);
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -294,9 +276,11 @@ public class BaseMessageHandler {
 
     private static boolean generateBaseL2MsgByteArray(BaseL1Message bsL1Msg) {
         boolean isover = false;
+        int index = 0;
         try {
             if (bsL1Msg.isAiziBaseL1Head) {
                 if (bsL1Msg.errFlag == 0) { // 标识起始位
+                    index = bsL1Msg.sequenceId;
                     l2OutputStream.reset();
                     l2OutputStream.write(bsL1Msg.payload);
                 } else if (bsL1Msg.errFlag == 1) { // 标识中间位
