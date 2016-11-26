@@ -22,7 +22,7 @@ public class CommandCenter {
     Consumer consumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
     
     private static final Object synchronizedLock = new Object();
-    private static int SLEEP_TIME = 10 * 1000;
+    private static int SLEEP_TIME = 15 * 1000;
     private static int mRetryTimes = 0;
     
     public CommandCenter() {

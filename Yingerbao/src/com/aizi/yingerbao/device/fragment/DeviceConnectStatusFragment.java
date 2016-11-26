@@ -3,8 +3,6 @@
  */
 package com.aizi.yingerbao.device.fragment;
 
-import java.util.Timer;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
@@ -73,13 +71,12 @@ public class DeviceConnectStatusFragment extends Fragment{
     public ViewGroup mClickConnectViewGroup;
     
     public ViewGroup mSyncDataViewGroup;
+    
+    Animation mProgressAnimation; 
 
 
     /** 正在检测的状态 */
     public static CheckingState mCurrentState;
-
-
-    Timer mTimer;
 
     @Override
     public void onAttach(Activity activity) {
@@ -100,7 +97,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View deviceStatusView = inflater.inflate(R.layout.yingerbao_status_fragment, container, false);
-        
         
         mProgressImageView = (ImageView) deviceStatusView.findViewById(R.id.progressImageView);
         mProgressImageView.setOnClickListener(new UpdateStatusOnclickListener());
@@ -145,9 +141,9 @@ public class DeviceConnectStatusFragment extends Fragment{
         if (!mIsConnectingAnimation) {
             mIsConnectingAnimation = true;
             mProgressImageView.setImageResource(R.drawable.lightline);
-            Animation progressAnimation = AnimationUtils.loadAnimation(getActivity(),
+            mProgressAnimation = AnimationUtils.loadAnimation(getActivity(),
                     R.anim.connecting_router_rotate_animation);
-            mProgressImageView.startAnimation(progressAnimation);
+            mProgressImageView.startAnimation(mProgressAnimation);
             
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
@@ -174,12 +170,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        
-        if (mTimer != null) {
-            mTimer.purge();
-            mTimer.cancel(); 
-            mTimer = null;
-        }
     }
     /**
      * 更新状态的OnClick
@@ -210,8 +200,9 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCurrentState = CheckingState.CHECKING;
             startConnectingAnimation();
         } else if (mCurrentState == CheckingState.CONNECTED) {
-            //mIsConnectingAnimation = false;
-            //mProgressImageView.clearAnimation();
+            mProgressImageView.clearAnimation();
+            mProgressImageView.startAnimation(mProgressAnimation);
+            
             mSyncDataViewGroup.setVisibility(View.VISIBLE);
             mClickConnectViewGroup.setVisibility(View.GONE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
@@ -219,10 +210,14 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             
             AsyncDeviceFactory.getInstance(getActivity().getApplicationContext()).checkDeviceValid();
-          //同步数据，将未同步数据设置为0
+            Intent checkintent = new Intent("com.aizi.yingerbao.checkdevice");
+            mListener.onDeviceConnected(checkintent);
+            //同步数据，将未同步数据设置为0
             PrivateParams.setSPInt(getActivity().getApplicationContext(), Constant.NOT_SYNC_DATA_LEN, 0);
+            mCurrentState = CheckingState.SYNC_DATA_SUCCEED;
            
         } else if (mCurrentState == CheckingState.SYNC_DATA_SUCCEED) {
+            SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED 2");
             mIsConnectingAnimation = false;
             mProgressImageView.clearAnimation();
             mSyncDataViewGroup.setVisibility(View.GONE);

@@ -233,12 +233,15 @@ public class Utiliy {
             
             List<BluetoothDevice> devices = mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
             for (BluetoothDevice device : devices) {
+                String devname = device.getName();
                 SLog.e(TAG, "pairedDevices name = " + device.getName());
-                if (device.getName().equals(Constant.AIZI_DEVICE_TAG)) {
-                    int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
-                    if (state == BluetoothProfile.STATE_CONNECTED) {
-                        isConnected = true;
-                        break;
+                if (!TextUtils.isEmpty(devname)) {
+                    if (devname.equals(Constant.AIZI_DEVICE_TAG)) {
+                        int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
+                        if (state == BluetoothProfile.STATE_CONNECTED) {
+                            isConnected = true;
+                            break;
+                        }
                     }
                 }
               }

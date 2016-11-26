@@ -47,7 +47,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     LineChart mTemperatureChart;
     Button mTempButton;
     TextView mTempValue;
-    Timer mTimer;
     boolean mTempStart = false;
     boolean mIsTempMeasuring = false;
     
@@ -72,10 +71,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         super.onDestroy();
         
         mTempStart = false;
-        if (mTimer != null) {
-            mTimer.purge();
-            mTimer.cancel();
-        }
     }
 
     @Override
@@ -165,15 +160,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         mTempValue = (TextView) findViewById(R.id.tempvalue);
         
-        AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
-        
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            SLog.e(TAG, e);
-        }
-        
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
         dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
@@ -182,16 +168,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         EventBus.getDefault().register(this);
     }
     
-    
-    TimerTask task = new TimerTask(){  
-        public void run() {  
-            mIsTempMeasuring = false; 
-            if (mTimer != null) {
-                mTimer.purge();
-                mTimer.cancel();
-            } 
-      }  
-   };  
     
     public void onEventMainThread(Intent intent) { 
         String action = intent.getAction();
@@ -227,6 +203,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
        for (int i = 0; i < 144; i++) {
            if (i < temperatureinfos.size()) {
                float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
+               //temperatureinfos.get(i).g
                
                SLog.e(TAG, "tempvalue from database = " + tempvalue);
                yValsTem.add(new Entry(tempvalue -10, i));

@@ -99,13 +99,6 @@ public class MessageParse {
         }
     }
     
-    private void sendCallback(Context context, Intent intent, int sendCode, int resultCode) {
-        intent.putExtra(Constant.REQUEST_KEY_SEND_CODE, sendCode);
-        //intent.setClass(context, CommandService.class);
-        intent.putExtra(Constant.REQUEST_KEY_RESULT_CODE,
-                resultCode);
-        context.startService(intent);
-    }
     
     private void handleBind(List<KeyPayload> params) {
         try {
@@ -151,6 +144,11 @@ public class MessageParse {
             SLog.e(TAG, result);
             Utiliy.dataToFile(result);
             SLog.e(TAG, "devCheckInfo.mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength);
+            
+            Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
+            intent.putExtra(Constant.NOT_SYNC_DATA_LEN, devCheckInfo.mNoSyncDataLength);
+            EventBus.getDefault().post(intent);
+            
             PrivateParams.setSPInt(mContext, Constant.NOT_SYNC_DATA_LEN, devCheckInfo.mNoSyncDataLength);
             
             if (PrivateParams.getSPInt(mContext, Constant.ACTIVATE_RESULT, 0) == 0) {
@@ -303,6 +301,10 @@ public class MessageParse {
             } else if (datastopresult == 2) {
                 Utiliy.reflectTranDataType(2);
             }
+            
+            Intent intent = new Intent(Constant.ACTION_RECE_DATA);
+            intent.putExtra(Constant.RECE_BREATH_DATA_RESULT, datastopresult);
+            EventBus.getDefault().post(intent);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -314,11 +316,15 @@ public class MessageParse {
             int datatransresult = keyValue[0] & 0xff;
             if (datatransresult == 0 
                     || datatransresult == 2
-                    || datatransresult == 4) {
+                    || datatransresult == 4) {    
                 Utiliy.reflectTranDataType(0);
             } else if (datatransresult == 1 || datatransresult == 3) {
                 Utiliy.reflectTranDataType(2);
             }
+            
+            Intent intent = new Intent(Constant.ACTION_RECE_DATA);
+            intent.putExtra(Constant.RECE_SYNC_DATA_RESULT, datatransresult);
+            EventBus.getDefault().post(intent);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -392,6 +398,11 @@ public class MessageParse {
 
 
     private void handleBreathStopData(byte[] keyValue) {
+        
+        Intent intent = new Intent(Constant.ACTION_RECE_DATA);
+        intent.putExtra(Constant.RECE_SYNC_DATA_LEN, keyValue.length);
+        EventBus.getDefault().post(intent);
+        
         BreathStopInfo breathStopInfo = new BreathStopInfo();
         int breathstoplength = keyValue.length;
         boolean breathalarm = false;
@@ -469,6 +480,11 @@ public class MessageParse {
     }
     
     private void handleTempData(byte[] keyValue) {
+        
+        Intent intent = new Intent(Constant.ACTION_RECE_DATA);
+        intent.putExtra(Constant.RECE_SYNC_DATA_LEN, keyValue.length);
+        EventBus.getDefault().post(intent);
+        
         TemperatureInfo temperatureinfo = new TemperatureInfo();
         int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
         int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
@@ -521,9 +537,6 @@ public class MessageParse {
         // TODO Auto-generated method stub
         if (keyValue.length > 6) {
             List<SleepInfo> sleepInfos = getSleepInfoList(keyValue);
-            /*for (SleepInfo sleepinfo : sleepInfos) {
-                YingerbaoDatabase.insertSleepInfo(mContext, sleepinfo);
-            }*/
         } else {
             SLog.e(TAG, "There is no Sleep Data");
         }
@@ -532,6 +545,10 @@ public class MessageParse {
 
     private List<SleepInfo> getSleepInfoList(byte[] keyValue) {
         List<SleepInfo> sleepInfos = new ArrayList<SleepInfo>();
+        
+        Intent intent = new Intent(Constant.ACTION_RECE_DATA);
+        intent.putExtra(Constant.RECE_SYNC_DATA_LEN, keyValue.length);
+        EventBus.getDefault().post(intent);
         
         int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
         int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
@@ -558,11 +575,6 @@ public class MessageParse {
                    
                    YingerbaoDatabase.insertSleepInfo(mContext, sleepInfo);
                    sleepInfos.add(sleepInfo);
-                   SLog.e(TAG, "sleep date  year = " + year 
-                           + " month = " + month 
-                           + " day = " + day 
-                           + " min = " + minu
-                           + "  sleep value = " + (keyValue[6+i] & 0x0ff));
                }
            } 
         }
@@ -728,9 +740,7 @@ public class MessageParse {
                         
                         AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
                         AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
-                        
-                        
-                        
+   
                     }
                 } else if (kpload.key == 2) { //设置时间返回结果
                     if (kpload.keyLen == 1) {

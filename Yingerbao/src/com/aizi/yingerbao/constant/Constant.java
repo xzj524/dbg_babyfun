@@ -108,6 +108,12 @@ public class Constant {
 
     public static final String ACTIVATE_RESULT = "activate_device_result";
 
-    public static final String NOT_SYNC_DATA_LEN = "not_sync_data_name";
+    public static final String NOT_SYNC_DATA_LEN = "not_sync_data_len";
+    public static final String ACTION_TOTAL_DATA_LEN = "com.aizi.yingerbao.total_data_len";
+    public static final String ACTION_RECE_DATA = "com.aizi.yingerbao.rece_data";
+    public static final String RECE_SYNC_DATA_LEN = "rece_sync_data_len";
+    public static final String RECE_SYNC_DATA_RESULT = "rece_sync_data_result";
+    public static final String RECE_BREATH_DATA_RESULT = "rece_breath_data_result";
+
     
 }

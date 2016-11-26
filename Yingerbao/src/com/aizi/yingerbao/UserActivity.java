@@ -150,20 +150,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         }
         
     }
-    
-    TimerTask task = new TimerTask(){  
-        public void run() {  
-            try {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
-                Thread.sleep(1000);
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
-                Thread.sleep(1000);
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            }
-      }  
-   };
+
     
     @Override
     protected void onResume() {

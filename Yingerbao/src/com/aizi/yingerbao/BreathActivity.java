@@ -64,6 +64,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     long mLastBreathTime;
     long mBreathPeriod;
     int mBreathFreq;
+    long mBreathTimeforlast;
     boolean mBreatfreq = false;
     boolean mBreatStart = false;
     Timer mTimer;
@@ -157,15 +158,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         initBreathChart();
         LineData initData = initData(50);
         setupRealTimeBreathChart(initData, mColors[5]);
-        
-        AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            SLog.e(TAG, e);
-        }
-        
+       
         initBreathStopBarChart();
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
@@ -251,6 +244,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
          
          mBreValue = breaths.mBreathValue + 60;
          mBreathFreq = breaths.mBreathFreq;
+         mBreathTimeforlast = breaths.mBreathTime;
      }
      
      public void onEventMainThread(DataTime dataTime) { 
