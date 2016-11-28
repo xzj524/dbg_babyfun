@@ -43,7 +43,8 @@
 		            android:layout_marginTop="50dip"
 		            android:padding="5dp"
 		            zhy:progress_reached_bar_height="10dp"
-		            zhy:progress_text_size = "10dp"/>
+		            zhy:progress_text_size = "10dp"
+		            android:visibility="gone"/>
 
 	
 	    	 </LinearLayout> 

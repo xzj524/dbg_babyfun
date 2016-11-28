@@ -362,6 +362,7 @@ public class BluetoothService extends Service {
     
     public boolean writeBaseRXCharacteristic(byte[] value) {
         boolean wrstatus = false;
+        SLog.e(TAG, "write TXchar status  before");
         try {
             if (mBluetoothGatt != null) {
                 BluetoothGattService TxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);

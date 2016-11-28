@@ -10,14 +10,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment;
+import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.CheckingState;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.OnDeviceConnectListener;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.ScanDevicesService;
-import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.view.HorizontalProgressBarWithNumber;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
@@ -45,7 +47,6 @@ onTitleBarClickListener {
     
     DeviceConnectStatusFragment mDevConnectFragment;
 
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -55,7 +56,6 @@ onTitleBarClickListener {
         EventBus.getDefault().register(this);
 
         mProgressBar = (HorizontalProgressBarWithNumber) findViewById(R.id.data_transfer_progress);
-        //mHandler.sendEmptyMessage(MSG_PROGRESS_COMPLETED);
         
         initScanService();
 
@@ -65,6 +65,28 @@ onTitleBarClickListener {
         mDevConnectFragment 
             = (DeviceConnectStatusFragment)getFragmentManager().findFragmentById(R.id.deviceConnectFragment);
              
+    }
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {   
+            /*Intent intent=new Intent();   
+            intent.setClass(ChildActivity.this, MainActivity.class);   
+            startActivity(intent);   
+            ChildActivity.this.finish();   */
+            SLog.e(TAG, "backbutton is called ");
+            if (mDevConnectFragment != null) {
+                if (mDevConnectFragment.getCurrentState() != CheckingState.FAIL
+                        || mDevConnectFragment.getCurrentState() != CheckingState.IDEL
+                        || mDevConnectFragment.getCurrentState() != CheckingState.CONNECTED
+                        || mDevConnectFragment.getCurrentState() != CheckingState.FATAL_DEVICE_NOT_CONNECT
+                        || mDevConnectFragment.getCurrentState() != CheckingState.IDEL) {
+                    
+                } 
+            }
+            
+        }      
+        return super.onKeyDown(keyCode, event);
     }
     
     private void initScanService(){
@@ -126,7 +148,10 @@ onTitleBarClickListener {
                     SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED 3");
                 } else {
                     mHandler.removeMessages(MSG_PROGRESS_AUTO_COMPLETED);
-                    mDevConnectFragment.doUpdateStatusClick();
+                    if (mDevConnectFragment != null) {
+                        mDevConnectFragment.doUpdateStatusClick();
+                    }
+                    
                     SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED 1");
                 }
             }
@@ -138,6 +163,9 @@ onTitleBarClickListener {
         super.onDestroy();
         unbindService(mScanServiceConnection);
         EventBus.getDefault().unregister(this);//反注册EventBus  
+        mHandler.removeMessages(MSG_PROGRESS_UPDATE);
+        mHandler.removeMessages(MSG_PROGRESS_COMPLETED);
+        mHandler.removeMessages(MSG_PROGRESS_AUTO_COMPLETED);
     }
 
     @Override
@@ -171,6 +199,8 @@ onTitleBarClickListener {
             finish();
         } else if (action.equals("com.aizi.yingerbao.checkdevice")) {
             mTotalSyncDataLen = 0;
+        } else if (action.equals("com.aizi.yingerbao.sync_data")) {
+            mProgressBar.setVisibility(View.VISIBLE); 
         }
     }
 

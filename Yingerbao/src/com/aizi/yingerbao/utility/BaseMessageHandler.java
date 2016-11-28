@@ -64,7 +64,7 @@ public class BaseMessageHandler {
                         int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
                         if (bsL1Msg.CRC16 == (short)crc16) {
                             sendACKBaseL1Msg(baseData);
-                            if (bsL1Msg.sequenceId != l1squenceid) {
+                            if (bsL1Msg.sequenceId != l1squenceid) { //  此处判断待修改为bsL1Msg.sequenceId == l1squenceid+1 
                                 if (bsL1Msg.errFlag == 2) { // 标识结束位
                                     l1squenceid = -1;
                                 } else {
@@ -101,6 +101,7 @@ public class BaseMessageHandler {
                     SLog.e(TAG, "receive L2 DATA");
                 }            
             } else {
+                SLog.e(TAG, "reflectTranDataType 1");
                 Utiliy.reflectTranDataType(1);
             }
         } catch (Exception e) {

@@ -82,6 +82,22 @@
         </LinearLayout>
         
         <LinearLayout
+            android:id="@+id/checkdeviceLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+	       <TextView
+	           android:id="@+id/checkdeviceTextView"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_gravity="center_horizontal"
+	           android:text="@string/check_device" />
+        </LinearLayout>
+        
+        <LinearLayout
             android:id="@+id/connectedSucceedLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

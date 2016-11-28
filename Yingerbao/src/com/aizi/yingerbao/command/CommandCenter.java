@@ -26,7 +26,6 @@ public class CommandCenter {
     private static int mRetryTimes = 0;
     
     public CommandCenter() {
-        //EventBus.getDefault().register(this);
         mExecutorService.submit(consumer);
     }
 

@@ -63,9 +63,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
                 "582580076e27a45a8a00000c", "360", 
                 EScenarioType.E_UM_NORMAL));
         
-        EventBus.getDefault().register(this);
-
-        
         mCircleButtonBreath = (CircleButton) findViewById(R.id.button0);
         mCircleButtonTemp = (CircleButton) findViewById(R.id.button1);
         mCircleButtonBreath.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +72,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), BreathActivity.class);
                 startActivity(intent);
-                
-                AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
             }
         });
         mCircleButtonTemp.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +97,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         mSlidingMenuHelper.initSlidingMenu();
         
         BluetoothApi.getInstance(getApplicationContext());
-        
+        PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
         if (PrivateParams.getSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 0) == 0) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
@@ -137,48 +132,12 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         CommandCenter.getInstance().clearInterfaceQueue();
        
     }
-    
-    public void onEventMainThread(Intent intent) { 
-        try {
-            String action = intent.getAction();
-            if (action.equals("com.aizi.transfer")) {
-               Thread.sleep(200);
-               AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-            }
-        } catch (Exception e) {
-            SLog.e(TAG, e);
-        }
-        
-    }
 
     
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        
-        try {
-            if (Utiliy.isBluetoothConnected(getApplicationContext())) {
-                if (PrivateParams.getSPInt(getApplicationContext(), "SetTimeinfo", 0) != 1 ) {
-                    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-                }
-                
-                //PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
-              /*  if (PrivateParams.getSPInt(getApplicationContext(), "GetCheckinfo", 0) != 1) {
-                    AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-                } else {
-                    //AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-                }*/
-                
-               // Thread.sleep(500);
-                /*AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
-                Thread.sleep(500);
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();*/
-            }
-            
-        } catch (Exception e) {
-            SLog.e(TAG, e);
-        }
     }
    
     

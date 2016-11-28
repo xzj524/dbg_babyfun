@@ -299,8 +299,6 @@ public class SyncDeviceImpl implements SyncDevice{
                     for (int i = 0; i < blueadd.length; i++) {
                         converstr = converstr + blueadd[i];
                     }
-                    SLog.e(TAG, "converstr = " + converstr);
-                    SLog.e(TAG, "connectaddress = " + connectaddress);
                     devaddress = Utiliy.hexStringToByte(converstr);
                     devaddress[0] = (byte) (devaddress[0] + 0x01);
                     devaddress[1] = (byte) (devaddress[1] + 0x11);
@@ -310,7 +308,6 @@ public class SyncDeviceImpl implements SyncDevice{
                     devaddress[5] = (byte) (devaddress[5] + 0x51);
                     
                     String devstr = Utiliy.printHexString(devaddress);
-                    SLog.e(TAG, "devaddress = " + devstr);
                     System.arraycopy(devaddress, 0, checkinfo, 0, blueadd.length);
                     checkinfo[6] = 0x0; // 表示Android系统
                 }

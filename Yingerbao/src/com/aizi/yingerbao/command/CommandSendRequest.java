@@ -55,10 +55,6 @@ public class CommandSendRequest {
     }
 
     public void send() {
-        /*intent.putExtra(PushConstants.CROSS_REQUEST_KEY_REQUEST_SOURCE_PACKAGE, context.getPackageName());
-        intent.putExtra(PushConstants.CROSS_REQUEST_KEY_REQUEST_ID, requestId);
-        intent.putExtra(PushConstants.CROSS_REQUEST_KEY_NEED_CALLBACK, true);
-        intent.putExtra(PushConstants.CROSS_REQUEST_KEY_SENDING_REQUEST, true);*/
         try {
             BaseMessageHandler.sendL2Message(mBL2Msg);
         } catch (Exception e) {
@@ -69,7 +65,6 @@ public class CommandSendRequest {
     synchronized void finish() {
         callback = null;
         mContext = null;
-        //CommandCenter.removeCallbackRequest(requestId);
     }
 
     public void onCallback(Intent intent) {

@@ -2,6 +2,8 @@ package com.aizi.yingerbao.constant;
 
 import java.util.UUID;
 
+import android.content.Intent;
+
 public class Constant {
     /** 日志前缀配置 **/
     public static final String LOG_PREFIX = "AIZI-";
@@ -114,6 +116,12 @@ public class Constant {
     public static final String RECE_SYNC_DATA_LEN = "rece_sync_data_len";
     public static final String RECE_SYNC_DATA_RESULT = "rece_sync_data_result";
     public static final String RECE_BREATH_DATA_RESULT = "rece_breath_data_result";
+
+    public static final String SYNC_DATA_SUCCEED_TIMESTAMP = "sync_data_succeed_timestamp";
+
+    public static final String ACTION_CHECKDEVICE_SUCCEED = "com.aizi.yingerbao.checkdev_succeed";
+
+    public static final String IS_SYNC_DATA = "is_sync_data";
 
     
 }

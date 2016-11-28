@@ -130,6 +130,8 @@ public class MessageParse {
             devCheckInfo.mDeviceCharge = keyValue[6] & 0xff;
             devCheckInfo.mDeviceStatus = keyValue[7];
             
+            int isDeviceActivited = (keyValue[7] & 0x08) >> 3;
+            
             PrivateParams.setSPInt(mContext, "NoSyncDataLength", devCheckInfo.mNoSyncDataLength);
             PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
             
@@ -148,16 +150,30 @@ public class MessageParse {
             Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
             intent.putExtra(Constant.NOT_SYNC_DATA_LEN, devCheckInfo.mNoSyncDataLength);
             EventBus.getDefault().post(intent);
-            
-            PrivateParams.setSPInt(mContext, Constant.NOT_SYNC_DATA_LEN, devCheckInfo.mNoSyncDataLength);
-            
-            if (PrivateParams.getSPInt(mContext, Constant.ACTIVATE_RESULT, 0) == 0) {
+  
+            if (isDeviceActivited == 0) {
                 // 如果没有激活过设备则进行激活
                 AsyncDeviceFactory.getInstance(mContext).activateDevice();
             }
-                      
-            AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
             
+            setDeviceTime(devCheckInfo);
+            
+            boolean isSyncData = true;
+            long curtime = System.currentTimeMillis();
+            long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
+            if (curtime - syncdatatime > 1000 * 60 * 60 * 6 ) {
+                SLog.e(TAG, "sync data has consumed six hour ");
+                AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
+                AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
+                isSyncData = true;
+            } else {
+                isSyncData = false;
+                SLog.e(TAG, "sync data don not consumed six hour");
+            }  
+            
+            intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
+            intent.putExtra(Constant.IS_SYNC_DATA, isSyncData);
+            EventBus.getDefault().post(intent);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -736,11 +752,9 @@ public class MessageParse {
                         SLog.e(TAG, curDeviceTime);   
                         Utiliy.dataToFile(curDeviceTime);
                         
-                        setDeviceTime(devTime);
-                        
-                        AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
-                        AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
-   
+                        //setDeviceTime(devTime);
+
+                       
                     }
                 } else if (kpload.key == 2) { //设置时间返回结果
                     if (kpload.keyLen == 1) {
