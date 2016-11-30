@@ -159,6 +159,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         });
         
         mTempValue = (TextView) findViewById(R.id.tempvalue);
+        mTempValue.setText("36.5");
         
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
@@ -206,7 +207,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                //temperatureinfos.get(i).g
                
                SLog.e(TAG, "tempvalue from database = " + tempvalue);
-               yValsTem.add(new Entry(tempvalue -10, i));
+              // yValsTem.add(new Entry(tempvalue -10, i));
            }/* else {
                yValsTem.add(new Entry(0, i));
            }*/
@@ -229,17 +230,21 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             xVals.add(i + "");
         }
         
-/*        for (int i = 0; i < 24; i++) {
-            if (i < 6) {
-                yValsTem.add(new Entry((float) (70 - (Math.random() * 10)), i));
-            } else if (i > 5 && i < 12) {
-                yValsTem.add(new Entry((float) (50 - (Math.random() * 10)), i));
-            }else if (i > 11 && i < 18) {
-                yValsTem.add(new Entry((float) (60 - (Math.random() * 10)), i));
-            }else if (i > 17 && i < 24) {
-                yValsTem.add(new Entry((float) (70 - (Math.random() * 10)), i));
+        for (int i = 0; i < 144; i++) {
+            if (i < 30) {
+                yValsTem.add(new Entry((float) (35 - (Math.random() * 3)), i));
+            } else if (i> 30 && i < 54) {
+                yValsTem.add(new Entry((float) (33 - (Math.random() * 4)), i));
+            } else if (i > 54 && i < 70) {
+                yValsTem.add(new Entry((float) (15 - (Math.random() * 3)), i));
+            } else if (i > 70 && i < 120) {
+                yValsTem.add(new Entry((float) (14 - (Math.random() * 2)), i));
+            } else if (i > 120 && i < 130) {
+                yValsTem.add(new Entry((float) (30 - (Math.random() * 2)), i));
+            }else if (i > 130 && i < 144) {
+                yValsTem.add(new Entry((float) (35 - (Math.random() * 5)), i));
             }
-        }*/
+        }
         
         
       
@@ -248,7 +253,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         TemperatureSet.setDrawCubic(true);
         TemperatureSet.setDrawValues(false);
         TemperatureSet.setDrawCircles(false);
-        TemperatureSet.setColor(Color.RED);
+        TemperatureSet.setColor(Color.WHITE);
         
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(TemperatureSet);
@@ -285,7 +290,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
      
         // enable / disable grid background  
-        mTemperatureChart.setDrawGridBackground(true); // 是否显示表格颜色  
+        mTemperatureChart.setDrawGridBackground(false); // 是否显示表格颜色  
        
         // enable touch gestures  
         mTemperatureChart.setTouchEnabled(false); // 设置是否可以触摸  
@@ -299,7 +304,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         mTemperatureChart.setDragEnabled(false);// 是否可以拖拽  
         mTemperatureChart.setScaleEnabled(false);// 是否可以缩放  
   
-        mTemperatureChart.setBackgroundColor(color);// 设置背景  
+        //mTemperatureChart.setBackgroundColor(color);// 设置背景  
         // add data  
         mTemperatureChart.setData(data); // 设置数据  
     

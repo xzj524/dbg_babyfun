@@ -3,7 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res/com.aizi.yingerbao"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pink"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="${relativePackage}.${activityClass}" >
     
@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"  
         custom:titleText="@string/title_activity_temperature"   
         custom:titleSize="8sp"   
-        custom:titleColor="@android:color/white"   
-        custom:leftBtn="@drawable/leftarrow"
+        custom:titleColor="@color/gray"   
+        custom:leftBtn="@drawable/title_back_icon_pressed"
         custom:calendarBtn="@drawable/calendar_icon"/> 
         
 
@@ -22,7 +22,7 @@
 	         android:id="@+id/tempvaluetext"
 	         android:layout_width="match_parent"
 	         android:layout_height="wrap_content"
-	         android:textColor="@color/white"
+	         android:textColor="@color/gray"
 	         android:text="检测温度"
 	         android:textSize="64px"
 	         android:layout_marginTop="30dp"
@@ -38,7 +38,7 @@
 		         android:id="@+id/tempvalue"
 		         android:layout_width="wrap_content"
 		         android:layout_height="wrap_content"
-		         android:textColor="@color/white"
+		         android:textColor="@color/gray"
 		         android:text="--"
 		         android:textSize="100px"/>
             
@@ -46,22 +46,32 @@
 		         android:id="@+id/tempunit"
 		         android:layout_width="wrap_content"
 		         android:layout_height="wrap_content"
-		         android:textColor="@color/white"
+		         android:textColor="@color/gray"
 		         android:text="℃"
-		         android:textSize="100px"
-		        />
+		         android:textSize="100px"/>
             
         </LinearLayout>
         
+         <LinearLayout 
+            android:id="@+id/breath_list"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+               <Button
+		           android:id="@+id/control_temp_button"
+		           style="?android:textAppearanceSmall"
+		           android:layout_width="match_parent"
+		           android:layout_height="wrap_content"
+		           android:layout_marginTop="16dp"
+		           android:text="@string/action_start_temp"
+		           android:textStyle="bold"
+		           android:background="@color/pink_new"
+		           android:textColor="@color/white" />
+         </LinearLayout>
         
-   	     <Button
-           android:id="@+id/control_temp_button"
-           style="?android:textAppearanceSmall"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="16dp"
-           android:text="@string/action_start_temp"
-           android:textStyle="bold" />
+   	   
         
          
     <TextView 
@@ -71,7 +81,7 @@
         android:layout_marginLeft="20dp"
         android:text="环境温度："
         android:textSize="30px"
-        android:textColor="@color/white"
+        android:textColor="@color/gray"
         android:layout_marginTop="24dp"/>
     
     
@@ -93,30 +103,35 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="10dp"
+	            android:textColor="@color/gray"
 	            android:text="40℃"/>
 	        <TextView 
 	            android:id="@+id/templist2"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="16dp"
+	            android:textColor="@color/gray"
 	            android:text="35℃"/>
 	        <TextView 
 	            android:id="@+id/templist3"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="20dp"
+	            android:textColor="@color/gray"
 	            android:text="30℃"/>
 	        <TextView 
 	            android:id="@+id/templist4"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="20dp"
+	            android:textColor="@color/gray"
 	            android:text="25℃"/>
 	        <TextView 
 	            android:id="@+id/templist5"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="20dp"
+	            android:textColor="@color/gray"
 	            android:text="20℃"/>
     </LinearLayout>
     
@@ -125,7 +140,8 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:background="@color/pink_new"/>
          
   </LinearLayout>  
   
@@ -140,6 +156,7 @@
                  android:id="@+id/temperature_time_0"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
+             	 android:textColor="@color/gray"
              	 android:text="0"/>
  <!--            <TextView 
                  android:id="@+id/temperature_time_1"
@@ -156,7 +173,8 @@
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="3"
-             	 android:layout_marginLeft="24dp"/>
+             	 android:layout_marginLeft="24dp"
+             	 android:textColor="@color/gray"/>
 <!--                <TextView 
                  android:id="@+id/temperature_time_4"
                  android:layout_height="wrap_content"
@@ -172,7 +190,8 @@
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="6"
-             	 android:layout_marginLeft="24dp"/>
+             	 android:layout_marginLeft="24dp"
+             	 android:textColor="@color/gray"/>
      <!--               <TextView 
                 android:id="@+id/temperature_time_7"
                  android:layout_height="wrap_content"
@@ -188,7 +207,8 @@
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="9"
-             	 android:layout_marginLeft="24dp"/>
+             	 android:layout_marginLeft="24dp"
+             	 android:textColor="@color/gray"/>
      <!--                 <TextView 
                  android:id="@+id/temperature_time_10"
                  android:layout_height="wrap_content"
@@ -204,7 +224,8 @@
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="12"
-             	 android:layout_marginLeft="24dp"/>
+             	 android:layout_marginLeft="24dp"
+             	 android:textColor="@color/gray"/>
       
                         
         <!--                  <TextView 
@@ -222,7 +243,8 @@
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="15"
-             	 android:layout_marginLeft="24dp"/>
+             	 android:layout_marginLeft="24dp"
+             	 android:textColor="@color/gray"/>
   <!--                           <TextView 
                  android:id="@+id/temperature_time_16"
                  android:layout_height="wrap_content"
@@ -238,7 +260,8 @@
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="18"
-             	 android:layout_marginLeft="24dp"/>
+             	 android:layout_marginLeft="24dp"
+             	 android:textColor="@color/gray"/>
      <!--                           <TextView 
                  android:id="@+id/temperature_time_19"
                  android:layout_height="wrap_content"
@@ -254,7 +277,8 @@
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:text="21"
-             	 android:layout_marginLeft="24dp"/>
+             	 android:layout_marginLeft="24dp"
+             	 android:textColor="@color/gray"/>
        <!--                            <TextView 
                  android:id="@+id/temperature_time_22"
                  android:layout_height="wrap_content"

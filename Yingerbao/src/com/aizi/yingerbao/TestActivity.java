@@ -207,8 +207,13 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-              
+                //AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+              /*  Utiliy.showFeverNotification(getApplicationContext(), 
+                        "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + "36.5" + " 请及时就医。", null);
+            */
+                Utiliy.showFeverNotification(getApplicationContext(), 
+                        "呼吸停滞！！", "孩子呼吸停滞了， 请及时就医。", null);
+            
             }
         });
         

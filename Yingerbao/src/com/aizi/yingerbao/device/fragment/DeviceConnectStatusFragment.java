@@ -321,6 +321,7 @@ public class DeviceConnectStatusFragment extends Fragment{
         
         String action = event.getAction();
         if (action.equals(BluetoothService.ACTION_GATT_SERVICES_DISCOVERED)) {
+            SLog.e(TAG, "BluetoothService is discovered !!!!!!!!!!!!!!!");
             setCurrentStateConnected();
             doUpdateStatusClick();
         } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {

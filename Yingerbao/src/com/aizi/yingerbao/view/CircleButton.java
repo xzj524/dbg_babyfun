@@ -77,7 +77,7 @@ public class CircleButton extends ImageView {
 		 Paint mPaint = new Paint();  
 		    mPaint.setStrokeWidth(3);  
 		    mPaint.setTextSize(64);  
-		    mPaint.setColor(Color.RED);  
+		    mPaint.setColor(Color.WHITE);  
 		    mPaint.setTextAlign(Align.LEFT);  
 		    Rect bounds = new Rect();  
 		    mPaint.getTextBounds(testString, 0, testString.length(), bounds);  

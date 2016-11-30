@@ -97,6 +97,7 @@ public class BluetoothService extends Service {
                 mBluetoothGatt.discoverServices(); // Attempts to discover services after successful connection.
                 SLog.e(TAG, "Attempting to start service discovery:");
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                
                 connectionAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
                 SLog.e(TAG, "Disconnected from GATT server.");   

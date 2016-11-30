@@ -3,7 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res/com.aizi.yingerbao" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pink"
+    android:background="@color/white"
     tools:context="${relativePackage}.${activityClass}" >
     
        
@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"  
         custom:titleText="@string/title_activity_breath"   
         custom:titleSize="8sp"   
-        custom:titleColor="@android:color/white"   
-        custom:leftBtn="@drawable/leftarrow"
+        custom:titleColor="@color/gray"   
+        custom:leftBtn="@drawable/title_back_icon_pressed"
         custom:calendarBtn="@drawable/calendar_icon"/> 
 
 	<ScrollView 
@@ -42,7 +42,7 @@
 			         android:id="@+id/breathfrequence"
 			         android:layout_width="match_parent"
 			         android:layout_height="wrap_content"
-			         android:textColor="@color/white"
+			         android:textColor="@color/gray"
 			         android:text="实时呼吸频率"
 			         android:textSize="56px"
 			         android:gravity="center_horizontal"/>
@@ -58,7 +58,7 @@
 					         android:id="@+id/breath_frequence_data"
 					         android:layout_width="wrap_content"
 					         android:layout_height="wrap_content"
-					         android:textColor="@color/white"
+					         android:textColor="@color/gray"
 					         android:text="0"
 					         android:textSize="80px"/>
 				            
@@ -66,7 +66,7 @@
 					         android:id="@+id/breathfrequenceunit"
 					         android:layout_width="wrap_content"
 					         android:layout_height="wrap_content"
-					         android:textColor="@color/white"
+					         android:textColor="@color/gray"
 					         android:text="  BPM"
 					         android:textSize="56px"
 					         />
@@ -79,7 +79,8 @@
 	        <com.github.mikephil.charting.charts.LineChart
 		        android:id="@+id/breath_line_chart"
 		        android:layout_width="match_parent"
-		        android:layout_height="200dp"/>
+		        android:layout_height="200dp"
+		        android:background="@color/pink_new"/>
 
 		      
 		     <Button
@@ -88,8 +89,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@color/pink_new"
                 android:text="@string/action_start_breath"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white" />
      
 		      <TextView 
 			        android:id="@+id/breathstoptextview"
@@ -99,7 +102,7 @@
 			        android:layout_marginTop="20dp"
 			        android:text="呼吸停止分布(次数/小时)："
 			        android:textSize="30px"
-			        android:textColor="@color/white"/>
+			        android:textColor="@color/gray"/>
 		    
 		    
 		       <com.github.mikephil.charting.charts.BarChart

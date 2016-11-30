@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathInfoEnumClass;
+import com.aizi.yingerbao.database.BreathStopInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
@@ -69,6 +70,8 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     boolean mBreatStart = false;
     Timer mTimer;
     
+    boolean mbreathset = false;
+    
     Button mControlBreathBtn;
     
     private  TopBarView mBreathTopbar;
@@ -79,7 +82,8 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         Color.rgb(89, 199, 250), 
         Color.rgb(250, 104, 104), 
         Color.rgb(4, 158, 255),
-        Color.rgb(222, 182, 180) }; // 自定义颜色 
+        Color.rgb(222, 182, 180),
+        Color.rgb(241, 158, 194)}; // 自定义颜色 
     
     static ArrayList<Entry> yValsBreath = new ArrayList<Entry>();
     static ArrayList<String> xValsBreathTime = new ArrayList<String>();
@@ -121,8 +125,15 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 public void run() {  
                                 Message message = new Message();      
                                 message.what = 1; 
-                                message.arg1 = mBreValue;
-                                message.arg2 = mBreathFreq;
+                                if (mbreathset) {
+                                    mbreathset = false;
+                                    message.arg1 = (int) (60 + Math.random() * 10);
+                                } else {
+                                    mbreathset = true;
+                                    message.arg1 = 5;
+                                }
+                                
+                                message.arg2 = 36;
                                 mHandler.sendMessage(message);  
                                 
                                 /*updateBreathWave(mBreValue);
@@ -371,7 +382,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
          rightAxis.setDrawLabels(false);
 
          mBreathChart.setDrawGridBackground(false); // 是否显示表格颜色 
-         mBreathChart.setGridBackgroundColor(mColors[5]);
+        // mBreathChart.setGridBackgroundColor(mColors[5]);
          
          mBreathChart.setDrawBorders(false);
          //mBreathChart.setBorderPositions(new BorderPosition[] { BorderPosition.BOTTOM, BorderPosition.LEFT });// 设置图标边框
@@ -390,7 +401,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
          // if disabled, scaling can be done on x- and y-axis separately  
          mBreathChart.setPinchZoom(false);    
          
-         mBreathChart.setBackgroundColor(mColors[5]);// 设置背景  
+         //mBreathChart.setBackgroundColor(mColors[5]);// 设置背景  
          
          // get the legend (only possible after setting data)  
          Legend breathLegend = mBreathChart.getLegend(); // 设置标示，就是那个一组y的value的  
@@ -425,15 +436,23 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
             day = calendar.get(Calendar.DAY_OF_MONTH);   
         } 
         
-  /*      BreathStopInfo breathinfo = new BreathStopInfo();
+        BreathStopInfo breathinfo = new BreathStopInfo();
         breathinfo.mBreathYear = year;
         breathinfo.mBreathMonth = month;
         breathinfo.mBreathDay = day;
         
-        for (int i = 0; i < 24; i++) {
+        breathinfo.mBreathHour = 5;
+        
+        for (int i = 0; i < 3; i++) {
+            breathinfo.mBreathMinute = 5+i;
+            YingerbaoDatabase.insertBreathInfo(getApplicationContext(), breathinfo);
+        }
+        
+        
+      /*  for (int i = 0; i < 24; i++) {
              breathinfo.mBreathHour = i;
          
-             if (i%4 == 3) {
+             if (i == 5) {
                  breathinfo.mBreathMinute = i;
              }else {
                  breathinfo.mBreathMinute = 0;
@@ -456,7 +475,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         mBarDataSet.setHighLightColor(Color.GRAY);
         
         //mBarDataSet.setColors(mColors);
-        mBarDataSet.setColor(mColors[0]);
+        mBarDataSet.setColor(mColors[6]);
         //BarData表示挣个柱形图的数据
         BarData mBarData = new BarData(getXAxisShowLable(),mBarDataSet);
         mBreathStopChart.setData(mBarData);
@@ -714,7 +733,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         //获得左侧侧坐标轴
         YAxis leftAxis = mBreathStopChart.getAxisLeft();
         leftAxis.setLabelCount(5);
-        leftAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        leftAxis.setAxisMaxValue(10); // 设置Y轴最大值
         leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
 
         //设置右侧坐标轴
@@ -722,7 +741,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
 //        rightAxis.setDrawAxisLine(false);//右侧坐标轴线
         rightAxis.setDrawLabels(false);//右侧坐标轴数组Lable
         rightAxis.setLabelCount(5);
-        rightAxis.setAxisMaxValue(100); // 设置Y轴最大值
+        rightAxis.setAxisMaxValue(10); // 设置Y轴最大值
         rightAxis.setAxisMinValue(0);// 设置Y轴最小值。
         
         Legend mLegend = mBreathStopChart.getLegend(); // 设置标示，就是那个一组y的value的  
