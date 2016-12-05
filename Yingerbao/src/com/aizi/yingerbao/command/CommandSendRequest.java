@@ -43,7 +43,6 @@ public class CommandSendRequest {
 
     public void addSendTask() {
         try {
-            SLog.e(TAG, "add addCallbackRequest");
             CommandCenter.getInstance().addCallbackRequest(this);   
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -56,7 +55,7 @@ public class CommandSendRequest {
 
     public void send() {
         try {
-            BaseMessageHandler.sendL2Message(mBL2Msg);
+            BaseMessageHandler.sendL2Message(mContext, mBL2Msg);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

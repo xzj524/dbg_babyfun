@@ -238,7 +238,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         };  
         
         private void updateBreathWave(int preValue) {
-            // TODO Auto-generated method stub
             for (int i = 0; i < 2; i++) {
                 if (i == 0) {
                     generateNewWave(5); 
@@ -291,7 +290,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
      public void generateNewWave(int val) {
          yValsBreath = generateNewyVals(val);
          if (yValsBreath != null) {
-             //BreathSet.
              LineDataSet SleepySet = new LineDataSet(yValsBreath, null);
              setupLineDataSet(SleepySet);
              ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
@@ -308,7 +306,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
      }
      
      private void setupLineDataSet(LineDataSet DataSet) {
-         // TODO Auto-generated method stub
          DataSet.setLineWidth(1.75f); // 线宽  
          DataSet.setColor(Color.WHITE);// 显示颜色  
          DataSet.setHighLightColor(Color.WHITE); // 高亮的线的颜色  

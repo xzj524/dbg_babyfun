@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Calendar;
 import java.util.List;
@@ -25,6 +24,7 @@ import com.aizi.yingerbao.database.SleepInfo;
 import com.aizi.yingerbao.database.TemperatureInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DeviceTime;
 
@@ -38,6 +38,8 @@ public class MessageParse {
     int mBreathStartResult;
     int mBreathCount;
     Context mContext;
+    
+    private static final int RECV_DATA_COUNT = 1440;
     
     /** single instance. */
     private static volatile MessageParse mInstance;   
@@ -58,14 +60,16 @@ public class MessageParse {
     }
     
     public void onEvent(BaseL2Message bsl2Msg) {
-        SLog.e(TAG, "bsl2Msg = " + Arrays.toString(bsl2Msg.toByte()));
+        handleL2Msg(bsl2Msg);
+    }
+    
+    public void RecvBaseL2Msg(BaseL2Message bsl2Msg) {
         handleL2Msg(bsl2Msg);
     }
 
-
     private void handleL2Msg(BaseL2Message bMsg) {
         
-        String l2payload = printHexString(bMsg.toByte());
+        String l2payload = Utiliy.printHexString(bMsg.toByte());
         SLog.e(TAG, "HEX string l2load1 = " + l2payload);
         Utiliy.logToFile(" L2 " + " RECV " + l2payload);// 写入本地日志文件
         
@@ -130,14 +134,15 @@ public class MessageParse {
             devCheckInfo.mDeviceCharge = keyValue[6] & 0xff;
             devCheckInfo.mDeviceStatus = keyValue[7];
             
-            int isDeviceActivited = (keyValue[7] & 0x08) >> 3;
+            int isDeviceActivited = (keyValue[7] & 0x10) >> 4;
             
             PrivateParams.setSPInt(mContext, "NoSyncDataLength", devCheckInfo.mNoSyncDataLength);
             PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
             
             String result = "Check Device return mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength
                     + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
-                    + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus;
+                    + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus
+                    + " isDeviceActivited = " + isDeviceActivited;
             
             
             // 校验设备成功
@@ -153,7 +158,7 @@ public class MessageParse {
   
             if (isDeviceActivited == 0) {
                 // 如果没有激活过设备则进行激活
-                AsyncDeviceFactory.getInstance(mContext).activateDevice();
+                DeviceFactory.getInstance(mContext).activateDevice();
             }
             
             setDeviceTime(devCheckInfo);
@@ -163,8 +168,8 @@ public class MessageParse {
             long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
             if (curtime - syncdatatime > 1000 * 60 * 60 * 6 ) {
                 SLog.e(TAG, "sync data has consumed six hour ");
-                AsyncDeviceFactory.getInstance(mContext).getAllNoSyncInfo();
-                AsyncDeviceFactory.getInstance(mContext).getBreathStopInfo();
+                DeviceFactory.getInstance(mContext).getAllNoSyncInfo();
+                DeviceFactory.getInstance(mContext).getBreahStopInfo();
                 isSyncData = true;
             } else {
                 isSyncData = false;
@@ -209,7 +214,8 @@ public class MessageParse {
                     || day != devCheckInfo.mCheckInfoDay
                     || hour != devCheckInfo.mCheckInfoHour
                     || Math.abs(min - devCheckInfo.mCheckInfoMinute) > 5) {
-                AsyncDeviceFactory.getInstance(mContext).setDeviceTime();
+                //AsyncDeviceFactory.getInstance(mContext).setDeviceTime();
+                DeviceFactory.getInstance(mContext).setDeviceTime();
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -217,30 +223,6 @@ public class MessageParse {
     }
 
 
-    /**
-     * 将指定byte数组以16进制的形式打印到控制台
-     * 
-     * @param hint
-     *            String
-     * @param b
-     *            byte[]
-     * @return void
-     */
-    public static String printHexString(byte[] b)
-    {
-        String hexString = "";
-        for (int i = 0; i < b.length; i++)
-        {
-            String hex = Integer.toHexString(b[i] & 0xFF);
-            if (hex.length() == 1)
-            {
-                hex = '0' + hex;
-            }
-            
-            hexString += " " + hex;
-        }
-        return hexString;
-    }
 
   //写文件  
     public void writeSDFile(String fileName, byte[] write_str) throws IOException{    
@@ -349,7 +331,7 @@ public class MessageParse {
 
     private void handleExceptionData(byte[] keyValue) {
         ExceptionEvent exEvent = new ExceptionEvent();
-        String exceptionlog = printHexString(keyValue);
+        String exceptionlog = Utiliy.printHexString(keyValue);
         SLog.e(TAG, "Exception Log = " + exceptionlog);
         int exceptionlength = keyValue.length;
         if (exceptionlength % 8 == 0) {
@@ -512,40 +494,44 @@ public class MessageParse {
                 + " month = " + month 
                 + " day = " + day 
                 + " minu = " + minu 
-                + " sleepcount = " + tempcount );
+                + " tempcount = " + tempcount );
         
         temperatureinfo.mTemperatureYear = year + 2000;
         temperatureinfo.mTemperatureMonth = month;
         temperatureinfo.mTemperatureDay = day;
         
-        for (int i = 0; i < tempcount; i++) {
-            
-            int PNValue = (keyValue[6+i*2] & 0x80) >> 7;
-            int tempHigh = keyValue[6+i*2] & 0x7f;
-            int tempLow = keyValue[7+i*2] & 0xff;
-            
-            String tempString;
-            if (PNValue == 1) {
-                SLog.e(TAG, "temp = " + "-" + tempHigh + "." + tempLow);
-                tempString = "-" + tempHigh + "." + tempLow;
-            } else {
-                SLog.e(TAG, "temp = " + tempHigh + "." + tempLow);
-                tempString = tempHigh + "." + tempLow;
+        if (tempcount <= RECV_DATA_COUNT) {
+            for (int i = 0; i < tempcount/2; i++) {
+                
+                int PNValue = (keyValue[6+i*2] & 0x80) >> 7;
+                int tempHigh = keyValue[6+i*2] & 0x7f;
+                int tempLow = keyValue[7+i*2] & 0xff;
+                
+                String tempValue;
+                if (PNValue == 1) {
+                    SLog.e(TAG, "temp = " + "-" + tempHigh + "." + tempLow);
+                    tempValue = "-" + tempHigh + "." + tempLow;
+                } else {
+                    SLog.e(TAG, "temp = " + tempHigh + "." + tempLow);
+                    tempValue = tempHigh + "." + tempLow;
+                }
+                
+                temperatureinfo.mTemperatureMinute = minu + i * 10;
+                temperatureinfo.mTemperatureValue = tempValue;
+                temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
+                // 温度数据插入数据库
+                YingerbaoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
+                
+                String tempinfo = "Device Time : " + temperatureinfo.mTemperatureYear 
+                        + "-" + temperatureinfo.mTemperatureMonth 
+                        + "-" + temperatureinfo.mTemperatureDay 
+                        + "-" + temperatureinfo.mTemperatureMinute 
+                        + " tempValue = " + temperatureinfo.mTemperatureValue;  
+                Utiliy.dataToFile(tempinfo);
             }
-            
-            temperatureinfo.mTemperatureMinute = minu + i * 10;
-            temperatureinfo.mTemperatureValue = tempString;
-            temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
-            
-            String tempinfo = "Device Time : " + temperatureinfo.mTemperatureYear 
-                    + "-" + temperatureinfo.mTemperatureMonth 
-                    + "-" + temperatureinfo.mTemperatureDay 
-                    + "-" + temperatureinfo.mTemperatureMinute 
-                    + " tempValue = " + temperatureinfo.mTemperatureValue;  
-            Utiliy.dataToFile(tempinfo);
-            
-            YingerbaoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
         }
+        
+       
     }
 
 
@@ -579,7 +565,8 @@ public class MessageParse {
                 SLog.e(TAG, "sleep date  year = " + year 
                         + " month = " + month 
                         + " day = " + day 
-                        + " min = " + minu);
+                        + " min = " + minu
+                        + " sleepcount = " + sleepcount);
                 for (int i = 0; i < sleepcount; i++) {
                    
                    sleepInfo.mSleepTimestamp = System.currentTimeMillis();
@@ -598,7 +585,6 @@ public class MessageParse {
     }
 
     private void acquireTemp(byte[] keyValue) {
-        // TODO Auto-generated method stub
         int PNValue = (keyValue[0] & 0x80) >> 7;
         int tempHigh = keyValue[0] & 0x7f;
         int tempLow = keyValue[1] & 0xff;

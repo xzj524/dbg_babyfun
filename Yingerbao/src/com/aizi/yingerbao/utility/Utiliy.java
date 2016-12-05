@@ -8,9 +8,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -18,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -26,6 +29,7 @@ import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
+import com.aizi.yingerbao.receiver.AlarmManagerReceiver;
 
 /*
 * @author xuzejun
@@ -234,7 +238,6 @@ public class Utiliy {
             List<BluetoothDevice> devices = mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
             for (BluetoothDevice device : devices) {
                 String devname = device.getName();
-                SLog.e(TAG, "pairedDevices name = " + device.getName());
                 if (!TextUtils.isEmpty(devname)) {
                     if (devname.equals(Constant.AIZI_DEVICE_TAG)) {
                         int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
@@ -349,6 +352,73 @@ public class Utiliy {
             }
             
             CommandCenter.getInstance().handleIntent(intent);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+    
+    /**
+     * 获取Receiver接收的intent
+     *
+     * @param context
+     * @param intent
+     * @param action
+     *
+     * @return 返回intent
+     *
+     * @author xuzejun01
+     */
+    public static Intent getReceiverIntent(Context context, Intent intent,
+                                              String action) {
+
+        intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setAction(action);
+        intent.setClass(context, AlarmManagerReceiver.class);
+        return intent;
+    }
+    
+    public static PendingIntent getDelayPendingIntent(final Context context, int waittype) {
+        Intent intent = new Intent();
+        intent = getReceiverIntent(context, intent, Constant.ACTION_ALARM_MESSAGE);
+        intent.putExtra(Constant.ALARM_WAIT_TYPE, waittype);
+        
+        int req = 0;
+        try {
+            // 根据当前时间值设置唯一的定时器标识
+            req = Long.valueOf(System.currentTimeMillis()).intValue();
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(
+                context, req, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        
+        return alarmPendingIntent;
+    }
+    
+    public static void setDelayAlarm(final Context context, long waittime, PendingIntent pdIntent) {
+        try {
+            AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            long expiredtime = System.currentTimeMillis() + waittime;
+            // 设置定时器
+            if (Build.VERSION.SDK_INT < 19) {
+                alarm.set(AlarmManager.RTC_WAKEUP, expiredtime, pdIntent);
+            } else if (Build.VERSION.SDK_INT >= 19) {
+                alarm.setExact(AlarmManager.RTC_WAKEUP, expiredtime, pdIntent);
+            }
+            SLog.e(TAG, "setAlarm  expiredtime = " + expiredtime);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+    public static void cancelAlarmPdIntent(Context context, PendingIntent pdintent) {
+        try {
+            AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (pdintent != null) {
+                alarm.cancel(pdintent);
+            }
+            SLog.e(TAG, "Cancel AlarmManager  PendingIntent = " + pdintent);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

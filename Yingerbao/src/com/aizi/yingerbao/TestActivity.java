@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -211,8 +212,11 @@ public class TestActivity extends Activity {
               /*  Utiliy.showFeverNotification(getApplicationContext(), 
                         "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + "36.5" + " 请及时就医。", null);
             */
-                Utiliy.showFeverNotification(getApplicationContext(), 
-                        "呼吸停滞！！", "孩子呼吸停滞了， 请及时就医。", null);
+                
+                PendingIntent mPendingIntent = Utiliy.getDelayPendingIntent(getApplicationContext(), Constant.ALARM_WAIT_L1);
+                Utiliy.setDelayAlarm(getApplicationContext(), 5 * 1000, mPendingIntent);
+                
+
             
             }
         });

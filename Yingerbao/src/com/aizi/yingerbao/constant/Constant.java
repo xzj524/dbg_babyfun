@@ -33,6 +33,12 @@ public class Constant {
     /** 爱子科技设备标识 */
     public static final String AIZI_DEVICE_TAG = "my_hrm";
     
+    /** 定时器延时类型 */
+    public static final String ALARM_WAIT_TYPE = "wait_type";
+    
+    /** 定时器接收L1数据超时 */
+    public static final int ALARM_WAIT_L1 = 1;
+    
     /** 存储app私有的shared preference */
     public static final String SHARED_NAME_PRIVATE_SETTINGS = "aizi_pst";
     
@@ -122,6 +128,10 @@ public class Constant {
     public static final String ACTION_CHECKDEVICE_SUCCEED = "com.aizi.yingerbao.checkdev_succeed";
 
     public static final String IS_SYNC_DATA = "is_sync_data";
+    
+    /** 延时触发action */
+    public static final String ACTION_ALARM_MESSAGE =
+            "com.aizi.yingerbao.action.alarm.message";
 
     
 }

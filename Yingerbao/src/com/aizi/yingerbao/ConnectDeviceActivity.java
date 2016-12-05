@@ -16,7 +16,7 @@ import android.view.Window;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment;
-import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.CheckingState;
+import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.ConnectDeviceState;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.OnDeviceConnectListener;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.ScanDevicesService;
@@ -76,15 +76,14 @@ onTitleBarClickListener {
             ChildActivity.this.finish();   */
             SLog.e(TAG, "backbutton is called ");
             if (mDevConnectFragment != null) {
-                if (mDevConnectFragment.getCurrentState() != CheckingState.FAIL
-                        || mDevConnectFragment.getCurrentState() != CheckingState.IDEL
-                        || mDevConnectFragment.getCurrentState() != CheckingState.CONNECTED
-                        || mDevConnectFragment.getCurrentState() != CheckingState.FATAL_DEVICE_NOT_CONNECT
-                        || mDevConnectFragment.getCurrentState() != CheckingState.IDEL) {
+                if (mDevConnectFragment.getCurrentState() != ConnectDeviceState.FAIL
+                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.IDEL
+                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.CONNECTED
+                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.FATAL_DEVICE_NOT_CONNECT
+                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.IDEL) {
                     
                 } 
             }
-            
         }      
         return super.onKeyDown(keyCode, event);
     }
@@ -161,6 +160,7 @@ onTitleBarClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mTotalSyncDataLen = 0;
         unbindService(mScanServiceConnection);
         EventBus.getDefault().unregister(this);//反注册EventBus  
         mHandler.removeMessages(MSG_PROGRESS_UPDATE);
@@ -247,9 +247,15 @@ onTitleBarClickListener {
             if (intent.hasExtra(Constant.NOT_SYNC_DATA_LEN)) {
                 mTotalSyncDataLen = intent.getIntExtra(Constant.NOT_SYNC_DATA_LEN, 0);
                 SLog.e(TAG, "RECV SYNC DATA  mTotalSyncDataLen real = " + mTotalSyncDataLen);
-                if (mTotalSyncDataLen < 1000) {
-                    mTotalSyncDataLen += 200; // 因为该数值不准确，加上一个值比实际值大
-                } else if (mTotalSyncDataLen > 1000) {
+                if (mTotalSyncDataLen <= 100) { // 因为该数值不准确，加上一个值比实际值大
+                    mTotalSyncDataLen += 20;
+                } else if (mTotalSyncDataLen > 100 && mTotalSyncDataLen <= 200) {
+                    mTotalSyncDataLen += 50;
+                } else if (mTotalSyncDataLen > 200 && mTotalSyncDataLen <= 500) {
+                    mTotalSyncDataLen += 100;
+                } else if (mTotalSyncDataLen > 500 && mTotalSyncDataLen <= 1000) {
+                    mTotalSyncDataLen += 200; 
+                } else if (mTotalSyncDataLen >= 1000) {
                     mTotalSyncDataLen += 500;
                 }
             }

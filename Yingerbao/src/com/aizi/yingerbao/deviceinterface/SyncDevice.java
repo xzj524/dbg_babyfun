@@ -1,8 +1,5 @@
 package com.aizi.yingerbao.deviceinterface;
 
-import android.content.Context;
-
-
 
 public interface SyncDevice {
 

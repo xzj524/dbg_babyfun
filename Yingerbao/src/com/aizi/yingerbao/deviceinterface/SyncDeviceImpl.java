@@ -25,7 +25,6 @@ public class SyncDeviceImpl implements SyncDevice{
     Context mContext;
 
     public SyncDeviceImpl(Context context) {
-        // TODO Auto-generated constructor stub
         mContext = context;
         mIsBluetoothReady = false;      
     }
@@ -58,7 +57,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
 
     private DeviceTime acqDeviceTime() {
-        // TODO Auto-generated method stub
        DeviceTime dvtm = new DeviceTime();
        Calendar calendar = Calendar.getInstance(); 
        
@@ -75,7 +73,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
     @Override
     public DeviceResponse<?> startSendBreathData() {
-        // TODO Auto-generated method stub
         SLog.e(TAG, " startSendBreathData ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
@@ -97,7 +94,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
     @Override
     public DeviceResponse<?> stopSendBreathData() {
-        // TODO Auto-generated method stub
         SLog.e(TAG, " stopSendBreathData ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
@@ -119,7 +115,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
     @Override
     public DeviceResponse<?> getDeviceTime() {
-        // TODO Auto-generated method stub
         SLog.e(TAG, " getDeviceTime ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
@@ -140,7 +135,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
     @Override
     public DeviceResponse<?> getRealTimeData() {
-        // TODO Auto-generated method stub
         SLog.e(TAG, " getRealTimeData ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();

@@ -18,6 +18,7 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.PrivateParams;
@@ -28,18 +29,16 @@ public class ScanDevicesService extends Service{
     
     private static final String TAG = ScanDevicesService.class.getSimpleName();
     private Handler mHandler;
-    private boolean mScanning;
+    private boolean mScanning = false;
     BluetoothAdapter mBluetoothAdapter;
     List<BluetoothDevice> mDeviceList;
-    Map<String, Integer> devRssiValues;
+    Map<String, Integer> mDevRssiValues;
     
-    private static final long SCAN_PERIOD = 10 * 1000; //10 seconds
+    private static final long SCAN_PERIOD = 10 * 1000; //扫描设备超时时间
     
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO Auto-generated method stub
         mHandler = new Handler();
-
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, "手机不支持蓝牙", Toast.LENGTH_SHORT).show();
             stopSelf();
@@ -47,17 +46,18 @@ public class ScanDevicesService extends Service{
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
-        // Checks if Bluetooth is supported on the device.
+        // 检查手机设备是否支持蓝牙功能
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "手机不支持蓝牙", Toast.LENGTH_SHORT).show();
             stopSelf();
         } else {
+            // 启动手机蓝牙功能
             mBluetoothAdapter.enable();
         }
         
-        /* Initialize device list container */
+        // 初始化设备容器 
         mDeviceList = new ArrayList<BluetoothDevice>();
-        devRssiValues = new HashMap<String, Integer>();
+        mDevRssiValues = new HashMap<String, Integer>();
         return new ScanBinder();
     }
     
@@ -88,11 +88,11 @@ public class ScanDevicesService extends Service{
 
     private void scanBLEDevice(final boolean enable) {
         if (enable) {
-            // Stops scanning after a pre-defined scan period.
+            // 扫描超时之后停止扫描
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   if (mScanning) {
+                   if (mScanning) { //在扫描进行中才会停止扫描
                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
                        // 没有扫描到蓝牙设备
                        Intent intent = new Intent(Constant.BLUETOOTH_SCAN_NOT_FOUND);
@@ -116,10 +116,14 @@ public class ScanDevicesService extends Service{
         @Override
         public void onLeScan(final BluetoothDevice device, 
                 final int rssi, byte[] scanRecord) {
-            boolean isdiscovery = isDiscoveryDevice(device,rssi);
-            if (isdiscovery) {
-                Intent intent = new Intent(Constant.BLUETOOTH_SCAN_FOUND);
-                EventBus.getDefault().post(intent);
+            boolean isDiscovery = isDiscoveryDevice(device,rssi);
+            if (isDiscovery) {
+                if (BluetoothApi.getInstance(getApplicationContext()).mBluetoothService != null) {
+                    BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.connect(device.getAddress());
+                }
+                
+               /* Intent intent = new Intent(Constant.BLUETOOTH_SCAN_FOUND);
+                EventBus.getDefault().post(intent);*/
             }
         }
     };
@@ -132,19 +136,18 @@ public class ScanDevicesService extends Service{
                 if (listDev.getAddress().equals(device.getAddress())) {  
                     isDeviceFound = true;  // 设备已经发现
                     stopScanDevice();
-                    SLog.e(TAG, "device is already in the device list ");
+                    SLog.e(TAG, "Device is already in the device list ");
                     break;
                 }
             }    
-            SLog.e(TAG, "searching....  address = " + device.getAddress() 
-                      + " name = " + device.getName() 
-                      + " rssi = " + rssi);
+            SLog.e(TAG, "searching....  Address = " + device.getAddress() 
+                      + " Name = " + device.getName());
            
             if (!isDeviceFound) {
                 if (!TextUtils.isEmpty(device.getName())) {
                     if (device.getName().equals(Constant.AIZI_DEVICE_TAG)) {
                         mDeviceList.add(device);
-                        devRssiValues.put(device.getAddress(), rssi);
+                        //mDevRssiValues.put(device.getAddress(), rssi);
                         isDeviceFound = true;
                         PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_DEVICE_ADDRESS, 
                                 device.getAddress());

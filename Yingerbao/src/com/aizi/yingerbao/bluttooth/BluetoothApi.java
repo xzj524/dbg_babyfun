@@ -72,6 +72,10 @@ public class BluetoothApi {
         }
     };
     
+    public void RecvEvent(AsycEvent event) { 
+        Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
+        mExecutorService.submit(producer);
+     } 
     
     public void onEvent(AsycEvent event) { 
         Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);

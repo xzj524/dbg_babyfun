@@ -54,7 +54,6 @@ public class CommandCenter {
     }
 
     public void handleIntent(Intent intent) {
-        SLog.d(TAG, "receiveIntent: " + intent.toUri(0));
         try {
             String action = intent.getAction();
             if (!TextUtils.isEmpty(action)) {
