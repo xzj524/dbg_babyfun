@@ -3,8 +3,6 @@ package com.aizi.yingerbao;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -69,7 +67,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        
+        EventBus.getDefault().unregister(this);
         mTempStart = false;
     }
 
@@ -82,6 +80,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         mTopView.setClickListener(this);
         
         mTemperatureChart = (LineChart) findViewById(R.id.temperature_linechart);
+        
         mTempButton = (Button) findViewById(R.id.control_temp_button);
         mTempButton.setOnClickListener(new View.OnClickListener() {
             
@@ -109,8 +108,10 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                             }
                            
                         } else {
-                            mTempStart = false;
-                            mTempButton.setText(R.string.action_start_temp);
+                            if (!mIsTempMeasuring) {
+                                mTempStart = false;
+                                mTempButton.setText(R.string.action_start_temp);
+                            }
                         }
                     } else {
                         showNormalDialog();

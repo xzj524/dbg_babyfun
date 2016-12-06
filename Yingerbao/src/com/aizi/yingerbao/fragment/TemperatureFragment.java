@@ -98,7 +98,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
                         mTempButton.setText(R.string.action_start_temp);
                     }
                 } else {
-                    Utiliy.showNormalDialog(getActivity());
+                    Utiliy.showConnectDialog(getActivity());
                 }
             }
             

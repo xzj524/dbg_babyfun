@@ -36,5 +36,7 @@ public interface SyncDevice {
 
     DeviceResponse<?> activateDevice();
 
+    DeviceResponse<?> getAllNoSyncInfo(int datatype);
+
 
 }

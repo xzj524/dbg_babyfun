@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.Utiliy;
 
@@ -213,10 +214,10 @@ public class TestActivity extends Activity {
                         "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + "36.5" + " 请及时就医。", null);
             */
                 
-                PendingIntent mPendingIntent = Utiliy.getDelayPendingIntent(getApplicationContext(), Constant.ALARM_WAIT_L1);
-                Utiliy.setDelayAlarm(getApplicationContext(), 5 * 1000, mPendingIntent);
+                //PendingIntent mPendingIntent = Utiliy.getDelayPendingIntent(getApplicationContext(), Constant.ALARM_WAIT_L1);
+                //Utiliy.setDelayAlarm(getApplicationContext(), 5 * 1000, mPendingIntent);
                 
-
+                DeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo(2);
             
             }
         });

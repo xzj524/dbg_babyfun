@@ -111,7 +111,7 @@ public class YingerBaoActivity extends FragmentActivity  implements onTitleBarCl
         initTabLineWidth();
         
         if (!Utiliy.isBluetoothReady(getApplicationContext())) {
-            Utiliy.showNormalDialog(this);
+            //Utiliy.showNormalDialog(this);
         }
         
     }

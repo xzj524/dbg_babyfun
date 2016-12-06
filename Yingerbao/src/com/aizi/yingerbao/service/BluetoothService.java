@@ -18,6 +18,7 @@ package com.aizi.yingerbao.service;
 
 import java.util.UUID;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -40,6 +41,7 @@ import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.BaseMessageHandler;
 import com.aizi.yingerbao.utility.PrivateParams;
+import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
 
@@ -62,8 +64,13 @@ public class BluetoothService extends Service {
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
     private static final int STATE_CONNECTED = 2;
+    private static final long WAIT_CHECK_PERIOD = 15 * 1000;
     
+    int mConnectTimes = 0;
+    boolean mIsConnectRepeat = false;
     
+    PendingIntent mCheckPendingIntent;
+
     private static final  UUID BLE_UUID_NUS_SERVICE = UUID.fromString("00000001-0000-1000-8000-00805f9b34fb");
     private static final UUID BLE_UUID_NUS_TX_CHARACTERISTIC = UUID.fromString("00000002-0000-1000-8000-00805f9b34fb");
     private static final UUID BLE_UUID_NUS_RX_CHARACTERISTIC = UUID.fromString("00000003-0000-1000-8000-00805f9b34fb");
@@ -82,9 +89,9 @@ public class BluetoothService extends Service {
             "com.aizi.yingerbao.EXTRA_TYPE";
     public final static String DEVICE_DOES_NOT_SUPPORT_BLUETOOTH =
             "com.aizi.yingerbao.DEVICE_DOES_NOT_SUPPORT_BLUETOOTH";
-    
-    
-   
+
+    protected static final long SYNC_DATA_TIMEOUT = 60 * 60 * 12 * 1000;
+
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -101,8 +108,22 @@ public class BluetoothService extends Service {
                 mConnectionState = STATE_DISCONNECTED;
                 SLog.e(TAG, "Disconnected from GATT server.");   
                 PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-                broadcastUpdate(connectionAction);
+                
                 disconnect();
+                broadcastUpdate(connectionAction);
+                
+                /*boolean conres = false;
+                SLog.e(TAG, "mConnectTimes = " + mConnectTimes);
+                if (mConnectTimes < 3) {
+                    mConnectTimes++;
+                    initialize();
+                    conres = connect(mBluetoothDeviceAddress, true);
+                    if (!conres) {
+                        broadcastUpdate(connectionAction);
+                    }
+                } else {
+                    broadcastUpdate(connectionAction);
+                }*/
             }
         }
 
@@ -129,7 +150,10 @@ public class BluetoothService extends Service {
                 
                 if (notifyres) { // 使能数据成功
                     SLog.e(TAG, "Bluetooth  is Ready, mBluetoothGatt = " + mBluetoothGatt );
-                    
+                    if (PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0) == 1) {
+                        // 检测到连接过程中断
+                        return;
+                    }
                     new Thread(new Runnable() {
                         
                         @Override
@@ -137,14 +161,30 @@ public class BluetoothService extends Service {
                             try {
                                 Thread.sleep(500);
                                 AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
+                                // 设置检查设备状态，开始
+                                PrivateParams.setSPInt(getApplicationContext(), "check_device_status", 1);
+                                // 设置校验设备超时定时器
+                                if (mCheckPendingIntent != null) {
+                                    Utiliy.cancelAlarmPdIntent(getApplicationContext(), mCheckPendingIntent);
+                                }
+                                mCheckPendingIntent = Utiliy.getDelayPendingIntent(getApplicationContext(), Constant.ALARM_WAIT_CHECK_DEVICE);
+                                Utiliy.setDelayAlarm(getApplicationContext(), WAIT_CHECK_PERIOD, mCheckPendingIntent);
+                                SLog.e(TAG, "setAlarm  checkDevice ");
+                            
                             } catch (InterruptedException e) {
                                 SLog.e(TAG, e);
                             }
-                            
                         }
                     }).start();
                     PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 1);
+                    // 搜索设备状态，成功
+                    PrivateParams.setSPInt(getApplicationContext(), "search_device_status", 3);
                     broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+                    mConnectTimes = 0;
+                    
+                    // 设置定时器，用于定时同步数据
+                    //Utiliy.cancelAlarmPdIntent(getApplicationContext(), Utiliy.getRepeatAlarmPendingIntent(getApplicationContext()));
+                    //Utiliy.setRepeatAlarm(getApplicationContext(), SYNC_DATA_TIMEOUT, Utiliy.getRepeatAlarmPendingIntent(getApplicationContext()));
                     return;
                 } else {
                     disconnect();
@@ -198,7 +238,6 @@ public class BluetoothService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        
         return mBinder;
     }
 
@@ -248,7 +287,7 @@ public class BluetoothService extends Service {
      *         {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      *         callback.
      */
-    public boolean connect(final String address) {
+    public boolean connect(final String address, boolean isrepeat) {
         if (mBluetoothAdapter == null || address == null) {
             SLog.e(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
@@ -256,7 +295,7 @@ public class BluetoothService extends Service {
         
         disconnect();
 
-        // Previously connected device.  Try to reconnect.
+  /*      // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
             SLog.e(TAG, "Trying to use an existing mBluetoothGatt for connection. address = " + address);
@@ -268,7 +307,7 @@ public class BluetoothService extends Service {
                 broadcastUpdate(ACTION_GATT_DISCONNECTED);
                 return false;
             }
-        }
+        }*/
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
@@ -284,6 +323,7 @@ public class BluetoothService extends Service {
         SLog.e(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
+        mIsConnectRepeat = isrepeat;
         return true;
     }
 
@@ -302,13 +342,14 @@ public class BluetoothService extends Service {
             
             SLog.e(TAG, "BluetoothAdapter DISCONNECT");
             PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-            broadcastUpdate(ACTION_GATT_DISCONNECTED);
+            //broadcastUpdate(ACTION_GATT_DISCONNECTED);
             
-            mBluetoothDeviceAddress = null;
-            mBluetoothGatt.disconnect();
-            mBluetoothGatt.close();
-            mBluetoothGatt = null;
-            
+            //mBluetoothDeviceAddress = null;
+            if (mBluetoothGatt != null) {
+                mBluetoothGatt.disconnect();
+                mBluetoothGatt.close();
+                mBluetoothGatt = null;
+            } 
             if (BaseMessageHandler.mL2OutputStream != null) {
                 BaseMessageHandler.mL2OutputStream.reset();
                 BaseMessageHandler.mL2OutputStream.close();  

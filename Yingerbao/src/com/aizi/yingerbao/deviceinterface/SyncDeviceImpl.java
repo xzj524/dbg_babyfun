@@ -2,6 +2,8 @@ package com.aizi.yingerbao.deviceinterface;
 
 import java.util.Calendar;
 
+import u.aly.by;
+
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -157,7 +159,6 @@ public class SyncDeviceImpl implements SyncDevice{
 
     @Override
     public DeviceResponse<?> getAllNoSyncInfo() {
-        // TODO Auto-generated method stub
         SLog.e(TAG, " getAllNoSyncInfo ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
@@ -165,10 +166,30 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+                = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
         
-            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
+            String str = "getAllNoSyncInfo";
+            Utiliy.dataToFile(str);
+        }
+
+        return null;
+    }
+    
+    @Override
+    public DeviceResponse<?> getAllNoSyncInfo(int datatype) {
+        SLog.e(TAG, " getAllNoSyncInfo ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 3;
+            keyPayload.keyLen = 1;
+            keyPayload.keyValue = getDataType(datatype);
+            
+            BaseL2Message bsl2Msg 
+                = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+        
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getAllNoSyncInfo";
             Utiliy.dataToFile(str);
@@ -177,6 +198,18 @@ public class SyncDeviceImpl implements SyncDevice{
         return null;
     }
 
+
+
+
+    private byte[] getDataType(int datatype) {
+        byte[] type = new byte[1];
+        try {
+            type[0] = (byte) (datatype & 0xff);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return type;
+    }
 
 
     @Override

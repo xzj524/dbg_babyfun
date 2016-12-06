@@ -85,13 +85,15 @@ public class Utiliy {
      * @Context
      */
     
-    public static void showNormalDialog(final Context context){
+    public static void showConnectDialog(final Context context){
         
         final AlertDialog.Builder normalDialog = 
             new AlertDialog.Builder(context);
         normalDialog.setIcon(R.drawable.yingerbao_96);
         normalDialog.setTitle("连接设备");
-        normalDialog.setMessage("设备未连接，是否连接设备,\n请先摇动设备保证能够正确连接。");
+        normalDialog.setMessage("设备未连接，是否连接设备?\n请先摇动设备保证能够正确连接。");
+        //normalDialog.setTitle(title);
+        //normalDialog.setMessage(content);
         normalDialog.setPositiveButton("确定", 
             new DialogInterface.OnClickListener() {
             @Override
@@ -111,6 +113,37 @@ public class Utiliy {
         normalDialog.show();
     }
     
+    /** 
+     * @Description: 显示连接对话框
+     * @Context
+     */
+    
+    public static void showQuitDialog(final Context context, String title, String content){
+        
+        final AlertDialog.Builder normalDialog = 
+            new AlertDialog.Builder(context);
+        normalDialog.setIcon(R.drawable.yingerbao_96);
+        normalDialog.setTitle("退出应用");
+        normalDialog.setMessage("确定退出应用？");
+        //normalDialog.setTitle(title);
+        //normalDialog.setMessage(content);
+        normalDialog.setPositiveButton("确定", 
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                
+            }
+        });
+        normalDialog.setNegativeButton("取消", 
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //...To-do
+            }
+        });
+        // 显示
+        normalDialog.show();
+    }
     
     
     
@@ -377,6 +410,22 @@ public class Utiliy {
         return intent;
     }
     
+    /**
+     * 获取定时闹钟pendingIntent
+     * 
+     * @return pendingIntent
+     */
+    public static PendingIntent getRepeatAlarmPendingIntent(Context context) {
+        Intent intent = new Intent();
+        intent = getReceiverIntent(context, intent, Constant.ACTION_ALARM_MESSAGE);
+        intent.putExtra(Constant.ALARM_WAIT_TYPE, 4); // 设置定时读取设备数据类型
+
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(
+                context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        
+        return alarmPendingIntent;
+    }
+    
     public static PendingIntent getDelayPendingIntent(final Context context, int waittype) {
         Intent intent = new Intent();
         intent = getReceiverIntent(context, intent, Constant.ACTION_ALARM_MESSAGE);
@@ -407,6 +456,18 @@ public class Utiliy {
                 alarm.setExact(AlarmManager.RTC_WAKEUP, expiredtime, pdIntent);
             }
             SLog.e(TAG, "setAlarm  expiredtime = " + expiredtime);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+    
+    public static void setRepeatAlarm(final Context context, long repeattime, PendingIntent pdIntent) {
+        try {
+            AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            long firsttime = System.currentTimeMillis() + repeattime;
+            // 设置定时器
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, firsttime, repeattime, pdIntent);
+            SLog.e(TAG, "setAlarm  repeat = " + repeattime);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

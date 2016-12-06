@@ -209,6 +209,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         // TODO Auto-generated method stub
         super.onDestroy();
         AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+        EventBus.getDefault().unregister(this);
         if (mTimer != null) {
             mTimer.purge();
             mTimer.cancel();
@@ -786,5 +787,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         super.onPause();
         MobclickAgent.onPause(this);
     }
+    
+    
 
 }

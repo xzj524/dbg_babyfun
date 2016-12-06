@@ -15,6 +15,7 @@
     <string name="click_start">点击进行连接同步数据</string>
     <string name="start_connect">正在搜索设备</string>
     <string name="check_device">正在校验设备</string>
+    <string name="check_device_fail">校验设备失败\n请重试</string>
     <string name="sync_data">正在同步数据...</string>
     <string name="show_device_status">宝宝状态</string>
     <string name="reset_user_password">重置密码</string>
@@ -27,6 +28,7 @@
     <string name="connecting_device_success">设备已连接\n可以使用啦！</string>
     <string name="connect_device_done">设备已连接</string>
     <string name="connecting_device_sync_data">数据同步中。。。</string>
+     <string name="connecting_device_sync_data_fail">数据同步失败\n请重试</string>
     <string name="connecting_device_fail">找不到设备\n请重新检测</string>
     <string name="connecting_router_one_abnormal">检测到一个问题\n点击查看</string>
     <string name="connecting_router_two_abnormal">检测到两个问题\n点击查看</string>

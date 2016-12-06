@@ -135,7 +135,7 @@ public class BreathFragment extends Fragment{
                             mControlBreathBtn.setText(R.string.action_start_breath);
                         }
                     } else {
-                        Utiliy.showNormalDialog(getActivity());
+                        Utiliy.showConnectDialog(getActivity());
                     }
                 }
                

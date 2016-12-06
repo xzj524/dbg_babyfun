@@ -4,14 +4,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.ConnectDeviceState;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.login.LoginActivity;
@@ -103,7 +109,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             startActivity(intent);
         } else {
             if (!Utiliy.isBluetoothConnected(getApplicationContext())) {
-                Utiliy.showNormalDialog(this);
+                Utiliy.showConnectDialog(this);
             }
         }
     }
@@ -129,8 +135,8 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         super.onDestroy();
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect();
+        //BluetoothApi.getInstance(getApplicationContext()).unregisterEventBus();
         CommandCenter.getInstance().clearInterfaceQueue();
-       
     }
 
     
@@ -145,5 +151,49 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+    
+    
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        try {
+            if (keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {   
+                showQuitDialog(this, null, null);
+            } 
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+             
+        return super.onKeyDown(keyCode, event);
+    }
+    
+    
+    /** 
+     * @Description: 显示退出对话框
+     * @Context
+     */
+    
+    public void showQuitDialog(Context context, String title, String content){
+        
+        final AlertDialog.Builder normalDialog = 
+            new AlertDialog.Builder(context);
+        normalDialog.setIcon(R.drawable.yingerbao_96);
+        normalDialog.setTitle("退出应用");
+        normalDialog.setMessage("退出后蓝牙断开，确定退出应用？");
+        normalDialog.setPositiveButton("确定", 
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        normalDialog.setNegativeButton("取消", 
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //...To-do
+            }
+        });
+        // 显示
+        normalDialog.show();
     }
 }

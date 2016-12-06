@@ -36,6 +36,10 @@ public class BluetoothApi {
         bindBluetoothService(context);
         mExecutorService.submit(consumer);
     }
+    
+    public void unregisterEventBus() {
+        EventBus.getDefault().unregister(this);
+    }
 
     public static BluetoothApi getInstance(Context context) {
         if (mInstance != null) {

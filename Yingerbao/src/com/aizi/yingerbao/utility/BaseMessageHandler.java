@@ -126,7 +126,6 @@ public class BaseMessageHandler {
                         SLog.e(TAG, "receive L2 DATA");
                         BaseL2Message bsl2Msg = getBaseL2Msg(mL2OutputStream.toByteArray()); 
                         mL2OutputStream.reset();
-                        
                         MessageParse.getInstance(context).RecvBaseL2Msg(bsl2Msg);
                     }
                 }            
@@ -155,22 +154,7 @@ public class BaseMessageHandler {
             }
         }
     };
-    
-/*    static AZRunnable timeOutRunnable = new AZRunnable("sendtimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
-        @Override
-        public void brun() {
-            try {
-                Thread.sleep(SLEEP_TIME);
-                synchronized (synchronizedLock) {
-                    synchronizedLock.notifyAll();
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
-                }
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            }
-        }
-    };*/
-    
+       
     static TimerTask task = new TimerTask(){    
              public void run(){    
                  try {

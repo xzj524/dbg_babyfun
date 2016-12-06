@@ -118,12 +118,11 @@ public class ScanDevicesService extends Service{
                 final int rssi, byte[] scanRecord) {
             boolean isDiscovery = isDiscoveryDevice(device,rssi);
             if (isDiscovery) {
-                if (BluetoothApi.getInstance(getApplicationContext()).mBluetoothService != null) {
-                    BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.connect(device.getAddress());
+                if (PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0) != 1) {
+                    if (BluetoothApi.getInstance(getApplicationContext()).mBluetoothService != null) {
+                        BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.connect(device.getAddress(), false);
+                    }
                 }
-                
-               /* Intent intent = new Intent(Constant.BLUETOOTH_SCAN_FOUND);
-                EventBus.getDefault().post(intent);*/
             }
         }
     };
@@ -147,7 +146,6 @@ public class ScanDevicesService extends Service{
                 if (!TextUtils.isEmpty(device.getName())) {
                     if (device.getName().equals(Constant.AIZI_DEVICE_TAG)) {
                         mDeviceList.add(device);
-                        //mDevRssiValues.put(device.getAddress(), rssi);
                         isDeviceFound = true;
                         PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_DEVICE_ADDRESS, 
                                 device.getAddress());

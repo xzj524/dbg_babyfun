@@ -1,8 +1,10 @@
 package com.aizi.yingerbao;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -14,12 +16,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 
+import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.ConnectDeviceState;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.OnDeviceConnectListener;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.ScanDevicesService;
+import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.view.HorizontalProgressBarWithNumber;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
@@ -54,34 +58,32 @@ onTitleBarClickListener {
         setContentView(R.layout.activity_baby_fun);
         
         EventBus.getDefault().register(this);
-
         mProgressBar = (HorizontalProgressBarWithNumber) findViewById(R.id.data_transfer_progress);
-        
-        initScanService();
-
         mConnectTopBarView = (TopBarView) findViewById(R.id.hometopbar);
         mConnectTopBarView.setClickListener(this);
-        
         mDevConnectFragment 
             = (DeviceConnectStatusFragment)getFragmentManager().findFragmentById(R.id.deviceConnectFragment);
-             
+        
+        initScanService();
+        PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 0);
     }
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {   
-            /*Intent intent=new Intent();   
-            intent.setClass(ChildActivity.this, MainActivity.class);   
-            startActivity(intent);   
-            ChildActivity.this.finish();   */
             SLog.e(TAG, "backbutton is called ");
             if (mDevConnectFragment != null) {
-                if (mDevConnectFragment.getCurrentState() != ConnectDeviceState.FAIL
-                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.IDEL
-                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.CONNECTED
-                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.FATAL_DEVICE_NOT_CONNECT
-                        || mDevConnectFragment.getCurrentState() != ConnectDeviceState.IDEL) {
+                if (mDevConnectFragment.getCurrentState() == ConnectDeviceState.SEARCHING_DEVICE
+                        || mDevConnectFragment.getCurrentState() == ConnectDeviceState.CHECKING_DEVICE
+                        || mDevConnectFragment.getCurrentState() == ConnectDeviceState.SYNCING_DATA) {
                     
+                    if (mDevConnectFragment.getCurrentState() == ConnectDeviceState.SEARCHING_DEVICE) {
+                        showConnectQuitDialog(this, "连接退出", "设备正在连接，请勿退出！", ConnectDeviceState.SEARCHING_DEVICE);
+                    } else if (mDevConnectFragment.getCurrentState() == ConnectDeviceState.CHECKING_DEVICE) {
+                        showConnectQuitDialog(this, "设备校验退出", "设备正在校验，请勿退出！", ConnectDeviceState.SEARCHING_DEVICE);
+                    } else if (mDevConnectFragment.getCurrentState() == ConnectDeviceState.SYNCING_DATA) {
+                        showConnectQuitDialog(this, "数据同步退出", "数据正在同步，请勿退出！", ConnectDeviceState.SEARCHING_DEVICE);
+                    }
                 } 
             }
         }      
@@ -115,7 +117,11 @@ onTitleBarClickListener {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mScanService = ((ScanDevicesService.ScanBinder) service).getService();
             if (mScanService != null) {
-                mScanService.startScanDevice();
+                if (mDevConnectFragment.getCurrentState() == ConnectDeviceState.IDEL
+                        || mDevConnectFragment.getCurrentState() == ConnectDeviceState.FAIL) {
+                    mScanService.startScanDevice(); 
+                }
+                
             }
         }
     };
@@ -135,10 +141,12 @@ onTitleBarClickListener {
             } else if (msg.what == MSG_PROGRESS_COMPLETED) {
                 mCurSyncDataLen = 0;
                 int res = msg.arg1;
-                //if (res == 4) { //根据返回结果做对应处理
-                    //mHandler.sendEmptyMessageDelayed(MSG_PROGRESS_AUTO_COMPLETED, 100);
+                if (res == 0 || res == 1) { // 数据同步完成或者没有产生新的数据
                     mHandler.sendEmptyMessage(MSG_PROGRESS_AUTO_COMPLETED);
-                //}
+                } else if (res == 2) { // 同步数据出错
+                    mDevConnectFragment.setSyncDataFailed();
+                    mDevConnectFragment.doUpdateStatusClick();
+                }
             } else if (msg.what == MSG_PROGRESS_AUTO_COMPLETED) {
                 progress = mProgressBar.getProgress();
                 if (progress < 100) {
@@ -148,7 +156,10 @@ onTitleBarClickListener {
                 } else {
                     mHandler.removeMessages(MSG_PROGRESS_AUTO_COMPLETED);
                     if (mDevConnectFragment != null) {
+                        mDevConnectFragment.setSyncDataSucceed();
                         mDevConnectFragment.doUpdateStatusClick();
+                        PrivateParams.setSPLong(getApplicationContext(),
+                                Constant.SYNC_DATA_SUCCEED_TIMESTAMP, System.currentTimeMillis());
                     }
                     
                     SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED 1");
@@ -161,7 +172,7 @@ onTitleBarClickListener {
     protected void onDestroy() {
         super.onDestroy();
         mTotalSyncDataLen = 0;
-        unbindService(mScanServiceConnection);
+        //unbindService(mScanServiceConnection);
         EventBus.getDefault().unregister(this);//反注册EventBus  
         mHandler.removeMessages(MSG_PROGRESS_UPDATE);
         mHandler.removeMessages(MSG_PROGRESS_COMPLETED);
@@ -272,5 +283,40 @@ onTitleBarClickListener {
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+    
+    
+    /** 
+     * @param state 
+     * @Description: 显示退出对话框
+     * @Context
+     */
+    
+    public void showConnectQuitDialog(final Context context, String title, String content, final ConnectDeviceState state){
+        
+        final AlertDialog.Builder normalDialog = 
+            new AlertDialog.Builder(context);
+        normalDialog.setIcon(R.drawable.yingerbao_96);
+        normalDialog.setTitle(title);
+        normalDialog.setMessage(content);
+        normalDialog.setPositiveButton("退出", 
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                
+                mDevConnectFragment.setCurrentStateIdel();
+                PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 1);
+                finish();
+            }
+        });
+        normalDialog.setNegativeButton("继续", 
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //...To-do
+            }
+        });
+        // 显示
+        normalDialog.show();
     }
 }

@@ -36,8 +36,20 @@ public class Constant {
     /** 定时器延时类型 */
     public static final String ALARM_WAIT_TYPE = "wait_type";
     
+    /** 定时器延时类型 */
+    public static final String DEVICE_CONNECT_DELAY_TYPE = "device_connect_delay_type";
+    
     /** 定时器接收L1数据超时 */
     public static final int ALARM_WAIT_L1 = 1;
+    
+    /** 设备校验超时 */
+    public static final int ALARM_WAIT_CHECK_DEVICE = 2;
+    
+    /** 同步数据超时 */
+    public static final int ALARM_WAIT_SYNC_DATA = 3;
+    
+    /** 搜索设备超时 */
+    public static final int ALARM_WAIT_SEARCH_DEVICE = 4;
     
     /** 存储app私有的shared preference */
     public static final String SHARED_NAME_PRIVATE_SETTINGS = "aizi_pst";
@@ -55,6 +67,12 @@ public class Constant {
     
     /** 设备时间与手机端偏差限制  */
     public static final long DEVICE_TIME_OFFSET = 60 * 60 * 1000;
+    
+    /** 设备同步数据超时时间  */
+    public static final long WAIT_SYNC_PERIOD = 15 * 1000;
+    
+    /** 搜索设备超时时间  */
+    public static final long WAIT_SEARCH_DEVICE_PERIOD = 10 * 1000;
     
     
     /** 用户登录是否成功  */
@@ -132,6 +150,9 @@ public class Constant {
     /** 延时触发action */
     public static final String ACTION_ALARM_MESSAGE =
             "com.aizi.yingerbao.action.alarm.message";
+
+    public static final String ACTION_DEVICE_CONNECT_RECEIVER 
+            = "com.aizi.yingerbao.action.deviceconnect.receiver";
 
     
 }
