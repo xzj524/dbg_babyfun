@@ -53,12 +53,6 @@ public class SyncDeviceRefactor implements SyncDevice{
     }
 
     @Override
-    public DeviceResponse<?> getBreahStopInfo() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public DeviceResponse<?> getRealTimeTempData() {
         // TODO Auto-generated method stub
         return null;
@@ -84,6 +78,12 @@ public class SyncDeviceRefactor implements SyncDevice{
 
     @Override
     public DeviceResponse<?> getAllNoSyncInfo(int datatype) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DeviceResponse<?> getBreathStopInfo() {
         // TODO Auto-generated method stub
         return null;
     }

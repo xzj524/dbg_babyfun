@@ -233,9 +233,9 @@ public class SyncDeviceImpl implements SyncDevice{
     }
 
     @Override
-    public DeviceResponse<?> getBreahStopInfo() {
+    public DeviceResponse<?> getBreathStopInfo() {
         // TODO Auto-generated method stub
-        SLog.e(TAG, " getBreahStopInfo ");
+        SLog.e(TAG, " getBreathStopInfo ");
         if (Utiliy.isBluetoothConnected(mContext)) {
             KeyPayload keyPayload = new KeyPayload();
             keyPayload.key = 11;
@@ -244,7 +244,6 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getBreahStopInfo";
             Utiliy.dataToFile(str);

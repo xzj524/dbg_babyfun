@@ -37,7 +37,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.BaseMessageHandler;
 import com.aizi.yingerbao.utility.PrivateParams;
@@ -160,7 +160,7 @@ public class BluetoothService extends Service {
                         public void run() {
                             try {
                                 Thread.sleep(500);
-                                AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
+                                DeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
                                 // 设置检查设备状态，开始
                                 PrivateParams.setSPInt(getApplicationContext(), "check_device_status", 1);
                                 // 设置校验设备超时定时器

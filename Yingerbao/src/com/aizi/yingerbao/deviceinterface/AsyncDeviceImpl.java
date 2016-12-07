@@ -155,7 +155,7 @@ public class AsyncDeviceImpl implements AsyncDevice {
 
             @Override
             public void run() {
-                DeviceResponse<?> response = mSyncDevice.getBreahStopInfo();
+                DeviceResponse<?> response = mSyncDevice.getBreathStopInfo();
             }
         };
         return getDispatcher().dispatch(task);

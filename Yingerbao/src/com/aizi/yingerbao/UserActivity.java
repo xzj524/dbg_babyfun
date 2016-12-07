@@ -1,11 +1,9 @@
 package com.aizi.yingerbao;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +15,6 @@ import android.view.View;
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.ConnectDeviceState;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.login.LoginActivity;
@@ -33,8 +30,6 @@ import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.MobclickAgent.EScenarioType;
 import com.umeng.analytics.MobclickAgent.UMAnalyticsConfig;
-
-import de.greenrobot.event.EventBus;
 
 public class UserActivity extends Activity implements onTitleBarClickListener {
     
@@ -156,8 +151,10 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         try {
-            if (keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {   
-                showQuitDialog(this, null, null);
+            if (keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {  
+                if (Utiliy.isBluetoothConnected(getApplicationContext())) {
+                    showQuitDialog(this, null, null); 
+                }
             } 
         } catch (Exception e) {
             SLog.e(TAG, e);

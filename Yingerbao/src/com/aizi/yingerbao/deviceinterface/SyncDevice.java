@@ -26,8 +26,6 @@ public interface SyncDevice {
 
     DeviceResponse<?> getAllSyncInfo();
 
-    DeviceResponse<?> getBreahStopInfo();
-
     DeviceResponse<?> getRealTimeTempData();
 
     DeviceResponse<?> getExceptionEvent();
@@ -37,6 +35,8 @@ public interface SyncDevice {
     DeviceResponse<?> activateDevice();
 
     DeviceResponse<?> getAllNoSyncInfo(int datatype);
+
+    DeviceResponse<?> getBreathStopInfo();
 
 
 }

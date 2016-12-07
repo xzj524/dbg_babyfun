@@ -24,7 +24,6 @@ import com.aizi.yingerbao.database.ExceptionEvent;
 import com.aizi.yingerbao.database.SleepInfo;
 import com.aizi.yingerbao.database.TemperatureInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
-import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DeviceTime;
@@ -113,7 +112,7 @@ public class MessageParse {
             for (KeyPayload kpload:params) {
                 if (kpload.key == 6) { // 收到连接合法性返回
                     SLog.e(TAG, "receive  check device data");
-                    if (kpload.keyLen == 12) {
+                    if (kpload.keyLen >= 12) {
                         handlecheckinfo(kpload.keyValue); // 分析校验返回
                     }
                 } 
@@ -148,9 +147,9 @@ public class MessageParse {
             PrivateParams.setSPInt(mContext, "NoSyncDataLength", totaldatalen);
             PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
             
-            String result = "Check Device return mNoSyncSleepDataLength = " + devCheckInfo.mNoSyncSleepDataLength
-                    + " mNoSyncTempDataLength = " + devCheckInfo.mNoSyncTempDataLength
-                    + " mNoSyncBreathDataLength = " + devCheckInfo.mNoSyncBreathDataLength
+            String result = "CheckDevice return SleepDataLength = " + devCheckInfo.mNoSyncSleepDataLength
+                    + " TempDataLength = " + devCheckInfo.mNoSyncTempDataLength
+                    + " BreathDataLength = " + devCheckInfo.mNoSyncBreathDataLength
                     + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
                     + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus
                     + " isDeviceActivited = " + isDeviceActivited;
@@ -160,7 +159,6 @@ public class MessageParse {
             
             SLog.e(TAG, result);
             Utiliy.dataToFile(result);
-            //SLog.e(TAG, "devCheckInfo.mNoSyncDataLength = " + devCheckInfo.mNoSyncDataLength);
             
             if (PrivateParams.getSPInt(mContext, "connect_interrupt", 0) == 1) {
                 // 检测到连接过程中断
@@ -187,12 +185,12 @@ public class MessageParse {
             boolean isSyncData = true;
             long curtime = System.currentTimeMillis();
             long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
-            //if (curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 200) {
-                if ( totaldatalen > 0) {
-                // 距上次同步数据超过六小时，并且未同步数据大于0.
+            if ((curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 60) 
+                    || devCheckInfo.mNoSyncBreathDataLength > 0) {
+                // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
                 SLog.e(TAG, "sync data has consumed six hour ");
                 DeviceFactory.getInstance(mContext).getAllNoSyncInfo(2);
-                DeviceFactory.getInstance(mContext).getBreahStopInfo();
+                DeviceFactory.getInstance(mContext).getBreathStopInfo();
                 // 读取数据状态，开始
                 PrivateParams.setSPInt(mContext, "sync_data_status", 1);
                 setSyncDataAlarm();
@@ -275,7 +273,6 @@ public class MessageParse {
     }   
 
     private void handleData(List<KeyPayload> params) {
-        // TODO Auto-generated method stub
         SLog.e(TAG, "handleData List<KeyPayload> params");
         for (KeyPayload kpload:params) {
             if (kpload.key == 2) { // 接收到实时数据
@@ -290,19 +287,19 @@ public class MessageParse {
                 SLog.e(TAG, "receiver sleep data " + kpload.keyLen);
                 handleSleepData(kpload.keyValue);
             } else if (kpload.key == 7) { //温度数据
-                SLog.e(TAG, "receiver temp data " + + kpload.keyLen);
+                SLog.e(TAG, "receiver temp data " + kpload.keyLen);
                 handleTempData(kpload.keyValue);
             } else if (kpload.key == 8) { //湿度数据
-                SLog.e(TAG, "receiver humit data " + + kpload.keyLen);
+                SLog.e(TAG, "receiver humit data " + kpload.keyLen);
                 handleHumbitData(kpload.keyValue);
             } else if (kpload.key == 10) { // 实时温度数据
-                SLog.e(TAG, "receiver realtime temp data " + + kpload.keyLen);
+                SLog.e(TAG, "receiver realtime temp data " + kpload.keyLen);
                 handleRealTimeTemperatureData(kpload.keyValue);
             } else if (kpload.key == 12) { // 呼吸停滞数据
-                SLog.e(TAG, "receiver breath stop data " + + kpload.keyLen);
+                SLog.e(TAG, "receiver breath stop data " + kpload.keyLen);
                 handleBreathStopData(kpload.keyValue);
             } else if (kpload.key == 13) { // 呼吸停滞数据结束
-                SLog.e(TAG, "receiver breath stop data completed " + + kpload.keyLen);
+                SLog.e(TAG, "receiver breath stop data completed " + kpload.keyLen);
                 handleBreathStoprefect(kpload.keyValue);
             } else if (kpload.key == 15) {
                 handleExceptionData(kpload.keyValue);
@@ -416,6 +413,7 @@ public class MessageParse {
         int PNValue = (keyValue[0] & 0x80) >> 7;
         int tempHigh = keyValue[0] & 0x7f;
         int tempLow = keyValue[1] & 0xff;
+        int errType = 0;
         
         String tempString;
         if (PNValue == 1) {
@@ -425,8 +423,16 @@ public class MessageParse {
             SLog.e(TAG, "temp = " + tempHigh + "." + tempLow);
             tempString = tempHigh + "." + tempLow;
         }
+        
+        if (tempHigh == 0 && tempLow == 255) { //温度传感器损坏
+            errType = 1;
+        } else if (tempHigh == 1 && tempLow == 255) { // 温度超出合理范围
+            errType = 2;
+        }
+        
         Intent intent = new Intent(Constant.DATA_REALTIME_TEMPERATURE);
         intent.putExtra("realtime_temperature", tempString);
+        intent.putExtra("error_type", errType);
         EventBus.getDefault().post(intent);
         
         
@@ -859,7 +865,7 @@ public class MessageParse {
                     || day != devTime.day
                     || hour != devTime.hour
                     || Math.abs(min - devTime.min) > 5) {
-                AsyncDeviceFactory.getInstance(mContext).setDeviceTime();
+                DeviceFactory.getInstance(mContext).setDeviceTime();
             }
         } catch (Exception e) {
             SLog.e(TAG, e);

@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -150,12 +149,20 @@ public class DeviceConnectStatusFragment extends Fragment{
 
     @Override
     public void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         unregisterMessageReceiver();
         EventBus.getDefault().unregister(this);
+        cancelAllPendingIntent();
     }
     
+    
+    
+    private void cancelAllPendingIntent() {
+        Utiliy.cancelAlarmPdIntent(mContext, mCheckPendingIntent);
+        Utiliy.cancelAlarmPdIntent(mContext, mSearchPendingIntent);
+        Utiliy.cancelAlarmPdIntent(mContext, mSyncDataPendingIntent);
+    }
+
     /**
      * 开始检查连接动画
      */
@@ -280,16 +287,36 @@ public class DeviceConnectStatusFragment extends Fragment{
         } else if (mCurrentState == ConnectDeviceState.REPEAT_CHECKING_DEVICE) {
             mCurrentState = ConnectDeviceState.CHECKING_DEVICE;
             mProgressImageView.startAnimation(mProgressAnimation);
-            DeviceFactory.getInstance(mContext).checkDeviceValid();
-            // 设置检查设备状态，开始
-            PrivateParams.setSPInt(mContext, "check_device_status", 1);
-            // 设置校验设备超时定时器
-            if (mCheckPendingIntent != null) {
-                Utiliy.cancelAlarmPdIntent(mContext, mCheckPendingIntent);
+            if (Utiliy.isBluetoothConnected(mContext)) {
+                DeviceFactory.getInstance(mContext).checkDeviceValid();
+                // 设置检查设备状态，开始
+                PrivateParams.setSPInt(mContext, "check_device_status", 1);
+                // 设置校验设备超时定时器
+                if (mCheckPendingIntent != null) {
+                    Utiliy.cancelAlarmPdIntent(mContext, mCheckPendingIntent);
+                }
+                mCheckPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_CHECK_DEVICE);
+                Utiliy.setDelayAlarm(mContext, WAIT_CHECK_PERIOD, mCheckPendingIntent);
+                SLog.e(TAG, "setAlarm  checkDevice "); 
+            } else {
+                mCurrentState = ConnectDeviceState.SEARCHING_DEVICE;     
+                Intent bluetoothIntent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(bluetoothIntent,REQUEST_ENABLE_BLUETOOTH);
+                
+                // 搜索设备状态，开始
+                PrivateParams.setSPInt(mContext, "search_device_status", 1);
+                setSearchDeviceTimeout();
+                
+                mConnectingInfoViewGroup.setVisibility(View.VISIBLE);
+                mConnectedSucceedViewGroup.setVisibility(View.GONE);
+                mConnectedFailedViewGroup.setVisibility(View.GONE);
+                mClickConnectViewGroup.setVisibility(View.GONE);
+                mSyncDataViewGroup.setVisibility(View.GONE);
+                mSyncDataFailedViewGroup.setVisibility(View.GONE);
+                mCheckDeviceViewGroup.setVisibility(View.GONE);
+                mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
             }
-            mCheckPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_CHECK_DEVICE);
-            Utiliy.setDelayAlarm(mContext, WAIT_CHECK_PERIOD, mCheckPendingIntent);
-            SLog.e(TAG, "setAlarm  checkDevice ");
+           
             
         } else if (mCurrentState == ConnectDeviceState.SYNC_DATA_FAILED) {
             SLog.e(TAG, "Sync Data  failed");
@@ -309,7 +336,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mProgressImageView.startAnimation(mProgressAnimation);
             
             DeviceFactory.getInstance(mContext).getAllNoSyncInfo();
-            DeviceFactory.getInstance(mContext).getBreahStopInfo();
+            DeviceFactory.getInstance(mContext).getBreathStopInfo();
             // 读取数据状态，开始
             PrivateParams.setSPInt(mContext, "sync_data_status", 1);
             if (mSyncDataPendingIntent != null) {

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.deviceinterface.DeviceError;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.deviceinterface.DeviceTimeListener;
 
 public class DeviceTimeHelper {
@@ -16,7 +17,7 @@ public class DeviceTimeHelper {
     
     public static void setDeviceTime(Context context, DeviceTime dvtime) {
         
-        AsyncDeviceFactory.getInstance(context).setDeviceTime();
+        DeviceFactory.getInstance(context).setDeviceTime();
     }
     
     class devTimeListener implements DeviceTimeListener {

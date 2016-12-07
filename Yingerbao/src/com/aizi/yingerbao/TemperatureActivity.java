@@ -2,6 +2,8 @@ package com.aizi.yingerbao;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
@@ -20,7 +22,7 @@ import android.widget.Toast;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
-import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DataTime;
@@ -65,7 +67,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         mTempStart = false;
@@ -92,7 +93,8 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                             if (!mIsTempMeasuring) {
                                 mTempStart = true;
                                 mTempButton.setText(R.string.action_measure_temp);
-                                AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
+                                DeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
+                                mTempValue.setText("--");
                                 mIsTempMeasuring = true;
                                 
                                 new Handler().postDelayed(new Runnable() {
@@ -100,6 +102,10 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                                     @Override
                                     public void run() {
                                         mIsTempMeasuring = false; 
+                                        if (mTempStart) { // 如果10秒钟没有返回温度值，则恢复按钮
+                                            mTempStart = false;
+                                            mTempButton.setText(R.string.action_start_temp);
+                                        }
                                     }
                                 }, 10000);
                                 
@@ -120,53 +126,16 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                 } catch (Exception e) {
                     SLog.e(TAG, e);
                 }
-                
-                
-                
-                // 首先检测蓝牙是否连接
-                /*if (mTempStart) {
-                    mTempStart = false;
-                    if (mTimer != null) {
-                        mTimer.purge();
-                        mTimer.cancel();
-                    }   
-                    mTempButton.setText(R.string.action_start_temp);
-                } else {
-                    if (Utiliy.isBluetoothConnected(getApplicationContext())) {
-                        if (!mTempStart) {
-                            mTempStart = true;
-                            mTimer = new Timer(true);
-                            TimerTask task = new TimerTask(){  
-                                public void run() {  
-                                AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
-                              }  
-                           };  
-                            mTimer.schedule(task,1000, 3000); 
-                            mTempButton.setText(R.string.action_stop);
-                        } else {
-                            mTempStart = false;
-                            if (mTimer != null) {
-                                mTimer.purge();
-                                mTimer.cancel();
-                            } 
-                            mTempButton.setText(R.string.action_start_temp);
-                        }
-                    } else {
-                        showNormalDialog();
-                    }
-                }*/
-                
             }
         });
         
         mTempValue = (TextView) findViewById(R.id.tempvalue);
-        mTempValue.setText("36.5");
         
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
         dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
         dataTime.day = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
-        updateTempStatus(dataTime );
+        updateTempStatus(dataTime);
         EventBus.getDefault().register(this);
     }
     
@@ -175,14 +144,26 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         String action = intent.getAction();
         if (Constant.DATA_REALTIME_TEMPERATURE.equals(action)) {
             // 获取实时温度值
-           String str = intent.getStringExtra("realtime_temperature"); 
-           mTempValue.setText(str);
-           mTempStart = false;
-           mTempButton.setText(R.string.action_start_temp);
+            if (intent.hasExtra("error_type")) {
+                int errtype = intent.getIntExtra("error_type", 0);
+                if (errtype == 1) { // 
+                    Toast.makeText(getApplicationContext(), "数据错误！", Toast.LENGTH_SHORT).show();
+                } else if (errtype == 2) {
+                    Toast.makeText(getApplicationContext(), "温度值超出合理范围！", Toast.LENGTH_SHORT).show();
+                } else {
+                    String str = intent.getStringExtra("realtime_temperature"); 
+                    mTempValue.setText(str);
+                    mTempStart = false;  
+                }
+            }
+            mTempButton.setText(R.string.action_start_temp);
         }
     }
     
+    @SuppressWarnings("unchecked")
     private void updateTempStatus(DataTime dataTime) {
+        
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         if (yValsTem.size() > 0) {
             yValsTem.clear();
         }
@@ -200,29 +181,26 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         List<TemperatureInfoEnumClass> temperatureinfos 
             = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
-        
-        
-       for (int i = 0; i < 144; i++) {
-           if (i < temperatureinfos.size()) {
-               float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
-               //temperatureinfos.get(i).g
-               
-               SLog.e(TAG, "tempvalue from database = " + tempvalue);
-              // yValsTem.add(new Entry(tempvalue -10, i));
-           }/* else {
-               yValsTem.add(new Entry(0, i));
-           }*/
-           
-       }
-        
-       /* for (int j = 0; j < 1440; j++) {
-            for (int i = 0; i < temperatureinfos.size(); i++) {
-                if (j == temperatureinfos.get(i).getTemperatureMinute()) {
-                    yValsTem.add(new Entry(Float.parseFloat(temperatureinfos.get(i).getTemperatureValue()), j));
-                }
-                
+        Collections.sort(temperatureinfos, new Comparator() {
+            public int compare(Object a, Object b) {
+                int one = ((TemperatureInfoEnumClass) a).getTemperatureMinute();
+                int two = ((TemperatureInfoEnumClass) b).getTemperatureMinute();
+                return one - two;
             }
-        }*/
+        });
+        
+        for (int i = 0; i < 144; i++) {
+            if (i < temperatureinfos.size()) {
+                float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
+                if (tempvalue != 0.255 && tempvalue != 1.255) {
+                    int tempmin = temperatureinfos.get(i).mTemperatureMinute/10;
+                    yValsTem.add(new Entry(tempvalue -10, tempmin));
+                    
+                    SLog.e(TAG, "tempvalue from database = " + tempvalue 
+                            + " min = " + tempmin);
+                }
+            } 
+        }  
         
         if (xVals.size() > 0) {
             xVals.clear();
@@ -231,46 +209,30 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             xVals.add(i + "");
         }
         
-        for (int i = 0; i < 144; i++) {
-            if (i < 30) {
-                yValsTem.add(new Entry((float) (35 - (Math.random() * 3)), i));
-            } else if (i> 30 && i < 54) {
-                yValsTem.add(new Entry((float) (33 - (Math.random() * 4)), i));
-            } else if (i > 54 && i < 70) {
-                yValsTem.add(new Entry((float) (15 - (Math.random() * 3)), i));
-            } else if (i > 70 && i < 120) {
-                yValsTem.add(new Entry((float) (14 - (Math.random() * 2)), i));
-            } else if (i > 120 && i < 130) {
-                yValsTem.add(new Entry((float) (30 - (Math.random() * 2)), i));
-            }else if (i > 130 && i < 144) {
-                yValsTem.add(new Entry((float) (35 - (Math.random() * 5)), i));
-            }
-        }
-        
-        
-      
-        
-        LineDataSet TemperatureSet = new LineDataSet(yValsTem, null);
-        TemperatureSet.setDrawCubic(true);
-        TemperatureSet.setDrawValues(false);
-        TemperatureSet.setDrawCircles(false);
-        TemperatureSet.setColor(Color.WHITE);
-        
-        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        dataSets.add(TemperatureSet);
+/*        for (int i = 97; i < 109; i++) {
+            yValsTem.add(new Entry(10, i));
+        }*/
+
+        LineDataSet tempSet = new LineDataSet(yValsTem, null);
+        tempSet.setDrawCubic(true);
+        tempSet.setDrawValues(false);
+        tempSet.setDrawCircles(false);
+        tempSet.setColor(Color.WHITE);
+        tempSet.setFillColor(Color.WHITE);
+        tempSet.setFillAlpha(100);
+        tempSet.setDrawFilled(true);
+ 
+        dataSets.add(tempSet);
         LineData data = new LineData(xVals, dataSets);
         setupChart(data, mColors[4]);
     }
     
  // 设置显示的样式  
     public void setupChart(LineData data, int color) {  
-        // if enabled, the chart will always start at zero on the y-axis  
    
         XAxis xAxis = mTemperatureChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawLabels(false);
-        //xAxis.setGridColor(Color.RED);
-        
+        xAxis.setDrawLabels(false);        
         
         YAxis leftAxis = mTemperatureChart.getAxisLeft();  //得到图表的左侧Y轴实例
         leftAxis.setDrawAxisLine(true);

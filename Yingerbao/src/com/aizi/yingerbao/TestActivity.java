@@ -81,7 +81,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
+                DeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
               
             }
         });
@@ -91,7 +91,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getAllSyncInfo();
+                DeviceFactory.getInstance(getApplicationContext()).getAllSyncInfo();
                 
             }
         });
@@ -101,7 +101,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+                DeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
                 
             }
         });
@@ -111,7 +111,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+                DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
                
             }
         });
@@ -121,7 +121,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
+                DeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
               
             }
         });
@@ -132,7 +132,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeData();
+                DeviceFactory.getInstance(getApplicationContext()).getRealTimeData();
             }
         });
         
@@ -141,7 +141,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getExceptionEvent();
+                DeviceFactory.getInstance(getApplicationContext()).getExceptionEvent();
             }
         });
         
@@ -151,7 +151,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
+                DeviceFactory.getInstance(getApplicationContext()).getBreathStopInfo();
             }
         });
         
@@ -161,7 +161,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
+                DeviceFactory.getInstance(getApplicationContext()).getRealTimeTempData();
  
             }
         });
@@ -172,7 +172,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
+                DeviceFactory.getInstance(getApplicationContext()).getDeviceTime();
                 Intent intent = new Intent();
                 
                 if (Utiliy.isBluetoothConnected(getApplicationContext())) {
@@ -189,7 +189,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).activateDevice();
+                DeviceFactory.getInstance(getApplicationContext()).activateDevice();
               
             }
         });
@@ -199,7 +199,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                AsyncDeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
+                DeviceFactory.getInstance(getApplicationContext()).checkDeviceValid();
               
             }
         });

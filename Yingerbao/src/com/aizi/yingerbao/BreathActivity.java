@@ -24,7 +24,7 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathInfoEnumClass;
 import com.aizi.yingerbao.database.BreathStopInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
-import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DataTime;
@@ -66,11 +66,10 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     long mBreathPeriod;
     int mBreathFreq;
     long mBreathTimeforlast;
-    boolean mBreatfreq = false;
     boolean mBreatStart = false;
     Timer mTimer;
     
-    boolean mbreathset = false;
+    boolean mIsBreathSet = false;
     
     Button mControlBreathBtn;
     
@@ -113,7 +112,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                         mTimer.purge();
                         mTimer.cancel(); 
                     }
-                    AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+                    DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
                     mControlBreathBtn.setText(R.string.action_start_breath);
                 } else {
                     // 首先检测蓝牙是否连接
@@ -125,15 +124,15 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 public void run() {  
                                 Message message = new Message();      
                                 message.what = 1; 
-                                if (mbreathset) {
-                                    mbreathset = false;
-                                    message.arg1 = (int) (60 + Math.random() * 10);
+                                if (mIsBreathSet) {
+                                    mIsBreathSet = false;
+                                    message.arg1 = mBreValue;
                                 } else {
-                                    mbreathset = true;
+                                    mIsBreathSet = true;
                                     message.arg1 = 5;
                                 }
                                 
-                                message.arg2 = 36;
+                                message.arg2 = mBreathFreq;
                                 mHandler.sendMessage(message);  
                                 
                                 /*updateBreathWave(mBreValue);
@@ -143,7 +142,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                            };  
                             mTimer.schedule(task,1000, 1300); 
                             
-                            AsyncDeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
+                            DeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
                             mControlBreathBtn.setText(R.string.action_stop);
                         } else {
                             mBreatStart = false;
@@ -151,15 +150,13 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 mTimer.purge();
                                 mTimer.cancel();
                             }  
-                            AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+                            DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
                             mControlBreathBtn.setText(R.string.action_start_breath);
                         }
                     } else {
                        showNormalDialog();
                     }
                 }
-               
-                
             }
         });
         
@@ -206,9 +203,8 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
-        AsyncDeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+        DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
         EventBus.getDefault().unregister(this);
         if (mTimer != null) {
             mTimer.purge();
@@ -250,12 +246,14 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         
      
      public void onEventMainThread(final BabyBreath breaths) { 
-         SLog.e(TAG, "breath receivre data  mBreValue = " + mBreValue 
-                 + " mBreathFreq = " + mBreathFreq);
-         
-         mBreValue = breaths.mBreathValue + 60;
+
+         mBreValue = (int) (breaths.mBreathValue + (60 + Math.random() * 10));
          mBreathFreq = breaths.mBreathFreq;
          mBreathTimeforlast = breaths.mBreathTime;
+         
+         SLog.e(TAG, "breath receivre data  mBreValue = " + mBreValue 
+                 + " mBreathFreq = " + mBreathFreq
+                 + " mBreathTimeforlast = " + mBreathTimeforlast);
      }
      
      public void onEventMainThread(DataTime dataTime) { 
@@ -416,16 +414,10 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
      * @param chart
      */
     private void updateBreathStopBarChartData(DataTime dataTime) {
-        //所有数据点的集合
-        //ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
         
         int year = dataTime.year;
         int month = dataTime.month;
         int day = dataTime.day;
-        
-      /*  int year =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
-        int month =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
-        int day =  PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);*/
         
         if (year == 0 || month == 0 || day == 0) {
             Calendar calendar = Calendar.getInstance();   
@@ -434,17 +426,17 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
             day = calendar.get(Calendar.DAY_OF_MONTH);   
         } 
         
-        BreathStopInfo breathinfo = new BreathStopInfo();
+   /*     BreathStopInfo breathinfo = new BreathStopInfo();
         breathinfo.mBreathYear = year;
         breathinfo.mBreathMonth = month;
-        breathinfo.mBreathDay = day;
+        breathinfo.mBreathDay = day;*/
         
-        breathinfo.mBreathHour = 5;
+       // breathinfo.mBreathHour = 5;
         
-        for (int i = 0; i < 3; i++) {
+     /*   for (int i = 0; i < 3; i++) {
             breathinfo.mBreathMinute = 5+i;
             YingerbaoDatabase.insertBreathInfo(getApplicationContext(), breathinfo);
-        }
+        }*/
         
         
       /*  for (int i = 0; i < 24; i++) {
@@ -472,7 +464,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         mBarDataSet.setHighLightAlpha(100);//设置点击后高亮颜色透明度
         mBarDataSet.setHighLightColor(Color.GRAY);
         
-        //mBarDataSet.setColors(mColors);
         mBarDataSet.setColor(mColors[6]);
         //BarData表示挣个柱形图的数据
         BarData mBarData = new BarData(getXAxisShowLable(),mBarDataSet);

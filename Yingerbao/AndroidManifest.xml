@@ -92,9 +92,7 @@
 
         <receiver android:name=".receiver.AlarmManagerReceiver" >
             <intent-filter>
-                <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_SERVICES_DISCOVERED" />
-                <action android:name="com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE" />
-                <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_DISCONNECTED" />
+                <action android:name="com.aizi.yingerbao.action.alarm.message" />
             </intent-filter>
         </receiver>
         

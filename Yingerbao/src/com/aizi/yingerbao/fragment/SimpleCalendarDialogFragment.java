@@ -102,7 +102,6 @@ public class SimpleCalendarDialogFragment extends DialogFragment implements OnDa
     
 
     private void postDataTime(CalendarDay date) {
-        // TODO Auto-generated method stub
         DataTime dataTime = new DataTime();
         dataTime.year = date.getYear();
         dataTime.month = date.getMonth() + 1;
