@@ -57,7 +57,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         long intervalMillis = 100 * 1000L; //第一次调用startUpdateSilent出现弹窗后，如果100秒内进行第二次调用不会查询更新
         UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
         
-        CommandCenter.getInstance();
+        CommandCenter.getInstance(getApplicationContext());
         
         MobclickAgent.startWithConfigure(
                 new UMAnalyticsConfig(getApplicationContext(), 
@@ -79,7 +79,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), TemperatureActivity.class);
                 startActivity(intent);
@@ -131,7 +130,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
         BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect();
         //BluetoothApi.getInstance(getApplicationContext()).unregisterEventBus();
-        CommandCenter.getInstance().clearInterfaceQueue();
+        CommandCenter.getInstance(getApplicationContext()).clearInterfaceQueue();
     }
 
     

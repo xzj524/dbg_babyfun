@@ -41,8 +41,6 @@ public class MessageParse {
     Context mContext;
     
     private static final int RECV_DATA_COUNT = 1440;
-
-
     
     /** single instance. */
     private static volatile MessageParse mInstance;   
@@ -155,7 +153,7 @@ public class MessageParse {
                     + " isDeviceActivited = " + isDeviceActivited;
             
             // 校验设备成功
-            Utiliy.reflectTranDataType(0);
+            Utiliy.reflectTranDataType(mContext, 0);
             
             SLog.e(TAG, result);
             Utiliy.dataToFile(result);
@@ -185,8 +183,12 @@ public class MessageParse {
             boolean isSyncData = true;
             long curtime = System.currentTimeMillis();
             long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
-            if ((curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 60) 
-                    || devCheckInfo.mNoSyncBreathDataLength > 0) {
+        /*    if ((curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 60) 
+                    || devCheckInfo.mNoSyncBreathDataLength > 0) {*/
+                
+                if (true) {
+                    Thread.sleep(3000);
+                    
                 // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
                 SLog.e(TAG, "sync data has consumed six hour ");
                 DeviceFactory.getInstance(mContext).getAllNoSyncInfo(2);
@@ -247,8 +249,7 @@ public class MessageParse {
                     || month != devCheckInfo.mCheckInfoMonth
                     || day != devCheckInfo.mCheckInfoDay
                     || hour != devCheckInfo.mCheckInfoHour
-                    || Math.abs(min - devCheckInfo.mCheckInfoMinute) > 5) {
-                //AsyncDeviceFactory.getInstance(mContext).setDeviceTime();
+                    || Math.abs(min - devCheckInfo.mCheckInfoMinute) > 30) {
                 DeviceFactory.getInstance(mContext).setDeviceTime();
             }
         } catch (Exception e) {
@@ -314,9 +315,9 @@ public class MessageParse {
         try {
             int exceptionresult = keyValue[0] & 0xff;
             if (exceptionresult == 0 || exceptionresult == 1) {
-                Utiliy.reflectTranDataType(0);
+                Utiliy.reflectTranDataType(mContext, 0);
             } else if (exceptionresult == 2) {
-                Utiliy.reflectTranDataType(2);
+                Utiliy.reflectTranDataType(mContext, 2);
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -328,9 +329,9 @@ public class MessageParse {
         try {
             int datastopresult = keyValue[0] & 0xff;
             if (datastopresult == 0 || datastopresult == 1) {
-                Utiliy.reflectTranDataType(0);
+                Utiliy.reflectTranDataType(mContext, 0);
             } else if (datastopresult == 2) {
-                Utiliy.reflectTranDataType(2);
+                Utiliy.reflectTranDataType(mContext, 2);
             }
             
             Intent intent = new Intent(Constant.ACTION_RECE_DATA);
@@ -356,9 +357,9 @@ public class MessageParse {
             if (datatransresult == 0 
                     || datatransresult == 2
                     || datatransresult == 4) {    
-                Utiliy.reflectTranDataType(0);
+                Utiliy.reflectTranDataType(mContext, 0);
             } else if (datatransresult == 1 || datatransresult == 3) {
-                Utiliy.reflectTranDataType(2);
+                Utiliy.reflectTranDataType(mContext, 2);
             }
             
             Intent intent = new Intent(Constant.ACTION_RECE_DATA);
@@ -436,7 +437,7 @@ public class MessageParse {
         EventBus.getDefault().post(intent);
         
         
-        Utiliy.reflectTranDataType(0);
+        Utiliy.reflectTranDataType(mContext, 0);
         
         String result = "Receiver RealTime Temperature = " + tempString;
         SLog.e(TAG, result);
@@ -659,7 +660,7 @@ public class MessageParse {
         SLog.e(TAG, "humbit = " + humbit);
         SLog.e(TAG, "energy = " + energy);
         
-        Utiliy.reflectTranDataType(0);
+        Utiliy.reflectTranDataType(mContext, 0);
         
         String result = "Receiver RealTime Temperature 1 = " + tempString;
         SLog.e(TAG, result);
@@ -669,30 +670,23 @@ public class MessageParse {
 
     private void handleNotify(List<KeyPayload> params) {
         for (KeyPayload kpload:params) {
-           /* if (kpload.key == 1) { // 正反状态报警
-                SLog.e(TAG, "正反状态 ALARM");
-                if (kpload.keyLen == 1) {
-                    //mBreathStartResult = kpload.keyValue[0] & 0x0f;
-                }
-            }*/ 
             if (kpload.key == 2) { // 温度报警
                 SLog.e(TAG, "TEMP ALARM");
-                String babytemp = getBabyTemp(kpload.keyValue);
+                String babytemp = getBabyEmergencyTemp(kpload.keyValue);
                 
                 Utiliy.showFeverNotification(mContext, 
-                        "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + babytemp + " 请及时就医。", null);
+                        "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + babytemp + " 请及时处理！", null);
                 
             } else if (kpload.key == 3) { // 呼吸停滞报警
                 SLog.e(TAG, "BREATH ALARM");
                 Utiliy.showFeverNotification(mContext, 
-                        "呼吸停滞！！", "孩子呼吸停滞了， 请及时就医。", null);
+                        "呼吸停滞！！", "孩子呼吸停滞了， 请及时处理", null);
             }
         }
     }
 
 
-    private String getBabyTemp(byte[] keyValue) {
-        // TODO Auto-generated method stub
+    private String getBabyEmergencyTemp(byte[] keyValue) {
         int PNValue = (keyValue[4] & 0x80) >> 7;
         int tempHigh = keyValue[4] & 0x7f;
         int tempLow = keyValue[5] & 0xff;
@@ -713,17 +707,17 @@ public class MessageParse {
         // TODO Auto-generated method stub
         for (KeyPayload kpload:params) {
             if (kpload.key == 2) { // 呼吸测试启动返回
-                SLog.e(TAG, "START BREATH RETURN");
+                SLog.e(TAG, "START BREATH ALREADY");
                 if (kpload.keyLen == 1) {
                     mBreathStartResult = kpload.keyValue[0] & 0x0f;
                     if (mBreathStartResult == 0) {
-                        Utiliy.reflectTranDataType(0);
+                        Utiliy.reflectTranDataType(mContext, 0);
                     } else if (mBreathStartResult == 1) {
-                        Utiliy.reflectTranDataType(2);
+                        Utiliy.reflectTranDataType(mContext, 2);
                     }
                 }
             } else if (kpload.key == 3) { // 呼吸测试数据
-                SLog.e(TAG, "START REAL BREATH DATA");
+                SLog.e(TAG, "RECEIVE REAL BREATH DATA");
                 BabyBreath babyBre = getBabyBreath(kpload.keyValue);
                 if (babyBre != null) {
                     updateBreathWave(babyBre);
@@ -731,9 +725,9 @@ public class MessageParse {
             } else if (kpload.key == 5) { // 呼吸测试关闭返回
                 int breathstopresult = kpload.keyValue[0] & 0x0f;
                 if (breathstopresult == 0) {
-                    Utiliy.reflectTranDataType(0);
+                    Utiliy.reflectTranDataType(mContext, 0);
                 } else if (breathstopresult == 1) {
-                    Utiliy.reflectTranDataType(2);
+                    Utiliy.reflectTranDataType(mContext, 2);
                 }
             }
         }
@@ -787,13 +781,9 @@ public class MessageParse {
                         
                         
                         //请求时间成功
-                        Utiliy.reflectTranDataType(0);
+                        Utiliy.reflectTranDataType(mContext, 0);
                         SLog.e(TAG, curDeviceTime);   
-                        Utiliy.dataToFile(curDeviceTime);
-                        
-                        //setDeviceTime(devTime);
-
-                       
+                        Utiliy.dataToFile(curDeviceTime);  
                     }
                 } else if (kpload.key == 2) { //设置时间返回结果
                     if (kpload.keyLen == 1) {
@@ -803,10 +793,10 @@ public class MessageParse {
                         String result =  "settimeresult = " + settimeresult;
                         if (settimeresult == 0 || settimeresult == 1) {
                             //设置时间成功
-                            Utiliy.reflectTranDataType(0);
+                            Utiliy.reflectTranDataType(mContext, 0);
                         } else if (settimeresult == 2) {
                           //设置时间失败
-                            Utiliy.reflectTranDataType(2);
+                            Utiliy.reflectTranDataType(mContext, 2);
                         }
                         SLog.e(TAG, result);
                         Utiliy.dataToFile(result);
@@ -820,12 +810,12 @@ public class MessageParse {
                             PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 1);
                             result =  "activate device success ";
                             //激活设备成功
-                            Utiliy.reflectTranDataType(0);
-                        } else if (activateresult == 1) {
+                            Utiliy.reflectTranDataType(mContext, 0);
+                        } else {
                             PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 0);
                             result =  "activate device failed ";
                             //激活设备成功
-                            Utiliy.reflectTranDataType(3);
+                            Utiliy.reflectTranDataType(mContext, 2);
                         }
                         SLog.e(TAG, result);
                         Utiliy.dataToFile(result);

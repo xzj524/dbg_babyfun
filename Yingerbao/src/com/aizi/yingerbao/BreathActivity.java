@@ -124,23 +124,21 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 public void run() {  
                                 Message message = new Message();      
                                 message.what = 1; 
-                                if (mIsBreathSet) {
+                               /* if (mIsBreathSet) {
                                     mIsBreathSet = false;
-                                    message.arg1 = mBreValue;
+                                    //message.arg1 = mBreValue;
                                 } else {
                                     mIsBreathSet = true;
-                                    message.arg1 = 5;
-                                }
+                                    mBreValue = 5;
+                                }*/
                                 
+                                message.arg1 = mBreValue;
                                 message.arg2 = mBreathFreq;
                                 mHandler.sendMessage(message);  
-                                
-                                /*updateBreathWave(mBreValue);
-                                mBreValue = 5;
-                                mBreathFreqData.setText(mBreathFreq + "");*/
+                                SLog.e(TAG, "mBreathValue = " + mBreValue + " mBreathFreq = " + mBreathFreq);
                               }  
                            };  
-                            mTimer.schedule(task,1000, 1300); 
+                            mTimer.schedule(task,1000, 400); 
                             
                             DeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
                             mControlBreathBtn.setText(R.string.action_stop);

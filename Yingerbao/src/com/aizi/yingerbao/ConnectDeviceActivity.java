@@ -16,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 
-import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.ConnectDeviceState;
@@ -36,7 +35,7 @@ onTitleBarClickListener {
     
     private static final String TAG = ConnectDeviceActivity.class.getSimpleName();
     
-    private ScanDevicesService mScanService = null;
+    private ScanDevicesService mScanService;
     
     int mTotalSyncDataLen = 0;
     int mIncrementDataLen = 0;
@@ -92,14 +91,21 @@ onTitleBarClickListener {
     
     private void initScanService(){
         try {
-            for (int i = 0; i < 3; i++) {
-                Intent bindscanIntent = new Intent(this, ScanDevicesService.class);
-                bindService(bindscanIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
-                if (mScanService != null) {
+            //for (int i = 0; i < 3; i++) {
+                Intent bindscanIntent = new Intent(getApplicationContext(), ScanDevicesService.class);
+                boolean isBind = bindService(bindscanIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
+                if (isBind) {
+                    SLog.e(TAG, "mScanService = true " + mScanService );
+                } else {
+                    SLog.e(TAG, "mScanService is false");
+                }
+                /*  if (mScanService != null) {
                     SLog.e(TAG, "mScanService = " + mScanService);
                     break;
+                } else {
+                    SLog.e(TAG, "mScanService is null");
                 }
-            }      
+            }*/      
         } catch (Exception e) {
             SLog.e(TAG, e);
         } 
@@ -110,7 +116,7 @@ onTitleBarClickListener {
         
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mScanService = null;
+            //mScanService = null;
         }
         
         @Override
@@ -118,11 +124,18 @@ onTitleBarClickListener {
             mScanService = ((ScanDevicesService.ScanBinder) service).getService();
             if (mScanService != null) {
                 if (mDevConnectFragment.getCurrentState() == ConnectDeviceState.IDEL
-                        || mDevConnectFragment.getCurrentState() == ConnectDeviceState.FAIL) {
+                        || mDevConnectFragment.getCurrentState() == ConnectDeviceState.FAIL
+                        || mDevConnectFragment.getCurrentState() == ConnectDeviceState.SEARCHING_DEVICE) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     mScanService.startScanDevice(); 
                 }
-                
-            }
+            } 
+            SLog.e(TAG, "onServiceConnected mScanService = " + mScanService 
+                    + " currentState = " + mDevConnectFragment.getCurrentState());
         }
     };
     
@@ -172,7 +185,7 @@ onTitleBarClickListener {
     protected void onDestroy() {
         super.onDestroy();
         mTotalSyncDataLen = 0;
-        //unbindService(mScanServiceConnection);
+        unbindService(mScanServiceConnection);
         EventBus.getDefault().unregister(this);//反注册EventBus  
         mHandler.removeMessages(MSG_PROGRESS_UPDATE);
         mHandler.removeMessages(MSG_PROGRESS_COMPLETED);
@@ -198,13 +211,7 @@ onTitleBarClickListener {
                 mScanService.startScanDevice();
             } else {
                 SLog.e(TAG, "start scan bluetooth3");
-                Intent bindIntent = new Intent(this, ScanDevicesService.class);
-                if (bindService(bindIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE)) {
-                    if (mScanService != null) {
-                        mScanService.startScanDevice();
-                        SLog.e(TAG, "start scan bluetooth4");
-                    }
-                }
+                initScanService();
             }
         } else if (action.equals("com.aizi.finish")) {
             finish();
@@ -257,7 +264,7 @@ onTitleBarClickListener {
         } else if (action.equals(Constant.ACTION_TOTAL_DATA_LEN)) {
             if (intent.hasExtra(Constant.NOT_SYNC_DATA_LEN)) {
                 mTotalSyncDataLen = intent.getIntExtra(Constant.NOT_SYNC_DATA_LEN, 0);
-                SLog.e(TAG, "RECV SYNC DATA  mTotalSyncDataLen real = " + mTotalSyncDataLen);
+                //SLog.e(TAG, "RECV SYNC DATA  mTotalSyncDataLen real = " + mTotalSyncDataLen);
                 if (mTotalSyncDataLen <= 100) { // 因为该数值不准确，加上一个值比实际值大
                     mTotalSyncDataLen += 20;
                 } else if (mTotalSyncDataLen > 100 && mTotalSyncDataLen <= 200) {

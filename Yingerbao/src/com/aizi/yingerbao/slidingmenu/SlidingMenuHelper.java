@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aizi.yingerbao.AboutActivity;
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.TestActivity;
-import com.aizi.yingerbao.YingerBaoActivity;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.login.LoginActivity;
@@ -32,6 +32,8 @@ public class SlidingMenuHelper {
     ViewGroup mQuitUserAccountGroup;
     ViewGroup mDataTestGroup;
     ViewGroup mSearchGroup;
+    
+    ViewGroup mAboutGroup;
     
     TextView mUserAccountTextView;
     
@@ -81,102 +83,6 @@ public class SlidingMenuHelper {
             }
         });
         
-       /* mMessageCenterViewGroup = (ViewGroup) findViewById(R.id.message_center_view);
-        mMessageCenterViewGroup.setOnClickListener(new View.OnClickListener() {
-         
-         @Override
-         public void onClick(View v) {
-             // TODO Auto-generated method stub
-             Intent intent = new Intent(mActivity.getApplicationContext(), CriticalActivity.class);
-             mActivity.startActivity(intent);
-         }
-     });*/
-        
-      /*  mBabyBreathViewGroup = (ViewGroup) findViewById(R.id.baby_breath_view);
-        mBabyBreathViewGroup.setOnClickListener(new View.OnClickListener() {
-         
-         @Override
-         public void onClick(View v) {
-             // TODO Auto-generated method stub
-             Intent intent = new Intent(mActivity.getApplicationContext(), BabyBreathActivity.class);
-             mActivity.startActivity(intent);
-         }
-     });
-        
-        mBabySleepViewGroup = (ViewGroup) findViewById(R.id.baby_sleep_view);
-        mBabySleepViewGroup.setOnClickListener(new View.OnClickListener() {
-         
-         @Override
-         public void onClick(View v) {
-             // TODO Auto-generated method stub
-             Intent intent = new Intent(mActivity.getApplicationContext(), BabyStatusActivity.class);
-             mActivity.startActivity(intent);
-         }
-     });
-        
-        mSettingsViewGroup = (ViewGroup) findViewById(R.id.baby_settings_view);
-        mSettingsViewGroup.setOnClickListener(new View.OnClickListener() {
-         
-         @Override
-         public void onClick(View v) {
-             // TODO Auto-generated method stub
-             Intent intent = new Intent(mActivity.getApplicationContext(), LoginActivity.class);
-             mActivity.startActivity(intent);
-             AsyncDeviceFactory.getInstance(mActivity.getApplicationContext()).getAllNoSyncInfo();
-         }
-     });*/
-        
-        mSyncDataViewGroup = (ViewGroup) findViewById(R.id.baby_syncdata_view);
-        mSyncDataViewGroup.setOnClickListener(new View.OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                
-      /*          if (!UserAccountDataBase.checkUserAccountAndPassword(mActivity.getApplicationContext(),
-                        "18811130187", "123456")) {
-                    UserAccountInfo useraccountinfo = new UserAccountInfo();
-                    useraccountinfo.mUserAccountName = "18811130187";
-                    useraccountinfo.mUserAccountInfoPassWord = "123456";
-                    useraccountinfo.mUserAccountTimestamp = System.currentTimeMillis();
-                    useraccountinfo.mUserAccountPosition = "beijing";
-                    UserAccountDataBase.insertUserAccountInfo(mActivity.getApplicationContext(),
-                            useraccountinfo );
-                }*/
-                
-                Intent intent = new Intent(mActivity.getApplicationContext(), YingerBaoActivity.class);
-                mActivity.startActivity(intent);
-                
-               // AsyncDeviceFactory.getInstance(mActivity.getApplicationContext()).getBreathStopInfo();
-                
-                
-                
-                
-                
-             /*   TemperatureInfo temperatureinfo = new TemperatureInfo();
-                temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
-                temperatureinfo.mTemperatureValue = "35.24";
-                temperatureinfo.mTemperatureYear = 2016;
-                temperatureinfo.mTemperatureMonth = 8;
-                temperatureinfo.mTemperatureDay = 28;
-                temperatureinfo.mTemperatureMinute = 16;
-                
-                SleepInfoDatabase.insertTemperatureInfo(mActivity.getApplicationContext(), temperatureinfo);
-                SLog.e(TAG, "insertTemperatureInfo");
-                
-                SleepInfo sleepInfo = new SleepInfo();
-                sleepInfo.mSleepYear = 2016;
-                sleepInfo.mSleepMonth = 8;
-                sleepInfo.mSleepDay = 28;
-                sleepInfo.mSleepMinute = 10;
-                sleepInfo.mSleepTimestamp = System.currentTimeMillis();
-                sleepInfo.mSleepValue = 100;
-                
-                SleepInfoDatabase.insertSleepInfo(mActivity.getApplicationContext(), sleepInfo);*/
-            }
-        });
-        
-        
         mSearchGroup = (ViewGroup) findViewById(R.id.baby_search_device);
         mSearchGroup.setOnClickListener(new View.OnClickListener() {
             
@@ -184,6 +90,16 @@ public class SlidingMenuHelper {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(mActivity.getApplicationContext(), ConnectDeviceActivity.class);
+                mActivity.startActivity(intent);
+            }
+        });
+        
+        mAboutGroup = (ViewGroup) findViewById(R.id.appabout);
+        mAboutGroup.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity.getApplicationContext(), AboutActivity.class);
                 mActivity.startActivity(intent);
             }
         });
@@ -195,11 +111,8 @@ public class SlidingMenuHelper {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent(mActivity.getApplicationContext(), TestActivity.class);
                 mActivity.startActivity(intent);
-                
-                //Utiliy.logToFile("12345456767899");
             }
         });
         

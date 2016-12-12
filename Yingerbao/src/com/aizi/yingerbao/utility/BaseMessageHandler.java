@@ -8,6 +8,8 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import u.aly.bs;
+
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -55,8 +57,8 @@ public class BaseMessageHandler {
                 
                 if (baseData.length >= BASE_DATA_HEAD) {
                     BaseL1Message bsL1Msg = getBaseL1Msg(baseData); // 生成L1数据
-                    
                     String l1payload = Utiliy.printHexString(bsL1Msg.tobyte());
+                    Utiliy.logToFile(" L1 " + " RECV DATA: " + l1payload);
                     SLog.e(TAG, "recv l1 msg  = " + l1payload);
                     
                     if (bsL1Msg.ackFlag == 1) { //收到设备的ack信息
@@ -68,40 +70,51 @@ public class BaseMessageHandler {
                     } else {
                         //收到设备发过来的信息，需要返回ACK
                         if (bsL1Msg.isNeedAck && bsL1Msg.ackFlag == 0) { 
-                            int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
-                            if (bsL1Msg.CRC16 == (short)crc16) {
-                                sendACKBaseL1Msg(context, baseData);
-
-                                if (bsL1Msg.errFlag == 2) { // 标识结束位
-                                    mL1squenceid = -1;
-                                } else if (bsL1Msg.errFlag == 1) { // 标识中间位
-                                    if (bsL1Msg.sequenceId - mL1squenceid != 1) {
-                                        if (mL2OutputStream != null) {
-                                            mL2OutputStream.reset();
-                                            mL2OutputStream.close();  
-                                        }
-                                        return;//中间位与上一个相差不为1 则抛弃
-                                    } else {
+                            // 判断接收的长度是否正确
+                            boolean isLenRight = checkLen(bsL1Msg, baseData);
+                            if (isLenRight) {
+                                int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
+                                if (bsL1Msg.CRC16 == (short)crc16) {
+                                    if (bsL1Msg.errFlag == 2) { // 标识结束位
+                                        mL1squenceid = -1;
+                                    } else if (bsL1Msg.errFlag == 1) { // 标识中间位
+                                        if ((mL1squenceid == 15 && bsL1Msg.sequenceId == 0) 
+                                                || bsL1Msg.sequenceId - mL1squenceid == 1) {
+                                            mL1squenceid = bsL1Msg.sequenceId;
+                                        } else if (mL1squenceid == bsL1Msg.sequenceId) { // L1消息重复
+                                            // 消息重复的情况也按照正确消息返回ACK
+                                            sendACKBaseL1Msg(context, baseData, 0); 
+                                            return;
+                                        } else if ((bsL1Msg.sequenceId - mL1squenceid != 1) 
+                                                && mL1squenceid != bsL1Msg.sequenceId) {
+                                            if (mL2OutputStream != null) {
+                                                mL2OutputStream.reset();
+                                                mL2OutputStream.close();  
+                                            }
+                                            //sendACKBaseL1Msg(context, baseData, 1); // 帧序号校验错误
+                                            return;//中间位与上一个相差不为1 则抛弃
+                                        } 
+                                    } else if (bsL1Msg.errFlag == 0) { // 标识起始位
                                         mL1squenceid = bsL1Msg.sequenceId;
                                     }
-                                } else if (bsL1Msg.errFlag == 0) { // 标识起始位
-                                    mL1squenceid = bsL1Msg.sequenceId;
-                                }
-                                
-                                // 设置超时机制，超时后所有接收的l1层数据清空
-                                if (mPendingIntent != null) {
-                                    Utiliy.cancelAlarmPdIntent(context, mPendingIntent);
-                                }
-                                mPendingIntent = Utiliy.getDelayPendingIntent(context, Constant.ALARM_WAIT_L1);
-                                Utiliy.setDelayAlarm(context, WAIT_PERIOD, mPendingIntent);
+                                    
+                                    // 设置超时机制，超时后所有接收的l1层数据清空
+                                    if (mPendingIntent != null) {
+                                        Utiliy.cancelAlarmPdIntent(context, mPendingIntent);
+                                    }
+                                    mPendingIntent = Utiliy.getDelayPendingIntent(context, Constant.ALARM_WAIT_L1);
+                                    Utiliy.setDelayAlarm(context, WAIT_PERIOD, mPendingIntent);
 
-                                handleL1Msg(context, bsL1Msg);
-                                
-                                Utiliy.logToFile(" L1 " + " RECV DATA: " + l1payload);
-                                Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
-                                intent.putExtra("transferdata", " L1 " + " DATA: " + l1payload);
-                                EventBus.getDefault().post(intent); // 显示到测试界面上
-                              }                   
+                                    sendACKBaseL1Msg(context, baseData, 0); // CRC校验、帧序号校验正确
+                                    handleL1Msg(context, bsL1Msg);
+                                    
+                                    Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+                                    intent.putExtra("transferdata", " L1 " + " DATA: " + l1payload);
+                                    EventBus.getDefault().post(intent); // 显示到测试界面上
+                                  } else {
+                                      //sendACKBaseL1Msg(context, baseData, 2); // CRC校验错误
+                                  }
+                                }             
                             } else {
                                 SLog.e(TAG, "Not Send ACK");
                             }
@@ -114,24 +127,41 @@ public class BaseMessageHandler {
         
     }
 
+    private static boolean checkLen(BaseL1Message bsL1Msg, byte[] baseData) {
+        int basedatalen = 0;
+        try {
+            if (baseData != null) {
+                basedatalen = baseData.length; // 接收数据的长度
+                if (basedatalen == BASE_DATA_HEAD + bsL1Msg.payloadLength) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return false;
+    }
+
     private static void handleL1Msg(Context context, BaseL1Message bsL1Msg) {
         try {
             mIsReceOver = generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
             if (mIsReceOver) {
                 if (mL2OutputStream.size() > 0) {
                     byte[] l2buff = mL2OutputStream.toByteArray();
-                    int l2len = ((l2buff[3] & 0x01) << 8) | (l2buff[4] & 0xff);
-                    SLog.e(TAG, "receiveL2DATA before l2len = " + l2len + " totallen = " + l2buff.length);
-                    if (l2len + BASE_L2_DATA_LEN == l2buff.length) {
-                        SLog.e(TAG, "receive L2 DATA");
-                        BaseL2Message bsl2Msg = getBaseL2Msg(mL2OutputStream.toByteArray()); 
-                        mL2OutputStream.reset();
-                        MessageParse.getInstance(context).RecvBaseL2Msg(bsl2Msg);
-                    }
+                    if (l2buff.length > 5) {
+                        int l2len = ((l2buff[3] & 0x01) << 8) | (l2buff[4] & 0xff);
+                        SLog.e(TAG, "receiveL2DATA before l2len = " + l2len + " totallen = " + l2buff.length);
+                        if (l2len + BASE_L2_DATA_LEN == l2buff.length) {
+                            SLog.e(TAG, "receive L2 DATA");
+                            BaseL2Message bsl2Msg = getBaseL2Msg(mL2OutputStream.toByteArray()); 
+                            mL2OutputStream.reset();
+                            MessageParse.getInstance(context).RecvBaseL2Msg(bsl2Msg);
+                        } 
+                    } 
                 }            
             } else {
                 SLog.e(TAG, "reflectTranDataType 1");
-                Utiliy.reflectTranDataType(1);
+                Utiliy.reflectTranDataType(context, 1);
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -173,10 +203,11 @@ public class BaseMessageHandler {
              }    
          };    
 
-    private static void sendACKBaseL1Msg(Context context, byte[] baseData) {
+    public static void sendACKBaseL1Msg(Context context, byte[] baseData, int errcode) {
         byte[] ACKMsg = new byte[6];
         System.arraycopy(baseData, 0, ACKMsg, 0, 6);
-        ACKMsg[1] = (byte) ((baseData[1] | 0x10) & 0x10);
+        ACKMsg[1] = (byte) (((errcode & 0x03) << 5) & 0x60);
+        ACKMsg[1] = (byte) (ACKMsg[1] | 0x10);
         ACKMsg[2] = (byte) (baseData[2] & 0);
         ACKMsg[4] = (byte) (baseData[4] & 0);
         ACKMsg[5] = (byte) (baseData[5] & 0);
@@ -187,8 +218,10 @@ public class BaseMessageHandler {
         Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
         intent.putExtra("transferdata", " L1 " + " ACK: " + l1ack);
         EventBus.getDefault().post(intent); // 显示到测试界面上
-        
-        BluetoothApi.getInstance(context).RecvEvent(new AsycEvent(ACKMsg));
+        SLog.e(TAG, "WriteSendBuff*******************1");
+        AsycEvent asycEvent = new AsycEvent(ACKMsg);
+        asycEvent.isAck = true;
+        BluetoothApi.getInstance(context).RecvEvent(asycEvent);
     }
     
     public static boolean sendL2Message(Context context, BaseL2Message bsl2msg) {
@@ -292,7 +325,7 @@ public class BaseMessageHandler {
             intent.putExtra("transferdata", " L1 " + l1payload);
             EventBus.getDefault().post(intent); // 显示到测试界面上
             Utiliy.logToFile(" L1 " + " SEND: " + l1payload); // 写入日志文件
-            SLog.e(TAG, " L1 " + " SEND: " + l1payload);
+            SLog.e(TAG, " L1 **** SEND: " + l1payload);
         }
     }
 

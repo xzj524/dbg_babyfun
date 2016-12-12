@@ -43,7 +43,7 @@ public class CommandSendRequest {
 
     public void addSendTask() {
         try {
-            CommandCenter.getInstance().addCallbackRequest(this);   
+            CommandCenter.getInstance(mContext).addCallbackRequest(this);   
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

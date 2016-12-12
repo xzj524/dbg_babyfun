@@ -2,11 +2,12 @@ package com.aizi.yingerbao.constant;
 
 import java.util.UUID;
 
-import android.content.Intent;
-
 public class Constant {
     /** 日志前缀配置 **/
     public static final String LOG_PREFIX = "AIZI-";
+    
+    /** 关于版本号前缀 **/
+    public static final String ABOUT_PREFIX = "Android 版本-";
     
     public static final UUID BLE_UUID_NUS_SERVICE = UUID.fromString("00000001-0000-1000-8000-00805f9b34fb");
     public static final UUID BLE_UUID_NUS_TX_CHARACTERISTIC = UUID.fromString("00000002-0000-1000-8000-00805f9b34fb");
@@ -72,8 +73,10 @@ public class Constant {
     public static final long WAIT_SYNC_PERIOD = 15 * 1000;
     
     /** 搜索设备超时时间  */
-    public static final long WAIT_SEARCH_DEVICE_PERIOD = 10 * 1000;
+    public static final long WAIT_SEARCH_DEVICE_PERIOD = 20 * 1000;
     
+    /** 验证设备超时时间  */
+    public static final long WAIT_CHECK_PERIOD = 15 * 1000;
     
     /** 用户登录是否成功  */
     public static final String LOGIN_VALUE = "login_value";

@@ -2,46 +2,36 @@ package com.aizi.yingerbao;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.aizi.yingerbao.R;
 
-public class BabyEmergencyActivity extends Activity {
+public class BabyBreathEmergencyActivity extends Activity {
     
-    TextView mTitleTextView;
-    TextView mContentTextView;
+    TextView mBabyBreathTextView;
     Button mButtonUserKown;
     Button mButtonUserCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_baby_emergency);
+        setContentView(R.layout.activity_baby_breath_emergency);
         
-        mTitleTextView = (TextView) findViewById(R.id.babyemergencytitle);
-        mContentTextView = (TextView) findViewById(R.id.babyemergencecontent);
-        mButtonUserKown = (Button) findViewById(R.id.userkonw);
-        mButtonUserCall = (Button) findViewById(R.id.usercall);
+        mBabyBreathTextView = (TextView) findViewById(R.id.breathstoptext);
+        mButtonUserKown = (Button) findViewById(R.id.breathuserkonw);
+        mButtonUserCall = (Button) findViewById(R.id.breathusercall);
         
         Intent intent = getIntent();
         if (intent != null) {
-            String titleString = intent.getStringExtra("title");
-            String contentString = intent.getStringExtra("content");
-            
-            mTitleTextView.setText(titleString);
-            mContentTextView.setText(contentString);
+            String breathcustom = intent.getStringExtra("content");
+            //mBabyBreathTextView.setText(breathcustom);
         }
         
         mButtonUserKown.setOnClickListener(new View.OnClickListener() {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 finish();
             }
         });
@@ -50,14 +40,9 @@ public class BabyEmergencyActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //dialPhoneNumber("18811130187");
-                
                 Intent intent = new Intent(getApplicationContext(), EmergencyPhoneNumberActivity.class);
                 startActivity(intent);
             }
         });
     }
-    
-    
 }

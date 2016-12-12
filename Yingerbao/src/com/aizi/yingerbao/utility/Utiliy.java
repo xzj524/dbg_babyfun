@@ -19,6 +19,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
@@ -62,8 +63,7 @@ public class Utiliy {
             String customcontent) {
         NotificationManager nmNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notif = null;
-        notif = NotificationBuilderManager.createNotification(context, 0, title, content, false);
+        Notification notif = NotificationBuilderManager.createFeverNotification(context, 0, title, content, customcontent, false);
         nmNotificationManager.notify(System.currentTimeMillis() + "", 0, notif);
     }
     
@@ -72,9 +72,7 @@ public class Utiliy {
             String customcontent) {
         NotificationManager nmNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notif = null;
-        
-        notif = NotificationBuilderManager.createNotification(context, 0, title, content, false);
+        Notification notif = NotificationBuilderManager.createBreathNotification(context, 0, title, content, null, false);
         int req = Long.valueOf(System.currentTimeMillis()).intValue();
         nmNotificationManager.notify(req, notif);
     }
@@ -366,7 +364,7 @@ public class Utiliy {
           return phoneaddress;  
       }
 
-    public static void reflectTranDataType(int res) {
+    public static void reflectTranDataType(Context context, int res) {
         try {
             Intent intent = new Intent(Constant.ACITON_DATA_TRANSFER);
             switch (res) {
@@ -384,7 +382,7 @@ public class Utiliy {
                 break;
             }
             
-            CommandCenter.getInstance().handleIntent(intent);
+            CommandCenter.getInstance(context).handleIntent(intent);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -455,7 +453,6 @@ public class Utiliy {
             } else if (Build.VERSION.SDK_INT >= 19) {
                 alarm.setExact(AlarmManager.RTC_WAKEUP, expiredtime, pdIntent);
             }
-            SLog.e(TAG, "setAlarm  expiredtime = " + expiredtime);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -479,10 +476,19 @@ public class Utiliy {
             if (pdintent != null) {
                 alarm.cancel(pdintent);
             }
-            SLog.e(TAG, "Cancel AlarmManager  PendingIntent = " + pdintent);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
+    }
+
+    public static String getAppVersionName(Context context) {
+        try {  
+            PackageInfo pi=context.getPackageManager().getPackageInfo(context.getPackageName(), 0);  
+            return pi.versionName;  
+        } catch (Exception e) {  
+            SLog.e(TAG, e);
+        }  
+        return null;
     }
 
 }

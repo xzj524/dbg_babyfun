@@ -5,13 +5,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.thread.AZRunnable;
 import com.aizi.yingerbao.thread.ThreadPool;
+import com.aizi.yingerbao.utility.Utiliy;
 
 public class CommandCenter {
     private static final String TAG = "CommandCenter";
@@ -20,20 +23,22 @@ public class CommandCenter {
     static CommandSendRequest mCommandSendRequest;
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
     Consumer consumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
+    static Context mContext;
     
     private static final Object synchronizedLock = new Object();
     private static int SLEEP_TIME = 15 * 1000;
     private static int mRetryTimes = 0;
     
-    public CommandCenter() {
+    public CommandCenter(Context context) {
+        mContext = context;
         mExecutorService.submit(consumer);
     }
 
-    public static CommandCenter getInstance() {
+    public static CommandCenter getInstance(Context context) {
         if (mInstance != null) {
             return mInstance;
         } else {
-            mInstance = new CommandCenter();
+            mInstance = new CommandCenter(context);
             return mInstance;
         }
     }
@@ -74,14 +79,22 @@ public class CommandCenter {
                             break;
                         case Constant.TRANSFER_TYPE_ERROR: // 数据传输出错
                             synchronized (synchronizedLock) { //传输失败之后继续下一个
-                                synchronizedLock.notifyAll();
                                 if (mRetryTimes < 3) {
                                     // 重新加入任务队列
-                                    mSendDataQueue.produce(mCommandSendRequest);
+                                    //mSendDataQueue.produce(mCommandSendRequest);
+                                    SLog.e(TAG, "RETRY TIMES = " + mRetryTimes);
+                                    mCommandSendRequest.send();
+                                    SLog.e(TAG, "handleIntent CommandCenter mCommandSendRequest send");
+                                    SLog.e(TAG, "handleIntent CommandCenter mCommandSendRequest set alarm timer");
+                                    ThreadPool.getInstance().submitRunnable(timeOutRunnable);
                                     mRetryTimes++;
                                 } else {
+                                    // 超过重试次数之后，不再重试
                                     mRetryTimes = 0;
+                                    synchronizedLock.notifyAll();
                                 }
+                                
+                                
                             }
                             break;
                         default:
@@ -95,11 +108,10 @@ public class CommandCenter {
     }
     
     
-    public void clearInterfaceQueue() {
+    public static void clearInterfaceQueue() {
         try {
             mSendDataQueue.clear();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             SLog.e(TAG, e);
         }
     }
@@ -111,8 +123,12 @@ public class CommandCenter {
             try {
                 Thread.sleep(SLEEP_TIME);
                 synchronized (synchronizedLock) {
-                    synchronizedLock.notifyAll();
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
+                    Utiliy.reflectTranDataType(mContext, 2);
+                    if (mRetryTimes == 0) {
+                        BluetoothApi.getInstance(mContext).mSendDataQueue.clearqueue();
+                        synchronizedLock.notifyAll();
+                        SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
+                    }
                 }
             } catch (Exception e) {
                 SLog.e(TAG, e);

@@ -15,11 +15,6 @@ public class DeviceTimeHelper {
         
     }
     
-    public static void setDeviceTime(Context context, DeviceTime dvtime) {
-        
-        DeviceFactory.getInstance(context).setDeviceTime();
-    }
-    
     class devTimeListener implements DeviceTimeListener {
 
         @Override

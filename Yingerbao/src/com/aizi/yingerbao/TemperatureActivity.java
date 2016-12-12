@@ -189,12 +189,38 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             }
         });
         
+        SLog.e(TAG, "tempvalue from database length = " + temperatureinfos.size());
+        if (xVals.size() > 0) {
+            xVals.clear();
+        }  
+        
         for (int i = 0; i < 144; i++) {
+            xVals.add(i + "");
+            boolean isIntempinfo = false;
+            for (TemperatureInfoEnumClass tempeinfo : temperatureinfos) {
+                int tempmin = tempeinfo.mTemperatureMinute/10;
+                if (tempmin == i+1) {
+                    float tempvalue = Float.parseFloat(tempeinfo.getTemperatureValue());
+                    yValsTem.add(new Entry(tempvalue -10, i));
+                    isIntempinfo = true;
+                    break;
+                }
+            }
+            
+            if (!isIntempinfo) {
+                yValsTem.add(new Entry(-1, i));
+            }
+        }
+        
+        
+   /*     for (int i = 0; i < 144; i++) {
             if (i < temperatureinfos.size()) {
                 float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
                 if (tempvalue != 0.255 && tempvalue != 1.255) {
                     int tempmin = temperatureinfos.get(i).mTemperatureMinute/10;
                     yValsTem.add(new Entry(tempvalue -10, tempmin));
+                    xVals.add(tempmin + "");
+                    
                     
                     SLog.e(TAG, "tempvalue from database = " + tempvalue 
                             + " min = " + tempmin);
@@ -207,7 +233,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         }  
         for (int i = 0; i < 144; i++) {
             xVals.add(i + "");
-        }
+        }*/
         
 /*        for (int i = 97; i < 109; i++) {
             yValsTem.add(new Entry(10, i));

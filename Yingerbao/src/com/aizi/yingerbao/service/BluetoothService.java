@@ -64,7 +64,6 @@ public class BluetoothService extends Service {
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
     private static final int STATE_CONNECTED = 2;
-    private static final long WAIT_CHECK_PERIOD = 15 * 1000;
     
     int mConnectTimes = 0;
     boolean mIsConnectRepeat = false;
@@ -149,6 +148,8 @@ public class BluetoothService extends Service {
                 }
                 
                 if (notifyres) { // 使能数据成功
+                    // 搜索设备状态，成功
+                    PrivateParams.setSPInt(getApplicationContext(), "search_device_status", 3);
                     SLog.e(TAG, "Bluetooth  is Ready, mBluetoothGatt = " + mBluetoothGatt );
                     if (PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0) == 1) {
                         // 检测到连接过程中断
@@ -168,7 +169,7 @@ public class BluetoothService extends Service {
                                     Utiliy.cancelAlarmPdIntent(getApplicationContext(), mCheckPendingIntent);
                                 }
                                 mCheckPendingIntent = Utiliy.getDelayPendingIntent(getApplicationContext(), Constant.ALARM_WAIT_CHECK_DEVICE);
-                                Utiliy.setDelayAlarm(getApplicationContext(), WAIT_CHECK_PERIOD, mCheckPendingIntent);
+                                Utiliy.setDelayAlarm(getApplicationContext(), Constant.WAIT_CHECK_PERIOD, mCheckPendingIntent);
                                 SLog.e(TAG, "setAlarm  checkDevice ");
                             
                             } catch (InterruptedException e) {
@@ -177,8 +178,7 @@ public class BluetoothService extends Service {
                         }
                     }).start();
                     PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 1);
-                    // 搜索设备状态，成功
-                    PrivateParams.setSPInt(getApplicationContext(), "search_device_status", 3);
+                    
                     broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                     mConnectTimes = 0;
                     
@@ -320,7 +320,7 @@ public class BluetoothService extends Service {
         // parameter to false.
         
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
-        SLog.e(TAG, "Trying to create a new connection.");
+        SLog.e(TAG, "Trying to create a new connection.  " + device.getAddress());
         mBluetoothDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
         mIsConnectRepeat = isrepeat;
@@ -340,7 +340,7 @@ public class BluetoothService extends Service {
                 return;
             }
             
-            SLog.e(TAG, "BluetoothAdapter DISCONNECT");
+            
             PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
             //broadcastUpdate(ACTION_GATT_DISCONNECTED);
             
@@ -354,6 +354,7 @@ public class BluetoothService extends Service {
                 BaseMessageHandler.mL2OutputStream.reset();
                 BaseMessageHandler.mL2OutputStream.close();  
             }
+            SLog.e(TAG, "BluetoothAdapter DISCONNECT");
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -438,7 +439,6 @@ public class BluetoothService extends Service {
     
     public boolean writeBaseRXCharacteristic(byte[] value) {
         boolean wrstatus = false;
-        SLog.e(TAG, "write TXchar status  before");
         try {
             if (mBluetoothGatt != null) {
                 BluetoothGattService TxService = mBluetoothGatt.getService(BLE_UUID_NUS_SERVICE);
@@ -461,7 +461,7 @@ public class BluetoothService extends Service {
             SLog.e(TAG, e);
         }
 
-        SLog.e(TAG, "write TXchar status = " + wrstatus);
+        SLog.e(TAG, "write TXchar status = " + wrstatus  + " value = " + Utiliy.printHexString(value));
         return wrstatus;  
     }
 }

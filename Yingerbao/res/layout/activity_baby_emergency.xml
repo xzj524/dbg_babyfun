@@ -13,7 +13,8 @@
         android:layout_centerHorizontal="true"
         android:paddingTop="20dp"
         android:textSize="80px"
-        android:text="@string/hello_world" />
+        android:text="@string/baby_fever"
+        android:textColor="@color/gray" />
     
      <LinearLayout
          android:id="@+id/line"
@@ -30,12 +31,11 @@
 	         android:layout_width="match_parent"
 	         android:layout_height="wrap_content"
 	         android:textColor="@color/gray"
-	         android:text="宝宝当前体温："
+	         android:text="宝宝当前体温"
 	         android:textSize="64px"
 	         android:layout_marginTop="30dp"
 	         android:gravity="center_horizontal"
-	         android:layout_below="@id/line"
-	         android:visibility="gone"/>
+	         android:layout_below="@id/line"/>
         <LinearLayout 
             android:id ="@+id/currenttemperaturevalue"
             android:layout_width="match_parent"
@@ -43,14 +43,13 @@
             android:orientation="horizontal"
             android:gravity="center_horizontal"
              android:layout_marginTop="32dp"
-             android:layout_below="@id/currenttempvaluetext"
-             android:visibility="gone">
+             android:layout_below="@id/currenttempvaluetext">
             <TextView 
 		         android:id="@+id/currenttempvalue"
 		         android:layout_width="wrap_content"
 		         android:layout_height="wrap_content"
 		         android:textColor="@color/gray"
-		         android:text="38.1"
+		         android:text="--"
 		         android:textSize="100px"/>
             
              <TextView 
@@ -72,7 +71,8 @@
         android:layout_below="@id/currenttemperaturevalue"
         android:paddingTop="20dp"
         android:textSize="60px"
-        android:text="请及时就医！！" />
+        android:text="请及时就医！"
+        android:textColor="@color/gray" />
      
         
      <LinearLayout 

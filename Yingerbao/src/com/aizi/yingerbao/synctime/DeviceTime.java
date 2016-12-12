@@ -25,7 +25,6 @@ public class DeviceTime {
     public byte[] toByte() {
         byte[] devTimeValue = null;
         bitSet = new BitSet(32);
-        SLog.e(TAG, "bitSet = " + bitSet.size());
         try {
             calculateBitset(bitSet, year, 6);
             calculateBitset(bitSet, month, 4);
@@ -33,18 +32,14 @@ public class DeviceTime {
             calculateBitset(bitSet, hour, 5);
             calculateBitset(bitSet, min, 6);
             calculateBitset(bitSet, second, 6);      
-            SLog.e(TAG, "bitSet = " + bitSet.size() 
-                    + "   bitSetlength = " + bitSet.length());
             devTimeValue = BitSetConvert.bitSet2ByteArray(bitSet);
         } catch (Exception e) {
-            // TODO: handle exception
             SLog.e(TAG, e);
         }   
         return devTimeValue;
     }
 
     private void calculateBitset(BitSet bitSet, int keyvalue, int keylength) {
-        // TODO Auto-generated method stub
         try {
             if (bitSet != null) {
                 for (int i = keylength -1; i >= 0; i--) {
@@ -53,7 +48,6 @@ public class DeviceTime {
                 } 
             }
         } catch (Exception e) {
-            // TODO: handle exception
             SLog.e(TAG, e);
         }
     }

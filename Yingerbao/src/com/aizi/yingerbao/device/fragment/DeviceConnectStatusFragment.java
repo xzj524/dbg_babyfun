@@ -44,9 +44,7 @@ public class DeviceConnectStatusFragment extends Fragment{
 
     public static final int ABNORMAL_REQUEST_CODE = 1;
     private static final int REQUEST_ENABLE_BLUETOOTH = 101;
-    private static final long WAIT_PERIOD = 10 * 1000; //10 seconds
 
-    private static final long WAIT_CHECK_PERIOD = 15 * 1000;
 
     private BluetoothDevice mDevice = null;
     OnDeviceConnectListener mListener;
@@ -55,7 +53,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     MessageReceiver mMessageReceiver;
     PendingIntent mCheckPendingIntent;
     PendingIntent mSyncDataPendingIntent;
-    PendingIntent mSearchPendingIntent;
+    public PendingIntent mSearchPendingIntent;
 
     /** 连接时候的progress */
     private ImageView mProgressImageView;
@@ -143,6 +141,7 @@ public class DeviceConnectStatusFragment extends Fragment{
         if (mSearchPendingIntent != null) {
             Utiliy.cancelAlarmPdIntent(mContext, mSearchPendingIntent);
         }
+        PrivateParams.setSPInt(mContext, "connect_interrupt", 0);// 重新开始表示未中断
         mSearchPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_SEARCH_DEVICE);
         Utiliy.setDelayAlarm(mContext, Constant.WAIT_SEARCH_DEVICE_PERIOD, mSearchPendingIntent);
     }
@@ -263,6 +262,8 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCurrentState = ConnectDeviceState.IDEL;
             mProgressImageView.clearAnimation();
             
+            BluetoothApi.getInstance(mContext).mBluetoothService.disconnect();
+            
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
@@ -296,7 +297,7 @@ public class DeviceConnectStatusFragment extends Fragment{
                     Utiliy.cancelAlarmPdIntent(mContext, mCheckPendingIntent);
                 }
                 mCheckPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_CHECK_DEVICE);
-                Utiliy.setDelayAlarm(mContext, WAIT_CHECK_PERIOD, mCheckPendingIntent);
+                Utiliy.setDelayAlarm(mContext, Constant.WAIT_CHECK_PERIOD, mCheckPendingIntent);
                 SLog.e(TAG, "setAlarm  checkDevice "); 
             } else {
                 mCurrentState = ConnectDeviceState.SEARCHING_DEVICE;     
@@ -504,7 +505,9 @@ public class DeviceConnectStatusFragment extends Fragment{
                         }
                         break;
                     case 3:                          
-                        if (mCurrentState == ConnectDeviceState.SEARCHING_DEVICE) {
+                        SLog.e(TAG, "mCurrentState = " + mCurrentState);
+                        if (mCurrentState == ConnectDeviceState.SEARCHING_DEVICE
+                                || mCurrentState == ConnectDeviceState.IDEL) {
                             mCurrentState = ConnectDeviceState.FAIL;
                             // 搜索设备状态，失败
                             PrivateParams.setSPInt(mContext, "search_device_status", 2);

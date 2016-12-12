@@ -20,6 +20,7 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
+import com.aizi.yingerbao.utility.BaseMessageHandler;
 import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
@@ -81,7 +82,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                DeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo();
+                DeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo(2);
               
             }
         });
@@ -210,15 +211,25 @@ public class TestActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-              /*  Utiliy.showFeverNotification(getApplicationContext(), 
-                        "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + "36.5" + " 请及时就医。", null);
-            */
-                
+               /*Utiliy.showFeverNotification(getApplicationContext(), 
+                        "孩子发烧了！！", "孩子发烧了，当前体温:" + "36.5。" + " 请及时就医。", "36.5");*/
+            
+               /*Utiliy.showBreathNotification(getApplicationContext(), 
+                       "呼吸停滞！！", "孩子呼吸停滞了， 请及时查看。", null);*/
                 //PendingIntent mPendingIntent = Utiliy.getDelayPendingIntent(getApplicationContext(), Constant.ALARM_WAIT_L1);
                 //Utiliy.setDelayAlarm(getApplicationContext(), 5 * 1000, mPendingIntent);
                 
-                DeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo(2);
+          //      DeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo(2);
+                
+         /*       byte[] baseData = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
+                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 0);
+                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 1);
+                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 2);
+                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 3);*/
             
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), AboutActivity.class);
+                startActivity(intent);
             }
         });
         

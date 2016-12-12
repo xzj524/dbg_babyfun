@@ -23,8 +23,6 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.PrivateParams;
 
-import de.greenrobot.event.EventBus;
-
 public class ScanDevicesService extends Service{
     
     private static final String TAG = ScanDevicesService.class.getSimpleName();
@@ -34,7 +32,7 @@ public class ScanDevicesService extends Service{
     List<BluetoothDevice> mDeviceList;
     Map<String, Integer> mDevRssiValues;
     
-    private static final long SCAN_PERIOD = 10 * 1000; //扫描设备超时时间
+    private static final long SCAN_PERIOD = 18 * 1000; //扫描设备超时时间
     
     @Override
     public IBinder onBind(Intent intent) {
@@ -94,9 +92,9 @@ public class ScanDevicesService extends Service{
                 public void run() {
                    if (mScanning) { //在扫描进行中才会停止扫描
                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                       // 没有扫描到蓝牙设备
+                      /* // 没有扫描到蓝牙设备
                        Intent intent = new Intent(Constant.BLUETOOTH_SCAN_NOT_FOUND);
-                       EventBus.getDefault().post(intent); 
+                       EventBus.getDefault().post(intent); */
                    }
                 }
             }, SCAN_PERIOD);
@@ -118,6 +116,7 @@ public class ScanDevicesService extends Service{
                 final int rssi, byte[] scanRecord) {
             boolean isDiscovery = isDiscoveryDevice(device,rssi);
             if (isDiscovery) {
+                // 中断连接定时器
                 if (PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0) != 1) {
                     if (BluetoothApi.getInstance(getApplicationContext()).mBluetoothService != null) {
                         BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.connect(device.getAddress(), false);
@@ -131,14 +130,14 @@ public class ScanDevicesService extends Service{
     private boolean isDiscoveryDevice(BluetoothDevice device, int rssi) {
         boolean isDeviceFound = false;
         try {
-            for (BluetoothDevice listDev : mDeviceList) {
+  /*          for (BluetoothDevice listDev : mDeviceList) {
                 if (listDev.getAddress().equals(device.getAddress())) {  
                     isDeviceFound = true;  // 设备已经发现
                     stopScanDevice();
-                    SLog.e(TAG, "Device is already in the device list ");
+                    SLog.e(TAG, "Device is already in the device list " + device.getAddress());
                     break;
                 }
-            }    
+            }  */  
             SLog.e(TAG, "searching....  Address = " + device.getAddress() 
                       + " Name = " + device.getName());
            
@@ -172,7 +171,7 @@ public class ScanDevicesService extends Service{
     
     @Override
     public boolean onUnbind(Intent intent) {
-        scanBLEDevice(false);
+        //scanBLEDevice(false);
         return super.onUnbind(intent);
     }
 

@@ -4,6 +4,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,18 +23,21 @@ import de.greenrobot.event.EventBus;
 public class BluetoothApi {
     
     private static final String TAG = BluetoothApi.class.getSimpleName();
+    private Object mWriteLock = new Object();
     
     private static BluetoothApi mInstance;
     public BluetoothService mBluetoothService = null;
     // 建立一个装数据的队列
-    SendDataQueue mSendDataQueue = new SendDataQueue();
+    public SendDataQueue mSendDataQueue = new SendDataQueue();
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
     Consumer consumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
+    Context mContext;
     
     
     public BluetoothApi(Context context) {
         EventBus.getDefault().register(this);
         bindBluetoothService(context);
+        mContext = context;
         mExecutorService.submit(consumer);
     }
     
@@ -77,13 +81,45 @@ public class BluetoothApi {
     };
     
     public void RecvEvent(AsycEvent event) { 
-        Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
-        mExecutorService.submit(producer);
+        synchronized (mWriteLock) {
+            int waittimes = 0;
+            try {
+                while (true) {
+                    if (BaseMessageHandler.isWriteSuccess) {
+                        waittimes = 0;
+                        SLog.e(TAG, "WriteSendBuff*******************3");
+                        writeByte(event.getByte());
+                        break;
+                    } else {
+                        waittimes++;
+                        if (waittimes > 2) {
+                            waittimes = 0;
+                            /*BaseMessageHandler.repeattime++;
+                            if (BaseMessageHandler.repeattime < 3) {
+                                //sendqueue.produce(event);
+                            } */
+                            BaseMessageHandler.isWriteSuccess = true;
+                        }
+                    }
+                    Thread.sleep(1000); // 休眠1000ms
+                }
+            } catch (Exception e) {
+                SLog.e(TAG, e);
+            }
+           
+            
+            //writeByte(event.getByte());
+            //SLog.e(TAG, "RecvEvent WritByte");
+        }
+        
+        //Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
+        //mExecutorService.submit(producer);
      } 
     
     public void onEvent(AsycEvent event) { 
         Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
         mExecutorService.submit(producer);
+        SLog.e(TAG, "onEvent WritByte");
      } 
     
     
@@ -92,6 +128,7 @@ public class BluetoothApi {
         if (mBluetoothService != null) {
             wrres = mBluetoothService.writeBaseRXCharacteristic(wrByte);
             BaseMessageHandler.isWriteSuccess = false;
+            SLog.e(TAG, "WriteSendBuff*******************4");
         }
         return wrres;
     }
@@ -103,13 +140,16 @@ public class BluetoothApi {
      */
     public class SendDataQueue {
         // 发送数据队列，能容纳一百个数据
-        //BlockingQueue<String> basket = new LinkedBlockingQueue<String>(3);
+        //BlockingQueue<String> basket = new PriorityBlockingQueue<String>();
         BlockingQueue<AsycEvent> asyceventqueue = new LinkedBlockingQueue<AsycEvent>(100);
         //PriorityBlockingQueue<AsycEvent> priorityBlockingQueue = new PriorityBlockingQueue<AsycEvent>(100);
 
         // 生产数据
         public void produce(AsycEvent event) throws InterruptedException {
             // put方法放入数据，若asyceventqueue满了，等到asyceventqueue有位置
+            if (event.isAck) {
+                asyceventqueue.clear();
+            }
             asyceventqueue.put(event);
         }
 
@@ -119,7 +159,7 @@ public class BluetoothApi {
             return asyceventqueue.take();
         }
         
-     // 消费数据
+        // 消费数据
         public AsycEvent element() throws InterruptedException {
             // 取数据但是不清空头部
             return asyceventqueue.element();
@@ -128,6 +168,11 @@ public class BluetoothApi {
         // wait
         public void waitfor() throws InterruptedException {
             asyceventqueue.wait();
+        }
+        
+        // wait
+        public void clearqueue() throws InterruptedException {
+            asyceventqueue.clear();
         }
     }
     
@@ -147,6 +192,7 @@ public class BluetoothApi {
         public void run() {
             try {
                  sendqueue.produce(mAsycEvent);
+                 SLog.e(TAG, "WriteSendBuff*******************2");
             } catch (InterruptedException ex) {
                 SLog.e(TAG, ex);
             }
@@ -171,13 +217,17 @@ public class BluetoothApi {
                     if (BaseMessageHandler.isWriteSuccess) {
                         waittimes = 0;
                         event =  sendqueue.consume();
+                        SLog.e(TAG, "WriteSendBuff*******************3");
                         writeByte(event.getByte());
+                        if (event.isAck) {
+                            BaseMessageHandler.isWriteSuccess = true;
+                        }
                     } else {
                         waittimes++;
                         if (waittimes > 10) {
                             waittimes = 0;
                             BaseMessageHandler.repeattime++;
-                            if (BaseMessageHandler.repeattime < 4) {
+                            if (BaseMessageHandler.repeattime < 3) {
                                 sendqueue.produce(event);
                             } 
                             BaseMessageHandler.isWriteSuccess = true;

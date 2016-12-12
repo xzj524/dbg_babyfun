@@ -2,40 +2,33 @@ package com.aizi.yingerbao;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import android.R.integer;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.adapter.FragmentAdapter;
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.eventbus.AsycEvent;
 import com.aizi.yingerbao.fragment.BreathFragment;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
 import com.aizi.yingerbao.fragment.SleepFragment;
 import com.aizi.yingerbao.fragment.TemperatureFragment;
-import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.slidingmenu.SlidingMenuHelper;
 import com.aizi.yingerbao.synctime.DataTime;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
-import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 
 import de.greenrobot.event.EventBus;
 
