@@ -17,12 +17,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathInfoEnumClass;
-import com.aizi.yingerbao.database.BreathStopInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
@@ -60,6 +60,8 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     static LineChart mBreathChart;
     BarChart mBreathStopChart;
     private TextView mBreathFreqData;
+    TextView mBreathDate;
+    ImageView mBreathCalendarView;
     
     int mBreValue = 5;
     long mLastBreathTime;
@@ -98,6 +100,17 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         mBreathTopbar = (TopBarView) findViewById(R.id.breathtopbar);
         mBreathTopbar.setClickListener(this);
         
+        mBreathDate = (TextView) findViewById(R.id.breathstopdate);
+        mBreathCalendarView = (ImageView) findViewById(R.id.breathstop_calendar);
+        mBreathCalendarView.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
+                mFragment.show(getFragmentManager(), "simple-calendar");
+            }
+        });
+        
         mBreathChart = (LineChart) findViewById(R.id.breath_line_chart);
         mBreathStopChart = (BarChart) findViewById(R.id.breath_stop_barchart);
         mControlBreathBtn = (Button) findViewById(R.id.control_breath_button);
@@ -124,18 +137,12 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 public void run() {  
                                 Message message = new Message();      
                                 message.what = 1; 
-                               /* if (mIsBreathSet) {
-                                    mIsBreathSet = false;
-                                    //message.arg1 = mBreValue;
-                                } else {
-                                    mIsBreathSet = true;
-                                    mBreValue = 5;
-                                }*/
-                                
                                 message.arg1 = mBreValue;
                                 message.arg2 = mBreathFreq;
                                 mHandler.sendMessage(message);  
-                                SLog.e(TAG, "mBreathValue = " + mBreValue + " mBreathFreq = " + mBreathFreq);
+                                if (mBreValue != 5) {
+                                    SLog.e(TAG, "mBreathValue = " + mBreValue + " mBreathFreq = " + mBreathFreq);
+                                }
                               }  
                            };  
                             mTimer.schedule(task,1000, 400); 
@@ -202,7 +209,10 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+        if (mBreatStart) {
+            DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
+        }
+       
         EventBus.getDefault().unregister(this);
         if (mTimer != null) {
             mTimer.purge();
@@ -423,6 +433,8 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
             month = calendar.get(Calendar.MONTH) + 1;     
             day = calendar.get(Calendar.DAY_OF_MONTH);   
         } 
+        
+        mBreathDate.setText(year + "年" + month + "月" + day + "日");
         
    /*     BreathStopInfo breathinfo = new BreathStopInfo();
         breathinfo.mBreathYear = year;
@@ -758,8 +770,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     @Override
     public void onCalendarClick() {
         // TODO Auto-generated method stub
-        SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
-        mFragment.show(getFragmentManager(), "simple-calendar");
+        
 
     }
     

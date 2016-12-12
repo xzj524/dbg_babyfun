@@ -122,7 +122,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/gray"
+                android:background="@color/login_user" />
             
        <RelativeLayout 
            android:id="@+id/user_action"
@@ -137,7 +139,7 @@
                android:background="@drawable/forget_password"
                android:layout_alignParentLeft="true"/>
            
-             <ImageView 
+            <ImageView 
                android:id="@+id/register_account"
                android:layout_height="wrap_content"
                android:layout_width="wrap_content"

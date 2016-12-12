@@ -4,11 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import u.aly.bs;
 
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
@@ -18,7 +15,6 @@ import android.content.Intent;
 
 import com.aizi.yingerbao.baseheader.BaseL1Message;
 import com.aizi.yingerbao.baseheader.BaseL2Message;
-import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.crc.CRC16;
@@ -30,23 +26,37 @@ import de.greenrobot.event.EventBus;
 public class BaseMessageHandler {
     
     private static final String TAG = BaseMessageHandler.class.getSimpleName();
+    private static BaseMessageHandler mInstance;
     private final static short BASE_DATA_HEAD = 6;
     private final static short BASE_L2_DATA_LEN = 5;
     private static Object mYingerbaoLock = new Object();
     
     public static boolean mIsReceOver = true;
     public static ByteArrayOutputStream mL2OutputStream = new ByteArrayOutputStream();
+    public static byte[] mL2RecvByte;
     public static boolean isWriteSuccess = true;
     public static int repeattime = 0;
-    static byte[] baseTwobytes;
     public static int squenceID = 1;
     public static int mL1squenceid = -1;
     private static final long WAIT_PERIOD = 5 * 1000; //10 seconds
-    static Timer mTimer;  
     static ExecutorService mBaseExecutorService = Executors.newCachedThreadPool();
     static PendingIntent mPendingIntent;
+    Context mContext;
     
-    public static void acquireBaseData(Context context, BluetoothDevice bluetoothDevice, 
+    public BaseMessageHandler(Context context) {
+        mContext = context;
+    }
+    
+    public static BaseMessageHandler getInstance(Context context) {
+        if (mInstance != null) {
+            return mInstance;
+        } else {
+            mInstance = new BaseMessageHandler(context);
+            return mInstance;
+        }
+    }
+    
+    public void acquireBaseData(Context context, BluetoothDevice bluetoothDevice, 
             BluetoothGattCharacteristic characteristic) {
         try {
             if (Constant.BLE_UUID_NUS_RX_CHARACTERISTIC.equals(characteristic.getUuid())) {
@@ -75,7 +85,7 @@ public class BaseMessageHandler {
                             if (isLenRight) {
                                 int crc16 = CRC16.calcCrc16(bsL1Msg.payload);
                                 if (bsL1Msg.CRC16 == (short)crc16) {
-                                    if (bsL1Msg.errFlag == 2) { // 标识结束位
+                                    if (bsL1Msg.errFlag == 2) { //标识结束位
                                         mL1squenceid = -1;
                                     } else if (bsL1Msg.errFlag == 1) { // 标识中间位
                                         if ((mL1squenceid == 15 && bsL1Msg.sequenceId == 0) 
@@ -87,6 +97,7 @@ public class BaseMessageHandler {
                                             return;
                                         } else if ((bsL1Msg.sequenceId - mL1squenceid != 1) 
                                                 && mL1squenceid != bsL1Msg.sequenceId) {
+                                            mL2RecvByte = null; // L2缓存清空
                                             if (mL2OutputStream != null) {
                                                 mL2OutputStream.reset();
                                                 mL2OutputStream.close();  
@@ -124,10 +135,9 @@ public class BaseMessageHandler {
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
-        
     }
 
-    private static boolean checkLen(BaseL1Message bsL1Msg, byte[] baseData) {
+    private boolean checkLen(BaseL1Message bsL1Msg, byte[] baseData) {
         int basedatalen = 0;
         try {
             if (baseData != null) {
@@ -142,12 +152,13 @@ public class BaseMessageHandler {
         return false;
     }
 
-    private static void handleL1Msg(Context context, BaseL1Message bsL1Msg) {
+    private void handleL1Msg(Context context, BaseL1Message bsL1Msg) {
         try {
             mIsReceOver = generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
             if (mIsReceOver) {
                 if (mL2OutputStream.size() > 0) {
                     byte[] l2buff = mL2OutputStream.toByteArray();
+                    
                     if (l2buff.length > 5) {
                         int l2len = ((l2buff[3] & 0x01) << 8) | (l2buff[4] & 0xff);
                         SLog.e(TAG, "receiveL2DATA before l2len = " + l2len + " totallen = " + l2buff.length);
@@ -167,43 +178,9 @@ public class BaseMessageHandler {
             SLog.e(TAG, e);
         }
     }
-    
-    
-    static Runnable recvtimeoutRunnable = new Runnable() {
         
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(WAIT_PERIOD);
-                if (mL2OutputStream != null) {
-                    mL2OutputStream.reset();
-                    mL2OutputStream.close();  
-                }
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            }
-        }
-    };
-       
-    static TimerTask task = new TimerTask(){    
-             public void run(){    
-                 try {
-                     if (!mIsReceOver) {
-                         mIsReceOver = true;
-                         mL1squenceid = -1;
-                         if (mL2OutputStream != null) {
-                             mL2OutputStream.reset();
-                             mL2OutputStream.close();  
-                         }
-                         SLog.e(TAG, "delay task is running###############");
-                     }
-                } catch (Exception e) {
-                    SLog.e(TAG, e);
-                }   
-             }    
-         };    
 
-    public static void sendACKBaseL1Msg(Context context, byte[] baseData, int errcode) {
+    private void sendACKBaseL1Msg(Context context, byte[] baseData, int errcode) {
         byte[] ACKMsg = new byte[6];
         System.arraycopy(baseData, 0, ACKMsg, 0, 6);
         ACKMsg[1] = (byte) (((errcode & 0x03) << 5) & 0x60);
@@ -224,7 +201,7 @@ public class BaseMessageHandler {
         BluetoothApi.getInstance(context).RecvEvent(asycEvent);
     }
     
-    public static boolean sendL2Message(Context context, BaseL2Message bsl2msg) {
+    public boolean sendL2Message(Context context, BaseL2Message bsl2msg) {
         boolean isSendL2Over = false;
         synchronized (mYingerbaoLock) {
             try {
@@ -247,7 +224,7 @@ public class BaseMessageHandler {
         return isSendL2Over;
     }
     
-    private static boolean sendL2Msg(Context context, BaseL2Message bsl2msg) {
+    private boolean sendL2Msg(Context context, BaseL2Message bsl2msg) {
         byte[] buffer = new byte[14];
         byte[] sendbuff = null;
         int flag = 0;
@@ -298,7 +275,7 @@ public class BaseMessageHandler {
 
     
     
-    public static void sendL1Msg(Context context, byte[] buffer, int flag) {
+    public void sendL1Msg(Context context, byte[] buffer, int flag) {
         BaseL1Message bsL1Msg = new BaseL1Message();
         if (buffer != null && buffer.length > 0) {
             bsL1Msg.payload = new byte[buffer.length];
@@ -329,7 +306,7 @@ public class BaseMessageHandler {
         }
     }
 
-    private static boolean generateBaseL2MsgByteArray(BaseL1Message bsL1Msg) {
+    private boolean generateBaseL2MsgByteArray(BaseL1Message bsL1Msg) {
         boolean isover = false;
         int index = 0;
         try {
@@ -346,7 +323,6 @@ public class BaseMessageHandler {
                 } else {
                     isover = false;
                 }
-                mL2OutputStream.close();
             } else {
                 isover = false;
             }
@@ -357,21 +333,9 @@ public class BaseMessageHandler {
         return isover;
     }
 
-    public static BaseL2Message generateBaseL2Msg(short commanid, short version, 
-            KeyPayload keyPayload){
-        BaseL2Message bsl2Msg = new BaseL2Message();
-        try {
-            bsl2Msg.commanID = commanid;
-            bsl2Msg.versionCode = version;
-            bsl2Msg.payload = new byte[keyPayload.keyLen + 3];
-            System.arraycopy(keyPayload.toByte(), 0, bsl2Msg.payload, 0, keyPayload.keyLen + 3);
-        } catch (Exception e) {
-            SLog.e(TAG, e);
-        }
-        return bsl2Msg;
-    }
 
-    private static BaseL2Message getBaseL2Msg(byte[] l2data) {
+
+    private BaseL2Message getBaseL2Msg(byte[] l2data) {
         BaseL2Message bsl2Msg = new BaseL2Message();
         if (l2data.length > 1) {
             bsl2Msg.commanID = (short)(l2data[0] & 0xff); 
@@ -383,7 +347,7 @@ public class BaseMessageHandler {
         return bsl2Msg;
     }
 
-    private static BaseL1Message getBaseL1Msg(byte[] basedata) {
+    private BaseL1Message getBaseL1Msg(byte[] basedata) {
         BaseL1Message bsL1Msg = new BaseL1Message();
         if ((basedata[0] & 0xf0) == 0xb0) {
             bsL1Msg.isAiziBaseL1Head = true;

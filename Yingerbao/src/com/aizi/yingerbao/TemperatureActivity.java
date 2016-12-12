@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     LineChart mTemperatureChart;
     Button mTempButton;
     TextView mTempValue;
+    TextView mTempDate;
+    ImageView mCalendarView;
     boolean mTempStart = false;
     boolean mIsTempMeasuring = false;
     
@@ -79,6 +82,17 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         mTopView = (TopBarView) findViewById(R.id.xiaohuhutopbar);
         mTopView.setClickListener(this);
+        
+        mTempDate = (TextView)findViewById(R.id.temperaturedate);
+        mCalendarView = (ImageView) findViewById(R.id.temperature_calendar);
+        mCalendarView.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
+                mFragment.show(getFragmentManager(), "simple-calendar");
+            }
+        });
         
         mTemperatureChart = (LineChart) findViewById(R.id.temperature_linechart);
         
@@ -178,6 +192,8 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             month = calendar.get(Calendar.MONTH) + 1;     
             day = calendar.get(Calendar.DAY_OF_MONTH);   
         } 
+        
+        mTempDate.setText(year + "年" + month + "月" + day + "日");
         
         List<TemperatureInfoEnumClass> temperatureinfos 
             = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
@@ -345,8 +361,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     @Override
     public void onCalendarClick() {
         // TODO Auto-generated method stub
-        SimpleCalendarDialogFragment mFragment = new SimpleCalendarDialogFragment();
-        mFragment.show(getFragmentManager(), "simple-calendar");
     }
     
     public void onEventMainThread(DataTime dataTime) { 

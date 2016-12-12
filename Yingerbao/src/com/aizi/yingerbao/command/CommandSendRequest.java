@@ -55,7 +55,7 @@ public class CommandSendRequest {
 
     public void send() {
         try {
-            BaseMessageHandler.sendL2Message(mContext, mBL2Msg);
+            BaseMessageHandler.getInstance(mContext).sendL2Message(mContext, mBL2Msg);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

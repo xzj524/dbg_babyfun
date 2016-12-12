@@ -44,7 +44,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyValue = dvtm.toByte();  
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -82,7 +82,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -103,7 +103,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -124,7 +124,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getDeviceTime";
@@ -144,7 +144,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -166,7 +166,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-                = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+                = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
         
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -187,7 +187,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyValue = getDataType(datatype);
             
             BaseL2Message bsl2Msg 
-                = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+                = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
         
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -221,7 +221,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -242,7 +242,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getBreahStopInfo";
@@ -261,7 +261,7 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
@@ -281,9 +281,8 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyLen = 0;
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "getExceptionEvent";
             Utiliy.dataToFile(str);
@@ -302,9 +301,8 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyValue = getDeviceAddress(mContext);
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_BIND, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_BIND, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "checkDeviceValid";
             Utiliy.dataToFile(str);
@@ -355,9 +353,8 @@ public class SyncDeviceImpl implements SyncDevice{
             keyPayload.keyValue = getProfileInfo(mContext);
             
             BaseL2Message bsl2Msg 
-            = BaseMessageHandler.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "activateDevice";
             Utiliy.dataToFile(str);

@@ -205,7 +205,9 @@ public class BluetoothService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-        	BaseMessageHandler.acquireBaseData(getApplicationContext(),gatt.getDevice(), characteristic);
+            BaseMessageHandler.getInstance(getApplicationContext())
+                .acquireBaseData(getApplicationContext(),gatt.getDevice(), characteristic);
+        	//BaseMessageHandler.acquireBaseData(getApplicationContext(),gatt.getDevice(), characteristic);
         }
         
 

@@ -27,6 +27,8 @@ import android.text.TextUtils;
 
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
+import com.aizi.yingerbao.baseheader.BaseL2Message;
+import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
@@ -321,6 +323,24 @@ public class Utiliy {
          return b;
       }
 
+      /**
+       * 根据commandid，version等信息组合成baseL2msg
+       * 
+       * @return BaseL2Message
+       */
+      public static BaseL2Message generateBaseL2Msg(short commandid, short version, 
+              KeyPayload keyPayload){
+          BaseL2Message bsl2Msg = new BaseL2Message();
+          try {
+              bsl2Msg.commanID = commandid;
+              bsl2Msg.versionCode = version;
+              bsl2Msg.payload = new byte[keyPayload.keyLen + 3];
+              System.arraycopy(keyPayload.toByte(), 0, bsl2Msg.payload, 0, keyPayload.keyLen + 3);
+          } catch (Exception e) {
+              SLog.e(TAG, e);
+          }
+          return bsl2Msg;
+      }
       
       /**
        * 将指定byte数组以16进制的形式打印到控制台

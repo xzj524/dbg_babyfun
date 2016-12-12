@@ -35,6 +35,7 @@
     <!-- login register -->
     <color name="progress_blue">#06A7ED</color>
     <color name="login_other_auth">#757575</color>
+    <color name="login_user">#fffaf0</color>
     <!-- login register end -->
     <!-- video player begin -->
     <color name="text_default_color">#B5B5B5</color>

@@ -14,11 +14,10 @@
         custom:titleText="@string/title_activity_temperature"   
         custom:titleSize="8sp"   
         custom:titleColor="@color/gray"   
-        custom:leftBtn="@drawable/title_back_icon_pressed"
-        custom:calendarBtn="@drawable/calendar_icon"/> 
+        custom:leftBtn="@drawable/title_back_icon_pressed"/> 
         
 
-    <TextView 
+   		<TextView 
 	         android:id="@+id/tempvaluetext"
 	         android:layout_width="match_parent"
 	         android:layout_height="wrap_content"
@@ -73,16 +72,50 @@
         
    	   
         
+         <LinearLayout 
+            android:id="@+id/descrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp">
+               
+            <LinearLayout 
+		        android:id="@+id/templist"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="28dp"
+		        android:orientation="vertical">
+	        
+                <TextView 
+			        android:id="@+id/temperature"
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:text="环境温度："
+			        android:textSize="30px"
+			        android:textColor="@color/gray"/>
+                
+                 <TextView 
+			        android:id="@+id/temperaturedate"
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:text="2016年12月12日"
+			        android:textSize="30px"
+			        android:textColor="@color/gray"/>
+                 </LinearLayout>
+	        
+            
+           
+            
+            <ImageView 
+                android:id="@+id/temperature_calendar"
+                android:layout_height="28dp"
+		        android:layout_width="28dp"
+		        android:src="@drawable/calendar"
+		        android:layout_marginTop="6dp"
+		        android:layout_marginLeft="160dp"/>
+            </LinearLayout>
          
-    <TextView 
-        android:id="@+id/temperaturetextview"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="环境温度："
-        android:textSize="30px"
-        android:textColor="@color/gray"
-        android:layout_marginTop="24dp"/>
+
     
     
      <LinearLayout 

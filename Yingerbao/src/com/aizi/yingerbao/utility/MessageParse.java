@@ -183,11 +183,11 @@ public class MessageParse {
             boolean isSyncData = true;
             long curtime = System.currentTimeMillis();
             long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
-        /*    if ((curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 60) 
-                    || devCheckInfo.mNoSyncBreathDataLength > 0) {*/
-                
+            if ((curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 60) 
+                    || devCheckInfo.mNoSyncBreathDataLength > 0) {
+             /*   
                 if (true) {
-                    Thread.sleep(3000);
+                    Thread.sleep(3000);*/
                     
                 // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
                 SLog.e(TAG, "sync data has consumed six hour ");

@@ -1,6 +1,7 @@
 package com.aizi.yingerbao.login;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import android.animation.Animator;
