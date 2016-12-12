@@ -8,6 +8,17 @@
     <dimen name="startup_undirect_layout_margin_top">16dp</dimen>
     <dimen name="startup_undirect_btn_margin_top">16dp</dimen>
     
+    <!-- 日历组件相关 -->
+	<dimen name="data_calender_left_margin">20dp</dimen>
+	<dimen name="data_calender_text_size">24px</dimen>
+	<dimen name="breath_data_calender_icon_left_margin">64dp</dimen>
+	<dimen name="temp_data_calender_icon_left_margin">154dp</dimen>
+	
+	 <!-- 搜索设备界面 -->
+    <dimen name="search_dev_text_size">24px</dimen>
+    
+     <!-- 主入口界面 -->
+     <dimen name="title_text_size">24px</dimen>
     
     <!-- 顶部导航栏字体 -->
     <dimen name="common_layout_top_text_size">12sp</dimen>

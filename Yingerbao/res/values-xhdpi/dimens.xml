@@ -11,7 +11,12 @@
     <dimen name="main_function_bottom_text_padding">8dp</dimen>
     <dimen name="main_setting_padding">8dp</dimen>
     <dimen name="main_status_speed_divider_magin">4dp</dimen>
-
+    
+     <!-- 日历组件相关 -->
+	<dimen name="data_calender_left_margin">20dp</dimen>
+	<dimen name="data_calender_text_size">30px</dimen>
+	<dimen name="breath_data_calender_icon_left_margin">60dp</dimen>
+	<dimen name="temp_data_calender_icon_left_margin">160dp</dimen>
     <!-- 公共组件属性 -->
     <dimen name="common_text_size_huge">20sp</dimen>
     <dimen name="common_text_size_large">18sp</dimen>

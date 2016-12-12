@@ -276,6 +276,7 @@ public class BluetoothService extends Service {
             SLog.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
         }
+        mBluetoothAdapter.enable();
         return true;
     }
 
@@ -290,12 +291,15 @@ public class BluetoothService extends Service {
      *         callback.
      */
     public boolean connect(final String address, boolean isrepeat) {
+        
+        disconnect();
+        initialize();
+        
         if (mBluetoothAdapter == null || address == null) {
             SLog.e(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
         }
-        
-        disconnect();
+
 
   /*      // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
@@ -310,6 +314,7 @@ public class BluetoothService extends Service {
                 return false;
             }
         }*/
+
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
@@ -342,20 +347,22 @@ public class BluetoothService extends Service {
                 return;
             }
             
+           
             
             PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
             //broadcastUpdate(ACTION_GATT_DISCONNECTED);
             
             //mBluetoothDeviceAddress = null;
             if (mBluetoothGatt != null) {
-                mBluetoothGatt.disconnect();
                 mBluetoothGatt.close();
+                mBluetoothGatt.disconnect();
                 mBluetoothGatt = null;
             } 
             if (BaseMessageHandler.mL2OutputStream != null) {
                 BaseMessageHandler.mL2OutputStream.reset();
                 BaseMessageHandler.mL2OutputStream.close();  
             }
+            mBluetoothAdapter.disable();
             SLog.e(TAG, "BluetoothAdapter DISCONNECT");
         } catch (Exception e) {
             SLog.e(TAG, e);

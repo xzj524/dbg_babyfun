@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -509,6 +510,12 @@ public class Utiliy {
             SLog.e(TAG, e);
         }  
         return null;
+    }
+
+    public static int getL2RecvLen(byte[] l2recv) {
+        Vector v = new Vector();
+        v.addElement(l2recv);
+        return v.size();
     }
 
 }

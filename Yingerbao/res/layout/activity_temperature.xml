@@ -12,52 +12,59 @@
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
         custom:titleText="@string/title_activity_temperature"   
-        custom:titleSize="8sp"   
+        custom:titleSize="@dimen/title_text_size"   
         custom:titleColor="@color/gray"   
         custom:leftBtn="@drawable/title_back_icon_pressed"/> 
         
-
-   		<TextView 
-	         android:id="@+id/tempvaluetext"
-	         android:layout_width="match_parent"
-	         android:layout_height="wrap_content"
-	         android:textColor="@color/gray"
-	         android:text="检测温度"
-	         android:textSize="64px"
-	         android:layout_marginTop="30dp"
-	         android:gravity="center_horizontal"/>
-        <LinearLayout 
-            android:id ="@+id/temperaturevalue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-             android:layout_marginTop="32dp">
-            <TextView 
-		         android:id="@+id/tempvalue"
-		         android:layout_width="wrap_content"
-		         android:layout_height="wrap_content"
-		         android:textColor="@color/gray"
-		         android:text="--"
-		         android:textSize="100px"/>
-            
-             <TextView 
-		         android:id="@+id/tempunit"
-		         android:layout_width="wrap_content"
-		         android:layout_height="wrap_content"
-		         android:textColor="@color/gray"
-		         android:text="℃"
-		         android:textSize="100px"/>
-            
-        </LinearLayout>
-        
-         <LinearLayout 
-            android:id="@+id/breath_list"
+   	<ScrollView 
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="10dp"
+         android:layout_below="@id/breathtopbar"> 
+         
+   	     <LinearLayout 
+            android:id="@+id/temprature_list"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
 	        android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
+            
+   	        <TextView 
+		         android:id="@+id/tempvaluetext"
+		         android:layout_width="match_parent"
+		         android:layout_height="wrap_content"
+		         android:textColor="@color/gray"
+		         android:text="检测温度"
+		         android:textSize="64px"
+		         android:layout_marginTop="30dp"
+		         android:gravity="center_horizontal"/>
+           <LinearLayout 
+	            android:id ="@+id/temperaturevalue"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:gravity="center_horizontal"
+	            android:layout_marginTop="32dp">
+	            <TextView 
+			         android:id="@+id/tempvalue"
+			         android:layout_width="wrap_content"
+			         android:layout_height="wrap_content"
+			         android:textColor="@color/gray"
+			         android:text="--"
+			         android:textSize="100px"/>
+	            
+	             <TextView 
+			         android:id="@+id/tempunit"
+			         android:layout_width="wrap_content"
+			         android:layout_height="wrap_content"
+			         android:textColor="@color/gray"
+			         android:text="℃"
+			         android:textSize="100px"/>
+            
+        	</LinearLayout>
+        
+
                <Button
 		           android:id="@+id/control_temp_button"
 		           style="?android:textAppearanceSmall"
@@ -68,22 +75,20 @@
 		           android:textStyle="bold"
 		           android:background="@color/pink_new"
 		           android:textColor="@color/white" />
-         </LinearLayout>
         
-   	   
-        
-         <LinearLayout 
+       <LinearLayout 
             android:id="@+id/descrip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="10dp">
                
             <LinearLayout 
-		        android:id="@+id/templist"
+		        android:id="@+id/tempdatelist"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="28dp"
+		        android:layout_marginLeft="@dimen/data_calender_left_margin"
 		        android:orientation="vertical">
 	        
                 <TextView 
@@ -91,7 +96,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_width="wrap_content"
 			        android:text="环境温度："
-			        android:textSize="30px"
+			        android:textSize="@dimen/data_calender_text_size"
 			        android:textColor="@color/gray"/>
                 
                  <TextView 
@@ -99,12 +104,10 @@
 			        android:layout_height="wrap_content"
 			        android:layout_width="wrap_content"
 			        android:text="2016年12月12日"
-			        android:textSize="30px"
+			        android:textSize="@dimen/data_calender_text_size"
 			        android:textColor="@color/gray"/>
                  </LinearLayout>
-	        
-            
-           
+	         
             
             <ImageView 
                 android:id="@+id/temperature_calendar"
@@ -112,11 +115,9 @@
 		        android:layout_width="28dp"
 		        android:src="@drawable/calendar"
 		        android:layout_marginTop="6dp"
-		        android:layout_marginLeft="160dp"/>
+		        android:layout_marginLeft="@dimen/temp_data_calender_icon_left_margin"/>
             </LinearLayout>
-         
-
-    
+        
     
      <LinearLayout 
             android:id ="@+id/temperaturechart"
@@ -323,6 +324,13 @@
              	 android:layout_width="wrap_content"
              	 android:text="23"/> -->
         
-     </LinearLayout>
+     		</LinearLayout>
+            
+            </LinearLayout>
+         
+   	</ScrollView>
+        
+
+   		
 
 </LinearLayout>

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
         custom:titleText="@string/title_activity_breath"   
-        custom:titleSize="8sp"   
+        custom:titleSize="@dimen/title_text_size"   
         custom:titleColor="@color/gray"   
         custom:leftBtn="@drawable/title_back_icon_pressed"/> 
 
@@ -100,13 +100,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="10dp">
                
             <LinearLayout 
 		        android:id="@+id/templist"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="20dp"
+		        android:layout_marginLeft="@dimen/data_calender_left_margin"
 		        android:orientation="vertical">
 				       
                   <TextView 
@@ -114,7 +115,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_width="wrap_content"
 			        android:text="呼吸停止分布(次数/小时)："
-			        android:textSize="30px"
+			        android:textSize="@dimen/data_calender_text_size"
 			        android:textColor="@color/gray"/>
 	        
 
@@ -123,7 +124,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_width="wrap_content"
 			        android:text="2016年12月12日"
-			        android:textSize="30px"
+			        android:textSize="@dimen/data_calender_text_size"
 			        android:textColor="@color/gray"/>
                  </LinearLayout>
 	        
@@ -134,7 +135,7 @@
 		        android:layout_width="28dp"
 		        android:src="@drawable/calendar"
 		        android:layout_marginTop="6dp"
-		        android:layout_marginLeft="60dp"/>
+		        android:layout_marginLeft="@dimen/breath_data_calender_icon_left_margin"/>
             </LinearLayout>
 		    
 		    

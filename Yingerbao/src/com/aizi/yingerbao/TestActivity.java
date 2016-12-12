@@ -227,9 +227,12 @@ public class TestActivity extends Activity {
                 BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 2);
                 BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 3);*/
             
-                Intent intent = new Intent();
+               /* Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), AboutActivity.class);
-                startActivity(intent);
+                startActivity(intent);*/
+                
+                byte[] testbyte = new byte[100];
+                SLog.e(TAG, "testbytelength = " + Utiliy.getL2RecvLen(testbyte));
             }
         });
         

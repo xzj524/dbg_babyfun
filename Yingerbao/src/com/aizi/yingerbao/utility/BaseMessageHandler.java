@@ -3,10 +3,12 @@ package com.aizi.yingerbao.utility;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Timer;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.R.array;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -29,11 +31,13 @@ public class BaseMessageHandler {
     private static BaseMessageHandler mInstance;
     private final static short BASE_DATA_HEAD = 6;
     private final static short BASE_L2_DATA_LEN = 5;
+    private final static short BASE_L2_RECE_LEN = 128;
     private static Object mYingerbaoLock = new Object();
     
     public static boolean mIsReceOver = true;
     public static ByteArrayOutputStream mL2OutputStream = new ByteArrayOutputStream();
-    public static byte[] mL2RecvByte;
+    private byte[] mL2RecvByte = new byte[BASE_L2_RECE_LEN];
+    private int mL2RecvCurrLen = 0;
     public static boolean isWriteSuccess = true;
     public static int repeattime = 0;
     public static int squenceID = 1;
@@ -156,15 +160,20 @@ public class BaseMessageHandler {
         try {
             mIsReceOver = generateBaseL2MsgByteArray(bsL1Msg); // 生成L2所需要的byte数组
             if (mIsReceOver) {
-                if (mL2OutputStream.size() > 0) {
-                    byte[] l2buff = mL2OutputStream.toByteArray();
+                //if (mL2OutputStream.size() > 0) {
+                    if (mL2RecvByte != null) {
+                    //byte[] l2buff = mL2OutputStream.toByteArray();
                     
-                    if (l2buff.length > 5) {
-                        int l2len = ((l2buff[3] & 0x01) << 8) | (l2buff[4] & 0xff);
-                        SLog.e(TAG, "receiveL2DATA before l2len = " + l2len + " totallen = " + l2buff.length);
-                        if (l2len + BASE_L2_DATA_LEN == l2buff.length) {
+                    if (mL2RecvCurrLen > 5) {
+                        //int l2len = ((l2buff[3] & 0x01) << 8) | (l2buff[4] & 0xff);
+                        int l2len = ((mL2RecvByte[3] & 0x01) << 8) | (mL2RecvByte[4] & 0xff);
+                        SLog.e(TAG, "receiveL2DATA before l2len = " + l2len + " totallen = " + mL2RecvCurrLen);
+                        if (l2len + BASE_L2_DATA_LEN == mL2RecvCurrLen) {
                             SLog.e(TAG, "receive L2 DATA");
-                            BaseL2Message bsl2Msg = getBaseL2Msg(mL2OutputStream.toByteArray()); 
+                            BaseL2Message bsl2Msg = getBaseL2Msg(mL2RecvByte, mL2RecvCurrLen); 
+                            Arrays.fill(mL2RecvByte, (byte) 0);
+                            mL2RecvCurrLen = 0;
+                            
                             mL2OutputStream.reset();
                             MessageParse.getInstance(context).RecvBaseL2Msg(bsl2Msg);
                         } 
@@ -195,7 +204,6 @@ public class BaseMessageHandler {
         Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
         intent.putExtra("transferdata", " L1 " + " ACK: " + l1ack);
         EventBus.getDefault().post(intent); // 显示到测试界面上
-        SLog.e(TAG, "WriteSendBuff*******************1");
         AsycEvent asycEvent = new AsycEvent(ACKMsg);
         asycEvent.isAck = true;
         BluetoothApi.getInstance(context).RecvEvent(asycEvent);
@@ -313,12 +321,34 @@ public class BaseMessageHandler {
             if (bsL1Msg.isAiziBaseL1Head) {
                 if (bsL1Msg.errFlag == 0) { // 标识起始位
                     index = bsL1Msg.sequenceId;
+                    Arrays.fill(mL2RecvByte, (byte) 0);
+                    System.arraycopy(bsL1Msg.payload, 0, mL2RecvByte, 0, bsL1Msg.payloadLength);
+                    mL2RecvCurrLen += bsL1Msg.payloadLength; 
+                    
                     mL2OutputStream.reset();
                     mL2OutputStream.write(bsL1Msg.payload);
                 } else if (bsL1Msg.errFlag == 1) { // 标识中间位
+                    //int l2recvlen = Utiliy.getL2RecvLen(mL2RecvByte);
+                    if (mL2RecvCurrLen + bsL1Msg.payloadLength <= 128) {
+                        System.arraycopy(bsL1Msg.payload, 0, mL2RecvByte, mL2RecvCurrLen, bsL1Msg.payloadLength);
+                        mL2RecvCurrLen += bsL1Msg.payloadLength;
+                    } else {
+                        Arrays.fill(mL2RecvByte, (byte) 0);
+                        mL2RecvCurrLen = 0;
+                        isover = true;
+                    }
+                    
                     mL2OutputStream.write(bsL1Msg.payload);
                 } else if (bsL1Msg.errFlag == 2) { // 标识结束位
+                    if (mL2RecvCurrLen + bsL1Msg.payloadLength <= 128) {
+                        System.arraycopy(bsL1Msg.payload, 0, mL2RecvByte, mL2RecvCurrLen, bsL1Msg.payloadLength);
+                        mL2RecvCurrLen += bsL1Msg.payloadLength;
+                    } else {
+                        Arrays.fill(mL2RecvByte, (byte) 0);
+                        mL2RecvCurrLen = 0;
+                    }
                     isover = true;
+                    
                     mL2OutputStream.write(bsL1Msg.payload);
                 } else {
                     isover = false;
@@ -335,14 +365,14 @@ public class BaseMessageHandler {
 
 
 
-    private BaseL2Message getBaseL2Msg(byte[] l2data) {
+    private BaseL2Message getBaseL2Msg(byte[] l2data, int mL2RecvCurrLen2) {
         BaseL2Message bsl2Msg = new BaseL2Message();
         if (l2data.length > 1) {
             bsl2Msg.commanID = (short)(l2data[0] & 0xff); 
             bsl2Msg.versionCode = (short) ((l2data[1] & 0xf0) >> 4);
-            int len = l2data.length;
-            bsl2Msg.payload = new byte[len-2];
-            System.arraycopy(l2data, 2, bsl2Msg.payload, 0, len - 2); // 拷贝l2数据
+            //int len = l2data.length;
+            bsl2Msg.payload = new byte[mL2RecvCurrLen2-2];
+            System.arraycopy(l2data, 2, bsl2Msg.payload, 0, mL2RecvCurrLen2 - 2); // 拷贝l2数据
         }   
         return bsl2Msg;
     }
