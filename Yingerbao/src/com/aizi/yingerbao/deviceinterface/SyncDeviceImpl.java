@@ -2,8 +2,6 @@ package com.aizi.yingerbao.deviceinterface;
 
 import java.util.Calendar;
 
-import u.aly.by;
-
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -12,23 +10,36 @@ import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.command.CommandSendRequest;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.service.BluetoothService;
 import com.aizi.yingerbao.synctime.DeviceTime;
-import com.aizi.yingerbao.utility.BaseMessageHandler;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 
 public class SyncDeviceImpl implements SyncDevice{
     
-    private static final String TAG = SyncDeviceImpl.class.getSimpleName();
-    private BluetoothService mBluetoothService = null;
-    private static boolean mIsBluetoothReady;
-    private String mAddress;
+    private final String TAG = SyncDeviceImpl.class.getSimpleName();
     Context mContext;
 
     public SyncDeviceImpl(Context context) {
         mContext = context;
-        mIsBluetoothReady = false;      
+    }
+    
+    @Override
+    public DeviceResponse<?> updateDeviceRom() {
+        SLog.e(TAG, " updateDeviceRom ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 3;
+            keyPayload.keyLen = 0; 
+
+            BaseL2Message bsl2Msg 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_UPDATE_ROM, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
+            String str = "updateDeviceRom";
+            Utiliy.dataToFile(str);
+        }
+        
+        return null;
     }
     
 
@@ -46,11 +57,9 @@ public class SyncDeviceImpl implements SyncDevice{
             BaseL2Message bsl2Msg 
             = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
                     Constant.BASE_VERSION_CODE, keyPayload);
-            //boolean isSendL2Over = BaseMessageHandler.sendL2Message(bsl2Msg);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
             String str = "setDeviceTime";
             Utiliy.dataToFile(str);
-            mIsBluetoothReady = true;
         }
         
         return null;
@@ -112,6 +121,25 @@ public class SyncDeviceImpl implements SyncDevice{
         }
         return null;
     }
+    
+    @Override
+    public DeviceResponse<?> manufactureTestCommand() {
+        SLog.e(TAG, " manufactureTestCommand ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 8;
+            keyPayload.keyLen = 0;
+            
+            BaseL2Message bsl2Msg 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_MANUFACTURE_TEST, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
+            String str = "manufactureTestCommand";
+            Utiliy.dataToFile(str);
+        }
+        return null;
+    }
+
 
 
 

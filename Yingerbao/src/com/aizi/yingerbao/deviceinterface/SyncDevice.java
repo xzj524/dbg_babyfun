@@ -38,5 +38,9 @@ public interface SyncDevice {
 
     DeviceResponse<?> getBreathStopInfo();
 
+    DeviceResponse<?> manufactureTestCommand();
+
+    DeviceResponse<?> updateDeviceRom();
+
 
 }

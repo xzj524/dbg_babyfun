@@ -53,9 +53,9 @@ public class CommandSendRequest {
         return requestId;
     }
 
-    public void send() {
+    public void send(boolean isrepeat) {
         try {
-            BaseMessageHandler.getInstance(mContext).sendL2Message(mContext, mBL2Msg);
+            BaseMessageHandler.getInstance(mContext).sendL2Message(mContext, mBL2Msg, isrepeat);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

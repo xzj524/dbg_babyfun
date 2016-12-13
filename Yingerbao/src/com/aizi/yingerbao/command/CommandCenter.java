@@ -26,7 +26,7 @@ public class CommandCenter {
     static Context mContext;
     
     private static final Object synchronizedLock = new Object();
-    private static int SLEEP_TIME = 15 * 1000;
+    private static int SLEEP_TIME = 10 * 1000;
     private static int mRetryTimes = 0;
     
     public CommandCenter(Context context) {
@@ -81,9 +81,8 @@ public class CommandCenter {
                             synchronized (synchronizedLock) { //传输失败之后继续下一个
                                 if (mRetryTimes < 3) {
                                     // 重新加入任务队列
-                                    //mSendDataQueue.produce(mCommandSendRequest);
                                     SLog.e(TAG, "RETRY TIMES = " + mRetryTimes);
-                                    mCommandSendRequest.send();
+                                    mCommandSendRequest.send(true);
                                     SLog.e(TAG, "handleIntent CommandCenter mCommandSendRequest send");
                                     SLog.e(TAG, "handleIntent CommandCenter mCommandSendRequest set alarm timer");
                                     ThreadPool.getInstance().submitRunnable(timeOutRunnable);
@@ -93,8 +92,6 @@ public class CommandCenter {
                                     mRetryTimes = 0;
                                     synchronizedLock.notifyAll();
                                 }
-                                
-                                
                             }
                             break;
                         default:
@@ -123,7 +120,12 @@ public class CommandCenter {
             try {
                 Thread.sleep(SLEEP_TIME);
                 synchronized (synchronizedLock) {
-                    Utiliy.reflectTranDataType(mContext, 2);
+                    if (Utiliy.isBluetoothConnected(mContext)) {
+                        Utiliy.reflectTranDataType(mContext, 2);
+                    } else {
+                        mRetryTimes = 0;
+                    }
+                   
                     if (mRetryTimes == 0) {
                         BluetoothApi.getInstance(mContext).mSendDataQueue.clearqueue();
                         synchronizedLock.notifyAll();
@@ -151,7 +153,7 @@ public class CommandCenter {
             try {
                 while (true) {
                     mCommandSendRequest =  sendqueue.consume();
-                    mCommandSendRequest.send();
+                    mCommandSendRequest.send(false);
                     SLog.e(TAG, "CommandCenter mCommandSendRequest send");
                     ThreadPool.getInstance().submitRunnable(timeOutRunnable);
                     SLog.e(TAG, "CommandCenter mCommandSendRequest set alarm timer");
@@ -163,6 +165,7 @@ public class CommandCenter {
                             SLog.e(TAG, e);
                         }
                     }
+                    
                 }
             } catch (Exception ex) {
                 SLog.e(TAG, ex);

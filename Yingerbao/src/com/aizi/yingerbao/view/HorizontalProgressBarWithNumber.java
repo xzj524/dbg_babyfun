@@ -14,8 +14,9 @@ public class HorizontalProgressBarWithNumber extends ProgressBar
 {
 
 	private static final int DEFAULT_TEXT_SIZE = 10;
-	private static final int DEFAULT_TEXT_COLOR = 0XFFFC00D1;
+	private static final int DEFAULT_TEXT_COLOR = 0XFFFFFFFF;
 	private static final int DEFAULT_COLOR_UNREACHED_COLOR = 0xFFd3d6da;
+	private static final int DEFAULT_COLOR_REACHED_COLOR = 0XFFFFFFFF;
 	private static final int DEFAULT_HEIGHT_REACHED_PROGRESS_BAR = 2;
 	private static final int DEFAULT_HEIGHT_UNREACHED_PROGRESS_BAR = 2;
 	private static final int DEFAULT_SIZE_TEXT_OFFSET = 10;
@@ -46,7 +47,7 @@ public class HorizontalProgressBarWithNumber extends ProgressBar
 	/**
 	 * color of reached bar
 	 */
-	protected int mReachedBarColor = DEFAULT_TEXT_COLOR;
+	protected int mReachedBarColor = DEFAULT_COLOR_REACHED_COLOR;
 	/**
 	 * color of unreached bar
 	 */
@@ -134,7 +135,7 @@ public class HorizontalProgressBarWithNumber extends ProgressBar
 		mReachedBarColor = attributes
 				.getColor(
 						R.styleable.HorizontalProgressBarWithNumber_progress_reached_color,
-						mTextColor);
+						DEFAULT_COLOR_REACHED_COLOR);
 		mUnReachedBarColor = attributes
 				.getColor(
 						R.styleable.HorizontalProgressBarWithNumber_progress_unreached_color,

@@ -88,5 +88,17 @@ public class SyncDeviceRefactor implements SyncDevice{
         return null;
     }
 
+    @Override
+    public DeviceResponse<?> manufactureTestCommand() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DeviceResponse<?> updateDeviceRom() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 
 }

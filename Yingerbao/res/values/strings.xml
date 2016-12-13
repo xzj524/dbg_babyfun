@@ -37,10 +37,9 @@
     <string name="baby_fever">孩子发烧了！！</string>
     <string name="baby_breath_stop">孩子呼吸停滞了！！</string>
     <string name="baby_breath_stop_info">孩子呼吸停滞了\n请及时查看！</string>
-    
+
     <!-- 关于界面 -->
     <string name="about_title">关于</string>
-    
     <string name="title_activity_baby_status">BabyStatusActivity</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_baby_breath">BabyBreathActivity</string>
@@ -80,5 +79,6 @@
     <string name="date_no_data">该日无数据</string>
     <string name="title_activity_baby_breath_emergency">BabyBreathEmergencyActivity</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_manufature_test">工厂测试</string>
 
 </resources>

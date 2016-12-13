@@ -273,7 +273,8 @@ public class Utiliy {
             for (BluetoothDevice device : devices) {
                 String devname = device.getName();
                 if (!TextUtils.isEmpty(devname)) {
-                    if (devname.equals(Constant.AIZI_DEVICE_TAG)) {
+                    if (devname.equals(Constant.AIZI_DEVICE_TAG)
+                            || devname.equals(Constant.AIZI_DEVICE_TEST_TAG)) {
                         int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
                         if (state == BluetoothProfile.STATE_CONNECTED) {
                             isConnected = true;

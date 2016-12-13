@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,10 +16,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.utility.BaseMessageHandler;
 import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
@@ -227,15 +224,18 @@ public class TestActivity extends Activity {
                 BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 2);
                 BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 3);*/
             
-               /* Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), AboutActivity.class);
-                startActivity(intent);*/
-                
-                byte[] testbyte = new byte[100];
-                SLog.e(TAG, "testbytelength = " + Utiliy.getL2RecvLen(testbyte));
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), ManufatureTestActivity.class);
+                startActivity(intent);
             }
         });
         
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
     
     public void onEventMainThread(Intent event) {  

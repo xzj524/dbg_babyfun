@@ -262,7 +262,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCurrentState = ConnectDeviceState.IDEL;
             mProgressImageView.clearAnimation();
             
-            BluetoothApi.getInstance(mContext).mBluetoothService.disconnect();
+            BluetoothApi.getInstance(mContext).mBluetoothService.disconnect(false);
             
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);

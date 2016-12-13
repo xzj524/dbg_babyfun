@@ -108,21 +108,8 @@ public class BluetoothService extends Service {
                 SLog.e(TAG, "Disconnected from GATT server.");   
                 PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
                 
-                disconnect();
+                disconnect(false);
                 broadcastUpdate(connectionAction);
-                
-                /*boolean conres = false;
-                SLog.e(TAG, "mConnectTimes = " + mConnectTimes);
-                if (mConnectTimes < 3) {
-                    mConnectTimes++;
-                    initialize();
-                    conres = connect(mBluetoothDeviceAddress, true);
-                    if (!conres) {
-                        broadcastUpdate(connectionAction);
-                    }
-                } else {
-                    broadcastUpdate(connectionAction);
-                }*/
             }
         }
 
@@ -187,7 +174,7 @@ public class BluetoothService extends Service {
                     //Utiliy.setRepeatAlarm(getApplicationContext(), SYNC_DATA_TIMEOUT, Utiliy.getRepeatAlarmPendingIntent(getApplicationContext()));
                     return;
                 } else {
-                    disconnect();
+                    disconnect(true);
                 }
             } else {  
                 SLog.e(TAG, "Bluetooth  is not Discovered ");
@@ -207,20 +194,21 @@ public class BluetoothService extends Service {
                                             BluetoothGattCharacteristic characteristic) {
             BaseMessageHandler.getInstance(getApplicationContext())
                 .acquireBaseData(getApplicationContext(),gatt.getDevice(), characteristic);
-        	//BaseMessageHandler.acquireBaseData(getApplicationContext(),gatt.getDevice(), characteristic);
         }
         
-
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            String str = null;
             if (BLE_UUID_NUS_TX_CHARACTERISTIC.equals(characteristic.getUuid())) {
                 if (BluetoothGatt.GATT_SUCCESS == status) {
                     BaseMessageHandler.isWriteSuccess = true;
                     BaseMessageHandler.repeattime = 0;
-                    SLog.e(TAG, "onCharacteristicWrite isWriteSuccess = true");
+                    str = "onCharacteristicWrite isWriteSuccess = true  " + Utiliy.printHexString(characteristic.getValue()); 
                 } else {
                     BaseMessageHandler.isWriteSuccess = false;
-                    SLog.e(TAG, "onCharacteristicWrite isWriteSuccess = false");
+                    str = "onCharacteristicWrite isWriteSuccess = false  " + Utiliy.printHexString(characteristic.getValue());
                 }
+                SLog.e(TAG, str);
+                Utiliy.logToFile(str);// 写入本地日志文件
             }
         };
     };
@@ -248,8 +236,7 @@ public class BluetoothService extends Service {
         // After using a given device, you should make sure that BluetoothGatt.close() is called
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
-        disconnect();
-        //EventBus.getDefault().unregister(this);//反注册EventBus  
+        disconnect(true);
         return super.onUnbind(intent);
     }
 
@@ -292,7 +279,7 @@ public class BluetoothService extends Service {
      */
     public boolean connect(final String address, boolean isrepeat) {
         
-        disconnect();
+        disconnect(true);
         initialize();
         
         if (mBluetoothAdapter == null || address == null) {
@@ -339,8 +326,9 @@ public class BluetoothService extends Service {
      * is reported asynchronously through the
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
+     * @param enablebluetooth 
      */
-    public void disconnect() {
+    public void disconnect(boolean disbluetooth) {
         try {
             if (mBluetoothAdapter == null || mBluetoothGatt == null) {
                 SLog.e(TAG, "BluetoothAdapter not initialized");
@@ -362,7 +350,10 @@ public class BluetoothService extends Service {
                 BaseMessageHandler.mL2OutputStream.reset();
                 BaseMessageHandler.mL2OutputStream.close();  
             }
-            mBluetoothAdapter.disable();
+            if (disbluetooth) {
+                mBluetoothAdapter.disable();
+            }
+            
             SLog.e(TAG, "BluetoothAdapter DISCONNECT");
         } catch (Exception e) {
             SLog.e(TAG, e);

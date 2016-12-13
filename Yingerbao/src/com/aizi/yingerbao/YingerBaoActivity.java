@@ -278,7 +278,7 @@ public class YingerBaoActivity extends FragmentActivity  implements onTitleBarCl
         // TODO Auto-generated method stub
         super.onDestroy();
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-        BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect();
+        BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(true);
     }
 
 }

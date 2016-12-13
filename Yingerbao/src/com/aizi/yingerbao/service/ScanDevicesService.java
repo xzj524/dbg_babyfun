@@ -92,9 +92,6 @@ public class ScanDevicesService extends Service{
                 public void run() {
                    if (mScanning) { //在扫描进行中才会停止扫描
                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                      /* // 没有扫描到蓝牙设备
-                       Intent intent = new Intent(Constant.BLUETOOTH_SCAN_NOT_FOUND);
-                       EventBus.getDefault().post(intent); */
                    }
                 }
             }, SCAN_PERIOD);
@@ -115,8 +112,10 @@ public class ScanDevicesService extends Service{
         public void onLeScan(final BluetoothDevice device, 
                 final int rssi, byte[] scanRecord) {
             boolean isDiscovery = isDiscoveryDevice(device,rssi);
+            SLog.e(TAG, "Discovery is " + isDiscovery 
+                    + " connect_interrupt = " +  PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0));
             if (isDiscovery) {
-                // 中断连接定时器
+                // 中断连接定时器 
                 if (PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0) != 1) {
                     if (BluetoothApi.getInstance(getApplicationContext()).mBluetoothService != null) {
                         BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.connect(device.getAddress(), false);
@@ -143,7 +142,8 @@ public class ScanDevicesService extends Service{
            
             if (!isDeviceFound) {
                 if (!TextUtils.isEmpty(device.getName())) {
-                    if (device.getName().equals(Constant.AIZI_DEVICE_TAG)) {
+                    if (device.getName().equals(Constant.AIZI_DEVICE_TAG)
+                            || device.getName().equals(Constant.AIZI_DEVICE_TEST_TAG)) {
                         mDeviceList.add(device);
                         isDeviceFound = true;
                         PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_DEVICE_ADDRESS, 
@@ -171,7 +171,7 @@ public class ScanDevicesService extends Service{
     
     @Override
     public boolean onUnbind(Intent intent) {
-        //scanBLEDevice(false);
+        scanBLEDevice(false);
         return super.onUnbind(intent);
     }
 

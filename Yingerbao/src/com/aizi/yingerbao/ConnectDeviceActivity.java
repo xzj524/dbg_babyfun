@@ -266,15 +266,15 @@ onTitleBarClickListener {
                 mTotalSyncDataLen = intent.getIntExtra(Constant.NOT_SYNC_DATA_LEN, 0);
                 //SLog.e(TAG, "RECV SYNC DATA  mTotalSyncDataLen real = " + mTotalSyncDataLen);
                 if (mTotalSyncDataLen <= 100) { // 因为该数值不准确，加上一个值比实际值大
-                    mTotalSyncDataLen += 20;
+                    mTotalSyncDataLen += 10;
                 } else if (mTotalSyncDataLen > 100 && mTotalSyncDataLen <= 200) {
-                    mTotalSyncDataLen += 50;
+                    mTotalSyncDataLen += 30;
                 } else if (mTotalSyncDataLen > 200 && mTotalSyncDataLen <= 500) {
-                    mTotalSyncDataLen += 100;
+                    mTotalSyncDataLen += 50;
                 } else if (mTotalSyncDataLen > 500 && mTotalSyncDataLen <= 1000) {
-                    mTotalSyncDataLen += 200; 
+                    mTotalSyncDataLen += 100; 
                 } else if (mTotalSyncDataLen >= 1000) {
-                    mTotalSyncDataLen += 500;
+                    mTotalSyncDataLen += 300;
                 }
             }
         }
@@ -291,7 +291,6 @@ onTitleBarClickListener {
         super.onPause();
         MobclickAgent.onPause(this);
     }
-    
     
     /** 
      * @param state 

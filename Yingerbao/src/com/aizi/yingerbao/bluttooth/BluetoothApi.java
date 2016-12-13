@@ -75,7 +75,7 @@ public class BluetoothApi {
                 }
         }
         public void onServiceDisconnected(ComponentName classname) {
-            mBluetoothService.disconnect();
+            mBluetoothService.disconnect(true);
             mBluetoothService = null;
         }
     };
@@ -87,17 +87,12 @@ public class BluetoothApi {
                 while (true) {
                     if (BaseMessageHandler.isWriteSuccess) {
                         waittimes = 0;
-                        SLog.e(TAG, "WriteSendBuff*******************3");
                         writeByte(event.getByte());
                         break;
                     } else {
                         waittimes++;
-                        if (waittimes > 2) {
+                        if (waittimes > 0) {
                             waittimes = 0;
-                            /*BaseMessageHandler.repeattime++;
-                            if (BaseMessageHandler.repeattime < 3) {
-                                //sendqueue.produce(event);
-                            } */
                             BaseMessageHandler.isWriteSuccess = true;
                         }
                     }
@@ -106,14 +101,7 @@ public class BluetoothApi {
             } catch (Exception e) {
                 SLog.e(TAG, e);
             }
-           
-            
-            //writeByte(event.getByte());
-            //SLog.e(TAG, "RecvEvent WritByte");
         }
-        
-        //Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
-        //mExecutorService.submit(producer);
      } 
     
     public void onEvent(AsycEvent event) { 
@@ -128,7 +116,6 @@ public class BluetoothApi {
         if (mBluetoothService != null) {
             wrres = mBluetoothService.writeBaseRXCharacteristic(wrByte);
             BaseMessageHandler.isWriteSuccess = false;
-            SLog.e(TAG, "WriteSendBuff*******************4");
         }
         return wrres;
     }
@@ -217,7 +204,6 @@ public class BluetoothApi {
                     if (BaseMessageHandler.isWriteSuccess) {
                         waittimes = 0;
                         event =  sendqueue.consume();
-                        SLog.e(TAG, "WriteSendBuff*******************3");
                         writeByte(event.getByte());
                         if (event.isAck) {
                             BaseMessageHandler.isWriteSuccess = true;

@@ -174,7 +174,7 @@ public class MessageParse {
             intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
             EventBus.getDefault().post(intent);
   
-            if (isDeviceActivited == 0) {
+          /*  if (isDeviceActivited == 0) {
                 // 如果没有激活过设备则进行激活
                 DeviceFactory.getInstance(mContext).activateDevice();
             }
@@ -184,11 +184,7 @@ public class MessageParse {
             long curtime = System.currentTimeMillis();
             long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
             if ((curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 60) 
-                    || devCheckInfo.mNoSyncBreathDataLength > 0) {
-             /*   
-                if (true) {
-                    Thread.sleep(3000);*/
-                    
+                    || devCheckInfo.mNoSyncBreathDataLength > 0) {           
                 // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
                 SLog.e(TAG, "sync data has consumed six hour ");
                 DeviceFactory.getInstance(mContext).getAllNoSyncInfo(2);
@@ -204,7 +200,7 @@ public class MessageParse {
             
             intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
             intent.putExtra(Constant.IS_SYNC_DATA, isSyncData);
-            EventBus.getDefault().post(intent);
+            EventBus.getDefault().post(intent);*/
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -704,7 +700,6 @@ public class MessageParse {
 
 
     private void handleManufature(List<KeyPayload> params) {
-        // TODO Auto-generated method stub
         for (KeyPayload kpload:params) {
             if (kpload.key == 2) { // 呼吸测试启动返回
                 SLog.e(TAG, "START BREATH ALREADY");
@@ -728,6 +723,34 @@ public class MessageParse {
                     Utiliy.reflectTranDataType(mContext, 0);
                 } else if (breathstopresult == 1) {
                     Utiliy.reflectTranDataType(mContext, 2);
+                }
+            } else if (kpload.key == 9) { // 自动化测试命令返回
+                if (kpload.keyLen >= 4) {
+                    int checkres = kpload.keyValue[0] & 0x01; // 自动化检测结果
+                    int acceleration = (kpload.keyValue[1] & 0xff) << 8 | (kpload.keyValue[2] & 0xff); // 加速度值
+                    
+                    int PNValue = (kpload.keyValue[3] & 0x80) >> 7;
+                    int tempHigh = kpload.keyValue[3] & 0x7f;
+                    int tempLow = kpload.keyValue[4] & 0xff;
+                    
+                    String tempString = "";
+                    if (PNValue == 1) {
+                        tempString = "-" + tempHigh + "." + tempLow;
+                    } else {
+                        tempString = tempHigh + "." + tempLow;
+                    }
+                    
+                    SLog.e(TAG, "AutoCheckResult = " + checkres 
+                            + " Acceleration = " + acceleration
+                            + " CurrentTemperature = " + tempString);
+                    
+                    Intent intent = new Intent(Constant.MANU_TEST_RESULT);
+                    intent.putExtra("manu_check_result", checkres);
+                    intent.putExtra("manu_acceleration", acceleration);
+                    intent.putExtra("manu_temperature", tempString);
+                    EventBus.getDefault().post(intent);
+                    
+                    Utiliy.reflectTranDataType(mContext, 0);
                 }
             }
         }

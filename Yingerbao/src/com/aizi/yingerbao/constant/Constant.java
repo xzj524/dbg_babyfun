@@ -31,8 +31,10 @@ public class Constant {
     
     public static final short BASE_VERSION_CODE = 1;
     
+    /** 爱子科技设备标识测试版 */
+    public static final String AIZI_DEVICE_TEST_TAG = "my_hrm";
     /** 爱子科技设备标识 */
-    public static final String AIZI_DEVICE_TAG = "my_hrm";
+    public static final String AIZI_DEVICE_TAG = "YingerBao";
     
     /** 定时器延时类型 */
     public static final String ALARM_WAIT_TYPE = "wait_type";
@@ -95,6 +97,9 @@ public class Constant {
     
     /** 数据传输单实例  */
     public static final String ACITON_DATA_TRANSFER = "com.aizi.yingerbao.datatransfer";
+    
+    /** 工厂测试命令结果反馈  */
+    public static final String MANU_TEST_RESULT = "com.aizi.yingerbao.manu.test";
     
     /** 数据日期 年  */
     public static final String DATA_DATE_YEAR = "calendar_year";

@@ -128,7 +128,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     protected void onDestroy() {
         super.onDestroy();
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-        BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect();
+        BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(true);
         //BluetoothApi.getInstance(getApplicationContext()).unregisterEventBus();
         CommandCenter.getInstance(getApplicationContext()).clearInterfaceQueue();
     }

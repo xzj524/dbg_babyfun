@@ -30,8 +30,6 @@
             android:id="@+id/button0"
             android:layout_width="164dip"
             android:layout_height="164dip"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="8dip"
             app:cb_text="呼吸"
             app:cb_color="@color/pink_new" />
@@ -41,13 +39,9 @@
             android:layout_width="164dip"
             android:layout_height="164dip"
             android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="8dip"
             app:cb_text="温度计"
             app:cb_color="@color/pink_new" />
-       
-
     </LinearLayout>
     
     <com.aizi.yingerbao.view.BatteryView
@@ -56,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/funcbtn"/>
+        android:layout_below="@id/funcbtn"
+        android:visibility="gone"/>
 
 </RelativeLayout>
