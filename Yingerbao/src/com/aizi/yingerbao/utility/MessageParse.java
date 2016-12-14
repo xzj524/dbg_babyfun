@@ -72,7 +72,7 @@ public class MessageParse {
         
         String l2payload = Utiliy.printHexString(bMsg.toByte());
         SLog.e(TAG, "HEX string l2load1 = " + l2payload);
-        Utiliy.logToFile(" L2 " + " RECV " + l2payload);// 写入本地日志文件
+        Utiliy.logToFile(" L2 RECV DATA : " + l2payload);// 写入本地日志文件
         
         Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
         intent.putExtra("transferdata", "L2 " + l2payload);
@@ -174,7 +174,7 @@ public class MessageParse {
             intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
             EventBus.getDefault().post(intent);
   
-          /*  if (isDeviceActivited == 0) {
+           /*if (isDeviceActivited == 0) {
                 // 如果没有激活过设备则进行激活
                 DeviceFactory.getInstance(mContext).activateDevice();
             }
@@ -201,6 +201,12 @@ public class MessageParse {
             intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
             intent.putExtra(Constant.IS_SYNC_DATA, isSyncData);
             EventBus.getDefault().post(intent);*/
+            
+            
+            /***工厂测试***/
+            intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
+            intent.putExtra(Constant.IS_SYNC_DATA, false);
+            EventBus.getDefault().post(intent);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

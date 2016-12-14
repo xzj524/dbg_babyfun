@@ -346,10 +346,10 @@ public class BluetoothService extends Service {
                 mBluetoothGatt.disconnect();
                 mBluetoothGatt = null;
             } 
-            if (BaseMessageHandler.mL2OutputStream != null) {
-                BaseMessageHandler.mL2OutputStream.reset();
-                BaseMessageHandler.mL2OutputStream.close();  
-            }
+            
+            // 清空接收数据缓存区
+            BaseMessageHandler.clearL2RecvByte();
+            
             if (disbluetooth) {
                 mBluetoothAdapter.disable();
             }

@@ -35,6 +35,8 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.receiver.AlarmManagerReceiver;
 
+import de.greenrobot.event.EventBus;
+
 /*
 * @author xuzejun
 * @since 2016-4-2
@@ -513,10 +515,11 @@ public class Utiliy {
         return null;
     }
 
-    public static int getL2RecvLen(byte[] l2recv) {
-        Vector v = new Vector();
-        v.addElement(l2recv);
-        return v.size();
+    public static void saveLog(String descrip, String payload) {
+        // TODO Auto-generated method stub
+        Utiliy.logToFile(descrip + payload);
+        SLog.e(TAG, descrip + payload);
+        
     }
 
 }

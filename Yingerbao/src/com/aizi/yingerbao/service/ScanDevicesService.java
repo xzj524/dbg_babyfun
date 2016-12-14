@@ -33,6 +33,7 @@ public class ScanDevicesService extends Service{
     Map<String, Integer> mDevRssiValues;
     
     private static final long SCAN_PERIOD = 18 * 1000; //扫描设备超时时间
+   
     
     @Override
     public IBinder onBind(Intent intent) {
@@ -74,6 +75,7 @@ public class ScanDevicesService extends Service{
     }
 
     public void startScanDevice() {
+        mDeviceList.clear();
         scanBLEDevice(true);
     }
     
@@ -92,6 +94,13 @@ public class ScanDevicesService extends Service{
                 public void run() {
                    if (mScanning) { //在扫描进行中才会停止扫描
                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
+                       
+                       /***工厂测试**/
+                       
+                       
+                       
+                       /***工厂测试**/
+                       
                    }
                 }
             }, SCAN_PERIOD);
@@ -112,9 +121,11 @@ public class ScanDevicesService extends Service{
         public void onLeScan(final BluetoothDevice device, 
                 final int rssi, byte[] scanRecord) {
             boolean isDiscovery = isDiscoveryDevice(device,rssi);
-            SLog.e(TAG, "Discovery is " + isDiscovery 
-                    + " connect_interrupt = " +  PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0));
-            if (isDiscovery) {
+           
+           
+            if (isDiscovery) {  
+                SLog.e(TAG, "Discovery is " + isDiscovery 
+                        + " connect_interrupt = " +  PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0));
                 // 中断连接定时器 
                 if (PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0) != 1) {
                     if (BluetoothApi.getInstance(getApplicationContext()).mBluetoothService != null) {
@@ -129,31 +140,42 @@ public class ScanDevicesService extends Service{
     private boolean isDiscoveryDevice(BluetoothDevice device, int rssi) {
         boolean isDeviceFound = false;
         try {
-  /*          for (BluetoothDevice listDev : mDeviceList) {
+            
+            /**工厂测试**/   
+          /*  for (BluetoothDevice listDev : mDeviceList) {
                 if (listDev.getAddress().equals(device.getAddress())) {  
                     isDeviceFound = true;  // 设备已经发现
                     stopScanDevice();
                     SLog.e(TAG, "Device is already in the device list " + device.getAddress());
                     break;
                 }
-            }  */  
-            SLog.e(TAG, "searching....  Address = " + device.getAddress() 
-                      + " Name = " + device.getName());
+            }*/
+            /**工厂测试**/ 
+            
+       
            
             if (!isDeviceFound) {
                 if (!TextUtils.isEmpty(device.getName())) {
                     if (device.getName().equals(Constant.AIZI_DEVICE_TAG)
                             || device.getName().equals(Constant.AIZI_DEVICE_TEST_TAG)) {
-                        mDeviceList.add(device);
-                        isDeviceFound = true;
-                        PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_DEVICE_ADDRESS, 
-                                device.getAddress());
-                        
-                        PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_PHONE_ADDRESS, 
-                                mBluetoothAdapter.getAddress());
-                        
-                        mScanning = false;
-                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
+                        SLog.e(TAG, "searching....  Address = " + device.getAddress() 
+                                + " Name = " + device.getName()
+                                + " rssi = " + rssi
+                                + " SCAN_RANG = " + Constant.SCAN_RANG);
+                        if (rssi > Constant.SCAN_RANG) {
+                            mDeviceList.add(device);
+                            mDevRssiValues.put(device.getAddress(), rssi);
+                            
+                            isDeviceFound = true;
+                            PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_DEVICE_ADDRESS, 
+                                    device.getAddress());
+                            
+                            PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_PHONE_ADDRESS, 
+                                    mBluetoothAdapter.getAddress());
+                            
+                            mScanning = false;
+                            mBluetoothAdapter.stopLeScan(mBLEScanCallback);
+                        }
                     }
                 }
             }

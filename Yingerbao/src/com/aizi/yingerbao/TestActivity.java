@@ -44,6 +44,7 @@ public class TestActivity extends Activity {
     Button mActiviteDev;
     Button mCheckDev;
     Button mFixDevtime;
+    Button mUpdateRom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +228,17 @@ public class TestActivity extends Activity {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ManufatureTestActivity.class);
                 startActivity(intent);
+            }
+        });
+        
+        mUpdateRom = (Button) findViewById(R.id.btn_updaterom);
+        mUpdateRom.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                if (Utiliy.isBluetoothConnected(getApplicationContext())) {
+                    DeviceFactory.getInstance(getApplicationContext()).updateDeviceRom();
+                }
             }
         });
         

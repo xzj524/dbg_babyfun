@@ -1,17 +1,8 @@
 package com.aizi.yingerbao;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
-import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.deviceinterface.DeviceFactory;
-import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.utility.Utiliy;
-import com.aizi.yingerbao.view.CircleButton;
-
-import de.greenrobot.event.EventBus;
-
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,18 +13,35 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ManufatureTestActivity extends Activity {
+import com.aizi.yingerbao.bluttooth.BluetoothApi;
+import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
+import com.aizi.yingerbao.slidingmenu.SlidingMenuHelper;
+import com.aizi.yingerbao.utility.Utiliy;
+import com.aizi.yingerbao.view.CircleButton;
+import com.aizi.yingerbao.view.TopBarView;
+import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
+
+import de.greenrobot.event.EventBus;
+
+public class ManufatureTestActivity extends Activity implements onTitleBarClickListener {
     private static final String TAG = ManufatureTestActivity.class.getSimpleName();
     
     Button mClearLog;
+    Button mSetSearchRange;
     private ListView mMsgListView;
     private ArrayAdapter<String> listAdapter;
+    private  TopBarView mManuTopbar;
+    
+    EditText mSearchParam;
     
     CircleButton mCircleButtonTest;
-    CircleButton mCircleButtonUpdate;
+    CircleButton mCircleButtonDisconnect;
+    SlidingMenuHelper mSlidingMenuHelper;
     
     boolean mManuTestStart = false;
     boolean mIsMeasuring = false;
@@ -48,6 +56,28 @@ public class ManufatureTestActivity extends Activity {
         mMsgListView.setAdapter(listAdapter);
         mMsgListView.setDivider(null);
         
+        mSearchParam = (EditText) findViewById(R.id.search_range_edit);
+        mSetSearchRange = (Button) findViewById(R.id.manu_btn_set_range);
+        mSetSearchRange.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                String searchrange = mSearchParam.getText().toString();
+                if (!TextUtils.isEmpty(searchrange)) {
+                    int searchparam = Integer.parseInt("-" + searchrange);
+                   // Toast.makeText(getApplicationContext(), " " + searchparam, Toast.LENGTH_SHORT).show();  
+                    Constant.setSearchRange(searchparam);
+                }
+                
+            }
+        });
+        
+        mSlidingMenuHelper = new SlidingMenuHelper(this);
+        mSlidingMenuHelper.initSlidingMenu();
+        
+        mManuTopbar = (TopBarView) findViewById(R.id.manufaturetopbar);
+        mManuTopbar.setClickListener(this);
+        
         mClearLog = (Button) findViewById(R.id.manu_btn_clearlog);
         mClearLog.setOnClickListener(new View.OnClickListener() {
             
@@ -57,15 +87,21 @@ public class ManufatureTestActivity extends Activity {
             }
         });
         
-        mCircleButtonTest = (CircleButton) findViewById(R.id.manufature_test);
-        mCircleButtonUpdate = (CircleButton) findViewById(R.id.update_rom_test);
+        mCircleButtonDisconnect = (CircleButton) findViewById(R.id.manufature_disconnect);
+        mCircleButtonDisconnect.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(false);
+            }
+        });
         
+        mCircleButtonTest = (CircleButton) findViewById(R.id.manufature_test);
         mCircleButtonTest.setOnClickListener(new View.OnClickListener() {
             
             @Override
             public void onClick(View v) {
                 if (Utiliy.isBluetoothConnected(getApplicationContext())) {
-                    String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
                     Calendar calendar = Calendar.getInstance();
                     String curCheckTime = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
                             + calendar.get(Calendar.MINUTE) + ":"
@@ -73,45 +109,25 @@ public class ManufatureTestActivity extends Activity {
                             + "]: ";
                     String checklog = curCheckTime + " 正在进行自动化测试，请稍后。。。";
                    
-                        if (!mIsMeasuring) {
-                            DeviceFactory.getInstance(getApplicationContext()).manufactureTestCommand();  
-                            listAdapter.add(checklog);
-                            mIsMeasuring = true;
+                    if (!mIsMeasuring) {
+                        DeviceFactory.getInstance(getApplicationContext()).manufactureTestCommand();  
+                        listAdapter.add(checklog);
+                        mMsgListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                        mIsMeasuring = true;
+                        
+                        new Handler().postDelayed(new Runnable() {
                             
-                            new Handler().postDelayed(new Runnable() {
-                                
-                                @Override
-                                public void run() {
-                                    mIsMeasuring = false; 
-                                }
-                            }, 5000);
-                            
-                        } else {
-                            Toast.makeText(getApplicationContext(), "5秒内请勿重复操作！", Toast.LENGTH_SHORT).show();
-                        }
-                       
-                   
-                    
-                    /*DeviceFactory.getInstance(getApplicationContext()).manufactureTestCommand();
-                    String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
-                    Calendar calendar = Calendar.getInstance();
-                    String curCheckTime = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
-                            + calendar.get(Calendar.MINUTE) + ":"
-                            + calendar.get(Calendar.SECOND)
-                            + "]: ";
-                    String checklog = curCheckTime + " 正在进行自动化测试，请稍后。。。";
-                    listAdapter.add(checklog);*/
+                            @Override
+                            public void run() {
+                                mIsMeasuring = false; 
+                            }
+                        }, 5000);
+                        
+                    } else {
+                        Toast.makeText(getApplicationContext(), "5秒内请勿重复操作！", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     showNormalDialog();
-                }
-            }
-        });
-        mCircleButtonUpdate.setOnClickListener(new View.OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                if (Utiliy.isBluetoothConnected(getApplicationContext())) {
-                    DeviceFactory.getInstance(getApplicationContext()).updateDeviceRom();
                 }
             }
         });
@@ -121,14 +137,12 @@ public class ManufatureTestActivity extends Activity {
     
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
     
   public void onEventMainThread(Intent event) {  
         
-        String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
         Calendar calendar = Calendar.getInstance();
         String curCheckTime = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
                 + calendar.get(Calendar.MINUTE) + ":"
@@ -183,4 +197,22 @@ public class ManufatureTestActivity extends Activity {
       // 显示
       normalDialog.show();
   }
+
+@Override
+public void onBackClick() {
+    // TODO Auto-generated method stub
+    mSlidingMenuHelper.showMenu();
+}
+
+@Override
+public void onRightClick() {
+    // TODO Auto-generated method stub
+    
+}
+
+@Override
+public void onCalendarClick() {
+    // TODO Auto-generated method stub
+    
+}
 }

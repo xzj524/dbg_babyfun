@@ -1,5 +1,6 @@
 package com.aizi.yingerbao.constant;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 public class Constant {
@@ -30,6 +31,9 @@ public class Constant {
     public static final short COMMAND_ID_FLASH_TEST = 9;
     
     public static final short BASE_VERSION_CODE = 1;
+    
+    //扫描范围
+    public static int SCAN_RANG = -80; 
     
     /** 爱子科技设备标识测试版 */
     public static final String AIZI_DEVICE_TEST_TAG = "my_hrm";
@@ -161,6 +165,11 @@ public class Constant {
 
     public static final String ACTION_DEVICE_CONNECT_RECEIVER 
             = "com.aizi.yingerbao.action.deviceconnect.receiver";
+
+    public static void setSearchRange(int searchparam) {
+        SCAN_RANG = searchparam;
+    }
+    
 
     
 }
