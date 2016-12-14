@@ -208,6 +208,9 @@ public class DeviceConnectStatusFragment extends Fragment{
             mSyncDataFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
+            
+            setSyncDataProgresShow(false);
+            
         } else if (mCurrentState == ConnectDeviceState.FATAL_DEVICE_NOT_CONNECT) {
             mCurrentState = ConnectDeviceState.SEARCHING_DEVICE;
             startConnectingAnimation();
@@ -227,6 +230,8 @@ public class DeviceConnectStatusFragment extends Fragment{
             Intent checkintent = new Intent("com.aizi.yingerbao.checkdevice");
             mListener.onDeviceConnected(checkintent);
             mCurrentState = ConnectDeviceState.CHECKING_DEVICE;
+            
+            setSyncDataProgresShow(false);
         } else if (mCurrentState == ConnectDeviceState.SYNCING_DATA) {
             mProgressImageView.clearAnimation();
             mProgressImageView.startAnimation(mProgressAnimation);
@@ -241,8 +246,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
             
-            Intent syncintent = new Intent("com.aizi.yingerbao.sync_data");
-            mListener.onDeviceConnected(syncintent); // 展示进度条
+            setSyncDataProgresShow(true);
         } else if (mCurrentState == ConnectDeviceState.SYNC_DATA_SUCCEED) {
             SLog.e(TAG, "SYNC_DATA_SUCCEED ");
             mIsConnectingAnimation = false;
@@ -256,6 +260,10 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
+            
+            Intent checkintent = new Intent("com.aizi.yingerbao.sync_finish");
+            mListener.onDeviceConnected(checkintent);
+            
         } else if (mCurrentState == ConnectDeviceState.FAIL) {
             SLog.e(TAG, "Scan Bluetooth Service failed or disconnect");
             mIsConnectingAnimation = false;
@@ -271,6 +279,9 @@ public class DeviceConnectStatusFragment extends Fragment{
             mSyncDataFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
+            
+            setSyncDataProgresShow(false);
+            
         } else if (mCurrentState == ConnectDeviceState.CHECKING_DEVICE_FAILED) {
             SLog.e(TAG, "Checking Device failed");
             mIsConnectingAnimation = false;
@@ -284,6 +295,8 @@ public class DeviceConnectStatusFragment extends Fragment{
             mSyncDataViewGroup.setVisibility(View.GONE);
             mSyncDataFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
+            
+            setSyncDataProgresShow(false);
             
         } else if (mCurrentState == ConnectDeviceState.REPEAT_CHECKING_DEVICE) {
             mCurrentState = ConnectDeviceState.CHECKING_DEVICE;
@@ -299,6 +312,7 @@ public class DeviceConnectStatusFragment extends Fragment{
                 mCheckPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_CHECK_DEVICE);
                 Utiliy.setDelayAlarm(mContext, Constant.WAIT_CHECK_PERIOD, mCheckPendingIntent);
                 SLog.e(TAG, "setAlarm  checkDevice "); 
+                setSyncDataProgresShow(false);
             } else {
                 mCurrentState = ConnectDeviceState.SEARCHING_DEVICE;     
                 Intent bluetoothIntent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -316,6 +330,7 @@ public class DeviceConnectStatusFragment extends Fragment{
                 mSyncDataFailedViewGroup.setVisibility(View.GONE);
                 mCheckDeviceViewGroup.setVisibility(View.GONE);
                 mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
+                setSyncDataProgresShow(false);
             }
            
             
@@ -348,6 +363,12 @@ public class DeviceConnectStatusFragment extends Fragment{
         }
     }
   
+    private void setSyncDataProgresShow(boolean isshow) {
+        Intent syncintent = new Intent("com.aizi.yingerbao.sync_data");
+        syncintent.putExtra("show_progress", isshow);
+        mListener.onDeviceConnected(syncintent); // 展示进度条
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

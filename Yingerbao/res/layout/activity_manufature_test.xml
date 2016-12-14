@@ -46,6 +46,24 @@
                 android:paddingTop="3dip"
                 android:text="清除日志"
                 android:textSize="15sp" />
+            
+            <EditText 
+                android:id="@+id/search_range_edit"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:singleLine="true"
+                android:layout_marginLeft="30dp"/>
+            
+              <Button
+                android:id="@+id/manu_btn_set_range"
+                android:layout_width="wrap_content"
+                android:layout_height="33dip"
+                android:gravity="center"
+                android:paddingBottom="3dip"
+                android:paddingTop="3dip"
+                android:text="设置搜索参数"
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
     
@@ -80,11 +98,11 @@
             app:cb_color="@color/gray" />
         
         <com.aizi.yingerbao.view.CircleButton
-            android:id="@+id/update_rom_test"
-            android:layout_width="164dip"
-            android:layout_height="164dip"
+            android:id="@+id/manufature_disconnect"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
             android:layout_marginBottom="8dip"
-            app:cb_text="升级"
+            app:cb_text="断开"
             app:cb_color="@color/gray" />
 
     </LinearLayout>

@@ -24,12 +24,9 @@ public class AlarmManagerReceiver extends BroadcastReceiver{
                         int waittype = intent.getIntExtra(Constant.ALARM_WAIT_TYPE, 0);
                         switch (waittype) {
                         case Constant.ALARM_WAIT_L1: // 接收L1数据超时
-                            BaseMessageHandler.mIsReceOver = true;
                             BaseMessageHandler.mL1squenceid = -1;
-                            if (BaseMessageHandler.mL2OutputStream != null) {
-                                BaseMessageHandler.mL2OutputStream.reset();
-                                BaseMessageHandler.mL2OutputStream.close();  
-                            }
+                            // 清空L2数据缓存区
+                            BaseMessageHandler.clearL2RecvByte();
                             break;
                          case Constant.ALARM_WAIT_CHECK_DEVICE: // 设备验证超时 
                              if (PrivateParams.getSPInt(context, "check_device_status", 0) == 1) {

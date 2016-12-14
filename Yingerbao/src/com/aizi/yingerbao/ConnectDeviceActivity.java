@@ -70,7 +70,6 @@ onTitleBarClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {   
-            SLog.e(TAG, "backbutton is called ");
             if (mDevConnectFragment != null) {
                 if (mDevConnectFragment.getCurrentState() == ConnectDeviceState.SEARCHING_DEVICE
                         || mDevConnectFragment.getCurrentState() == ConnectDeviceState.CHECKING_DEVICE
@@ -91,21 +90,13 @@ onTitleBarClickListener {
     
     private void initScanService(){
         try {
-            //for (int i = 0; i < 3; i++) {
-                Intent bindscanIntent = new Intent(getApplicationContext(), ScanDevicesService.class);
-                boolean isBind = bindService(bindscanIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
-                if (isBind) {
-                    SLog.e(TAG, "mScanService = true " + mScanService );
-                } else {
-                    SLog.e(TAG, "mScanService is false");
-                }
-                /*  if (mScanService != null) {
-                    SLog.e(TAG, "mScanService = " + mScanService);
-                    break;
-                } else {
-                    SLog.e(TAG, "mScanService is null");
-                }
-            }*/      
+            Intent bindscanIntent = new Intent(getApplicationContext(), ScanDevicesService.class);
+            boolean isBind = bindService(bindscanIntent, mScanServiceConnection, Context.BIND_AUTO_CREATE);
+            if (isBind) {
+                SLog.e(TAG, "mScanService = true " + mScanService );
+            } else {
+                SLog.e(TAG, "mScanService is false");
+            }
         } catch (Exception e) {
             SLog.e(TAG, e);
         } 
@@ -173,9 +164,9 @@ onTitleBarClickListener {
                         mDevConnectFragment.doUpdateStatusClick();
                         PrivateParams.setSPLong(getApplicationContext(),
                                 Constant.SYNC_DATA_SUCCEED_TIMESTAMP, System.currentTimeMillis());
-                    }
-                    
-                    SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED 1");
+                    } 
+                    SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED");
+                    finish();
                 }
             }
         };
@@ -213,12 +204,22 @@ onTitleBarClickListener {
                 SLog.e(TAG, "start scan bluetooth3");
                 initScanService();
             }
-        } else if (action.equals("com.aizi.finish")) {
+        } else if (action.equals("com.aizi.yingerbao.sync_finish")) {
             finish();
         } else if (action.equals("com.aizi.yingerbao.checkdevice")) {
             mTotalSyncDataLen = 0;
         } else if (action.equals("com.aizi.yingerbao.sync_data")) {
-            mProgressBar.setVisibility(View.VISIBLE); 
+            boolean isShowProgress = false;
+            if (intent.hasExtra("show_progress")) {
+                isShowProgress = intent.getBooleanExtra("show_progress", false);
+                if (mProgressBar != null) {
+                    if (isShowProgress) {
+                        mProgressBar.setVisibility(View.VISIBLE); 
+                    } else {
+                        mProgressBar.setVisibility(View.GONE); 
+                    } 
+                }
+            }
         }
     }
 
@@ -309,7 +310,6 @@ onTitleBarClickListener {
             new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                
                 mDevConnectFragment.setCurrentStateIdel();
                 PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 1);
                 finish();

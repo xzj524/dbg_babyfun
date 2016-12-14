@@ -205,7 +205,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             }
         });
         
-        SLog.e(TAG, "tempvalue from database length = " + temperatureinfos.size());
         if (xVals.size() > 0) {
             xVals.clear();
         }  
