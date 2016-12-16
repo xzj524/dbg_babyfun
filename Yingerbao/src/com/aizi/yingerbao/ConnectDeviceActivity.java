@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 
+import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment;
 import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.ConnectDeviceState;
@@ -312,6 +313,7 @@ onTitleBarClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 mDevConnectFragment.setCurrentStateIdel();
                 PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 1);
+                BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(false);
                 finish();
             }
         });

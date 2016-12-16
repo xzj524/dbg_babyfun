@@ -71,7 +71,7 @@
         android:layout_below="@id/currenttemperaturevalue"
         android:paddingTop="20dp"
         android:textSize="60px"
-        android:text="请及时就医！"
+        android:text="请及时处理！"
         android:textColor="@color/gray" />
      
         

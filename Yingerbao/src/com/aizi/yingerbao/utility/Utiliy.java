@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -26,6 +25,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.aizi.yingerbao.BabyBreathEmergencyActivity;
+import com.aizi.yingerbao.BabyFeverEmergencyActivity;
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.baseheader.BaseL2Message;
@@ -34,8 +35,6 @@ import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.receiver.AlarmManagerReceiver;
-
-import de.greenrobot.event.EventBus;
 
 /*
 * @author xuzejun
@@ -522,4 +521,46 @@ public class Utiliy {
         
     }
 
+    public static void initCurrentDataDate(Context context) {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            
+            PrivateParams.setSPInt(context, Constant.DATA_DATE_YEAR, year);
+            PrivateParams.setSPInt(context, Constant.DATA_DATE_MONTH, month);
+            PrivateParams.setSPInt(context, Constant.DATA_DATE_DAY, day);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+
+    public static void cancelAlarmNotify(Context context) {
+        VibratorUtil.StopVibrate(context);
+        MediaUtil.getInstance(context).stopAlarm();
+    }
+    
+    
+    public static void showEmergencyBreath(Context context,
+            String title, String content, String customcontent) {
+            Intent intent = new Intent(context, BabyBreathEmergencyActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("title", title);
+            intent.putExtra("content", content);
+            intent.putExtra("custom_content", customcontent);
+            
+            context.startActivity(intent);
+    }
+    
+    public static void showEmergencyFever(Context context,
+            String title, String content, String customcontent) {
+            Intent intent = new Intent(context, BabyFeverEmergencyActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("title", title);
+            intent.putExtra("content", content);
+            intent.putExtra("custom_content", customcontent);
+            
+            context.startActivity(intent);
+    }
 }

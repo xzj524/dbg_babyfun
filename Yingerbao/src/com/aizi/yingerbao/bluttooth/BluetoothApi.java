@@ -4,7 +4,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -59,9 +58,9 @@ public class BluetoothApi {
         context.bindService(bindblueIntent, mBluetoothServiceConnection, Context.BIND_AUTO_CREATE);
      }
     
-    private void unbindBluetoothService(Context context) {
-        if (context != null) {
-            context.unbindService(mBluetoothServiceConnection);
+    public void unbindBluetoothService() {
+        if (mContext != null) {
+            mContext.unbindService(mBluetoothServiceConnection);
         }
      }
     
@@ -91,7 +90,7 @@ public class BluetoothApi {
                         break;
                     } else {
                         waittimes++;
-                        if (waittimes > 0) {
+                        if (waittimes > 1) { // 等待2秒
                             waittimes = 0;
                             BaseMessageHandler.isWriteSuccess = true;
                         }

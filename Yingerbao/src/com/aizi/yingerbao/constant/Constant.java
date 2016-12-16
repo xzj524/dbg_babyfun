@@ -1,6 +1,5 @@
 package com.aizi.yingerbao.constant;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 public class Constant {
@@ -9,6 +8,9 @@ public class Constant {
     
     /** 关于版本号前缀 **/
     public static final String ABOUT_PREFIX = "Android 版本-";
+    
+    /** 报警时振动频率 **/
+    public static final long[] EMERGENCY_PATTERN = {500, 1000}; 
     
     public static final UUID BLE_UUID_NUS_SERVICE = UUID.fromString("00000001-0000-1000-8000-00805f9b34fb");
     public static final UUID BLE_UUID_NUS_TX_CHARACTERISTIC = UUID.fromString("00000002-0000-1000-8000-00805f9b34fb");
@@ -33,7 +35,7 @@ public class Constant {
     public static final short BASE_VERSION_CODE = 1;
     
     //扫描范围
-    public static int SCAN_RANG = -80; 
+    public static int SCAN_RANG = -90; 
     
     /** 爱子科技设备标识测试版 */
     public static final String AIZI_DEVICE_TEST_TAG = "my_hrm";

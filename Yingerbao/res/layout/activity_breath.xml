@@ -35,8 +35,7 @@
 		         android:id="@+id/breathfreq"
 		         android:layout_height="wrap_content"
 		         android:layout_width="match_parent"
-		         android:gravity="center"
-		         android:layout_marginTop="20dp">
+		         android:gravity="center">
 		         
 		           <TextView 
 			         android:id="@+id/breathfrequence"
@@ -75,7 +74,7 @@
 	        <com.github.mikephil.charting.charts.LineChart
 		        android:id="@+id/breath_line_chart"
 		        android:layout_width="match_parent"
-		        android:layout_height="200dp"
+		        android:layout_height="100dp"
 		        android:background="@color/pink_new"/>
 
 		      

@@ -26,7 +26,7 @@ public class CommandCenter {
     static Context mContext;
     
     private static final Object synchronizedLock = new Object();
-    private static int SLEEP_TIME = 10 * 1000;
+    private static int SLEEP_TIME = 5 * 1000;
     private static int mRetryTimes = 0;
     
     public CommandCenter(Context context) {
@@ -105,7 +105,7 @@ public class CommandCenter {
     }
     
     
-    public static void clearInterfaceQueue() {
+    public void clearInterfaceQueue() {
         try {
             mSendDataQueue.clear();
         } catch (InterruptedException e) {
@@ -165,7 +165,7 @@ public class CommandCenter {
                             SLog.e(TAG, e);
                         }
                     }
-                    
+                    Thread.sleep(500);
                 }
             } catch (Exception ex) {
                 SLog.e(TAG, ex);

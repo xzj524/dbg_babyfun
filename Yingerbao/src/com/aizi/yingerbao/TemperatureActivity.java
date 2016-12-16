@@ -144,7 +144,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         });
         
         mTempValue = (TextView) findViewById(R.id.tempvalue);
-        
+        Utiliy.initCurrentDataDate(getApplicationContext());
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
         dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
@@ -167,8 +167,8 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                 } else {
                     String str = intent.getStringExtra("realtime_temperature"); 
                     mTempValue.setText(str);
-                    mTempStart = false;  
                 }
+                mTempStart = false; 
             }
             mTempButton.setText(R.string.action_start_temp);
         }

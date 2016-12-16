@@ -1,5 +1,11 @@
 package com.aizi.yingerbao;
 
+import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.utility.MediaUtil;
+import com.aizi.yingerbao.utility.Utiliy;
+import com.aizi.yingerbao.utility.VibratorUtil;
+import com.umeng.analytics.MobclickAgent;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +30,6 @@ public class BabyFeverEmergencyActivity extends Activity {
         
         Intent intent = getIntent();
         if (intent != null) {
-            String titleString = intent.getStringExtra("title");
             String babytempvalue = intent.getStringExtra("custom_content");
             mBabyTempValue.setText(babytempvalue);
         }
@@ -33,6 +38,7 @@ public class BabyFeverEmergencyActivity extends Activity {
             
             @Override
             public void onClick(View v) {
+                Utiliy.cancelAlarmNotify(getApplicationContext());
                 finish();
             }
         });
@@ -43,9 +49,29 @@ public class BabyFeverEmergencyActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), EmergencyPhoneNumberActivity.class);
                 startActivity(intent);
+                Utiliy.cancelAlarmNotify(getApplicationContext());
             }
         });
+        
+        VibratorUtil.Vibrate(getApplicationContext(), Constant.EMERGENCY_PATTERN, true);
+        MediaUtil.getInstance(getApplicationContext()).startAlarm();
     }
     
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utiliy.cancelAlarmNotify(getApplicationContext());
+    }
     
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 }

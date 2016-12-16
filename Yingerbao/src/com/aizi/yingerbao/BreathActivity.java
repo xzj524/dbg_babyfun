@@ -173,10 +173,13 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         setupRealTimeBreathChart(initData, mColors[5]);
        
         initBreathStopBarChart();
+        Utiliy.initCurrentDataDate(getApplicationContext());
+        
         DataTime dataTime = new DataTime();
         dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
         dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
         dataTime.day = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
+        
         updateBreathStopBarChartData(dataTime);
     }
     

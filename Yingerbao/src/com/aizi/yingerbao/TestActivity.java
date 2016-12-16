@@ -1,11 +1,15 @@
 package com.aizi.yingerbao;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Display;
@@ -18,7 +22,9 @@ import android.widget.ListView;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
+import com.aizi.yingerbao.utility.MediaUtil;
 import com.aizi.yingerbao.utility.Utiliy;
+import com.aizi.yingerbao.utility.VibratorUtil;
 
 import de.greenrobot.event.EventBus;
 
@@ -208,7 +214,7 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                //AsyncDeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+                DeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
                /*Utiliy.showFeverNotification(getApplicationContext(), 
                         "孩子发烧了！！", "孩子发烧了，当前体温:" + "36.5。" + " 请及时就医。", "36.5");*/
             
@@ -225,11 +231,17 @@ public class TestActivity extends Activity {
                 BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 2);
                 BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 3);*/
             
-                Intent intent = new Intent();
+               /* Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ManufatureTestActivity.class);
-                startActivity(intent);
+                startActivity(intent);*/
+              /*  long[] pattern = {500, 1000}; 
+                VibratorUtil.Vibrate(getApplicationContext(), pattern, true);
+                MediaUtil.getInstance(getApplicationContext()).startAlarm();*/
+                
             }
         });
+        
+        
         
         mUpdateRom = (Button) findViewById(R.id.btn_updaterom);
         mUpdateRom.setOnClickListener(new View.OnClickListener() {
@@ -278,4 +290,6 @@ public class TestActivity extends Activity {
         }  
     } 
     
+    
+
 }

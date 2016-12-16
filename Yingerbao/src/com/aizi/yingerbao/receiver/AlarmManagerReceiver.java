@@ -60,7 +60,6 @@ public class AlarmManagerReceiver extends BroadcastReceiver{
         intent.putExtra(Constant.DEVICE_CONNECT_DELAY_TYPE, totype);
         context.sendBroadcast(intent);
         
-        SLog.e(TAG, "setAlarm  time out " + totype);
     }
 
 }

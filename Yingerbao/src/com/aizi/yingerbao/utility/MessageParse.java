@@ -158,11 +158,6 @@ public class MessageParse {
             SLog.e(TAG, result);
             Utiliy.dataToFile(result);
             
-            if (PrivateParams.getSPInt(mContext, "connect_interrupt", 0) == 1) {
-                // 检测到连接过程中断
-                return;
-            }
-            
             if (PrivateParams.getSPInt(mContext, "check_device_status", 0) == 2) {
                 // 表示设备身份验证超时
                 return;
@@ -170,11 +165,18 @@ public class MessageParse {
             // 设置检查设备状态，成功
             PrivateParams.setSPInt(mContext, "check_device_status", 3);
             
+            if (PrivateParams.getSPInt(mContext, "connect_interrupt", 0) == 1) {
+                // 检测到连接过程中断
+                return;
+            }
+            
+            
+            
             Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
             intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
             EventBus.getDefault().post(intent);
   
-           /*if (isDeviceActivited == 0) {
+            if (isDeviceActivited == 0) {
                 // 如果没有激活过设备则进行激活
                 DeviceFactory.getInstance(mContext).activateDevice();
             }
@@ -200,13 +202,13 @@ public class MessageParse {
             
             intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
             intent.putExtra(Constant.IS_SYNC_DATA, isSyncData);
-            EventBus.getDefault().post(intent);*/
+            EventBus.getDefault().post(intent);
             
             
             /***工厂测试***/
-            intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
+           /* intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
             intent.putExtra(Constant.IS_SYNC_DATA, false);
-            EventBus.getDefault().post(intent);
+            EventBus.getDefault().post(intent);*/
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -672,17 +674,13 @@ public class MessageParse {
 
     private void handleNotify(List<KeyPayload> params) {
         for (KeyPayload kpload:params) {
-            if (kpload.key == 2) { // 温度报警
-                SLog.e(TAG, "TEMP ALARM");
+            if (kpload.key == 2) { // 发烧报警
+                SLog.e(TAG, "FEVER ALARM");
                 String babytemp = getBabyEmergencyTemp(kpload.keyValue);
-                
-                Utiliy.showFeverNotification(mContext, 
-                        "孩子发烧了！！", "孩子发烧了，"+"当前体温： " + babytemp + " 请及时处理！", null);
-                
+                Utiliy.showEmergencyFever(mContext, null, null, babytemp);
             } else if (kpload.key == 3) { // 呼吸停滞报警
                 SLog.e(TAG, "BREATH ALARM");
-                Utiliy.showFeverNotification(mContext, 
-                        "呼吸停滞！！", "孩子呼吸停滞了， 请及时处理", null);
+                Utiliy.showEmergencyBreath(mContext, null, null, null);
             }
         }
     }

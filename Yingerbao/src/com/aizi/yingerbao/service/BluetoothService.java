@@ -97,6 +97,12 @@ public class BluetoothService extends Service {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String connectionAction = null;
+             SLog.e(TAG, "GATT STATUS **** = " + status);
+             
+             if (status == gatt.GATT_FAILURE) {
+                 SLog.e(TAG, "GATT STATUS  Failure **** = " + status);
+            }
+            
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 mConnectionState = STATE_CONNECTED;
                 SLog.e(TAG, "Connected to GATT server.");
@@ -205,7 +211,8 @@ public class BluetoothService extends Service {
                     str = "onCharacteristicWrite isWriteSuccess = true  " + Utiliy.printHexString(characteristic.getValue()); 
                 } else {
                     BaseMessageHandler.isWriteSuccess = false;
-                    str = "onCharacteristicWrite isWriteSuccess = false  " + Utiliy.printHexString(characteristic.getValue());
+                    str = "onCharacteristicWrite isWriteSuccess = false  " + Utiliy.printHexString(characteristic.getValue())
+                            + " status = " + status;
                 }
                 SLog.e(TAG, str);
                 Utiliy.logToFile(str);// 写入本地日志文件
@@ -237,6 +244,7 @@ public class BluetoothService extends Service {
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
         disconnect(true);
+        SLog.e(TAG, "BluetoothService onUnbind");
         return super.onUnbind(intent);
     }
 

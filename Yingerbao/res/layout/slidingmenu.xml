@@ -114,7 +114,7 @@
                 android:background="@drawable/setting_item_bottom_selector"
                 android:clickable="true"
                 android:paddingRight="@dimen/setting_item_icon_title_padding"
-                android:visibility="visible" >
+                android:visibility="gone" >
 
                 <TextView
                     android:id="@+id/baby_data_test_text"
@@ -125,10 +125,6 @@
                     android:duplicateParentState="true"
                     android:text="数据测试"/>
     
-            </RelativeLayout>
-            
-           
-
-  
+            </RelativeLayout>    
     
 </LinearLayout>

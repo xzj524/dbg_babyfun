@@ -121,8 +121,7 @@ public class ScanDevicesService extends Service{
         public void onLeScan(final BluetoothDevice device, 
                 final int rssi, byte[] scanRecord) {
             boolean isDiscovery = isDiscoveryDevice(device,rssi);
-           
-           
+                      
             if (isDiscovery) {  
                 SLog.e(TAG, "Discovery is " + isDiscovery 
                         + " connect_interrupt = " +  PrivateParams.getSPInt(getApplicationContext(), "connect_interrupt", 0));
@@ -140,20 +139,6 @@ public class ScanDevicesService extends Service{
     private boolean isDiscoveryDevice(BluetoothDevice device, int rssi) {
         boolean isDeviceFound = false;
         try {
-            
-            /**工厂测试**/   
-          /*  for (BluetoothDevice listDev : mDeviceList) {
-                if (listDev.getAddress().equals(device.getAddress())) {  
-                    isDeviceFound = true;  // 设备已经发现
-                    stopScanDevice();
-                    SLog.e(TAG, "Device is already in the device list " + device.getAddress());
-                    break;
-                }
-            }*/
-            /**工厂测试**/ 
-            
-       
-           
             if (!isDeviceFound) {
                 if (!TextUtils.isEmpty(device.getName())) {
                     if (device.getName().equals(Constant.AIZI_DEVICE_TAG)
