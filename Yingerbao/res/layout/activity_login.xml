@@ -134,15 +134,15 @@
                  
            <ImageView 
                android:id="@+id/forget_password"
-               android:layout_height="wrap_content"
-               android:layout_width="wrap_content"
+               android:layout_height="20dp"
+               android:layout_width="70dp"
                android:background="@drawable/forget_password"
                android:layout_alignParentLeft="true"/>
            
             <ImageView 
                android:id="@+id/register_account"
-               android:layout_height="wrap_content"
-               android:layout_width="wrap_content"
+               android:layout_height="20dp"
+               android:layout_width="70dp"
                android:background="@drawable/signin_account"
                android:layout_alignParentRight="true"/>
            

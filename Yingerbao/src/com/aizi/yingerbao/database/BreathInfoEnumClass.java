@@ -1,6 +1,8 @@
 package com.aizi.yingerbao.database;
 
-public class BreathInfoEnumClass {
+import cn.bmob.v3.BmobObject;
+
+public class BreathInfoEnumClass extends BmobObject {
     public long mBreathTimestamp = 0;
     public int mBreathIsAlarm = 0;
     public int mBreathDuration = 0;

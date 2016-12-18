@@ -232,10 +232,10 @@ public class YingerbaoDatabase {
             if (db == null) {
                 return -1;
             }
-            String selection = TemperatureInfoEnum.TemperatureYear.name() + " = " + temperatureinfo.mTemperatureYear 
-                              + " AND " + TemperatureInfoEnum.TemperatureMonth.name() + " = " + temperatureinfo.mTemperatureMonth 
-                              + " AND " + TemperatureInfoEnum.TemperatureDay.name() + " = " + temperatureinfo.mTemperatureDay
-                              + " AND " + TemperatureInfoEnum.TemperatureMinute.name() + " = " + temperatureinfo.mTemperatureMinute
+            String selection = TemperatureInfoEnum.TemperatureYear.name() + " = " + temperatureinfo.mTmYear 
+                              + " AND " + TemperatureInfoEnum.TemperatureMonth.name() + " = " + temperatureinfo.mTmMonth 
+                              + " AND " + TemperatureInfoEnum.TemperatureDay.name() + " = " + temperatureinfo.mTmDay
+                              + " AND " + TemperatureInfoEnum.TemperatureMinute.name() + " = " + temperatureinfo.mTmMinute
                               + ";";
             
             Cursor cursor = db.query(TemperatureInfoEnum.TABLE_NAME, null,
@@ -247,12 +247,12 @@ public class YingerbaoDatabase {
             
             if (cursor.getCount() <= 0) { 
                 ContentValues values = new ContentValues();
-                values.put(TemperatureInfoEnum.TemperatureTimestamp.name(), temperatureinfo.mTemperatureTimestamp);
-                values.put(TemperatureInfoEnum.TemperatureValue.name(), temperatureinfo.mTemperatureValue);
-                values.put(TemperatureInfoEnum.TemperatureYear.name(), temperatureinfo.mTemperatureYear);
-                values.put(TemperatureInfoEnum.TemperatureMonth.name(), temperatureinfo.mTemperatureMonth);
-                values.put(TemperatureInfoEnum.TemperatureDay.name(), temperatureinfo.mTemperatureDay);
-                values.put(TemperatureInfoEnum.TemperatureMinute.name(), temperatureinfo.mTemperatureMinute);
+                values.put(TemperatureInfoEnum.TemperatureTimestamp.name(), temperatureinfo.mTmTimestamp);
+                values.put(TemperatureInfoEnum.TemperatureValue.name(), temperatureinfo.mTmValue);
+                values.put(TemperatureInfoEnum.TemperatureYear.name(), temperatureinfo.mTmYear);
+                values.put(TemperatureInfoEnum.TemperatureMonth.name(), temperatureinfo.mTmMonth);
+                values.put(TemperatureInfoEnum.TemperatureDay.name(), temperatureinfo.mTmDay);
+                values.put(TemperatureInfoEnum.TemperatureMinute.name(), temperatureinfo.mTmMinute);
 
                 try {
                     ret = db.insert(TemperatureInfoEnum.TABLE_NAME, null, values);

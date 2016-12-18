@@ -99,7 +99,7 @@
                      android:layout_width="wrap_content"
                      android:layout_toRightOf="@id/register_check_code_text"
                      android:layout_alignParentRight="true"
-                     android:text="发送校验码"
+                     android:text="发送验证码"
                      android:textSize="12sp"></Button>
                 
             </RelativeLayout>

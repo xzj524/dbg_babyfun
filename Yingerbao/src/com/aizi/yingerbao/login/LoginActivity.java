@@ -29,12 +29,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.userdatabase.UserAccountDataBase;
+import com.aizi.yingerbao.userdatabase.UserAccountInfo;
 import com.aizi.yingerbao.utility.PrivateParams;
 
 /**
@@ -44,11 +49,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[] { "18811130187:123456", "bar@example.com:world" };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -99,8 +99,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -111,8 +111,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
@@ -138,7 +138,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String phonenumber = mPhoneView.getText().toString();
+        final String phonenumber = mPhoneView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -166,18 +166,43 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(phonenumber, password);
-            mAuthTask.execute((Void) null);
+            
+            UserAccountInfo userinfo = new UserAccountInfo();
+            userinfo.setUsername(phonenumber);
+            userinfo.setUserName(phonenumber);
+            userinfo.setMobilePhoneNumber(phonenumber);
+            userinfo.setPassword(password);
+            userinfo.setUserPassWord(password);
+            userinfo.login(new SaveListener<UserAccountInfo>() {
+
+                @Override
+                public void done(UserAccountInfo useinfo, BmobException e) {
+                    if (e == null) {
+                        PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
+                        PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USER_ACCOUNT, phonenumber);
+                        finish();
+                    } else {
+                        SLog.e(TAG, "login errorcode = " + e.getErrorCode()
+                                + " errormsg = " + e.getMessage());
+                        if (9016 == e.getErrorCode()) {
+                            Toast.makeText(getApplicationContext(), "网络连接错误，请检查网络是否正常", Toast.LENGTH_SHORT).show();
+                        } else if (101 == e.getErrorCode()) {
+                            Toast.makeText(getApplicationContext(), "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "登录失败", Toast.LENGTH_SHORT).show();
+                        }
+                        
+                    }
+                    showProgress(false);
+                }
+            });
+            
+            //mAuthTask = new UserLoginTask(phonenumber, password);
+            //mAuthTask.execute((Void) null);
         }
     }
 
-    private boolean isEmailValid(String email) {
-        // TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
     private boolean isPasswordValid(String password) {
-        // TODO: Replace this with your own logic
         if (!TextUtils.isEmpty(password)) {
             return password.length() > 4;
         }
@@ -286,11 +311,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
                 // Simulate network access.
                 Thread.sleep(1000);
+                
+              
+                
                 if (UserAccountDataBase.checkUserAccountAndPassword(getApplicationContext(),
                         mPhoneNumber, mPassword)) {
                     SLog.e(TAG, "login success");

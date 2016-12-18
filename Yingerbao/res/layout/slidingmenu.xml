@@ -114,7 +114,7 @@
                 android:background="@drawable/setting_item_bottom_selector"
                 android:clickable="true"
                 android:paddingRight="@dimen/setting_item_icon_title_padding"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     android:id="@+id/baby_data_test_text"

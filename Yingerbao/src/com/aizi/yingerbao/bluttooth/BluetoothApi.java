@@ -79,11 +79,38 @@ public class BluetoothApi {
         }
     };
     
-    public void RecvEvent(AsycEvent event) { 
+    public void RecvEvent(final AsycEvent event) { 
         synchronized (mWriteLock) {
-            int waittimes = 0;
+           
             try {
-                while (true) {
+                new Thread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        int waittimes = 0;
+                        try {
+                            while (true) {
+                                if (BaseMessageHandler.isWriteSuccess) {
+                                    waittimes = 0;
+                                    writeByte(event.getByte());
+                                    break;
+                                } else {
+                                    waittimes++;
+                                    if (waittimes > 1) { // 等待2秒
+                                        waittimes = 0;
+                                        BaseMessageHandler.isWriteSuccess = true;
+                                    }
+                                }
+                                Thread.sleep(1000); // 休眠1000ms
+                            }
+                        } catch (Exception e) {
+                            SLog.e(TAG, e);
+                        }
+                    }
+                }).start();
+                
+                
+            /*    while (true) {
                     if (BaseMessageHandler.isWriteSuccess) {
                         waittimes = 0;
                         writeByte(event.getByte());
@@ -96,7 +123,7 @@ public class BluetoothApi {
                         }
                     }
                     Thread.sleep(1000); // 休眠1000ms
-                }
+                }*/
             } catch (Exception e) {
                 SLog.e(TAG, e);
             }

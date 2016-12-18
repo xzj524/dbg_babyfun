@@ -54,6 +54,7 @@ public class DeviceConnectStatusFragment extends Fragment{
     PendingIntent mCheckPendingIntent;
     PendingIntent mSyncDataPendingIntent;
     public PendingIntent mSearchPendingIntent;
+    boolean mIsConnectDevice = false;
 
     /** 连接时候的progress */
     private ImageView mProgressImageView;
@@ -127,8 +128,11 @@ public class DeviceConnectStatusFragment extends Fragment{
                 R.anim.connecting_router_rotate_animation);
         
         if (!Utiliy.isBluetoothConnected(mContext)) {
+            mIsConnectDevice = true;
             mCurrentState = ConnectDeviceState.IDEL;
-        } 
+        } else {
+            mIsConnectDevice = false;
+        }
         SLog.e(TAG, "current state = " + mCurrentState);
         doUpdateStatusClick();
         
@@ -154,12 +158,14 @@ public class DeviceConnectStatusFragment extends Fragment{
         cancelAllPendingIntent();
     }
     
-    
-    
     private void cancelAllPendingIntent() {
-        Utiliy.cancelAlarmPdIntent(mContext, mCheckPendingIntent);
-        Utiliy.cancelAlarmPdIntent(mContext, mSearchPendingIntent);
-        Utiliy.cancelAlarmPdIntent(mContext, mSyncDataPendingIntent);
+        try {
+            Utiliy.cancelAlarmPdIntent(mContext, mCheckPendingIntent);
+            Utiliy.cancelAlarmPdIntent(mContext, mSearchPendingIntent);
+            Utiliy.cancelAlarmPdIntent(mContext, mSyncDataPendingIntent);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
     }
 
     /**
@@ -261,8 +267,11 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
             
-            Intent checkintent = new Intent("com.aizi.yingerbao.sync_finish");
-            mListener.onDeviceConnected(checkintent);
+            if (mIsConnectDevice) {
+                Intent checkintent = new Intent("com.aizi.yingerbao.sync_finish");
+                mListener.onDeviceConnected(checkintent);
+            }
+           
             
         } else if (mCurrentState == ConnectDeviceState.FAIL) {
             SLog.e(TAG, "Scan Bluetooth Service failed or disconnect");

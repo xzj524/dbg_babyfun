@@ -127,8 +127,6 @@ public class Utiliy {
         normalDialog.setIcon(R.drawable.yingerbao_96);
         normalDialog.setTitle("退出应用");
         normalDialog.setMessage("确定退出应用？");
-        //normalDialog.setTitle(title);
-        //normalDialog.setMessage(content);
         normalDialog.setPositiveButton("确定", 
             new DialogInterface.OnClickListener() {
             @Override
@@ -451,17 +449,9 @@ public class Utiliy {
         Intent intent = new Intent();
         intent = getReceiverIntent(context, intent, Constant.ACTION_ALARM_MESSAGE);
         intent.putExtra(Constant.ALARM_WAIT_TYPE, waittype);
-        
-        int req = 0;
-        try {
-            // 根据当前时间值设置唯一的定时器标识
-            req = Long.valueOf(System.currentTimeMillis()).intValue();
-        } catch (Exception e) {
-            SLog.e(TAG, e);
-        }
 
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(
-                context, req, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                context, waittype, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         
         return alarmPendingIntent;
     }
@@ -515,7 +505,6 @@ public class Utiliy {
     }
 
     public static void saveLog(String descrip, String payload) {
-        // TODO Auto-generated method stub
         Utiliy.logToFile(descrip + payload);
         SLog.e(TAG, descrip + payload);
         

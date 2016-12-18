@@ -15,8 +15,8 @@
      <!-- 日历组件相关 -->
 	<dimen name="data_calender_left_margin">20dp</dimen>
 	<dimen name="data_calender_text_size">30px</dimen>
-	<dimen name="breath_data_calender_icon_left_margin">150dp</dimen>
-	<dimen name="temp_data_calender_icon_left_margin">180dp</dimen>
+	<dimen name="breath_data_calender_icon_left_margin">200dp</dimen>
+	<dimen name="temp_data_calender_icon_left_margin">240dp</dimen>
 
     <!-- 公共组件属性 -->
     <dimen name="common_text_size_huge">20sp</dimen>

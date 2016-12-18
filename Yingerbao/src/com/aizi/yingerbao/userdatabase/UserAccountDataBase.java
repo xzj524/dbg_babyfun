@@ -1,7 +1,6 @@
 package com.aizi.yingerbao.userdatabase;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -17,14 +16,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.widget.TextView;
 
-import com.aizi.yingerbao.database.BreathInfoEnumClass;
-import com.aizi.yingerbao.database.BreathStopInfo;
-import com.aizi.yingerbao.database.SleepInfo;
-import com.aizi.yingerbao.database.SleepInfoEnumClass;
-import com.aizi.yingerbao.database.TemperatureInfo;
-import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
 import com.aizi.yingerbao.logging.SLog;
 
 public class UserAccountDataBase {
@@ -104,7 +96,7 @@ public class UserAccountDataBase {
      * @param context
      * @return
      */
-    public static synchronized void initUserAccountInfoDataBase(Context context) {
+   /* public static synchronized void initUserAccountInfoDataBase(Context context) {
         synchronized (myLock) {
             try {
                 UserAccountInfo useraccountinfo = new UserAccountInfo();
@@ -120,7 +112,7 @@ public class UserAccountDataBase {
                 SLog.e(TAG, e);
             }
         }
-    }
+    }*/
 
     /**
      * 在数据库中插入UserAccountInfo
@@ -130,23 +122,22 @@ public class UserAccountDataBase {
      * @return 设置是否成功
      */
     public static synchronized long insertUserAccountInfo(Context context, UserAccountInfo useraccountinfo) {
-        // TODO Auto-generated method stub
         synchronized (myLock) {
             SQLiteDatabase db = getDb(context);
             if (db == null) {
                 return -1;
             }
             ContentValues values = new ContentValues();
-            values.put(UserAccountInfoEnum.UserAccountName.name(), useraccountinfo.mUserAccountName);
-            values.put(UserAccountInfoEnum.UserAccountInfoPassWord.name(), useraccountinfo.mUserAccountInfoPassWord);
-            values.put(UserAccountInfoEnum.UserAccountTimestamp.name(), useraccountinfo.mUserAccountTimestamp);
-            values.put(UserAccountInfoEnum.UserAccountPosition.name(), useraccountinfo.mUserAccountPosition);
+            values.put(UserAccountInfoEnum.UserAccountName.name(), useraccountinfo.getMobilePhoneNumber());
+            values.put(UserAccountInfoEnum.UserAccountInfoPassWord.name(), useraccountinfo.getUserPassWord());
+            values.put(UserAccountInfoEnum.UserAccountTimestamp.name(), useraccountinfo.mUserTimestamp);
+            values.put(UserAccountInfoEnum.UserAccountPosition.name(), useraccountinfo.getUserPosition());
             
             long ret = -1;
             Cursor cs = null;
             try {
                 ret = db.insert(UserAccountInfoEnum.TABLE_NAME, null, values);
-                SLog.d(TAG, "UserAccountInfoEnum:  insert into database");
+                SLog.e(TAG, "UserAccountInfoEnum:  insert into database");
             } catch (Exception e) {
                 SLog.e(TAG, e);
             } finally {

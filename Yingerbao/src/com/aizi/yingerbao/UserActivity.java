@@ -11,6 +11,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobConfig;
+import cn.smssdk.SMSSDK;
 
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.command.CommandCenter;
@@ -50,6 +53,21 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
+        
+        Bmob.initialize(this, "d32cb6a0c62e9652f4f618ad60a76525", "Bomb");
+        SMSSDK.initSDK(this, "18320567edb8c", "099b55f2d0f7a8897a6fd1b70e0d4b55");
+        
+        BmobConfig config =new BmobConfig.Builder(this)
+        //设置appkey
+        .setApplicationId("d32cb6a0c62e9652f4f618ad60a76525")
+        //请求超时时间（单位为秒）：默认15s
+        .setConnectTimeout(30)
+        //文件分片上传时每片的大小（单位字节），默认512*1024
+        .setUploadBlockSize(1024*1024)
+        //文件的过期时间(单位为秒)：默认1800s
+        .setFileExpiration(2500)
+        .build();
+        Bmob.initialize(config);
         
         
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
@@ -127,18 +145,36 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-        BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(true);
-        BluetoothApi.getInstance(getApplicationContext()).unregisterEventBus();
-        CommandCenter.getInstance(getApplicationContext()).clearInterfaceQueue();
-        PrivateParams.setSPInt(getApplicationContext(), "check_device_status", 0);
-        PrivateParams.setSPInt(getApplicationContext(), "sync_data_status", 0);
-        PrivateParams.setSPInt(getApplicationContext(), "search_device_status", 0);
-        PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 0);
-        BluetoothApi.getInstance(getApplicationContext()).unbindBluetoothService();
+        try {
+            PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
+            BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(true);
+            BluetoothApi.getInstance(getApplicationContext()).unregisterEventBus();
+            CommandCenter.getInstance(getApplicationContext()).clearInterfaceQueue();
+            PrivateParams.setSPInt(getApplicationContext(), "check_device_status", 0);
+            PrivateParams.setSPInt(getApplicationContext(), "sync_data_status", 0);
+            PrivateParams.setSPInt(getApplicationContext(), "search_device_status", 0);
+            PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 0);
+            //BluetoothApi.getInstance(getApplicationContext()).unbindBluetoothService();
+            
+            cancelAllAlarmPendingIntent(getApplicationContext());
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        
     }
 
     
+    private void cancelAllAlarmPendingIntent(Context context) {
+        try {
+            Utiliy.cancelAlarmPdIntent(context, Utiliy.getDelayPendingIntent(context, Constant.ALARM_WAIT_L1));
+            Utiliy.cancelAlarmPdIntent(context, Utiliy.getDelayPendingIntent(context, Constant.ALARM_WAIT_CHECK_DEVICE));
+            Utiliy.cancelAlarmPdIntent(context, Utiliy.getDelayPendingIntent(context, Constant.ALARM_WAIT_SYNC_DATA));
+            Utiliy.cancelAlarmPdIntent(context, Utiliy.getDelayPendingIntent(context, Constant.ALARM_WAIT_SEARCH_DEVICE));
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+   }
+
     @Override
     protected void onResume() {
         super.onResume();

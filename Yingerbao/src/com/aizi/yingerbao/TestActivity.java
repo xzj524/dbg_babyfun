@@ -1,15 +1,11 @@
 package com.aizi.yingerbao;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Display;
@@ -18,13 +14,17 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.database.TemperatureInfo;
+import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.utility.MediaUtil;
 import com.aizi.yingerbao.utility.Utiliy;
-import com.aizi.yingerbao.utility.VibratorUtil;
 
 import de.greenrobot.event.EventBus;
 
@@ -214,7 +214,58 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                DeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
+                
+                TemperatureInfoEnumClass tempinfo = new TemperatureInfoEnumClass();
+                
+                Calendar calendar = Calendar.getInstance();
+                String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                        + calendar.get(Calendar.MINUTE) + ":"
+                        + calendar.get(Calendar.SECOND) + ":"
+                        + calendar.get(Calendar.MILLISECOND)
+                        + "]: ";
+                tempinfo.setTemperatureYear(calendar.get(Calendar.YEAR));
+                tempinfo.setTemperatureMonth(calendar.get(Calendar.MONTH));
+                tempinfo.setTemperatureDay(calendar.get(Calendar.DAY_OF_MONTH));
+                tempinfo.setTemperatureMinute(calendar.get(Calendar.MINUTE));
+                tempinfo.setTemperatureTimestamp(System.currentTimeMillis());
+                tempinfo.setTemperatureValue("36.9");
+                
+        /*        tempinfo.save(new SaveListener<String>() {
+
+                    @Override
+                    public void done(String objectID, BmobException e) {
+                        if (e == null) { 
+                            Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                */
+                TemperatureInfo temInfo = new TemperatureInfo();
+                temInfo.mTmYear = calendar.get(Calendar.YEAR);
+                temInfo.mTmMonth = calendar.get(Calendar.MONTH);
+                temInfo.mTmDay = calendar.get(Calendar.DAY_OF_MONTH);
+                temInfo.mTmMinute = calendar.get(Calendar.MINUTE);
+                temInfo.mTmValue = "36.9";
+                temInfo.mTmTimestamp = System.currentTimeMillis();
+                
+                temInfo.save(new SaveListener<String>() {
+
+                    @Override
+                    public void done(String objectID, BmobException e) {
+                        // TODO Auto-generated method stub
+                        if (e == null) { 
+                            Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                
+               // DeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
                /*Utiliy.showFeverNotification(getApplicationContext(), 
                         "孩子发烧了！！", "孩子发烧了，当前体温:" + "36.5。" + " 请及时就医。", "36.5");*/
             

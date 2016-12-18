@@ -468,8 +468,9 @@ public class BluetoothService extends Service {
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
-
-        SLog.e(TAG, "write TXchar status = " + wrstatus  + " value = " + Utiliy.printHexString(value));
+        String writeresult = "write TXchar status = " + wrstatus  + " value = " + Utiliy.printHexString(value);
+        SLog.e(TAG, writeresult);
+        Utiliy.logToFile(writeresult);
         return wrstatus;  
     }
 }

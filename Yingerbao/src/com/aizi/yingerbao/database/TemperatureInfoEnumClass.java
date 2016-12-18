@@ -1,6 +1,8 @@
 package com.aizi.yingerbao.database;
 
-public class TemperatureInfoEnumClass {
+import cn.bmob.v3.BmobObject;
+
+public class TemperatureInfoEnumClass extends BmobObject{
     public long mTemperatureTimestamp = 0;
     public String mTemperatureValue;
     public int mTemperatureYear = 0;

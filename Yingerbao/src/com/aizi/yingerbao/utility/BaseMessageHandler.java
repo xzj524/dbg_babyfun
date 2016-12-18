@@ -87,19 +87,19 @@ public class BaseMessageHandler {
                                             mL1squenceid = bsL1Msg.sequenceId;
                                         } else if (mL1squenceid == bsL1Msg.sequenceId) { // L1消息重复
                                             // 消息重复的情况也按照正确消息返回ACK
-                                            sendACKBaseL1Msg(context, baseData, 0); 
-                                            
                                             Utiliy.saveLog(" L1 RECV REPEAT DATA: ", l1payload);
+
                                             Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
                                             intent.putExtra("transferdata", " L1 REPEAT DATA: " + l1payload);
                                             EventBus.getDefault().post(intent); // 显示到测试界面上
                                             
+                                            sendACKBaseL1Msg(context, baseData, 0); 
                                             return;
                                         } else if ((bsL1Msg.sequenceId - mL1squenceid != 1) 
                                                 && mL1squenceid != bsL1Msg.sequenceId) {
                                             // 帧序号校验错误,L2缓存清空
                                             clearL2RecvByte();
-                                            Utiliy.saveLog(" L1 RECV SQUENCEID ERROR DATA: ", l1payload);
+                                            Utiliy.saveLog("L1 RECV SQUENCEID ERROR DATA: ", l1payload);
                                             Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
                                             intent.putExtra("transferdata", " L1 SQUENCEID ERROR DATA: " + l1payload);
                                             EventBus.getDefault().post(intent); // 显示到测试界面上

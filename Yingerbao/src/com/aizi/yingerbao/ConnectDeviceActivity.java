@@ -108,7 +108,7 @@ onTitleBarClickListener {
         
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //mScanService = null;
+            mScanService = null;
         }
         
         @Override

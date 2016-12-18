@@ -62,7 +62,7 @@
     <string name="prompt_password">请输入密码 </string>
     <string name="prompt_reset_password">请输入新密码 </string>
     <string name="prompt_register_password">请输入密码 </string>
-    <string name="prompt_checkcode">请输入校验码</string>
+    <string name="prompt_checkcode">请输入验证码</string>
     <string name="action_sign_in"> 登    录</string>
     <string name="action_reset_passcode">重置密码</string>
     <string name="action_register">完成注册</string>

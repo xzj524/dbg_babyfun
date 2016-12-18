@@ -84,7 +84,7 @@ public class MessageParse {
             case Constant.COMMAND_ID_UPDATE_ROM:
                 break;
             case Constant.COMMAND_ID_SETTING:
-               handleSettings(params);
+                handleSettings(params);
                 break;
             case Constant.COMMAND_ID_BIND:
                 handleBind(params);
@@ -169,9 +169,7 @@ public class MessageParse {
                 // 检测到连接过程中断
                 return;
             }
-            
-            
-            
+ 
             Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
             intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
             EventBus.getDefault().post(intent);
@@ -219,7 +217,7 @@ public class MessageParse {
         if (mSyncDataPendingIntent != null) {
             Utiliy.cancelAlarmPdIntent(mContext, mSyncDataPendingIntent);
         }
-        mSyncDataPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_CHECK_DEVICE);
+        mSyncDataPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_SYNC_DATA);
         Utiliy.setDelayAlarm(mContext, Constant.WAIT_SYNC_PERIOD, mSyncDataPendingIntent);
         SLog.e(TAG, "setAlarm  SyncData ");
     }
@@ -510,7 +508,7 @@ public class MessageParse {
                 YingerbaoDatabase.insertBreathInfo(mContext, breathStopInfo);
             }
         }
-        
+        Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
     }
 
@@ -553,9 +551,9 @@ public class MessageParse {
                 + " minu = " + minu 
                 + " tempcount = " + tempcount );
         
-        temperatureinfo.mTemperatureYear = year + 2000;
-        temperatureinfo.mTemperatureMonth = month;
-        temperatureinfo.mTemperatureDay = day;
+        temperatureinfo.mTmYear = year + 2000;
+        temperatureinfo.mTmMonth = month;
+        temperatureinfo.mTmDay = day;
         
         if (tempcount <= RECV_DATA_COUNT) {
             for (int i = 0; i < tempcount/2; i++) {
@@ -573,21 +571,21 @@ public class MessageParse {
                     tempValue = tempHigh + "." + tempLow;
                 }
                 
-                temperatureinfo.mTemperatureMinute = minu + i * 10;
-                temperatureinfo.mTemperatureValue = tempValue;
-                temperatureinfo.mTemperatureTimestamp = System.currentTimeMillis();
+                temperatureinfo.mTmMinute = minu + i * 10;
+                temperatureinfo.mTmValue = tempValue;
+                temperatureinfo.mTmTimestamp = System.currentTimeMillis();
                 // 温度数据插入数据库
                 YingerbaoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
                 
-                String tempinfo = "Device Time : " + temperatureinfo.mTemperatureYear 
-                        + "-" + temperatureinfo.mTemperatureMonth 
-                        + "-" + temperatureinfo.mTemperatureDay 
-                        + "-" + temperatureinfo.mTemperatureMinute 
-                        + " tempValue = " + temperatureinfo.mTemperatureValue;  
+                String tempinfo = "Device Time : " + temperatureinfo.mTmYear 
+                        + "-" + temperatureinfo.mTmMonth 
+                        + "-" + temperatureinfo.mTmDay 
+                        + "-" + temperatureinfo.mTmMinute 
+                        + " tempValue = " + temperatureinfo.mTmValue;  
                 Utiliy.dataToFile(tempinfo);
             }
         }
-        
+        Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
     }
 
@@ -637,7 +635,7 @@ public class MessageParse {
                }
            } 
         }
-        
+        Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
         return sleepInfos;
     }

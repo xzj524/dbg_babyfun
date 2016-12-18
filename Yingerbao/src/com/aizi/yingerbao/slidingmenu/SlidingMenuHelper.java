@@ -88,8 +88,8 @@ public class SlidingMenuHelper {
             
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent(mActivity.getApplicationContext(), ConnectDeviceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mActivity.startActivity(intent);
             }
         });

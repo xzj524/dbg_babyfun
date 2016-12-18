@@ -1,10 +1,14 @@
 package com.aizi.yingerbao.database;
 
-public class TemperatureInfo {
-    public long mTemperatureTimestamp = 0;
-    public String mTemperatureValue;
-    public int mTemperatureYear = 0;
-    public int mTemperatureMonth = 0;
-    public int mTemperatureDay = 0;
-    public int mTemperatureMinute = 0;
+import cn.bmob.v3.BmobObject;
+
+public class TemperatureInfo extends BmobObject {
+    public long mTmTimestamp = 0;
+    public String mTmValue;
+    public int mTmYear = 0;
+    public int mTmMonth = 0;
+    public int mTmDay = 0;
+    public int mTmMinute = 0;
+    
+    
 }
