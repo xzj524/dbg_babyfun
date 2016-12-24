@@ -2,17 +2,13 @@ package com.aizi.yingerbao.fragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import org.w3c.dom.Text;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,10 +20,6 @@ import android.widget.TextView;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.chart.TemperatureChart;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.database.BreathInfoEnumClass;
-import com.aizi.yingerbao.database.YingerbaoDatabase;
-import com.aizi.yingerbao.database.TemperatureInfo;
-import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;

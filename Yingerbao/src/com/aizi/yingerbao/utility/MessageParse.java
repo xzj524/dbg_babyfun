@@ -13,16 +13,21 @@ import java.util.List;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BatchResult;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListListener;
 
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.database.BreathStopInfo;
+import com.aizi.yingerbao.database.BreathDataInfo;
 import com.aizi.yingerbao.database.DevCheckInfo;
 import com.aizi.yingerbao.database.ExceptionEvent;
 import com.aizi.yingerbao.database.SleepInfo;
-import com.aizi.yingerbao.database.TemperatureInfo;
+import com.aizi.yingerbao.database.TemperatureDataInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
@@ -380,6 +385,8 @@ public class MessageParse {
         ExceptionEvent exEvent = new ExceptionEvent();
         String exceptionlog = Utiliy.printHexString(keyValue);
         SLog.e(TAG, "Exception Log = " + exceptionlog);
+        List<BmobObject> exceptiondatainfos = new ArrayList<BmobObject>();
+        int exceptionlen = 0;
         int exceptionlength = keyValue.length;
         if (exceptionlength % 8 == 0) {
             for (int i = 0; i < exceptionlength/8; i++) {
@@ -394,6 +401,14 @@ public class MessageParse {
                 exEvent.mExceptionData1 = keyValue[5+i*8] & 0xff;
                 exEvent.mExceptionData2 = keyValue[6+i*8] & 0xff;
                 exEvent.mExceptionData3 = keyValue[7+i*8] & 0xff;
+                
+                exceptiondatainfos.add(exEvent);
+                exceptionlen = exceptiondatainfos.size();
+                SLog.e(TAG, "exception len = " + exceptionlen);
+                if (exceptionlen == 50 ) {
+                    bmobBatchData(exceptiondatainfos);
+                    exceptiondatainfos.clear();
+                }
             
                 String logStr = "Exception occured at " + exEvent.mExceptionYear 
                             + "-" + exEvent.mExceptionMonth
@@ -411,6 +426,11 @@ public class MessageParse {
                 intent.putExtra("transferdata", logStr);
                 EventBus.getDefault().post(intent); // 显示在界面上  
             }
+        }
+        
+        if (exceptionlen < 50 && exceptionlen > 0) {
+            bmobBatchData(exceptiondatainfos);
+            exceptiondatainfos.clear();
         }
         
         Utiliy.reflectTranDataType(mContext, 1);
@@ -459,68 +479,96 @@ public class MessageParse {
         Intent intent = new Intent(Constant.ACTION_RECE_DATA);
         intent.putExtra(Constant.RECE_SYNC_DATA_LEN, keyValue.length);
         EventBus.getDefault().post(intent);
-        
-        BreathStopInfo breathStopInfo = new BreathStopInfo();
+
+        BreathDataInfo breathinfo = new BreathDataInfo(mContext);
+        int breathinfolength = 0;
+        List<BmobObject> breathdatainfos = new ArrayList<BmobObject>();
         int breathstoplength = keyValue.length;
-        boolean breathalarm = false;
         if (breathstoplength % 8 == 0) {
             for (int i = 0; i < keyValue.length/8; i++) {
-            
                 int year = (keyValue[i*8] & 0xfc) >> 2;
                 int month = ((keyValue[i*8] & 0x03) << 2) | ((keyValue[1+i*8] & 0xc0) >> 6);
                 int day = (keyValue[1+i*8] & 0x3e) >> 1;
                 int hour = ((keyValue[1+i*8] & 0x01)  << 4) | ((keyValue[2+i*8] & 0xf0) >> 4);
                 int minu = ((keyValue[2+i*8] & 0x0f) << 2) | (((keyValue[3+i*8] & 0xc0) >> 6) & 0x03);
                 int second = (keyValue[3+i*8] & 0x3f);
-
-                breathStopInfo.mBreathYear = year + 2000;
-                breathStopInfo.mBreathMonth = month;
-                breathStopInfo.mBreathDay = day;
-                breathStopInfo.mBreathHour = hour;
-                breathStopInfo.mBreathMinute = minu;
-                breathStopInfo.mBreathSecond = second;
                 
+                breathinfo.setBreathYear(year + 2000);
+                breathinfo.setBreathMonth(month);
+                breathinfo.setBreathDay(day);
+                breathinfo.setBreathHour(hour);
+                breathinfo.setBreathMinute(minu);
+                breathinfo.setBreathSecond(second);
+ 
                 int isAlarm = (keyValue[4 + i*8] & 0xff);
                 if (isAlarm == 1) {
-                    breathStopInfo.mBreathIsAlarm = isAlarm;
-                    breathalarm = true;
+                    breathinfo.setBreathIsAlarm(1);
                 } else {
-                    breathStopInfo.mBreathIsAlarm = 0;
-                    breathalarm = false;
+                    breathinfo.setBreathIsAlarm(0);
                 }
                 
-                breathStopInfo.mBreathDuration = keyValue[5 + i*8] & 0xff;
-                breathStopInfo.mBreathTimestamp = System.currentTimeMillis();
-                
-                SLog.e(TAG, "breathstop  year = " + year 
-                        + " month = " + month
-                        + " day = " + day
-                        + " hour = " + hour
-                        + " minu = " + minu
-                        + " second = " + second
-                        + " isAlarm = " + isAlarm
-                        + " duration = " + breathStopInfo.mBreathDuration);
-                
-                
-                String breathstop = "Breath Stop Info : " 
-                                   + breathStopInfo.mBreathYear + "-" 
-                                   + breathStopInfo.mBreathMonth + "-"
-                                   + breathStopInfo.mBreathDay + "-"
-                                   + breathStopInfo.mBreathHour + "-"
-                                   + breathStopInfo.mBreathMinute + "-"
-                                   + breathStopInfo.mBreathSecond 
-                                   + " BreathAlarm = " + breathalarm; 
-                Utiliy.dataToFile(breathstop);
-                YingerbaoDatabase.insertBreathInfo(mContext, breathStopInfo);
+                breathinfo.setBreathDuration(keyValue[5 + i*8] & 0xff);
+                breathinfo.setBreathTimestamp(System.currentTimeMillis());
+                breathdatainfos.add(breathinfo);
+                YingerbaoDatabase.insertBreathInfo(mContext, breathinfo);
+                breathinfolength = breathdatainfos.size();
+                if (breathinfolength == 50) {
+                    bmobBatchData(breathdatainfos); 
+                    breathdatainfos.clear();
+                }
+              
+                String breathlog = "Breath Stop Info = " + year + " month = " + month
+                        + " day = " + day + " hour = " + hour
+                        + " minu = " + minu + " second = " + second
+                        + " isAlarm = " + isAlarm + " duration = " + breathinfo.getBreathDuration();
+                SLog.e(TAG, breathlog);
+                Utiliy.dataToFile(breathlog);
             }
         }
+        
+        if (breathinfolength > 0 && breathinfolength < 50) {
+            bmobBatchData(breathdatainfos);
+            breathdatainfos.clear();
+        }
+
         Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
     }
 
 
+    private void bmobBatchData(final List<BmobObject> datainfos) {
+  /*      new Thread(new Runnable() {
+            
+            @Override
+            public void run() {*/
+                try {
+                    new BmobBatch().insertBatch(datainfos).doBatch(new QueryListListener<BatchResult>() {
+                        @Override
+                        public void done(List<BatchResult> o, BmobException e) {
+                            if(e==null){
+                                for(int i=0;i<o.size();i++){
+                                    BatchResult result = o.get(i);
+                                    BmobException ex =result.getError();
+                                    if(ex==null){
+                                        SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
+                                    }else{
+                                        SLog.e(TAG, i+" failed : "+ex.getMessage()+","+ex.getErrorCode());
+                                    }
+                                }
+                            } else {
+                                SLog.e(TAG, "failed: "+e.getMessage()+","+e.getErrorCode());
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    SLog.e(TAG, e);
+                }
+          //  }
+        //}).start();
+    }
+
+
     private void handleHumbitData(byte[] keyValue) {
-        // TODO Auto-generated method stub
         int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
         int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
         int day = keyValue[1] & 0x1f;
@@ -544,7 +592,9 @@ public class MessageParse {
         intent.putExtra(Constant.RECE_SYNC_DATA_LEN, keyValue.length);
         EventBus.getDefault().post(intent);
         
-        TemperatureInfo temperatureinfo = new TemperatureInfo();
+        int tempdatalength = 0;
+        List<BmobObject> tempdatainfos = new ArrayList<BmobObject>();
+        TemperatureDataInfo temperatureinfo = new TemperatureDataInfo(mContext);
         int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
         int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
         int day = keyValue[1] & 0x1f;
@@ -557,9 +607,10 @@ public class MessageParse {
                 + " minu = " + minu 
                 + " tempcount = " + tempcount );
         
-        temperatureinfo.mTmYear = year + 2000;
-        temperatureinfo.mTmMonth = month;
-        temperatureinfo.mTmDay = day;
+        temperatureinfo.setTemperatureYear(year + 2000);
+        temperatureinfo.setTemperatureMonth(month);
+        temperatureinfo.setTemperatureDay(day);
+        
         
         if (tempcount <= RECV_DATA_COUNT) {
             for (int i = 0; i < tempcount/2; i++) {
@@ -577,11 +628,17 @@ public class MessageParse {
                     tempValue = tempHigh + "." + tempLow;
                 }
                 
-                temperatureinfo.mTmMinute = minu + i * 10;
-                temperatureinfo.mTmValue = tempValue;
-                temperatureinfo.mTmTimestamp = System.currentTimeMillis();
+                temperatureinfo.setTemperatureMinute(minu + i * 10);
+                temperatureinfo.setTemperatureValue(tempValue);
+                temperatureinfo.setTemperatureTimestamp(System.currentTimeMillis());
                 // 温度数据插入数据库
                 YingerbaoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
+                tempdatainfos.add(temperatureinfo);
+                tempdatalength = tempdatainfos.size();
+                if (tempdatalength == 50) {
+                    bmobBatchData(tempdatainfos);
+                    tempdatainfos.clear();
+                }
                 
                 String tempinfo = "Device Time : " + temperatureinfo.mTmYear 
                         + "-" + temperatureinfo.mTmMonth 
@@ -591,6 +648,12 @@ public class MessageParse {
                 Utiliy.dataToFile(tempinfo);
             }
         }
+        
+        if (tempdatalength > 0 && tempdatalength < 50) {
+            bmobBatchData(tempdatainfos);
+            tempdatainfos.clear();
+        }
+        
         Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
     }

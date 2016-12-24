@@ -1,8 +1,10 @@
 package com.aizi.yingerbao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,13 +17,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BatchResult;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListListener;
 import cn.bmob.v3.listener.SaveListener;
 
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.database.TemperatureInfo;
-import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
+import com.aizi.yingerbao.database.TemperatureDataInfo;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.Utiliy;
@@ -215,35 +219,85 @@ public class TestActivity extends Activity {
             @Override
             public void onClick(View v) {
                 
-                TemperatureInfoEnumClass tempinfo = new TemperatureInfoEnumClass();
+                TemperatureDataInfo tempinfo = new TemperatureDataInfo(getApplicationContext());
                 
                 Calendar calendar = Calendar.getInstance();
-                String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
-                        + calendar.get(Calendar.MINUTE) + ":"
-                        + calendar.get(Calendar.SECOND) + ":"
-                        + calendar.get(Calendar.MILLISECOND)
-                        + "]: ";
                 tempinfo.setTemperatureYear(calendar.get(Calendar.YEAR));
                 tempinfo.setTemperatureMonth(calendar.get(Calendar.MONTH));
                 tempinfo.setTemperatureDay(calendar.get(Calendar.DAY_OF_MONTH));
                 tempinfo.setTemperatureMinute(calendar.get(Calendar.MINUTE));
                 tempinfo.setTemperatureTimestamp(System.currentTimeMillis());
-                tempinfo.setTemperatureValue("36.9");
                 
-        /*        tempinfo.save(new SaveListener<String>() {
+                final List<BmobObject> tempinfos = new ArrayList<BmobObject>();
+                
+               // final List<TemperatureDataInfo> tempinfos = new ArrayList<TemperatureDataInfo>();
+                
+                for (int i = 0; i < 40; i++) {
+                   // tempinfo.setTemperatureValue("" + 100 + 26*Math.random());
+                    tempinfo.setTemperatureValue("" + 20 + 10 * Math.random());
+                    tempinfos.add(tempinfo);
+                   /* tempinfo.save(new SaveListener<String>() {
 
-                    @Override
-                    public void done(String objectID, BmobException e) {
-                        if (e == null) { 
-                            Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void done(String objectID, BmobException e) {
+                            if (e == null) { 
+                                Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                            }
                         }
+                    });*/
+                }
+                
+              /*  for (TemperatureDataInfo temperatureinfo : tempinfos) {
+                    temperatureinfo.save(new SaveListener<String>() {
+
+                        @Override
+                        public void done(String objectID, BmobException e) {
+                            if (e == null) { 
+                                Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }*/
+                SLog.e(TAG, "tempinfos size = " + tempinfos.size());
+                new Thread(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                       
+                        new BmobBatch().insertBatch(tempinfos).doBatch(new QueryListListener<BatchResult>() {
+
+                            @Override
+                            public void done(List<BatchResult> o, BmobException e) {
+                                if(e==null){
+                                    for(int i=0;i<o.size();i++){
+                                        BatchResult result = o.get(i);
+                                        BmobException ex =result.getError();
+                                        if(ex==null) {
+                                            SLog.e(TAG, "第"+i+"个数据批量添加成功："+result.getCreatedAt()+","+result.getObjectId()+","+result.getUpdatedAt());
+                                            //log("第"+i+"个数据批量添加成功："+result.getCreatedAt()+","+result.getObjectId()+","+result.getUpdatedAt());
+                                        } else {
+                                            SLog.e(TAG, "第"+i+"个数据批量添加失败："+ex.getMessage()+","+ex.getErrorCode());
+                                            //log("第"+i+"个数据批量添加失败："+ex.getMessage()+","+ex.getErrorCode());
+                                        }
+                                    }
+                                }else{
+                                    SLog.e(TAG, "失败："+e.getMessage()+","+e.getErrorCode());
+                                    //Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                                }
+                            }
+                        });
                     }
-                });
-                */
-                TemperatureInfo temInfo = new TemperatureInfo();
+                }).start();
+               
+                
+                
+              /*  TemperatureInfo temInfo = new TemperatureInfo();
                 temInfo.mTmYear = calendar.get(Calendar.YEAR);
                 temInfo.mTmMonth = calendar.get(Calendar.MONTH);
                 temInfo.mTmDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -263,7 +317,7 @@ public class TestActivity extends Activity {
                                     "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
                 
                // DeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
                /*Utiliy.showFeverNotification(getApplicationContext(), 

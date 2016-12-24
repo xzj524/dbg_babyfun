@@ -1,14 +1,25 @@
 package com.aizi.yingerbao.database;
 
+import android.content.Context;
 import cn.bmob.v3.BmobObject;
+
+import com.aizi.yingerbao.utility.Utiliy;
 
 
 public class BaseUserInfo extends BmobObject{
     
-    public String mPhoneNumeber;
-    public String mPhoneImei;
-    public String mDeviceMac;
-    public String mDeviceType;
+    protected Context mContext;
+    protected String mPhoneNumeber;
+    protected String mPhoneImei;
+    protected String mDeviceMac;
+    protected String mDeviceType;
+    
+    public BaseUserInfo(Context context){
+        mContext = context;
+        mPhoneImei = Utiliy.getPhoneImei(mContext);
+        mPhoneNumeber = Utiliy.getPhoneNumber(mContext);
+        mDeviceType = "android";
+    }
     
     public void setPhoneNum(String phone){
         this.mPhoneNumeber = phone;

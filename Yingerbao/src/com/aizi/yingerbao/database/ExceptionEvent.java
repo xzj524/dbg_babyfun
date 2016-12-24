@@ -1,6 +1,8 @@
 package com.aizi.yingerbao.database;
 
-public class ExceptionEvent {
+import cn.bmob.v3.BmobObject;
+
+public class ExceptionEvent extends BmobObject{
 
     public int mExceptionType = 0;
     public int mExceptionData1 = 0;

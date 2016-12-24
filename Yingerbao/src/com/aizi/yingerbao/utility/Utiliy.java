@@ -23,7 +23,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+import cn.bmob.v3.BmobUser;
 
 import com.aizi.yingerbao.BabyBreathEmergencyActivity;
 import com.aizi.yingerbao.BabyFeverEmergencyActivity;
@@ -551,5 +554,41 @@ public class Utiliy {
             intent.putExtra("custom_content", customcontent);
             
             context.startActivity(intent);
+    }
+
+    public static String getPhoneImei(Context context) {
+        String imei = null;
+        try {
+            if (context != null) {
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE); 
+                imei = tm.getDeviceId();
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return imei;
+    }
+
+    public static String getPhoneNumber(Context mContext) {
+        String phonenum = null;
+        try {
+            BmobUser bmobUser = BmobUser.getCurrentUser();
+            if (bmobUser != null) {
+                phonenum =  bmobUser.getMobilePhoneNumber();
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return phonenum;
+    }
+
+    public static String getDeviceId(Context context) {
+        String deviceid = null;
+        try {
+            deviceid = PrivateParams.getSPString(context, Constant.AIZI_DEVICE_ADDRESS);
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return deviceid;
     }
 }

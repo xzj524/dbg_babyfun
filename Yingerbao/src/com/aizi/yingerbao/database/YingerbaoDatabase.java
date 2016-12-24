@@ -92,33 +92,6 @@ public class YingerbaoDatabase {
     // 都是synchronous方法，每个调用里面包含：获取db、使用db、关闭db 的组合操作，该组合操作是原子操作
 
     /**
-     * 初始化数据库
-     * 
-     * @param context
-     * @return
-     */
-    public static synchronized void initSleepInfoDataBase(Context context) {
-        synchronized (myLock) {
-            try {
-                SleepInfo sleepinfo = new SleepInfo();
-                sleepinfo.mSleepTimestamp = System.currentTimeMillis();
-                sleepinfo.mSleepYear = 0;
-                sleepinfo.mSleepMonth = 0;
-                sleepinfo.mSleepDay = 0;
-                sleepinfo.mSleepMinute = 0;
-                sleepinfo.mSleepValue = 3;
-      
-                insertSleepInfo(context, sleepinfo);
-
-                SLog.d(TAG, "initPushInfoDataBase with initValue");
-            } catch (Exception e) {
-                // TODO: handle exception
-                SLog.e(TAG, e);
-            }
-        }
-    }
-
-    /**
      * 在数据库中插入SleepInfo
      * 
      * @param context
@@ -165,7 +138,7 @@ public class YingerbaoDatabase {
      * @param sleepinfo
      * @return 设置是否成功
      */
-    public static synchronized long insertBreathInfo(Context context, BreathStopInfo breathinfo) {
+    public static synchronized long insertBreathInfo(Context context, BreathDataInfo breathinfo) {
         synchronized (myLock) {
             long ret = -1;
             SQLiteDatabase db = getDb(context);
@@ -173,12 +146,12 @@ public class YingerbaoDatabase {
                 return -1;
             }
             
-            String selection = BreathInfoEnum.BreathYear.name() + " = " + breathinfo.mBreathYear 
-                              + " AND " + BreathInfoEnum.BreathMonth.name() + " = " + breathinfo.mBreathMonth 
-                              + " AND " + BreathInfoEnum.BreathDay.name() + " = " + breathinfo.mBreathDay
-                              + " AND " + BreathInfoEnum.BreathHour.name() + " = " + breathinfo.mBreathHour
-                              + " AND " + BreathInfoEnum.BreathMinute.name() + " = " + breathinfo.mBreathMinute
-                              + " AND " + BreathInfoEnum.BreathSecond.name() + " = " + breathinfo.mBreathSecond
+            String selection = BreathInfoEnum.BreathYear.name() + " = " + breathinfo.getBreathYear()
+                              + " AND " + BreathInfoEnum.BreathMonth.name() + " = " + breathinfo.getBreathMonth() 
+                              + " AND " + BreathInfoEnum.BreathDay.name() + " = " + breathinfo.getBreathDay()
+                              + " AND " + BreathInfoEnum.BreathHour.name() + " = " + breathinfo.getBreathHour()
+                              + " AND " + BreathInfoEnum.BreathMinute.name() + " = " + breathinfo.getBreathMinute()
+                              + " AND " + BreathInfoEnum.BreathSecond.name() + " = " + breathinfo.getBreathSecond()
                               + ";";
             // 查询数据库中的msgId
             Cursor cursor = db.query(BreathInfoEnum.TABLE_NAME, null,
@@ -190,15 +163,18 @@ public class YingerbaoDatabase {
             
             if (cursor.getCount() <= 0) { // 此处表示没有重复的记录，插入数据
                 ContentValues values = new ContentValues();
-                values.put(BreathInfoEnum.BreathTimestamp.name(), breathinfo.mBreathTimestamp);
-                values.put(BreathInfoEnum.BreathIsAlarm.name(), breathinfo.mBreathIsAlarm);
-                values.put(BreathInfoEnum.BreathDuration.name(), breathinfo.mBreathDuration);
-                values.put(BreathInfoEnum.BreathYear.name(), breathinfo.mBreathYear);
-                values.put(BreathInfoEnum.BreathMonth.name(), breathinfo.mBreathMonth);
-                values.put(BreathInfoEnum.BreathDay.name(), breathinfo.mBreathDay);
-                values.put(BreathInfoEnum.BreathHour.name(), breathinfo.mBreathHour);
-                values.put(BreathInfoEnum.BreathMinute.name(), breathinfo.mBreathMinute);
-                values.put(BreathInfoEnum.BreathSecond.name(), breathinfo.mBreathSecond);
+                values.put(BreathInfoEnum.BreathTimestamp.name(), breathinfo.getBreathTimestamp());
+                values.put(BreathInfoEnum.BreathPhoneNum.name(), breathinfo.getPhoneNum());
+                values.put(BreathInfoEnum.BreathPhoneImei.name(), breathinfo.getPhoneImei());
+                values.put(BreathInfoEnum.BreathDeviceMac.name(), breathinfo.getDeviceMac());
+                values.put(BreathInfoEnum.BreathYear.name(), breathinfo.getBreathYear());
+                values.put(BreathInfoEnum.BreathMonth.name(), breathinfo.getBreathMonth());
+                values.put(BreathInfoEnum.BreathDay.name(), breathinfo.getBreathDay());
+                values.put(BreathInfoEnum.BreathHour.name(), breathinfo.getBreathHour());
+                values.put(BreathInfoEnum.BreathMinute.name(), breathinfo.getBreathMinute());
+                values.put(BreathInfoEnum.BreathSecond.name(), breathinfo.getBreathSecond());
+                values.put(BreathInfoEnum.BreathIsAlarm.name(), breathinfo.getBreathIsAlarm());
+                values.put(BreathInfoEnum.BreathDuration.name(), breathinfo.getBreathDuration());
 
                 try {
                     ret = db.insert(BreathInfoEnum.TABLE_NAME, null, values);
@@ -225,17 +201,17 @@ public class YingerbaoDatabase {
      * @param sleepinfo
      * @return 设置是否成功
      */
-    public static synchronized long insertTemperatureInfo(Context context, TemperatureInfo temperatureinfo) {
+    public static synchronized long insertTemperatureInfo(Context context, TemperatureDataInfo temperatureinfo) {
         synchronized (myLock) {
             long ret = -1;
             SQLiteDatabase db = getDb(context);
             if (db == null) {
                 return -1;
             }
-            String selection = TemperatureInfoEnum.TemperatureYear.name() + " = " + temperatureinfo.mTmYear 
-                              + " AND " + TemperatureInfoEnum.TemperatureMonth.name() + " = " + temperatureinfo.mTmMonth 
-                              + " AND " + TemperatureInfoEnum.TemperatureDay.name() + " = " + temperatureinfo.mTmDay
-                              + " AND " + TemperatureInfoEnum.TemperatureMinute.name() + " = " + temperatureinfo.mTmMinute
+            String selection = TemperatureInfoEnum.TemperatureYear.name() + " = " + temperatureinfo.getTemperatureYear() 
+                              + " AND " + TemperatureInfoEnum.TemperatureMonth.name() + " = " + temperatureinfo.getTemperatureMonth()
+                              + " AND " + TemperatureInfoEnum.TemperatureDay.name() + " = " + temperatureinfo.getTemperatureDay()
+                              + " AND " + TemperatureInfoEnum.TemperatureMinute.name() + " = " + temperatureinfo.getTemperatureMinute()
                               + ";";
             
             Cursor cursor = db.query(TemperatureInfoEnum.TABLE_NAME, null,
@@ -247,12 +223,15 @@ public class YingerbaoDatabase {
             
             if (cursor.getCount() <= 0) { 
                 ContentValues values = new ContentValues();
-                values.put(TemperatureInfoEnum.TemperatureTimestamp.name(), temperatureinfo.mTmTimestamp);
-                values.put(TemperatureInfoEnum.TemperatureValue.name(), temperatureinfo.mTmValue);
-                values.put(TemperatureInfoEnum.TemperatureYear.name(), temperatureinfo.mTmYear);
-                values.put(TemperatureInfoEnum.TemperatureMonth.name(), temperatureinfo.mTmMonth);
-                values.put(TemperatureInfoEnum.TemperatureDay.name(), temperatureinfo.mTmDay);
-                values.put(TemperatureInfoEnum.TemperatureMinute.name(), temperatureinfo.mTmMinute);
+                values.put(TemperatureInfoEnum.TemperatureTimestamp.name(), temperatureinfo.getTemperatureTimestamp());
+                values.put(TemperatureInfoEnum.TemperaturePhoneNum.name(), temperatureinfo.getPhoneNum());
+                values.put(TemperatureInfoEnum.TemperaturePhoneImei.name(), temperatureinfo.getPhoneImei());
+                values.put(TemperatureInfoEnum.TemperatureDeviceMac.name(), temperatureinfo.getDeviceMac());
+                values.put(TemperatureInfoEnum.TemperatureValue.name(), temperatureinfo.getTemperatureValue());
+                values.put(TemperatureInfoEnum.TemperatureYear.name(), temperatureinfo.getTemperatureYear());
+                values.put(TemperatureInfoEnum.TemperatureMonth.name(), temperatureinfo.getTemperatureMonth());
+                values.put(TemperatureInfoEnum.TemperatureDay.name(), temperatureinfo.getTemperatureDay());
+                values.put(TemperatureInfoEnum.TemperatureMinute.name(), temperatureinfo.getTemperatureMinute());
 
                 try {
                     ret = db.insert(TemperatureInfoEnum.TABLE_NAME, null, values);
@@ -398,14 +377,14 @@ public class YingerbaoDatabase {
      *            上次发送时间
      * @return BreathInfoEnumClass list
      */
-    public static List<BreathInfoEnumClass> getBreathInfoEnumClassList(Context context, long currentTime,
+    public static List<BreathDataInfo> getBreathInfoEnumClassList(Context context, long currentTime,
             long lastSendTime, int offset, int count) {
         synchronized (myLock) {
             SQLiteDatabase db = getDb(context);
             if (db == null) {
                 return null;
             }
-            List<BreathInfoEnumClass> values = new ArrayList<BreathInfoEnumClass>();
+            List<BreathDataInfo> values = new ArrayList<BreathDataInfo>();
 
             String selection = "SELECT * FROM " + BreathInfoEnum.TABLE_NAME
                     + " WHERE " + BreathInfoEnum.BreathTimestamp.name()
@@ -420,7 +399,7 @@ public class YingerbaoDatabase {
                 cursor = db.rawQuery(selection, null);
 
                 while (cursor.moveToNext()) {
-                    BreathInfoEnumClass breathvalues = new BreathInfoEnumClass();
+                    BreathDataInfo breathvalues = new BreathDataInfo(context);
                     breathvalues.setBreathTimestamp(cursor.getLong(cursor.getColumnIndex(BreathInfoEnum.BreathTimestamp.name())));
                     breathvalues.setBreathIsAlarm(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathIsAlarm.name())));
                     breathvalues.setBreathDuration(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathDuration.name())));
@@ -454,14 +433,14 @@ public class YingerbaoDatabase {
      *           
      * @return SleepInfoEnumClass list
      */
-    public static List<BreathInfoEnumClass> getBreathInfoEnumClassList(Context context, int year,
+    public static List<BreathDataInfo> getBreathInfoEnumClassList(Context context, int year,
             int month, int day) {
         synchronized (myLock) {
             SQLiteDatabase db = getDb(context);
             if (db == null) {
                 return null;
             }
-            List<BreathInfoEnumClass> values = new ArrayList<BreathInfoEnumClass>();
+            List<BreathDataInfo> values = new ArrayList<BreathDataInfo>();
 
             String selection = "SELECT * FROM " + BreathInfoEnum.TABLE_NAME
                     + " WHERE " + BreathInfoEnum.BreathYear.name()
@@ -475,9 +454,8 @@ public class YingerbaoDatabase {
             Cursor cursor = null;
             try {
                 cursor = db.rawQuery(selection, null);
-
                 while (cursor.moveToNext()) {
-                    BreathInfoEnumClass breathvalues = new BreathInfoEnumClass();
+                    BreathDataInfo breathvalues = new BreathDataInfo(context);
                     breathvalues.setBreathTimestamp(cursor.getLong(cursor.getColumnIndex(BreathInfoEnum.BreathTimestamp.name())));
                     breathvalues.setBreathIsAlarm(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathIsAlarm.name())));
                     breathvalues.setBreathDuration(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathDuration.name())));
@@ -515,14 +493,14 @@ public class YingerbaoDatabase {
      *            上次发送时间
      * @return BreathInfoEnumClass list
      */
-    public static List<TemperatureInfoEnumClass> getTemperatureInfoEnumClassList(Context context,int year,
+    public static List<TemperatureDataInfo> getTemperatureInfoEnumClassList(Context context,int year,
             int month, int day) {
         synchronized (myLock) {
             SQLiteDatabase db = getDb(context);
             if (db == null) {
                 return null;
             }
-            List<TemperatureInfoEnumClass> values = new ArrayList<TemperatureInfoEnumClass>();
+            List<TemperatureDataInfo> values = new ArrayList<TemperatureDataInfo>();
 
             String selection = "SELECT * FROM " + TemperatureInfoEnum.TABLE_NAME
                     + " WHERE " + TemperatureInfoEnum.TemperatureYear.name()
@@ -538,7 +516,7 @@ public class YingerbaoDatabase {
                 cursor = db.rawQuery(selection, null);
 
                 while (cursor.moveToNext()) {
-                    TemperatureInfoEnumClass temperaturevalues = new TemperatureInfoEnumClass();
+                    TemperatureDataInfo temperaturevalues = new TemperatureDataInfo(context);
                     temperaturevalues.setTemperatureTimestamp(cursor.getLong(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureTimestamp.name())));
                     temperaturevalues.setTemperatureValue(cursor.getString(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureValue.name())));
                     temperaturevalues.setTemperatureYear(cursor.getInt(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureYear.name())));
@@ -547,7 +525,6 @@ public class YingerbaoDatabase {
                     temperaturevalues.setTemperatureMinute(cursor.getInt(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureMinute.name())));
                     
                     values.add(temperaturevalues);
-
                 }
             } catch (Exception e) {
                 SLog.e(TAG, e);
@@ -574,14 +551,14 @@ public class YingerbaoDatabase {
      *            上次发送时间
      * @return BreathInfoEnumClass list
      */
-    public static List<TemperatureInfoEnumClass> getTemperatureInfoEnumClassList(Context context, long currentTime,
+    public static List<TemperatureDataInfo> getTemperatureInfoEnumClassList(Context context, long currentTime,
             long lastSendTime, int offset, int count) {
         synchronized (myLock) {
             SQLiteDatabase db = getDb(context);
             if (db == null) {
                 return null;
             }
-            List<TemperatureInfoEnumClass> values = new ArrayList<TemperatureInfoEnumClass>();
+            List<TemperatureDataInfo> values = new ArrayList<TemperatureDataInfo>();
 
             String selection = "SELECT * FROM " + TemperatureInfoEnum.TABLE_NAME
                     + " WHERE " + TemperatureInfoEnum.TemperatureTimestamp.name()
@@ -596,12 +573,11 @@ public class YingerbaoDatabase {
                 cursor = db.rawQuery(selection, null);
 
                 while (cursor.moveToNext()) {
-                    TemperatureInfoEnumClass temperaturevalues = new TemperatureInfoEnumClass();
+                    TemperatureDataInfo temperaturevalues = new TemperatureDataInfo(context);
                     temperaturevalues.setTemperatureTimestamp(cursor.getLong(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureTimestamp.name())));
                     temperaturevalues.setTemperatureValue(cursor.getString(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureValue.name())));
                     
                     values.add(temperaturevalues);
-
                 }
             } catch (Exception e) {
                 SLog.d(TAG, "e getADBehaviorEnumClassList " + e.getMessage());
@@ -619,61 +595,15 @@ public class YingerbaoDatabase {
     }
     
     /**
-     * 从数据库中取出PushInfoEnumClass
-     * 
-     * @param context
-     * @return PushInfoEnumClass
-     */
-    public static synchronized SleepInfoEnumClass getSleepInfoEnumClass(Context context) {
-        synchronized (myLock) {
-            SQLiteDatabase db = getDb(context);
-            if (db == null) {
-                return null;
-            }
-            SleepInfoEnumClass values = new SleepInfoEnumClass();
-            Cursor cursor = null;
-            try {
-                cursor = db.query(SleepInfoEnum.TABLE_NAME, null, null, null, null, null, null);
-                if (cursor.moveToFirst()) {
-                    values.setSleepTimestamp(cursor
-                            .getLong(cursor.getColumnIndex(SleepInfoEnum.SleepTimestamp.name())));
-                    values.setSleepYear(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepYear.name())));
-                    values.setSleepMonth(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMonth.name())));
-                    values.setSleepDay(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDay.name())));
-                    values.setSleepMinute(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepMinute.name())));
-                    values.setSleepValue(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepValue.name())));
-                }
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            } finally {
-                if (null != null && !cursor.isClosed()) {
-                    cursor.close();
-                }
-                if (db != null) {
-                    db.close();
-                }
-            }
-            return values;
-        }
-    }
-
-    
-    
-    /**
      * 自定义数据库异常处理内部类 有的手机默认处理数据库异常时将导致错误 形成系统内部递归调用导致栈溢出如下：<br>
      * 数据文件异常-> ->SQLiteDatabaseCorruptException->onCorruption<br>
      * ->isDatabaseIntegrityOk->onCorruption<br>
      * ->isDatabaseIntegrityOk->onCorruption...<br>
-     * 详情见push-sdk-714 StackOverflowError崩溃问题<br>
+     * 详情见714 StackOverflowError崩溃问题<br>
      * 
      * 处理方式为系统默认处理方式 即删除数据文件 将处理方式提取出来统一处理能够规避 上述错误
      * 
-     * @author lihongbin02
+     * @author  xuzejun
      * 
      */
     private static class DbErrorHandler implements DatabaseErrorHandler {
@@ -770,53 +700,40 @@ public class YingerbaoDatabase {
             
             try {
                 // 睡眠数据表
-                db.execSQL("CREATE TABLE " + SleepInfoEnum.TABLE_NAME + " (" 
+                String sleepsql = "CREATE TABLE " + SleepInfoEnum.TABLE_NAME + " (" 
                         + SleepInfoEnum.SleepInfoId.name() + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                        + SleepInfoEnum.SleepTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
+                        + SleepInfoEnum.SleepTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), "
+                        + SleepInfoEnum.SleepPhoneNum.name() + " TEXT, "
+                        + SleepInfoEnum.SleepPhoneImei.name() + " TEXT, "
+                        + SleepInfoEnum.SleepDeviceMac.name() + " TEXT, "
                         + SleepInfoEnum.SleepYear.name() + " INTEGER DEFAULT ((0)), " 
                         + SleepInfoEnum.SleepMonth.name() + " INTEGER DEFAULT ((0)), "
                         + SleepInfoEnum.SleepDay.name() + " INTEGER DEFAULT ((0)), "
                         + SleepInfoEnum.SleepMinute.name() + " INTEGER DEFAULT ((0)), "
-                        + SleepInfoEnum.SleepValue.name() + " INTEGER DEFAULT ((0)) " + ");");
-                
-                SLog.e(TAG,
-                        "CREATE TABLE " + SleepInfoEnum.TABLE_NAME + " (" 
-                                + SleepInfoEnum.SleepInfoId.name() + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                                + SleepInfoEnum.SleepTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
-                                + SleepInfoEnum.SleepYear.name() + " INTEGER DEFAULT ((0)), " 
-                                + SleepInfoEnum.SleepMonth.name() + " INTEGER DEFAULT ((0)), "
-                                + SleepInfoEnum.SleepDay.name() + " INTEGER DEFAULT ((0)), "
-                                + SleepInfoEnum.SleepMinute.name() + " INTEGER DEFAULT ((0)), "
-                                + SleepInfoEnum.SleepValue.name() + " INTEGER DEFAULT ((0)) " + ");");
+                        + SleepInfoEnum.SleepValue.name() + " INTEGER DEFAULT ((0)) " + ");";
+                db.execSQL(sleepsql);
+                SLog.e(TAG,sleepsql);
                 
                 // 呼吸数据表
-                db.execSQL("CREATE TABLE " + BreathInfoEnum.TABLE_NAME + " (" + BreathInfoEnum.BreathInfoId.name()
+                String breathsql = "CREATE TABLE " + BreathInfoEnum.TABLE_NAME + " (" + BreathInfoEnum.BreathInfoId.name()
                         + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
                         + BreathInfoEnum.BreathTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathIsAlarm.name() + " INTEGER DEFAULT ((0)), " 
+                        + BreathInfoEnum.BreathIsAlarm.name() + " INTEGER DEFAULT ((0)), "
+                        + BreathInfoEnum.BreathPhoneNum.name() + " TEXT, "
+                        + BreathInfoEnum.BreathPhoneImei.name() + " TEXT, "
+                        + BreathInfoEnum.BreathDeviceMac.name() + " TEXT, "
                         + BreathInfoEnum.BreathYear.name() + " INTEGER DEFAULT ((0)), " 
                         + BreathInfoEnum.BreathMonth.name() + " INTEGER DEFAULT ((0)), " 
                         + BreathInfoEnum.BreathDay.name() + " INTEGER DEFAULT ((0)), " 
                         + BreathInfoEnum.BreathHour.name() + " INTEGER DEFAULT ((0)), " 
                         + BreathInfoEnum.BreathMinute.name() + " INTEGER DEFAULT ((0)), " 
                         + BreathInfoEnum.BreathSecond.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathDuration.name() + " INTEGER DEFAULT ((0)) " + ");");
-                
-                SLog.e(TAG,
-                        "CREATE TABLE " + BreathInfoEnum.TABLE_NAME + " (" + BreathInfoEnum.BreathInfoId.name()
-                        + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                        + BreathInfoEnum.BreathTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathIsAlarm.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathYear.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathMonth.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathDay.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathHour.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathMinute.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathSecond.name() + " INTEGER DEFAULT ((0)), " 
-                        + BreathInfoEnum.BreathDuration.name() + " INTEGER DEFAULT ((0)) " + ");");
+                        + BreathInfoEnum.BreathDuration.name() + " INTEGER DEFAULT ((0)) " + ");";
+                db.execSQL(breathsql);
+                SLog.e(TAG, breathsql);
                 
                 // 温度数据表
-                db.execSQL("CREATE TABLE " + TemperatureInfoEnum.TABLE_NAME + " (" + TemperatureInfoEnum.TemperatureInfoId.name()
+                String temperaturesql = "CREATE TABLE " + TemperatureInfoEnum.TABLE_NAME + " (" + TemperatureInfoEnum.TemperatureInfoId.name()
                         + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
                         + TemperatureInfoEnum.TemperatureTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureValue.name() + " TEXT, "
@@ -827,23 +744,10 @@ public class YingerbaoDatabase {
                         + TemperatureInfoEnum.TemperatureMonth.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureDay.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureMinute.name() + " INTEGER DEFAULT ((0)) " 
-                        + ");");
-                
-                SLog.e(TAG,
-                        "CREATE TABLE " + TemperatureInfoEnum.TABLE_NAME + " (" + TemperatureInfoEnum.TemperatureInfoId.name()
-                        + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                        + TemperatureInfoEnum.TemperatureTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
-                        + TemperatureInfoEnum.TemperatureValue.name() + " TEXT "
-                        + TemperatureInfoEnum.TemperaturePhoneNum.name() + " TEXT, "
-                        + TemperatureInfoEnum.TemperaturePhoneImei.name() + " TEXT, "
-                        + TemperatureInfoEnum.TemperatureDeviceMac.name() + " TEXT, "
-                        + TemperatureInfoEnum.TemperatureYear.name() + " INTEGER DEFAULT ((0)), " 
-                        + TemperatureInfoEnum.TemperatureMonth.name() + " INTEGER DEFAULT ((0)), " 
-                        + TemperatureInfoEnum.TemperatureDay.name() + " INTEGER DEFAULT ((0)), " 
-                        + TemperatureInfoEnum.TemperatureMinute.name() + " INTEGER DEFAULT ((0)), " 
-                        + ");");
+                        + ");";
+                db.execSQL(temperaturesql);
+                SLog.e(TAG, temperaturesql);
             } catch (Exception e) {
-                // TODO: handle exception
                 SLog.e(TAG, e);
             }
         }
@@ -866,18 +770,21 @@ public class YingerbaoDatabase {
     }
 
     enum SleepInfoEnum {
-        SleepInfoId, SleepTimestamp, SleepYear, SleepMonth, SleepDay, SleepMinute, SleepValue;
+        SleepInfoId, SleepTimestamp, SleepPhoneNum, SleepPhoneImei,
+        SleepDeviceMac,SleepYear, SleepMonth, SleepDay, SleepMinute, SleepValue;
         static final String TABLE_NAME = "SleepInfo";
     }
     
     enum BreathInfoEnum {
-        BreathInfoId, BreathTimestamp, BreathYear, BreathMonth, 
+        BreathInfoId, BreathTimestamp, BreathPhoneNum,BreathPhoneImei,
+        BreathDeviceMac, BreathYear, BreathMonth, 
         BreathDay, BreathHour, BreathMinute, BreathSecond, BreathIsAlarm, BreathDuration;
         static final String TABLE_NAME = "BreathInfo";
     }
     
     enum TemperatureInfoEnum {
-        TemperatureInfoId, TemperatureTimestamp, TemperaturePhoneNum,TemperaturePhoneImei,TemperatureDeviceMac,TemperatureYear,TemperatureMonth,TemperatureDay,
+        TemperatureInfoId, TemperatureTimestamp, TemperaturePhoneNum,TemperaturePhoneImei,
+        TemperatureDeviceMac,TemperatureYear,TemperatureMonth,TemperatureDay,
         TemperatureMinute, TemperatureValue;
         static final String TABLE_NAME = "TemperatureInfo";
     }

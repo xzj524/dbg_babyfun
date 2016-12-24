@@ -1,7 +1,15 @@
 package com.aizi.yingerbao.database;
 
+import android.content.Context;
+import cn.bmob.v3.BmobObject;
 
-public class TemperatureInfoEnumClass extends BaseUserInfo{
+
+public class TemperatureDataInfo extends BmobObject{
+    
+    protected String mPhoneNumeber;
+    protected String mPhoneImei;
+    protected String mDeviceMac;
+    protected String mDeviceType;
     
     public long mTmTimestamp = 0;
     public String mTmValue;
@@ -9,6 +17,35 @@ public class TemperatureInfoEnumClass extends BaseUserInfo{
     public int mTmMonth = 0;
     public int mTmDay = 0;
     public int mTmMinute = 0;
+    
+    public TemperatureDataInfo(Context context) {
+        mDeviceType = "android";
+    }
+    
+    
+    public void setPhoneNum(String phone){
+        this.mPhoneNumeber = phone;
+    }
+    
+    public String getPhoneNum() {
+        return mPhoneNumeber;
+    }
+
+    public void setPhoneImei(String imei){
+        this.mPhoneImei = imei;
+    }
+    
+    public String getPhoneImei() {
+        return mPhoneImei;
+    }
+    
+    public void setDeviceMac(String mac){
+        this.mDeviceMac = mac;
+    }
+    
+    public String getDeviceMac() {
+        return mDeviceMac;
+    }
     
     public long getTemperatureTimestamp() {
         return mTmTimestamp;

@@ -94,13 +94,6 @@ public class ScanDevicesService extends Service{
                 public void run() {
                    if (mScanning) { //在扫描进行中才会停止扫描
                        mBluetoothAdapter.stopLeScan(mBLEScanCallback);
-                       
-                       /***工厂测试**/
-                       
-                       
-                       
-                       /***工厂测试**/
-                       
                    }
                 }
             }, SCAN_PERIOD);

@@ -23,7 +23,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
-import cn.smssdk.utils.SMSLog;
 
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.logging.SLog;
@@ -93,67 +92,7 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                 }
             }
         });
-        
-       /* mEventHandler = new EventHandler(){
-            @Override
-            public void afterEvent(int event, int result, Object data) {
-                SLog.e(TAG, "checkcode return result  = " + result + " event = " + event);
-               if (result == SMSSDK.RESULT_COMPLETE) {
-                 //回调完成
-                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                    //提交验证码成功
-                     SLog.e(TAG, "EVENT_SUBMIT_VERIFICATION_CODE succeed!");
-                     signup();
-                     new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (mIsRegisterSucceed) {
-                                    Thread.sleep(1000);
-                                    SLog.e(TAG, "RegisterActivity finish");
-                                    finish();
-                                }
-                            } catch (Exception e) {
-                                SLog.e(TAG, e);
-                            }
-                        }
-                       }).start();
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
-                    //获取验证码成功
-                    SLog.e(TAG, " get check code succeed"); 
-                }
-              } else if (result == SMSSDK.RESULT_ERROR) { // 请求验证码失败
-                
-                  try {
-                      Throwable throwable = (Throwable) data;
-                      JSONObject object = new JSONObject(throwable.getMessage());
-                      String des = object.optString("detail");
-                      int status = object.optInt("status");
-                      switch (status) {
-                        case 456:
-                        case 457:
-                            Toast.makeText(getApplicationContext(), "手机号码错误", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 463:
-                        case 464:
-                        case 465:
-                            Toast.makeText(getApplicationContext(), "获取验证码次数超限", Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            Toast.makeText(getApplicationContext(), "获取验证码失败或者验证失败", 
-                                    Toast.LENGTH_SHORT).show();
-                            break;
-                      }
-
-                } catch (Exception e) {
-                    SLog.e(TAG, e);
-                }
-                 
-              }                                                                
-            }
-        }; 
-*/        
-    
+  
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {

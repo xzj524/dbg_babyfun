@@ -1,7 +1,6 @@
 package com.aizi.yingerbao.fragment;
 
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,13 +19,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.aizi.yingerbao.R;
-import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.database.BreathInfoEnumClass;
-import com.aizi.yingerbao.database.BreathStopInfo;
+import com.aizi.yingerbao.database.BreathDataInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
-import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DataTime;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
@@ -398,7 +394,8 @@ public class BreathFragment extends Fragment{
            day = time.monthDay;  
        } 
        
-       BreathStopInfo breathinfo = new BreathStopInfo();
+       //BreathStopInfo breathinfo = new BreathStopInfo();
+       BreathDataInfo breathinfo = new BreathDataInfo(getActivity().getApplicationContext());
        breathinfo.mBreathYear = year;
        breathinfo.mBreathMonth = month;
        breathinfo.mBreathDay = day;
@@ -418,7 +415,7 @@ public class BreathFragment extends Fragment{
        
    // SleepInfoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo );
        
-       List<BreathInfoEnumClass> breathInfoEnumClasses = 
+       List<BreathDataInfo> breathInfoEnumClasses = 
                YingerbaoDatabase.getBreathInfoEnumClassList(getActivity().getApplicationContext(), 
                year, month, day);
        
@@ -446,7 +443,7 @@ public class BreathFragment extends Fragment{
        chart.animateY(1500);//设置动画
    }
 
-   private ArrayList<BarEntry> getBarEntry(List<BreathInfoEnumClass> breathInfoEnumClasses) {
+   private ArrayList<BarEntry> getBarEntry(List<BreathDataInfo> breathInfoEnumClasses) {
        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
        int h0 = 0;
        int h1 = 0;
@@ -475,7 +472,7 @@ public class BreathFragment extends Fragment{
        
        
        
-       for (BreathInfoEnumClass breathInfoEnumClass : breathInfoEnumClasses) {
+       for (BreathDataInfo breathInfoEnumClass : breathInfoEnumClasses) {
             int tempHour = breathInfoEnumClass.getBreathHour();
             switch (tempHour) {
             case 0:

@@ -1,8 +1,16 @@
 package com.aizi.yingerbao.database;
 
+import android.content.Context;
 import cn.bmob.v3.BmobObject;
 
-public class BreathInfoEnumClass extends BmobObject {
+
+public class BreathDataInfo extends BmobObject {
+    
+    protected String mPhoneNumeber;
+    protected String mPhoneImei;
+    protected String mDeviceMac;
+    protected String mDeviceType;
+    
     public long mBreathTimestamp = 0;
     public int mBreathIsAlarm = 0;
     public int mBreathDuration = 0;
@@ -13,7 +21,37 @@ public class BreathInfoEnumClass extends BmobObject {
     public int mBreathMinute = 0;
     public int mBreathSecond = 0;
     
+    public BreathDataInfo(Context context) {
+/*        mPhoneImei = Utiliy.getPhoneImei(mContext);
+        mPhoneNumeber = Utiliy.getPhoneNumber(mContext);
+        mDeviceMac = Utiliy.getDeviceId(mContext);*/
+        mDeviceType = "android";
+    }
     
+    public void setPhoneNum(String phone){
+        this.mPhoneNumeber = phone;
+    }
+    
+    public String getPhoneNum() {
+        return mPhoneNumeber;
+    }
+
+    public void setPhoneImei(String imei){
+        this.mPhoneImei = imei;
+    }
+    
+    public String getPhoneImei() {
+        return mPhoneImei;
+    }
+    
+    public void setDeviceMac(String mac){
+        this.mDeviceMac = mac;
+    }
+    
+    public String getDeviceMac() {
+        return mDeviceMac;
+    }
+
     public long getBreathTimestamp() {
         return mBreathTimestamp;
     }

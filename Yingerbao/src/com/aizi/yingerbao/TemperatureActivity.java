@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.database.TemperatureInfoEnumClass;
+import com.aizi.yingerbao.database.TemperatureDataInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
@@ -194,12 +194,12 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         mTempDate.setText(year + "年" + month + "月" + day + "日");
         
-        List<TemperatureInfoEnumClass> temperatureinfos 
+        List<TemperatureDataInfo> temperatureinfos 
             = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
         Collections.sort(temperatureinfos, new Comparator() {
             public int compare(Object a, Object b) {
-                int one = ((TemperatureInfoEnumClass) a).getTemperatureMinute();
-                int two = ((TemperatureInfoEnumClass) b).getTemperatureMinute();
+                int one = ((TemperatureDataInfo) a).getTemperatureMinute();
+                int two = ((TemperatureDataInfo) b).getTemperatureMinute();
                 return one - two;
             }
         });
@@ -211,7 +211,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         for (int i = 0; i < 144; i++) {
             xVals.add(i + "");
             boolean isIntempinfo = false;
-            for (TemperatureInfoEnumClass tempeinfo : temperatureinfos) {
+            for (TemperatureDataInfo tempeinfo : temperatureinfos) {
                 int tempmin = tempeinfo.mTmMinute/10;
                 if (tempmin == i+1) {
                     float tempvalue = Float.parseFloat(tempeinfo.getTemperatureValue());

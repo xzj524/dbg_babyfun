@@ -97,11 +97,10 @@ public class BluetoothService extends Service {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String connectionAction = null;
-             SLog.e(TAG, "GATT STATUS **** = " + status);
              
              if (status == gatt.GATT_FAILURE) {
                  SLog.e(TAG, "GATT STATUS  Failure **** = " + status);
-            }
+             }
             
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 mConnectionState = STATE_CONNECTED;
@@ -181,8 +180,9 @@ public class BluetoothService extends Service {
                     return;
                 } else {
                     disconnect(true);
+                    broadcastUpdate(ACTION_GATT_DISCONNECTED);
                 }
-            } else {  
+            } else {
                 SLog.e(TAG, "Bluetooth  is not Discovered ");
             }
         }
@@ -342,13 +342,8 @@ public class BluetoothService extends Service {
                 SLog.e(TAG, "BluetoothAdapter not initialized");
                 return;
             }
-            
-           
-            
+
             PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-            //broadcastUpdate(ACTION_GATT_DISCONNECTED);
-            
-            //mBluetoothDeviceAddress = null;
             if (mBluetoothGatt != null) {
                 mBluetoothGatt.close();
                 mBluetoothGatt.disconnect();
@@ -357,7 +352,6 @@ public class BluetoothService extends Service {
             
             // 清空接收数据缓存区
             BaseMessageHandler.clearL2RecvByte();
-            
             if (disbluetooth) {
                 mBluetoothAdapter.disable();
             }

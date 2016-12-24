@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.aizi.yingerbao.breath.BabyBreath;
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.database.BreathInfoEnumClass;
+import com.aizi.yingerbao.database.BreathDataInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
@@ -465,7 +465,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
 */
         
         
-        List<BreathInfoEnumClass> breathInfoEnumClasses = 
+        List<BreathDataInfo> breathInfoEnumClasses = 
                 YingerbaoDatabase.getBreathInfoEnumClassList(getApplicationContext(), 
                 year, month, day);
         
@@ -484,7 +484,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         mBreathStopChart.animateY(1500);//设置动画
     }
 
-    private ArrayList<BarEntry> getBarEntry(List<BreathInfoEnumClass> breathInfoEnumClasses) {
+    private ArrayList<BarEntry> getBarEntry(List<BreathDataInfo> breathInfoEnumClasses) {
         ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
         int h0 = 0;
         int h1 = 0;
@@ -513,7 +513,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         
         
         
-        for (BreathInfoEnumClass breathInfoEnumClass : breathInfoEnumClasses) {
+        for (BreathDataInfo breathInfoEnumClass : breathInfoEnumClasses) {
              int tempHour = breathInfoEnumClass.getBreathHour();
              switch (tempHour) {
              case 0:

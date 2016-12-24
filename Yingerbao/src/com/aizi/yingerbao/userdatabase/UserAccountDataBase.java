@@ -91,30 +91,6 @@ public class UserAccountDataBase {
     // 都是synchronous方法，每个调用里面包含：获取db、使用db、关闭db 的组合操作，该组合操作是原子操作
 
     /**
-     * 初始化数据库
-     * 
-     * @param context
-     * @return
-     */
-   /* public static synchronized void initUserAccountInfoDataBase(Context context) {
-        synchronized (myLock) {
-            try {
-                UserAccountInfo useraccountinfo = new UserAccountInfo();
-                useraccountinfo.mUserAccountName = "";
-                useraccountinfo.mUserAccountInfoPassWord = "";
-                useraccountinfo.mUserAccountTimestamp = System.currentTimeMillis();
-                useraccountinfo.mUserAccountPosition = "";
-                insertUserAccountInfo(context, useraccountinfo);
-
-                SLog.d(TAG, "initPushInfoDataBase with initValue");
-            } catch (Exception e) {
-                // TODO: handle exception
-                SLog.e(TAG, e);
-            }
-        }
-    }*/
-
-    /**
      * 在数据库中插入UserAccountInfo
      * 
      * @param context
@@ -232,103 +208,6 @@ public class UserAccountDataBase {
         }
         return false;
     }
-    
-    /**
-     * 从数据库中取出SleepInfoEnumClass
-     * 
-     * @param context
-     * @param currentTime
-     *            当前时间
-     * @param lastSendTime
-     *            上次发送时间
-     * @return SleepInfoEnumClass list
-     */
-   /* public static List<SleepInfoEnumClass> getUserAccountInfoEnumClassList(Context context, long currentTime,
-            long lastSendTime, int offset, int count) {
-        synchronized (myLock) {
-            SQLiteDatabase db = getDb(context);
-            if (db == null) {
-                return null;
-            }
-            List<SleepInfoEnumClass> values = new ArrayList<SleepInfoEnumClass>();
-
-            String selection = "SELECT * FROM " + UserAccountInfoEnum.TABLE_NAME
-                    + " WHERE " + UserAccountInfoEnum.UserAccountTimestamp.name()
-                    + " < " + currentTime
-                    + " AND " + UserAccountInfoEnum.UserAccountTimestamp.name()
-                    + " >= " + lastSendTime
-                    + " LIMIT " + count
-                    + " OFFSET " + offset + ";";
-
-            Cursor cursor = null;
-            try {
-                cursor = db.rawQuery(selection, null);
-
-                while (cursor.moveToNext()) {
-                    SleepInfoEnumClass sleepvalues = new SleepInfoEnumClass();
-                    sleepvalues.setSleepTimestamp(cursor.getLong(cursor.getColumnIndex(SleepInfoEnum.SleepTimestamp.name())));
-                    sleepvalues.setSleepDeviceTime(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDeviceTime.name())));
-                    sleepvalues.setSleepValue(cursor.getInt(cursor.getColumnIndex(SleepInfoEnum.SleepValue.name())));
-                    
-                    values.add(sleepvalues);
-
-                }
-            } catch (Exception e) {
-                SLog.d(TAG, "e getADBehaviorEnumClassList " + e.getMessage());
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-                if (db != null) {
-                    db.close();
-                }
-            }
-
-            return values;
-        }
-    }*/
-
-    
-    
-    /**
-     * 从数据库中取出PushInfoEnumClass
-     * 
-     * @param context
-     * @return PushInfoEnumClass
-     */
-  /*  public static synchronized SleepInfoEnumClass getSleepInfoEnumClass(Context context) {
-        synchronized (myLock) {
-            SQLiteDatabase db = getDb(context);
-            if (db == null) {
-                return null;
-            }
-            SleepInfoEnumClass values = new SleepInfoEnumClass();
-            Cursor cursor = null;
-            try {
-                cursor = db.query(SleepInfoEnum.TABLE_NAME, null, null, null, null, null, null);
-                if (cursor.moveToFirst()) {
-                    values.setSleepTimestamp(cursor
-                            .getLong(cursor.getColumnIndex(SleepInfoEnum.SleepTimestamp.name())));
-                    values.setSleepDeviceTime(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepDeviceTime.name())));
-                    values.setSleepValue(cursor
-                            .getInt(cursor.getColumnIndex(SleepInfoEnum.SleepValue.name())));
-                }
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            } finally {
-                if (null != null && !cursor.isClosed()) {
-                    cursor.close();
-                }
-                if (db != null) {
-                    db.close();
-                }
-            }
-            return values;
-        }
-    }*/
-
-    
     
     /**
      * 自定义数据库异常处理内部类 有的手机默认处理数据库异常时将导致错误 形成系统内部递归调用导致栈溢出如下：<br>
@@ -454,11 +333,8 @@ public class UserAccountDataBase {
                         + ");");
               
             } catch (Exception e) {
-                // TODO: handle exception
                 SLog.e(TAG, e);
             }
-
-           
         }
 
         @Override
@@ -471,7 +347,7 @@ public class UserAccountDataBase {
             try {
                 db.execSQL("DROP TABLE IF EXISTS " + UserAccountInfoEnum.TABLE_NAME);
             } catch (Exception e) {
-                SLog.d(TAG, "dropTables Exception: " + e);
+                SLog.e(TAG, e);
             }
         }
     }

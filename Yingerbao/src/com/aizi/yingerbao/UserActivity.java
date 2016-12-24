@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
-import cn.smssdk.SMSSDK;
 
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.command.CommandCenter;
@@ -55,7 +54,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         MessageParse.getInstance(getApplicationContext());
         
         Bmob.initialize(this, "d32cb6a0c62e9652f4f618ad60a76525", "Bomb");
-        
         
         BmobConfig config =new BmobConfig.Builder(this)
         //设置appkey
@@ -115,7 +113,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         mSlidingMenuHelper.initSlidingMenu();
         
         BluetoothApi.getInstance(getApplicationContext());
-        //PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
+        PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
         if (PrivateParams.getSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 0) == 0) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
