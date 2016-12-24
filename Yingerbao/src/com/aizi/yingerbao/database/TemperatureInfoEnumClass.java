@@ -1,61 +1,61 @@
 package com.aizi.yingerbao.database;
 
-import cn.bmob.v3.BmobObject;
 
-public class TemperatureInfoEnumClass extends BmobObject{
-    public long mTemperatureTimestamp = 0;
-    public String mTemperatureValue;
-    public int mTemperatureYear = 0;
-    public int mTemperatureMonth = 0;
-    public int mTemperatureDay = 0;
-    public int mTemperatureMinute = 0;
+public class TemperatureInfoEnumClass extends BaseUserInfo{
+    
+    public long mTmTimestamp = 0;
+    public String mTmValue;
+    public int mTmYear = 0;
+    public int mTmMonth = 0;
+    public int mTmDay = 0;
+    public int mTmMinute = 0;
     
     public long getTemperatureTimestamp() {
-        return mTemperatureTimestamp;
+        return mTmTimestamp;
     }
 
     public void setTemperatureTimestamp(long temperaturetimestamp) {
-        this.mTemperatureTimestamp = temperaturetimestamp;
+        this.mTmTimestamp = temperaturetimestamp;
     }
     
     public String getTemperatureValue() {
-        return mTemperatureValue;
+        return mTmValue;
     }
 
     public void setTemperatureValue(String temperaturevalue) {
-        this.mTemperatureValue = temperaturevalue;
+        this.mTmValue = temperaturevalue;
     }
     
     public int getTemperatureYear() {
-        return mTemperatureYear;
+        return mTmYear;
     }
 
     public void setTemperatureYear(int temperatureyear) {
-        this.mTemperatureYear = temperatureyear;
+        this.mTmYear = temperatureyear;
     }
     
     public int getTemperatureMonth() {
-        return mTemperatureMonth;
+        return mTmMonth;
     }
 
     public void setTemperatureMonth(int temperaturemonth) {
-        this.mTemperatureMonth = temperaturemonth;
+        this.mTmMonth = temperaturemonth;
     }
     
     public int getTemperatureDay() {
-        return mTemperatureDay;
+        return mTmDay;
     }
 
     public void setTemperatureDay(int temperatureday) {
-        this.mTemperatureDay = temperatureday;
+        this.mTmDay = temperatureday;
     }
     
     
     public int getTemperatureMinute() {
-        return mTemperatureMinute;
+        return mTmMinute;
     }
 
     public void setTemperatureMinute(int temperatureminute) {
-        this.mTemperatureMinute = temperatureminute;
+        this.mTmMinute = temperatureminute;
     }
 }

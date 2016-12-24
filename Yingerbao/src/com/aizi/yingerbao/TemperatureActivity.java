@@ -126,7 +126,6 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
                             } else {
                                 Toast.makeText(getApplicationContext(), "10秒内请勿重复读取！", Toast.LENGTH_SHORT).show();
                             }
-                           
                         } else {
                             if (!mIsTempMeasuring) {
                                 mTempStart = false;
@@ -213,7 +212,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             xVals.add(i + "");
             boolean isIntempinfo = false;
             for (TemperatureInfoEnumClass tempeinfo : temperatureinfos) {
-                int tempmin = tempeinfo.mTemperatureMinute/10;
+                int tempmin = tempeinfo.mTmMinute/10;
                 if (tempmin == i+1) {
                     float tempvalue = Float.parseFloat(tempeinfo.getTemperatureValue());
                     yValsTem.add(new Entry(tempvalue -10, i));

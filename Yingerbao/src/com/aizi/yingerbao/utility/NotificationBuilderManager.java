@@ -13,9 +13,7 @@ import com.aizi.yingerbao.R;
 public class NotificationBuilderManager {
     public static final int MEDIA_BUILDER_ID = 8888;
     private static String TAG = "NotificationBuilderManager";
-    private static String SHARE_PRE_FILE = "notification_builder_storage";
     private static Object notification_builder_lock = new Object();
-    private static int DEFAULT_ID = 0;
 
     public static Notification createFeverNotification(Context context, int id,
             String title, String content, String customcontent, boolean noDisturb) {

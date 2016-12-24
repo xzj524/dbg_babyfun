@@ -3,9 +3,13 @@ package com.aizi.yingerbao.login;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,6 +23,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import cn.smssdk.utils.SMSLog;
 
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.logging.SLog;
@@ -27,7 +32,7 @@ import com.aizi.yingerbao.userdatabase.UserAccountInfo;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
 
-public class RegisterActivity extends Activity implements onTitleBarClickListener{
+public class RegisterActivity extends Activity implements onTitleBarClickListener, android.os.Handler.Callback{
     
     private static final String TAG = RegisterActivity.class.getSimpleName();
     
@@ -44,6 +49,11 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
     private TopBarView mRegisterTopbar;  
     private TimeCount time;
     private static boolean mIsRegisterSucceed = false;
+    
+    // MOB SDK APPKEY
+    private static String APPKEY = "18320567edb8c";
+    // MOB SDK APPSECRET
+    private static String APPSECRET = "099b55f2d0f7a8897a6fd1b70e0d4b55";
 
 
     @Override
@@ -53,7 +63,11 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
         
         mRegisterTopbar = (TopBarView) findViewById(R.id.registertopbar);
         mRegisterTopbar.setClickListener(this);
-        SMSSDK.registerEventHandler(mEventHandler); //注册短信回调
+        
+        SMSSDK.initSDK(this, APPKEY, APPSECRET);
+      
+        initSDK();
+        //SMSSDK.registerEventHandler(mEventHandler); //注册短信回调
         time = new TimeCount(60000, 1000);//构造CountDownTimer对象
         mRegiserPhoneView = (AutoCompleteTextView) findViewById(R.id.register_phonenumber);
         mCheckCodeView = (EditText) findViewById(R.id.register_check_code_text);
@@ -80,7 +94,7 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
             }
         });
         
-        mEventHandler = new EventHandler(){
+       /* mEventHandler = new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
                 SLog.e(TAG, "checkcode return result  = " + result + " event = " + event);
@@ -88,6 +102,7 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                  //回调完成
                  if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     //提交验证码成功
+                     SLog.e(TAG, "EVENT_SUBMIT_VERIFICATION_CODE succeed!");
                      signup();
                      new Thread(new Runnable() {
                         @Override
@@ -108,13 +123,36 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                     SLog.e(TAG, " get check code succeed"); 
                 }
               } else if (result == SMSSDK.RESULT_ERROR) { // 请求验证码失败
-                  Toast.makeText(getApplicationContext(), "获取验证码失败或者验证失败", 
-                          Toast.LENGTH_SHORT).show();
-                  ((Throwable)data).printStackTrace(); 
+                
+                  try {
+                      Throwable throwable = (Throwable) data;
+                      JSONObject object = new JSONObject(throwable.getMessage());
+                      String des = object.optString("detail");
+                      int status = object.optInt("status");
+                      switch (status) {
+                        case 456:
+                        case 457:
+                            Toast.makeText(getApplicationContext(), "手机号码错误", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 463:
+                        case 464:
+                        case 465:
+                            Toast.makeText(getApplicationContext(), "获取验证码次数超限", Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Toast.makeText(getApplicationContext(), "获取验证码失败或者验证失败", 
+                                    Toast.LENGTH_SHORT).show();
+                            break;
+                      }
+
+                } catch (Exception e) {
+                    SLog.e(TAG, e);
+                }
+                 
               }                                                                
             }
         }; 
-        
+*/        
     
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -133,16 +171,51 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                 String phone = mRegiserPhoneView.getText().toString();
                 String passcode = mPasswordView.getText().toString();
                 String checkcode = mCheckCodeView.getText().toString();
-                if (TextUtils.isEmpty(passcode)) {
+                SLog.e(TAG, "click registerbutton  phone = " + phone
+                        + " passcode = " + passcode
+                        + " checkcode = " + checkcode);
+                if (TextUtils.isEmpty(phone)) {
+                    Toast.makeText(getApplicationContext(), "请输入手机号码", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(checkcode)) {
+                    Toast.makeText(getApplicationContext(), "请输入验证码", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(passcode)) {
                     Toast.makeText(getApplicationContext(), "请输入注册密码", Toast.LENGTH_SHORT).show();
                 } else if (passcode.length() <= 4) {
                     Toast.makeText(getApplicationContext(), "密码太短了", Toast.LENGTH_SHORT).show();
-                } else {      
+                } else {  
+                    SLog.e(TAG, "submitVerificationCode phone = " + phone
+                            + " passcode = " + passcode
+                            + " checkcode = " + checkcode);
+
                     SMSSDK.submitVerificationCode("86", phone, checkcode);
                 }               
             }
         });
     }
+    
+    
+    private void initSDK() {
+        try {
+            
+            final Handler handler = new Handler(this);
+            EventHandler eventHandler = new EventHandler() {
+                public void afterEvent(int event, int result, Object data) {
+                    Message msg = new Message();
+                    msg.arg1 = event;
+                    msg.arg2 = result;
+                    msg.obj = data;
+                    handler.sendMessage(msg);
+                }
+            };
+    
+            SMSSDK.registerEventHandler(eventHandler); // ע����Żص�
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+    }
+    
     
     private void signup() {
         try {
@@ -245,5 +318,57 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
     @Override
     public void onCalendarClick() {
         
+    }
+
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        int event = msg.arg1;
+        int result = msg.arg2;
+        Object data = msg.obj;
+         if (result == SMSSDK.RESULT_COMPLETE) {
+                System.out.println("--------result"+event);
+             if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                 //Toast.makeText(getApplicationContext(), "成功验证", Toast.LENGTH_SHORT).show();
+                 signup();
+                 new Thread(new Runnable() {
+                     @Override
+                     public void run() {
+                         try {
+                             if (mIsRegisterSucceed) {
+                                 Thread.sleep(1000);
+                                 SLog.e(TAG, "RegisterActivity finish");
+                                 finish();
+                             }
+                         } catch (Exception e) {
+                             SLog.e(TAG, e);
+                         }
+                     }
+                    }).start();
+             }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                 //Toast.makeText(getApplicationContext(), "获取验证码成功", Toast.LENGTH_SHORT).show();
+                
+             }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+             } 
+           
+           } else {    
+                int status = 0; 
+                try {
+                    ((Throwable) data).printStackTrace();
+                    Throwable throwable = (Throwable) data;
+    
+                    JSONObject object = new JSONObject(throwable.getMessage());
+                    String des = object.optString("detail");
+                    status = object.optInt("status");
+                    if (!TextUtils.isEmpty(des)) {
+                        Toast.makeText(getApplicationContext(), des, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                } catch (Exception e) {
+                    SLog.e(TAG, e);
+                }
+            
+       }
+        return false;
     }
 }

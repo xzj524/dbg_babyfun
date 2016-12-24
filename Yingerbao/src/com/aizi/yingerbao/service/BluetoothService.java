@@ -363,6 +363,7 @@ public class BluetoothService extends Service {
             }
             
             SLog.e(TAG, "BluetoothAdapter DISCONNECT");
+            Utiliy.dataToFile("BluetoothAdapter DISCONNECT");
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

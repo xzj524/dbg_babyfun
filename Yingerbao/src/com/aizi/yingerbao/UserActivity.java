@@ -55,7 +55,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         MessageParse.getInstance(getApplicationContext());
         
         Bmob.initialize(this, "d32cb6a0c62e9652f4f618ad60a76525", "Bomb");
-        SMSSDK.initSDK(this, "18320567edb8c", "099b55f2d0f7a8897a6fd1b70e0d4b55");
+        
         
         BmobConfig config =new BmobConfig.Builder(this)
         //设置appkey
@@ -115,7 +115,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         mSlidingMenuHelper.initSlidingMenu();
         
         BluetoothApi.getInstance(getApplicationContext());
-        PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
+        //PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
         if (PrivateParams.getSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 0) == 0) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);

@@ -820,6 +820,9 @@ public class YingerbaoDatabase {
                         + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
                         + TemperatureInfoEnum.TemperatureTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureValue.name() + " TEXT, "
+                        + TemperatureInfoEnum.TemperaturePhoneNum.name() + " TEXT, "
+                        + TemperatureInfoEnum.TemperaturePhoneImei.name() + " TEXT, "
+                        + TemperatureInfoEnum.TemperatureDeviceMac.name() + " TEXT, "
                         + TemperatureInfoEnum.TemperatureYear.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureMonth.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureDay.name() + " INTEGER DEFAULT ((0)), " 
@@ -831,6 +834,9 @@ public class YingerbaoDatabase {
                         + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
                         + TemperatureInfoEnum.TemperatureTimestamp.name() + " LONG  NOT NULL DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureValue.name() + " TEXT "
+                        + TemperatureInfoEnum.TemperaturePhoneNum.name() + " TEXT, "
+                        + TemperatureInfoEnum.TemperaturePhoneImei.name() + " TEXT, "
+                        + TemperatureInfoEnum.TemperatureDeviceMac.name() + " TEXT, "
                         + TemperatureInfoEnum.TemperatureYear.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureMonth.name() + " INTEGER DEFAULT ((0)), " 
                         + TemperatureInfoEnum.TemperatureDay.name() + " INTEGER DEFAULT ((0)), " 
@@ -871,7 +877,7 @@ public class YingerbaoDatabase {
     }
     
     enum TemperatureInfoEnum {
-        TemperatureInfoId, TemperatureTimestamp, TemperatureYear,TemperatureMonth,TemperatureDay,
+        TemperatureInfoId, TemperatureTimestamp, TemperaturePhoneNum,TemperaturePhoneImei,TemperatureDeviceMac,TemperatureYear,TemperatureMonth,TemperatureDay,
         TemperatureMinute, TemperatureValue;
         static final String TABLE_NAME = "TemperatureInfo";
     }

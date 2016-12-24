@@ -110,7 +110,7 @@ public class MessageParse {
             for (KeyPayload kpload:params) {
                 if (kpload.key == 6) { // 收到连接合法性返回
                     SLog.e(TAG, "receive  check device data");
-                    if (kpload.keyLen >= 12) {
+                    if (kpload.keyLen >= 14) {
                         handlecheckinfo(kpload.keyValue); // 分析校验返回
                     }
                 } 
@@ -134,13 +134,15 @@ public class MessageParse {
             devCheckInfo.mNoSyncSleepDataLength = ((keyValue[4] << 8) & 0xff00) | (keyValue[5] & 0xff);
             devCheckInfo.mNoSyncTempDataLength = ((keyValue[6] << 8) & 0xff00) | (keyValue[7] & 0xff);
             devCheckInfo.mNoSyncBreathDataLength = ((keyValue[8] << 8) & 0xff00) | (keyValue[9] & 0xff);
-            devCheckInfo.mDeviceCharge = keyValue[10] & 0xff;
-            devCheckInfo.mDeviceStatus = keyValue[11];
+            devCheckInfo.mNoSyncExceptionLength = ((keyValue[10] << 8) & 0xff00) | (keyValue[11] & 0xff);
+            devCheckInfo.mDeviceCharge = keyValue[12] & 0xff;
+            devCheckInfo.mDeviceStatus = keyValue[13];
             
-            int isDeviceActivited = (keyValue[11] & 0x10) >> 4;
+            int isDeviceActivited = (keyValue[13] & 0x10) >> 4;
             int totaldatalen =  
                      devCheckInfo.mNoSyncTempDataLength // 温度数据长度
-                    + devCheckInfo.mNoSyncBreathDataLength; // 呼吸停滞数据长度
+                    + devCheckInfo.mNoSyncBreathDataLength // 呼吸停滞数据长度
+                    + devCheckInfo.mNoSyncExceptionLength; // 异常数据changdu
             
             PrivateParams.setSPInt(mContext, "NoSyncDataLength", totaldatalen);
             PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
@@ -187,6 +189,7 @@ public class MessageParse {
                     || devCheckInfo.mNoSyncBreathDataLength > 0) {           
                 // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
                 SLog.e(TAG, "sync data has consumed six hour ");
+                DeviceFactory.getInstance(mContext).getExceptionEvent();
                 DeviceFactory.getInstance(mContext).getAllNoSyncInfo(2);
                 DeviceFactory.getInstance(mContext).getBreathStopInfo();
                 // 读取数据状态，开始
@@ -409,6 +412,9 @@ public class MessageParse {
                 EventBus.getDefault().post(intent); // 显示在界面上  
             }
         }
+        
+        Utiliy.reflectTranDataType(mContext, 1);
+        setSyncDataAlarm();
     }
 
 

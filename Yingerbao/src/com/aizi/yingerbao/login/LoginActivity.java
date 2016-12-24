@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.smssdk.SMSSDK;
 
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
@@ -66,6 +67,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        
+        SMSSDK.initSDK(this, "18320567edb8c", "099b55f2d0f7a8897a6fd1b70e0d4b55");
       
         // Set up the login form.
         mPhoneView = (AutoCompleteTextView) findViewById(R.id.phonenumber);
