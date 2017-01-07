@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.utility.BaseMessageHandler;
+import com.aizi.yingerbao.utility.SendMessageHandler;
 
 public class CommandSendRequest {
 
@@ -16,7 +16,7 @@ public class CommandSendRequest {
     private CommandCallback callback;
     private static int SLEEP_TIME = 1000;
     private Context mContext;
-    private Intent mIntent;
+    private boolean mIsWaitResult;
 
     private static final Object synchronizedLock = new Object();
     private Intent returnIntent;
@@ -26,19 +26,23 @@ public class CommandSendRequest {
         this.callback = callback;
         requestId = System.currentTimeMillis();
         this.mContext = context;
-        this.mIntent = intent;
     }
 
     public CommandSendRequest(Context context, Intent intent) {
         requestId = System.currentTimeMillis();
         this.mContext = context;
-        this.mIntent = intent;
     }
     
     public CommandSendRequest(Context context, BaseL2Message bsl2Msg) {
         mContext = context;
         mBL2Msg = bsl2Msg;
-        mIntent = new Intent(Constant.ACITON_DATA_TRANSFER);
+        mIsWaitResult = true;
+    }
+    
+    public CommandSendRequest(Context context, Boolean iswait, BaseL2Message bsl2Msg) {
+        mContext = context;
+        mBL2Msg = bsl2Msg;
+        mIsWaitResult = iswait;
     }
 
     public void addSendTask() {
@@ -52,10 +56,14 @@ public class CommandSendRequest {
     long getRequestId() {
         return requestId;
     }
+    
+    boolean getIsWaitReturn(){
+        return mIsWaitResult;
+    }
 
     public void send(boolean isrepeat) {
         try {
-            BaseMessageHandler.getInstance(mContext).sendL2Message(mContext, mBL2Msg, isrepeat);
+            SendMessageHandler.getInstance(mContext).sendL2Message(mContext, mBL2Msg, isrepeat, mIsWaitResult);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

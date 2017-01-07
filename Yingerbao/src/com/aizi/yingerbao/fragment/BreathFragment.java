@@ -396,11 +396,11 @@ public class BreathFragment extends Fragment{
        
        //BreathStopInfo breathinfo = new BreathStopInfo();
        BreathDataInfo breathinfo = new BreathDataInfo(getActivity().getApplicationContext());
-       breathinfo.mBreathYear = year;
-       breathinfo.mBreathMonth = month;
-       breathinfo.mBreathDay = day;
+       breathinfo.setBreathYear(year);
+       breathinfo.setBreathMonth(month);
+       breathinfo.setBreathDay(day);
        
-       for (int i = 0; i < 24; i++) {
+      /* for (int i = 0; i < 24; i++) {
 
         breathinfo.mBreathHour = i;
         
@@ -410,7 +410,7 @@ public class BreathFragment extends Fragment{
             breathinfo.mBreathMinute = 0;
         }
        // YingerbaoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo);
-       }
+       }*/
 
        
    // SleepInfoDatabase.insertBreathInfo(getActivity().getApplicationContext(), breathinfo );

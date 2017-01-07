@@ -278,7 +278,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mIsConnectingAnimation = false;
             mCurrentState = ConnectDeviceState.IDEL;
             mProgressImageView.clearAnimation();
-            
+            Constant.AIZI_USERACTIVTY_QUIT = 1;
             BluetoothApi.getInstance(mContext).mBluetoothService.disconnect(false);
             
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
@@ -321,7 +321,15 @@ public class DeviceConnectStatusFragment extends Fragment{
                 mCheckPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_CHECK_DEVICE);
                 Utiliy.setDelayAlarm(mContext, Constant.WAIT_CHECK_PERIOD, mCheckPendingIntent);
                 SLog.e(TAG, "setAlarm  checkDevice "); 
-                setSyncDataProgresShow(false);
+            
+                
+                mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
+                mConnectedFailedViewGroup.setVisibility(View.GONE);
+                mConnectedSucceedViewGroup.setVisibility(View.GONE);
+                mConnectingInfoViewGroup.setVisibility(View.GONE);
+                mSyncDataViewGroup.setVisibility(View.GONE);
+                mSyncDataFailedViewGroup.setVisibility(View.GONE);
+                mCheckDeviceViewGroup.setVisibility(View.VISIBLE);
             } else {
                 mCurrentState = ConnectDeviceState.SEARCHING_DEVICE;     
                 Intent bluetoothIntent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -339,10 +347,8 @@ public class DeviceConnectStatusFragment extends Fragment{
                 mSyncDataFailedViewGroup.setVisibility(View.GONE);
                 mCheckDeviceViewGroup.setVisibility(View.GONE);
                 mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
-                setSyncDataProgresShow(false);
-            }
-           
-            
+            }          
+            setSyncDataProgresShow(false); 
         } else if (mCurrentState == ConnectDeviceState.SYNC_DATA_FAILED) {
             SLog.e(TAG, "Sync Data  failed");
             mIsConnectingAnimation = false;
@@ -360,7 +366,8 @@ public class DeviceConnectStatusFragment extends Fragment{
             mCurrentState = ConnectDeviceState.SYNCING_DATA;
             mProgressImageView.startAnimation(mProgressAnimation);
             
-            DeviceFactory.getInstance(mContext).getAllNoSyncInfo();
+            DeviceFactory.getInstance(mContext).getExceptionEvent();
+            DeviceFactory.getInstance(mContext).getAllNoSyncInfo(2);
             DeviceFactory.getInstance(mContext).getBreathStopInfo();
             // 读取数据状态，开始
             PrivateParams.setSPInt(mContext, "sync_data_status", 1);
@@ -369,6 +376,15 @@ public class DeviceConnectStatusFragment extends Fragment{
             }
             mSyncDataPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_CHECK_DEVICE);
             Utiliy.setDelayAlarm(mContext, Constant.WAIT_SYNC_PERIOD, mSyncDataPendingIntent);
+            
+            mSyncDataFailedViewGroup.setVisibility(View.GONE);
+            mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
+            mConnectedFailedViewGroup.setVisibility(View.GONE);
+            mConnectedSucceedViewGroup.setVisibility(View.GONE);
+            mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mSyncDataViewGroup.setVisibility(View.VISIBLE);
+            mCheckDeviceViewGroup.setVisibility(View.GONE);
+            setSyncDataProgresShow(true);
         }
     }
   
@@ -486,6 +502,9 @@ public class DeviceConnectStatusFragment extends Fragment{
                 SLog.e(TAG, "sync data don not consumed six hour");
                 mCurrentState = ConnectDeviceState.SYNC_DATA_SUCCEED;
             } 
+            doUpdateStatusClick();
+        } else if (action.equals(Constant.ACTION_CHECKDEVICE_FAILED)) {
+            setCheckDeviceFailed();
             doUpdateStatusClick();
         }
     } 

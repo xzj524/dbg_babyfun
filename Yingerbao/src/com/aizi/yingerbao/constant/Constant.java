@@ -2,6 +2,8 @@ package com.aizi.yingerbao.constant;
 
 import java.util.UUID;
 
+import android.content.Intent;
+
 public class Constant {
     /** 日志前缀配置 **/
     public static final String LOG_PREFIX = "AIZI-";
@@ -36,6 +38,9 @@ public class Constant {
     
     //扫描范围
     public static int SCAN_RANG = -90; 
+    
+    //退出标识
+    public static int AIZI_USERACTIVTY_QUIT = 0;
     
     /** 爱子科技设备标识测试版 */
     public static final String AIZI_DEVICE_TEST_TAG = "my_hrm";
@@ -138,11 +143,11 @@ public class Constant {
     
     public static final String DATA_TRANSFER_TYPE = "com.aizi.yingerbao.datatransfer.TYPE";
     
-    public static final int TRANSFER_TYPE_SUCCEED = 1;
+    public static final int TRANSFER_TYPE_SUCCEED = 0;
 
-    public static final int TRANSFER_TYPE_NOT_COMPLETED = 2;
+    public static final int TRANSFER_TYPE_NOT_COMPLETED = 1;
     
-    public static final int TRANSFER_TYPE_ERROR = 3;
+    public static final int TRANSFER_TYPE_ERROR = 2;
     
     
 
@@ -158,6 +163,8 @@ public class Constant {
     public static final String SYNC_DATA_SUCCEED_TIMESTAMP = "sync_data_succeed_timestamp";
 
     public static final String ACTION_CHECKDEVICE_SUCCEED = "com.aizi.yingerbao.checkdev_succeed";
+    
+    public static final String ACTION_CHECKDEVICE_FAILED = "com.aizi.yingerbao.checkdev_failed";
 
     public static final String IS_SYNC_DATA = "is_sync_data";
     
@@ -167,11 +174,23 @@ public class Constant {
 
     public static final String ACTION_DEVICE_CONNECT_RECEIVER 
             = "com.aizi.yingerbao.action.deviceconnect.receiver";
+    
+    public static final String CUR_STATISTIC_TIME = "com.aizi.yingerbao.cst";
+    public static final String CUR_STATISTIC_CHARGE = "com.aizi.yingerbao.charge";
+    
+    public static final String AIZI_IS_CONNECT_REPEAT = "com.aizi.yingerbao.repeat.connect";
+    
+    public static final String AIZI_CONFIG_TEMPERATURE = "com.aizi.yingerbao.config.temperature";
+    public static final String AIZI_CONFIG_BREATHSTOP = "com.aizi.yingerbao.config.breathstop";
+    public static final String AIZI_CONFIG_BREATHLIGHT = "com.aizi.yingerbao.config.breathlight";
+    public static final String AIZI_CONFIG_LIESLEEP = "com.aizi.yingerbao.config.liesleep";
+
+    /** 设备时间数据  */
+    public static final String DATA_TRANSFER_TIME = "com.data.transfer.devicetime";
+    
+  
 
     public static void setSearchRange(int searchparam) {
         SCAN_RANG = searchparam;
-    }
-    
-
-    
+    }  
 }

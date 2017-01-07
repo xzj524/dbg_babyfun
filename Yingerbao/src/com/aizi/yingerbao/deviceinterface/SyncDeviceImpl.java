@@ -183,27 +183,6 @@ public class SyncDeviceImpl implements SyncDevice{
         return null;
     }
 
-
-
-    @Override
-    public DeviceResponse<?> getAllNoSyncInfo() {
-        SLog.e(TAG, " getAllNoSyncInfo ");
-        if (Utiliy.isBluetoothConnected(mContext)) {
-            KeyPayload keyPayload = new KeyPayload();
-            keyPayload.key = 3;
-            keyPayload.keyLen = 0;
-            
-            BaseL2Message bsl2Msg 
-                = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_DATA, 
-                    Constant.BASE_VERSION_CODE, keyPayload);
-        
-            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
-            String str = "getAllNoSyncInfo";
-            Utiliy.dataToFile(str);
-        }
-
-        return null;
-    }
     
     @Override
     public DeviceResponse<?> getAllNoSyncInfo(int datatype) {
@@ -398,10 +377,47 @@ public class SyncDeviceImpl implements SyncDevice{
             profileinfo[0] = (byte) (profileinfo[0] | (0xff8 << 2));
             profileinfo[0] = (byte) (profileinfo[0] & 0xfe);
             profileinfo[1] = (byte) (profileinfo[1] | 0x00);
-            //profileinfo[2] = (byte) (profileinfo[2] | 0x00);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
         return profileinfo;
+    }
+    
+    @Override
+    public DeviceResponse<?> updateDeviceConfig() {
+        SLog.e(TAG, " updateDeviceConfig ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 21;
+            keyPayload.keyLen = 1;
+            keyPayload.keyValue = getConfigInfo(mContext);
+            
+            BaseL2Message bsl2Msg 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            new CommandSendRequest(mContext, false, bsl2Msg).addSendTask();
+            String str = "updateDeviceConfig";
+            Utiliy.dataToFile(str);
+        }
+        return null;
+    }
+
+    private byte[] getConfigInfo(Context context) {
+        byte[] configinfo = new byte[1];
+        try {
+            int phoneTemperatureAlarmOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_TEMPERATURE, 1);
+            int phoneBreathStopAlarmOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_BREATHSTOP, 1);
+            int phoneBreathLightOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_BREATHLIGHT, 1);
+            int phoneLieSleepAlarmOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_LIESLEEP, 0);
+            
+            configinfo[0] = (byte) (configinfo[0] | (phoneTemperatureAlarmOnOff & 0x01));
+            configinfo[0] = (byte) (configinfo[0] | (phoneBreathStopAlarmOnOff << 1) & 0x02);
+            configinfo[0] = (byte) (configinfo[0] | (phoneBreathLightOnOff << 2) & 0x04);
+            configinfo[0] = (byte) (configinfo[0] | (phoneLieSleepAlarmOnOff << 3) & 0x08);
+
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return configinfo;
     }
 }

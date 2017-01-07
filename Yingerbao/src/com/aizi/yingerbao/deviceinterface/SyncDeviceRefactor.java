@@ -40,11 +40,6 @@ public class SyncDeviceRefactor implements SyncDevice{
         return null;
     }
 
-    @Override
-    public DeviceResponse<?> getAllNoSyncInfo() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public DeviceResponse<?> getAllSyncInfo() {
@@ -96,6 +91,13 @@ public class SyncDeviceRefactor implements SyncDevice{
 
     @Override
     public DeviceResponse<?> updateDeviceRom() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    public DeviceResponse<?> updateDeviceConfig() {
         // TODO Auto-generated method stub
         return null;
     }

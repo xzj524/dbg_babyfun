@@ -22,7 +22,6 @@ public interface SyncDevice {
 
     DeviceResponse<?> getRealTimeData();
 
-    DeviceResponse<?> getAllNoSyncInfo();
 
     DeviceResponse<?> getAllSyncInfo();
 
@@ -41,6 +40,8 @@ public interface SyncDevice {
     DeviceResponse<?> manufactureTestCommand();
 
     DeviceResponse<?> updateDeviceRom();
+
+    DeviceResponse<?> updateDeviceConfig();
 
 
 }

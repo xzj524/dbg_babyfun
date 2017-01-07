@@ -44,8 +44,12 @@ public class MessageParse {
     int mBreathCount;
     PendingIntent mSyncDataPendingIntent;
     Context mContext;
+    boolean mIsDeviceActivited = false;
+    boolean mIsDeviceTimed = false;
+    boolean mIsSyncData = true;
     
     private static final int RECV_DATA_COUNT = 1440;
+    private static final int WAIT_LOAD_DATA_TIME = 1000 * 60 * 60 * 6;
     
     /** single instance. */
     private static volatile MessageParse mInstance;   
@@ -73,7 +77,7 @@ public class MessageParse {
         handleL2Msg(bsl2Msg);
     }
 
-    private void handleL2Msg(BaseL2Message bMsg) {
+    private synchronized void handleL2Msg(BaseL2Message bMsg) {
         
         String l2payload = Utiliy.printHexString(bMsg.toByte());
         SLog.e(TAG, "HEX string l2load1 = " + l2payload);
@@ -117,6 +121,9 @@ public class MessageParse {
                     SLog.e(TAG, "receive  check device data");
                     if (kpload.keyLen >= 14) {
                         handlecheckinfo(kpload.keyValue); // 分析校验返回
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_FAILED);
+                        EventBus.getDefault().post(intent);
                     }
                 } 
             } 
@@ -143,73 +150,98 @@ public class MessageParse {
             devCheckInfo.mDeviceCharge = keyValue[12] & 0xff;
             devCheckInfo.mDeviceStatus = keyValue[13];
             
-            int isDeviceActivited = (keyValue[13] & 0x10) >> 4;
-            int totaldatalen =  
-                     devCheckInfo.mNoSyncTempDataLength // 温度数据长度
-                    + devCheckInfo.mNoSyncBreathDataLength // 呼吸停滞数据长度
-                    + devCheckInfo.mNoSyncExceptionLength; // 异常数据changdu
             
-            PrivateParams.setSPInt(mContext, "NoSyncDataLength", totaldatalen);
-            PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
-            
-            String result = "CheckDevice return SleepDataLength = " + devCheckInfo.mNoSyncSleepDataLength
-                    + " TempDataLength = " + devCheckInfo.mNoSyncTempDataLength
-                    + " BreathDataLength = " + devCheckInfo.mNoSyncBreathDataLength
-                    + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
-                    + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus
-                    + " isDeviceActivited = " + isDeviceActivited;
-            
-            // 校验设备成功
-            Utiliy.reflectTranDataType(mContext, 0);
-            
-            SLog.e(TAG, result);
-            Utiliy.dataToFile(result);
-            
-            if (PrivateParams.getSPInt(mContext, "check_device_status", 0) == 2) {
-                // 表示设备身份验证超时
-                return;
-            }
-            // 设置检查设备状态，成功
-            PrivateParams.setSPInt(mContext, "check_device_status", 3);
-            
-            if (PrivateParams.getSPInt(mContext, "connect_interrupt", 0) == 1) {
-                // 检测到连接过程中断
-                return;
-            }
- 
-            Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
-            intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
-            EventBus.getDefault().post(intent);
-  
-            if (isDeviceActivited == 0) {
-                // 如果没有激活过设备则进行激活
-                DeviceFactory.getInstance(mContext).activateDevice();
-            }
+            boolean ischecked = IsDeviceChecked(devCheckInfo);
+            if (ischecked) {
+                
+                int isDeviceActivited = (keyValue[13] & 0x10) >> 4;
+                int totaldatalen =  
+                         devCheckInfo.mNoSyncTempDataLength // 温度数据长度
+                        + devCheckInfo.mNoSyncBreathDataLength // 呼吸停滞数据长度
+                        + devCheckInfo.mNoSyncExceptionLength; // 异常数据changdu
+                
+                PrivateParams.setSPInt(mContext, "NoSyncDataLength", totaldatalen);
+                PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
+                
+                String result = "CheckDevice return SleepDataLength = " + devCheckInfo.mNoSyncSleepDataLength
+                        + " TempDataLength = " + devCheckInfo.mNoSyncTempDataLength
+                        + " BreathDataLength = " + devCheckInfo.mNoSyncBreathDataLength
+                        + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
+                        + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus
+                        + " isDeviceActivited = " + isDeviceActivited;
+                
+                // 校验设备成功
+                Utiliy.reflectTranDataType(mContext, 0);
+                
+                SLog.e(TAG, result);
+                Utiliy.dataToFile(result);
+                
+                if (PrivateParams.getSPInt(mContext, "check_device_status", 0) == 2) {
+                    // 表示设备身份验证超时
+                    return;
+                }
+                // 设置检查设备状态，成功
+                PrivateParams.setSPInt(mContext, "check_device_status", 3);
+                
+                if (PrivateParams.getSPInt(mContext, "connect_interrupt", 0) == 1) {
+                    // 检测到连接过程中断
+                    return;
+                }
+                
+                if (PrivateParams.getSPString(mContext, Constant.AIZI_IS_CONNECT_REPEAT).equals("true")) {
+                    return;
+                }
+     
+                Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
+                intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
+                EventBus.getDefault().post(intent);
+      
+                if (isDeviceActivited == 0) {
+                    // 如果没有激活过设备则进行激活
+                    DeviceFactory.getInstance(mContext).activateDevice();
+                    mIsDeviceActivited = false;
+                } else {
+                    mIsDeviceActivited = true;
+                }
+                
+                if (!checkDeviceConfig(devCheckInfo.mDeviceStatus)) {
+                    DeviceFactory.getInstance(mContext).updateDeviceConfig();
+                }
 
-            setDeviceTime(devCheckInfo);
-            boolean isSyncData = true;
-            long curtime = System.currentTimeMillis();
-            long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
-            if ((curtime - syncdatatime > 1000 * 60 * 60 * 6 && totaldatalen > 60) 
-                    || devCheckInfo.mNoSyncBreathDataLength > 0) {           
-                // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
-                SLog.e(TAG, "sync data has consumed six hour ");
-                DeviceFactory.getInstance(mContext).getExceptionEvent();
-                DeviceFactory.getInstance(mContext).getAllNoSyncInfo(2);
-                DeviceFactory.getInstance(mContext).getBreathStopInfo();
-                // 读取数据状态，开始
-                PrivateParams.setSPInt(mContext, "sync_data_status", 1);
-                setSyncDataAlarm();
-                isSyncData = true;
+                setDeviceTime(devCheckInfo);
+                
+                long curtime = System.currentTimeMillis();
+                long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
+                if ((curtime - syncdatatime > WAIT_LOAD_DATA_TIME && totaldatalen > 60) 
+                        || devCheckInfo.mNoSyncBreathDataLength > 0) {           
+                    // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
+                    SLog.e(TAG, "sync data has consumed six hour ");
+                    DeviceFactory.getInstance(mContext).getExceptionEvent();
+                    DeviceFactory.getInstance(mContext).getAllNoSyncInfo(2);
+                    DeviceFactory.getInstance(mContext).getBreathStopInfo();
+                    // 读取数据状态，开始
+                    PrivateParams.setSPInt(mContext, "sync_data_status", 1);
+                    setSyncDataAlarm();
+                    mIsSyncData = true;
+                } else {
+                    mIsSyncData = false;
+                    SLog.e(TAG, "sync data don not consumed six hour");
+                }  
+                
+                if (mIsDeviceActivited && mIsDeviceTimed) {
+                    intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
+                    intent.putExtra(Constant.IS_SYNC_DATA, mIsSyncData);
+                    EventBus.getDefault().post(intent);
+                }
             } else {
-                isSyncData = false;
-                SLog.e(TAG, "sync data don not consumed six hour");
-            }  
+                devCheckInfo.mDeviceCharge = 0;
+                Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_FAILED);
+                EventBus.getDefault().post(intent);
+            }
             
-            intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
-            intent.putExtra(Constant.IS_SYNC_DATA, isSyncData);
-            EventBus.getDefault().post(intent);
+            PrivateParams.setSPInt(mContext, Constant.CUR_STATISTIC_CHARGE, devCheckInfo.mDeviceCharge);
             
+           
             
             /***工厂测试***/
            /* intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
@@ -218,6 +250,73 @@ public class MessageParse {
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
+    }
+
+
+    private boolean checkDeviceConfig(byte devconfig) {
+        int TemperatureAlarmOnOff = (int)(devconfig & 0x01);
+        int BreathStopAlarmOnOff = (int)(devconfig & 0x02) >> 1;
+        int BreathLightOnOff = (int)(devconfig & 0x04) >> 2;
+        int LieSleepAlarmOnOff = (int)(devconfig & 0x08) >> 3;
+        
+        int phoneTemperatureAlarmOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_TEMPERATURE, 1);
+        int phoneBreathStopAlarmOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_BREATHSTOP, 1);
+        int phoneBreathLightOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_BREATHLIGHT, 1);
+        int phoneLieSleepAlarmOnOff = PrivateParams.getSPInt(mContext, Constant.AIZI_CONFIG_LIESLEEP, 0);
+        
+        if (TemperatureAlarmOnOff == phoneTemperatureAlarmOnOff
+                && BreathStopAlarmOnOff == phoneBreathStopAlarmOnOff
+                && BreathLightOnOff == phoneBreathLightOnOff
+                && LieSleepAlarmOnOff == phoneLieSleepAlarmOnOff) {
+            return true;
+        }
+        return false;
+    }
+
+
+    private void updateDeviceConfig(byte devconfig) {
+        int TemperatureAlarmOnOff = (int)(devconfig & 0x01);
+        int BreathStopAlarmOnOff = (int)(devconfig & 0x02);
+        int BreathLightOnOff = (int)(devconfig & 0x04);
+        int LieSleepAlarmOnOff = (int)(devconfig & 0x80);
+        
+        PrivateParams.setSPInt(mContext, Constant.AIZI_CONFIG_TEMPERATURE, TemperatureAlarmOnOff);
+        PrivateParams.setSPInt(mContext, Constant.AIZI_CONFIG_BREATHSTOP, BreathStopAlarmOnOff);
+        PrivateParams.setSPInt(mContext, Constant.AIZI_CONFIG_BREATHLIGHT, BreathLightOnOff);
+        PrivateParams.setSPInt(mContext, Constant.AIZI_CONFIG_LIESLEEP, LieSleepAlarmOnOff);
+    }
+
+
+    private boolean IsDeviceChecked(DevCheckInfo devCheckInfo) {
+        if (devCheckInfo.mCheckInfoYear < 0 || devCheckInfo.mCheckInfoYear > 64) {
+            return false;
+        }
+        
+        if (devCheckInfo.mCheckInfoMonth < 1 || devCheckInfo.mCheckInfoMonth > 12) {
+            return false;
+        }
+        
+        if (devCheckInfo.mCheckInfoDay < 1 || devCheckInfo.mCheckInfoDay > 31) {
+            return false;
+        }
+        
+        if (devCheckInfo.mCheckInfoHour < 0 || devCheckInfo.mCheckInfoHour > 23) {
+            return false;
+        }
+        
+        if (devCheckInfo.mCheckInfoMinute < 0 || devCheckInfo.mCheckInfoMinute > 59) {
+            return false;
+        }
+        
+        if (devCheckInfo.mCheckInfoSecond < 0 || devCheckInfo.mCheckInfoSecond > 59) {
+            return false;
+        }
+        
+        if (devCheckInfo.mDeviceCharge < 0 || devCheckInfo.mDeviceCharge > 100) {
+            return false;
+        }
+        
+        return true;
     }
 
 
@@ -261,6 +360,9 @@ public class MessageParse {
                     || hour != devCheckInfo.mCheckInfoHour
                     || Math.abs(min - devCheckInfo.mCheckInfoMinute) > 30) {
                 DeviceFactory.getInstance(mContext).setDeviceTime();
+                mIsDeviceTimed = false;
+            } else {
+                mIsDeviceTimed = true;
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -382,6 +484,11 @@ public class MessageParse {
 
 
     private void handleExceptionData(byte[] keyValue) {
+        
+        Intent intent = new Intent(Constant.ACTION_RECE_DATA);
+        intent.putExtra(Constant.RECE_SYNC_DATA_LEN, keyValue.length);
+        EventBus.getDefault().post(intent);
+        
         ExceptionEvent exEvent = new ExceptionEvent();
         String exceptionlog = Utiliy.printHexString(keyValue);
         SLog.e(TAG, "Exception Log = " + exceptionlog);
@@ -422,9 +529,9 @@ public class MessageParse {
                             + "-" + exEvent.mExceptionData3;
                 Utiliy.dataToFile(logStr);
                 SLog.e(TAG, "Exception Event = " + logStr);
-                Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
-                intent.putExtra("transferdata", logStr);
-                EventBus.getDefault().post(intent); // 显示在界面上  
+                Intent transfer_intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+                transfer_intent.putExtra("transferdata", logStr);
+                EventBus.getDefault().post(transfer_intent); // 显示在界面上  
             }
         }
         
@@ -482,7 +589,7 @@ public class MessageParse {
 
         BreathDataInfo breathinfo = new BreathDataInfo(mContext);
         int breathinfolength = 0;
-        List<BmobObject> breathdatainfos = new ArrayList<BmobObject>();
+      //  List<BmobObject> breathdatainfos = new ArrayList<BmobObject>();
         int breathstoplength = keyValue.length;
         if (breathstoplength % 8 == 0) {
             for (int i = 0; i < keyValue.length/8; i++) {
@@ -509,13 +616,13 @@ public class MessageParse {
                 
                 breathinfo.setBreathDuration(keyValue[5 + i*8] & 0xff);
                 breathinfo.setBreathTimestamp(System.currentTimeMillis());
-                breathdatainfos.add(breathinfo);
                 YingerbaoDatabase.insertBreathInfo(mContext, breathinfo);
+                /*breathdatainfos.add(breathinfo);
                 breathinfolength = breathdatainfos.size();
                 if (breathinfolength == 50) {
                     bmobBatchData(breathdatainfos); 
                     breathdatainfos.clear();
-                }
+                }*/
               
                 String breathlog = "Breath Stop Info = " + year + " month = " + month
                         + " day = " + day + " hour = " + hour
@@ -526,10 +633,10 @@ public class MessageParse {
             }
         }
         
-        if (breathinfolength > 0 && breathinfolength < 50) {
+     /*   if (breathinfolength > 0 && breathinfolength < 50) {
             bmobBatchData(breathdatainfos);
             breathdatainfos.clear();
-        }
+        }*/
 
         Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
@@ -537,34 +644,28 @@ public class MessageParse {
 
 
     private void bmobBatchData(final List<BmobObject> datainfos) {
-  /*      new Thread(new Runnable() {
-            
-            @Override
-            public void run() {*/
-                try {
-                    new BmobBatch().insertBatch(datainfos).doBatch(new QueryListListener<BatchResult>() {
-                        @Override
-                        public void done(List<BatchResult> o, BmobException e) {
-                            if(e==null){
-                                for(int i=0;i<o.size();i++){
-                                    BatchResult result = o.get(i);
-                                    BmobException ex =result.getError();
-                                    if(ex==null){
-                                        SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
-                                    }else{
-                                        SLog.e(TAG, i+" failed : "+ex.getMessage()+","+ex.getErrorCode());
-                                    }
-                                }
-                            } else {
-                                SLog.e(TAG, "failed: "+e.getMessage()+","+e.getErrorCode());
+        try {
+            new BmobBatch().insertBatch(datainfos).doBatch(new QueryListListener<BatchResult>() {
+                @Override
+                public void done(List<BatchResult> o, BmobException e) {
+                    if(e==null){
+                        for(int i=0;i<o.size();i++){
+                            BatchResult result = o.get(i);
+                            BmobException ex =result.getError();
+                            if(ex==null){
+                                SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
+                            }else{
+                                SLog.e(TAG, i+" failed : "+ex.getMessage()+","+ex.getErrorCode());
                             }
                         }
-                    });
-                } catch (Exception e) {
-                    SLog.e(TAG, e);
+                    } else {
+                        SLog.e(TAG, "failed: "+e.getMessage()+","+e.getErrorCode());
+                    }
                 }
-          //  }
-        //}).start();
+            });
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
     }
 
 
@@ -593,7 +694,7 @@ public class MessageParse {
         EventBus.getDefault().post(intent);
         
         int tempdatalength = 0;
-        List<BmobObject> tempdatainfos = new ArrayList<BmobObject>();
+       // List<BmobObject> tempdatainfos = new ArrayList<BmobObject>();
         TemperatureDataInfo temperatureinfo = new TemperatureDataInfo(mContext);
         int year = ((keyValue[0] & 0x7e) >> 1) &  0x3f;
         int month = ((keyValue[0] & 0x01) << 3)  |  ((keyValue[1] & 0xe0) >> 5);
@@ -633,26 +734,26 @@ public class MessageParse {
                 temperatureinfo.setTemperatureTimestamp(System.currentTimeMillis());
                 // 温度数据插入数据库
                 YingerbaoDatabase.insertTemperatureInfo(mContext, temperatureinfo);
-                tempdatainfos.add(temperatureinfo);
+               /* tempdatainfos.add(temperatureinfo);
                 tempdatalength = tempdatainfos.size();
                 if (tempdatalength == 50) {
                     bmobBatchData(tempdatainfos);
                     tempdatainfos.clear();
-                }
+                }*/
                 
-                String tempinfo = "Device Time : " + temperatureinfo.mTmYear 
-                        + "-" + temperatureinfo.mTmMonth 
-                        + "-" + temperatureinfo.mTmDay 
-                        + "-" + temperatureinfo.mTmMinute 
-                        + " tempValue = " + temperatureinfo.mTmValue;  
+                String tempinfo = "Device Time : " + temperatureinfo.getTemperatureYear()
+                        + "-" + temperatureinfo.getTemperatureMonth()
+                        + "-" + temperatureinfo.getTemperatureDay()
+                        + "-" + temperatureinfo.getTemperatureMinute()
+                        + " tempValue = " + temperatureinfo.getTemperatureValue();  
                 Utiliy.dataToFile(tempinfo);
             }
         }
         
-        if (tempdatalength > 0 && tempdatalength < 50) {
+      /*  if (tempdatalength > 0 && tempdatalength < 50) {
             bmobBatchData(tempdatainfos);
             tempdatainfos.clear();
-        }
+        }*/
         
         Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
@@ -862,16 +963,20 @@ public class MessageParse {
                         devTime.hour = BitSetConvert.getTimeValue(bSet, 15, 5);
                         devTime.min = BitSetConvert.getTimeValue(bSet, 20, 6);
                         devTime.second = BitSetConvert.getTimeValue(bSet, 26, 6);
+                       
                         
-                        //setDeviceTime(devTime);
-                        
-                        String  curDeviceTime = "get Current Device Time : year = "
+                        String  curDeviceTime = "Current Device Time : "
                                 + (devTime.year  + 2000)
-                                + " month = " + devTime.month
-                                + " day = " + devTime.day
-                                + " hour = " + devTime.hour
-                                + " min = " + devTime.min
-                                + " second = " + devTime.second;
+                                + "年" + devTime.month
+                                + "月" + devTime.day
+                                + "日" + devTime.hour
+                                + "点" + devTime.min
+                                + "分" + devTime.second
+                                + "秒";
+                        
+                        Intent intent = new Intent(Constant.DATA_TRANSFER_TIME);
+                        intent.putExtra("device_time", curDeviceTime);
+                        EventBus.getDefault().post(intent); 
                         
                         
                         //请求时间成功
@@ -888,9 +993,20 @@ public class MessageParse {
                         if (settimeresult == 0 || settimeresult == 1) {
                             //设置时间成功
                             Utiliy.reflectTranDataType(mContext, 0);
+                            if (!mIsDeviceTimed) {
+                                Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
+                                intent.putExtra(Constant.IS_SYNC_DATA, mIsSyncData);
+                                EventBus.getDefault().post(intent); 
+                            }
+                           
+                            
                         } else if (settimeresult == 2) {
                           //设置时间失败
                             Utiliy.reflectTranDataType(mContext, 2);
+                            if (!mIsDeviceTimed) {
+                                Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_FAILED);
+                                EventBus.getDefault().post(intent); 
+                            }
                         }
                         SLog.e(TAG, result);
                         Utiliy.dataToFile(result);
@@ -905,11 +1021,21 @@ public class MessageParse {
                             result =  "activate device success ";
                             //激活设备成功
                             Utiliy.reflectTranDataType(mContext, 0);
+                            
+                            if (mIsDeviceTimed && !mIsDeviceActivited) {
+                                Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
+                                intent.putExtra(Constant.IS_SYNC_DATA, mIsSyncData);
+                                EventBus.getDefault().post(intent); 
+                            }
                         } else {
                             PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 0);
-                            result =  "activate device failed ";
-                            //激活设备成功
+                            result =  "Activate Device Failed";
+                            //激活设备失败
                             Utiliy.reflectTranDataType(mContext, 2);
+                            if (mIsDeviceTimed && !mIsDeviceActivited) {
+                                Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_FAILED);
+                                EventBus.getDefault().post(intent); 
+                            }
                         }
                         SLog.e(TAG, result);
                         Utiliy.dataToFile(result);

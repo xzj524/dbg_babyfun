@@ -6,10 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
 
-import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.thread.AZRunnable;
@@ -24,6 +21,8 @@ public class CommandCenter {
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
     Consumer consumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
     static Context mContext;
+    static boolean mIsCompleted = false;
+    static int mCountingNum = 0;
     
     private static final Object synchronizedLock = new Object();
     private static int SLEEP_TIME = 8 * 1000;
@@ -58,46 +57,45 @@ public class CommandCenter {
         }
     }
 
-    public void handleIntent(Intent intent) {
+    public void handleIntent(int type) {
         try {
-            String action = intent.getAction();
-            if (!TextUtils.isEmpty(action)) {
-                if (action.equals(Constant.ACITON_DATA_TRANSFER)) {
-                    int trantype = intent.getIntExtra(Constant.DATA_TRANSFER_TYPE, 0);
-                    switch (trantype) {
-                        case Constant.TRANSFER_TYPE_SUCCEED: //数据传输成功
-                            synchronized (synchronizedLock) { //传输成功之后继续下一个
-                                synchronizedLock.notifyAll();
-                                SLog.e(TAG, "CommandCenter mCommandSendRequest  completed notifyALL");
-                                ThreadPool.getInstance().shutDown();
-                            }
-                            mRetryTimes = 0;
-                            break;
-                        case Constant.TRANSFER_TYPE_NOT_COMPLETED: // 数据传输未完成
-                            ThreadPool.getInstance().shutDown();
-                            ThreadPool.getInstance().submitRunnable(timeOutRunnable);
-                            break;
-                        case Constant.TRANSFER_TYPE_ERROR: // 数据传输出错
-                            synchronized (synchronizedLock) { //传输失败之后继续下一个
-                                if (mRetryTimes < 3) {
-                                    // 重新加入任务队列
-                                    SLog.e(TAG, "RETRY TIMES = " + mRetryTimes);
-                                    mCommandSendRequest.send(true);
-                                    SLog.e(TAG, "handleIntent CommandCenter mCommandSendRequest send");
-                                    SLog.e(TAG, "handleIntent CommandCenter mCommandSendRequest set alarm timer");
-                                    ThreadPool.getInstance().submitRunnable(timeOutRunnable);
-                                    mRetryTimes++;
-                                } else {
-                                    // 超过重试次数之后，不再重试
-                                    mRetryTimes = 0;
-                                    synchronizedLock.notifyAll();
-                                }
-                            }
-                            break;
-                        default:
-                            break;
+            switch (type) {
+                case Constant.TRANSFER_TYPE_SUCCEED: //数据传输成功
+                    synchronized (synchronizedLock) { //传输成功之后继续下一个
+                        SLog.e(TAG, "CommandCenter mCommandSendRequest  completed notifyALL");
+                        synchronizedLock.notifyAll();
+                        ThreadPool.getInstance().shutDown();
+                        
+                        mIsCompleted = true;
+                        mCountingNum = 0;
                     }
-                }
+                    mRetryTimes = 0;
+                    break;
+                case Constant.TRANSFER_TYPE_NOT_COMPLETED: // 数据传输未完成
+                    mIsCompleted = false;
+                    mCountingNum = 0;
+                    ThreadPool.getInstance().shutDown();
+                    ThreadPool.getInstance().submitRunnable(timeOutRunnable);
+                    break;
+                case Constant.TRANSFER_TYPE_ERROR: // 数据传输出错
+                    synchronized (synchronizedLock) { //传输失败之后继续下一个
+                        if (mRetryTimes < 3) {
+                            // 重新加入任务队列
+                            SLog.e(TAG, "RETRY TIMES = " + mRetryTimes);
+                            mCommandSendRequest.send(true);
+                            mCountingNum = 0;
+                            ThreadPool.getInstance().submitRunnable(timeOutRunnable);
+                            mRetryTimes++;
+                        } else {
+                            // 超过重试次数之后，不再重试
+                            mRetryTimes = 0;
+                            mIsCompleted = true;
+                            synchronizedLock.notifyAll();
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -114,26 +112,51 @@ public class CommandCenter {
     }
     
     
-    static AZRunnable timeOutRunnable = new AZRunnable("sendtimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
+   static AZRunnable timeOutRunnable = new AZRunnable("sendtimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
         @Override
         public void brun() {
             try {
                 Thread.sleep(SLEEP_TIME);
                 synchronized (synchronizedLock) {
+                    
                     if (Utiliy.isBluetoothConnected(mContext)) {
                         Utiliy.reflectTranDataType(mContext, 2);
+                        SLog.e(TAG, "reflectTranDataType  2 mCountingNum = " + mCountingNum);
                     } else {
                         mRetryTimes = 0;
-                    }
-                   
-                    if (mRetryTimes == 0) {
-                        BluetoothApi.getInstance(mContext).mSendDataQueue.clearqueue();
+                        mSendDataQueue.clear();
                         synchronizedLock.notifyAll();
                         SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
                     }
+                    
+                    
+                    /*while (true) {
+                        if (mIsCompleted) {
+                            synchronizedLock.notifyAll();
+                            SLog.e(TAG, "Command is comleted!");
+                            break;
+                        } else {
+                            Thread.sleep(500);
+                            mCountingNum++;
+                            if (mCountingNum > 15) { // 超时
+                                if (Utiliy.isBluetoothConnected(mContext)) {
+                                    handleIntent(2);
+                                    SLog.e(TAG, "reflectTranDataType  2 mCountingNum = " + mCountingNum);
+                                } else {
+                                    mRetryTimes = 0;
+                                    BluetoothApi.getInstance(mContext).mSendDataQueue.clearqueue();
+                                    synchronizedLock.notifyAll();
+                                    SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
+                                }
+                                
+                                break;
+                            }
+                            
+                        }
+                    }*/
                 }
             } catch (Exception e) {
-                SLog.e(TAG, e);
+                //SLog.e(TAG, e);
             }
         }
     };
@@ -154,18 +177,18 @@ public class CommandCenter {
                 while (true) {
                     mCommandSendRequest =  sendqueue.consume();
                     mCommandSendRequest.send(false);
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest send");
+                    mIsCompleted = false;
+                    mCountingNum = 0;
                     ThreadPool.getInstance().submitRunnable(timeOutRunnable);
-                    SLog.e(TAG, "CommandCenter mCommandSendRequest set alarm timer");
                     synchronized (synchronizedLock) {
                         try {
+                            SLog.e(TAG, "CommandCenter mCommandSendRequestING");
                             synchronizedLock.wait();
                             SLog.e(TAG, "CommandCenter mCommandSendRequest completed");
                         } catch (Exception e) {
                             SLog.e(TAG, e);
                         }
                     }
-                    Thread.sleep(500);
                 }
             } catch (Exception ex) {
                 SLog.e(TAG, ex);

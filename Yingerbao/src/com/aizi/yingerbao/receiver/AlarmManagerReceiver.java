@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.utility.BaseMessageHandler;
+import com.aizi.yingerbao.utility.RecvMessageHandler;
 import com.aizi.yingerbao.utility.PrivateParams;
 
 public class AlarmManagerReceiver extends BroadcastReceiver{
@@ -24,9 +24,9 @@ public class AlarmManagerReceiver extends BroadcastReceiver{
                         int waittype = intent.getIntExtra(Constant.ALARM_WAIT_TYPE, 0);
                         switch (waittype) {
                         case Constant.ALARM_WAIT_L1: // 接收L1数据超时
-                            BaseMessageHandler.mL1squenceid = -1;
+                            RecvMessageHandler.mL1squenceid = -1;
                             // 清空L2数据缓存区
-                            BaseMessageHandler.clearL2RecvByte();
+                            RecvMessageHandler.clearL2RecvByte();
                             break;
                          case Constant.ALARM_WAIT_CHECK_DEVICE: // 设备验证超时 
                              if (PrivateParams.getSPInt(context, "check_device_status", 0) == 1) {

@@ -36,9 +36,7 @@ public class SimpleCalendarDialogFragment extends DialogFragment implements OnDa
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        
         return inflater.inflate(R.layout.dialog_calendar, container, false);
-
     }
     
     @SuppressLint("NewApi")
@@ -106,7 +104,7 @@ public class SimpleCalendarDialogFragment extends DialogFragment implements OnDa
         dataTime.year = date.getYear();
         dataTime.month = date.getMonth() + 1;
         dataTime.day = date.getDay();
-        EventBus.getDefault().post(dataTime);  
+        EventBus.getDefault().post(dataTime);         
     }
 
     private void setPrivateCalendarDay(Context context, CalendarDay date) {

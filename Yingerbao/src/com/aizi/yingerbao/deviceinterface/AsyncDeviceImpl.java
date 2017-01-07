@@ -129,7 +129,7 @@ public class AsyncDeviceImpl implements AsyncDevice {
 
             @Override
             public void run() {
-                DeviceResponse<?> response = mSyncDevice.getAllNoSyncInfo();
+               // DeviceResponse<?> response = mSyncDevice.getAllNoSyncInfo();
             }
         };
         return getDispatcher().dispatch(task);

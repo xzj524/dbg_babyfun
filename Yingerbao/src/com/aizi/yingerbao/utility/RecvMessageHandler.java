@@ -1,7 +1,5 @@
 package com.aizi.yingerbao.utility;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Arrays;
 
 import android.app.PendingIntent;
@@ -20,10 +18,10 @@ import com.aizi.yingerbao.logging.SLog;
 
 import de.greenrobot.event.EventBus;
 
-public class BaseMessageHandler {
+public class RecvMessageHandler {
     
-    private static final String TAG = BaseMessageHandler.class.getSimpleName();
-    private static BaseMessageHandler mInstance;
+    private static final String TAG = RecvMessageHandler.class.getSimpleName();
+    private static RecvMessageHandler mInstance;
     private final static short BASE_DATA_HEAD = 6;
     private final static short BASE_L2_DATA_LEN = 5;
     private final static short BASE_L2_RECE_LEN = 128;
@@ -39,20 +37,20 @@ public class BaseMessageHandler {
     static PendingIntent mL1PendingIntent;
     Context mContext;
     
-    public BaseMessageHandler(Context context) {
+    public RecvMessageHandler(Context context) {
         mContext = context;
     }
     
-    public static BaseMessageHandler getInstance(Context context) {
+    public static RecvMessageHandler getInstance(Context context) {
         if (mInstance != null) {
             return mInstance;
         } else {
-            mInstance = new BaseMessageHandler(context);
+            mInstance = new RecvMessageHandler(context);
             return mInstance;
         }
     }
     
-    public void acquireBaseData(Context context, BluetoothDevice bluetoothDevice, 
+    public synchronized void acquireBaseData(Context context, BluetoothDevice bluetoothDevice, 
             BluetoothGattCharacteristic characteristic) {
         try {
             if (Constant.BLE_UUID_NUS_RX_CHARACTERISTIC.equals(characteristic.getUuid())) {
@@ -87,10 +85,10 @@ public class BaseMessageHandler {
                                             mL1squenceid = bsL1Msg.sequenceId;
                                         } else if (mL1squenceid == bsL1Msg.sequenceId) { // L1消息重复
                                             // 消息重复的情况也按照正确消息返回ACK
-                                            Utiliy.saveLog(" L1 RECV REPEAT DATA: ", l1payload);
+                                            Utiliy.saveLog(" L1 RECV REPEAT DATA(middle): ", l1payload);
 
                                             Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
-                                            intent.putExtra("transferdata", " L1 REPEAT DATA: " + l1payload);
+                                            intent.putExtra("transferdata", " L1 REPEAT DATA(middle): " + l1payload);
                                             EventBus.getDefault().post(intent); // 显示到测试界面上
                                             
                                             sendACKBaseL1Msg(context, baseData, 0); 
@@ -108,6 +106,15 @@ public class BaseMessageHandler {
                                             return;//中间位与上一个相差不为1 则抛弃
                                         } 
                                     } else if (bsL1Msg.errFlag == 0) { // 标识起始位
+                                        if (mL1squenceid == bsL1Msg.sequenceId ) {
+                                            Utiliy.saveLog(" L1 RECV REPEAT DATA(start): ", l1payload);
+                                            Intent intent = new Intent(Constant.DATA_TRANSFER_RECEIVE);
+                                            intent.putExtra("transferdata", " L1 REPEAT DATA(start): " + l1payload);
+                                            EventBus.getDefault().post(intent); // 显示到测试界面上
+                                            
+                                            sendACKBaseL1Msg(context, baseData, 0); 
+                                            return;
+                                        }
                                         mL1squenceid = bsL1Msg.sequenceId;
                                     }
                                     
@@ -182,6 +189,7 @@ public class BaseMessageHandler {
                     String l2failedstr = Utiliy.printHexString(mL2RecvByte);
                     if (mL2RecvCurrLen > 5) {
                         l2len = ((mL2RecvByte[3] & 0x01) << 8) | (mL2RecvByte[4] & 0xff);
+                        SLog.e(TAG, "receiveL2DATA before l2len = " + l2len + " totallen = " + mL2RecvCurrLen);
                         if (l2len + BASE_L2_DATA_LEN == mL2RecvCurrLen) {
                             BaseL2Message bsl2Msg = getBaseL2Msg(mL2RecvByte, mL2RecvCurrLen); 
                             MessageParse.getInstance(context).RecvBaseL2Msg(bsl2Msg);
@@ -191,13 +199,13 @@ public class BaseMessageHandler {
                         }
                      } else {
                          Utiliy.logToFile(" L2 RECV FAILED DATA(length is too short) : " + l2failedstr);
-                         SLog.e(TAG, " L2 RECV FAILED DATA(length is too short) : "  + l2failedstr);
+                         SLog.e(TAG, " L2 RECV FAILED DATA(length is too short)");
                     }
                 }   
-                SLog.e(TAG, "receiveL2DATA before l2len = " + l2len + " totallen = " + mL2RecvCurrLen);
+                
                 clearL2RecvByte();
             } else {
-                SLog.e(TAG, "reflectTranDataType 1");
+                
                 Utiliy.reflectTranDataType(context, 1);
             }
         } catch (Exception e) {
@@ -206,7 +214,7 @@ public class BaseMessageHandler {
     }
         
 
-    private void sendACKBaseL1Msg(Context context, byte[] baseData, int errcode) {
+    private synchronized void sendACKBaseL1Msg(Context context, byte[] baseData, int errcode) {
         byte[] ACKMsg = new byte[6];
         System.arraycopy(baseData, 0, ACKMsg, 0, 6);
         ACKMsg[1] = (byte) (((errcode & 0x03) << 5) & 0x60);
@@ -214,131 +222,20 @@ public class BaseMessageHandler {
         ACKMsg[2] = (byte) (baseData[2] & 0);
         ACKMsg[4] = (byte) (baseData[4] & 0);
         ACKMsg[5] = (byte) (baseData[5] & 0);
+        AsycEvent asycEvent = new AsycEvent(ACKMsg);
+        asycEvent.isAck = true;
+        
         
         String l1ack = Utiliy.printHexString(ACKMsg);
         Utiliy.logToFile(" L1  SEND ACK: " + l1ack); // 写入日志文件
         SLog.e(TAG, " L1 SEND ACK: " + l1ack);
+        BluetoothApi.getInstance(context).RecvEvent(asycEvent);
+
         Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
         intent.putExtra("transferdata", " L1 " + " ACK: " + l1ack);
         EventBus.getDefault().post(intent); // 显示到测试界面上
-        AsycEvent asycEvent = new AsycEvent(ACKMsg);
-        asycEvent.isAck = true;
-        BluetoothApi.getInstance(context).RecvEvent(asycEvent);
     }
     
-    public boolean sendL2Message(Context context, BaseL2Message bsl2msg, boolean isrepeat) {
-        boolean isSendL2Over = false;
-        String l2str = null;
-        synchronized (mYingerbaoLock) {
-            try {
-                
-                /****在测试界面显示出来,写入日志文件*****/
-                String l2payload = Utiliy.printHexString(bsl2msg.toByte());
-
-                Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
-                intent.putExtra("transferdata", "L2 " + l2payload);
-                EventBus.getDefault().post(intent);
-
-                l2str = "L2 SEND: " + l2payload + " repeat = " + isrepeat;
-                Utiliy.logToFile(l2str); 
-                SLog.e(TAG, l2str);
-                /****在测试界面显示出来,写入日志文件*****/
-                
-                sendL2Msg(context, bsl2msg, isrepeat);
-
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            }
-        }
-        return isSendL2Over;
-    }
-    
-    private boolean sendL2Msg(Context context, BaseL2Message bsl2msg, boolean isrepeat) {
-        byte[] buffer = new byte[14];
-        byte[] sendbuff = null;
-        int flag = 0;
-        int readcount = 0;
-        boolean isStart = false;
-        boolean isSendL2Over = false;
-        ByteArrayInputStream inputStream 
-                = new ByteArrayInputStream(bsl2msg.toByte());
-        try {
-            if (inputStream != null) {
-                do {
-                    if (readcount == 0) { // 第一次读流中的数据
-                        flag = 0; //开始帧
-                        isStart = true;
-                    } else {
-                        isStart = false;
-                    }
-                    readcount = inputStream.read(buffer, 0, 14);
-                    if (readcount > 0 && readcount <= 14) {
-                        sendbuff = new byte[readcount];
-                        System.arraycopy(buffer, 0, sendbuff, 0, readcount);
-                        if (inputStream.available() > 0) { //读取14个字符之后还有内容
-                            if (readcount == 14 && !isStart) {
-                                flag = 1; // 中间帧
-                            }
-                        } else {
-                            flag = 2;//结束帧
-                            inputStream.close();
-                            isSendL2Over = true;
-                        }
-                        sendL1Msg(context, sendbuff, flag, isrepeat);
-                    }
-                } while (inputStream.available() > 0);
-            }
-        } catch (Exception e) {
-            SLog.e(TAG, e);
-        } finally {
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException e1) {
-                SLog.e(TAG, e1);
-            }
-        }
-        return isSendL2Over;     
-    }
-    
-    public void sendL1Msg(Context context, byte[] buffer, int flag, boolean isrepeat) {
-        BaseL1Message bsL1Msg = new BaseL1Message();
-        String l1str = null;
-        if (buffer != null && buffer.length > 0) {
-            bsL1Msg.payload = new byte[buffer.length];
-            System.arraycopy(buffer, 0, bsL1Msg.payload, 0, buffer.length);
-            
-            bsL1Msg.errFlag = (short) flag;
-            bsL1Msg.isAiziBaseL1Head = true;
-            bsL1Msg.isNeedAck = true;
-            bsL1Msg.ackFlag = 0;
-            bsL1Msg.version = 0;
-            bsL1Msg.payloadLength = (short) buffer.length;
-            if (isrepeat) {
-                bsL1Msg.sequenceId = (short) mL2SquenceID;
-            } else {
-                if (mL2SquenceID > 65536) {
-                    mL2SquenceID = 0;
-                }
-                bsL1Msg.sequenceId = (short) ++mL2SquenceID;
-            }
-            
-            bsL1Msg.CRC16 = (short) CRC16.calcCrc16(bsL1Msg.payload);
-            
-            // 通过蓝牙传输数据
-            BluetoothApi.getInstance(context).RecvEvent(new AsycEvent(bsL1Msg.tobyte()));
-            
-            byte[] bsl1buffer = bsL1Msg.tobyte();
-            Intent intent = new Intent(Constant.DATA_TRANSFER_SEND);
-            String l1payload = Utiliy.printHexString(bsl1buffer);
-            intent.putExtra("transferdata", " L1 " + l1payload);
-            EventBus.getDefault().post(intent); // 显示到测试界面上
-            l1str = " L1 " + " SEND: " + l1payload + " isrepeat = " + isrepeat;
-            Utiliy.logToFile(l1str); // 写入日志文件
-            SLog.e(TAG, l1str);
-        }
-    }
 
     private boolean generateBaseL2MsgByteArray(BaseL1Message bsL1Msg) {
         boolean isover = false;

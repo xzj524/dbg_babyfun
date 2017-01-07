@@ -25,8 +25,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BatchResult;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListListener;
 
 import com.aizi.yingerbao.BabyBreathEmergencyActivity;
 import com.aizi.yingerbao.BabyFeverEmergencyActivity;
@@ -36,8 +40,13 @@ import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
 import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.constant.Constant;
+import com.aizi.yingerbao.database.BreathDataInfo;
+import com.aizi.yingerbao.database.TemperatureDataInfo;
+import com.aizi.yingerbao.database.YingerbaoDatabase;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.receiver.AlarmManagerReceiver;
+import com.aizi.yingerbao.thread.AZRunnable;
+import com.aizi.yingerbao.thread.ThreadPool;
 
 /*
 * @author xuzejun
@@ -104,6 +113,7 @@ public class Utiliy {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(context, ConnectDeviceActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
@@ -390,23 +400,8 @@ public class Utiliy {
 
     public static void reflectTranDataType(Context context, int res) {
         try {
-            Intent intent = new Intent(Constant.ACITON_DATA_TRANSFER);
-            switch (res) {
-            case 0:
-                intent.putExtra(Constant.DATA_TRANSFER_TYPE, Constant.TRANSFER_TYPE_SUCCEED);
-                break;
-            case 1:
-                intent.putExtra(Constant.DATA_TRANSFER_TYPE, Constant.TRANSFER_TYPE_NOT_COMPLETED);
-                break;
-            case 2:
-                intent.putExtra(Constant.DATA_TRANSFER_TYPE, Constant.TRANSFER_TYPE_ERROR);
-                break;
-
-            default:
-                break;
-            }
-            
-            CommandCenter.getInstance(context).handleIntent(intent);
+            SLog.e(TAG, "reflectTranDataType " + res);
+            CommandCenter.getInstance(context).handleIntent(res);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -509,20 +504,26 @@ public class Utiliy {
 
     public static void saveLog(String descrip, String payload) {
         Utiliy.logToFile(descrip + payload);
-        SLog.e(TAG, descrip + payload);
-        
+        SLog.e(TAG, descrip + payload);      
     }
 
-    public static void initCurrentDataDate(Context context) {
+    public static void initCurrentDataDate(final Context context) {
         try {
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH) + 1;
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            new Thread(new Runnable() {
+                
+                @Override
+                public void run() {
+                    Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    
+                    PrivateParams.setSPInt(context, Constant.DATA_DATE_YEAR, year);
+                    PrivateParams.setSPInt(context, Constant.DATA_DATE_MONTH, month);
+                    PrivateParams.setSPInt(context, Constant.DATA_DATE_DAY, day);
+                }
+            }).start();
             
-            PrivateParams.setSPInt(context, Constant.DATA_DATE_YEAR, year);
-            PrivateParams.setSPInt(context, Constant.DATA_DATE_MONTH, month);
-            PrivateParams.setSPInt(context, Constant.DATA_DATE_DAY, day);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -590,5 +591,137 @@ public class Utiliy {
             SLog.e(TAG, e);
         }
         return deviceid;
+    }
+    
+    public static void sendSavedBreathData(final Context context) {
+        ThreadPool.getInstance().submitRunnable(
+                new AZRunnable("sendBreathDataStatisticData", AZRunnable.RUNNABLE_HTTP_STATISTIC) {
+
+                    @Override
+                    public void brun() {
+                        sendBreathDataStatistics(context);
+                    }
+
+                });
+    }
+    
+
+    private static void sendBreathDataStatistics(final Context context) {
+        try {
+            long currentTime = System.currentTimeMillis();
+            long lastSendTime = getLastSendStatisticTime(context);
+            
+            List<BreathDataInfo> breathinfos 
+                       = YingerbaoDatabase.getBreathInfoEnumClassList(context, currentTime, lastSendTime);
+            SLog.e(TAG, "breathinfos size = " + breathinfos.size()
+                    + " currenttime = " + currentTime
+                    + " lastsendtime = " + lastSendTime);
+            List<BmobObject> breathbmobinfos = new ArrayList<BmobObject>();
+            for (BreathDataInfo breathinfo : breathinfos) {
+                breathbmobinfos.add(breathinfo);
+                if (breathbmobinfos.size() == 50) {
+                    bmobBatchData(breathbmobinfos);
+                    breathbmobinfos.clear();
+                    setLastSendStatisticTime(context);
+                    Thread.sleep(500);
+                }
+            }
+            SLog.e(TAG, "breathbmobinfos size = " + breathbmobinfos.size());
+            if (breathbmobinfos.size() > 0 && breathbmobinfos.size() < 50) {
+                bmobBatchData(breathbmobinfos);
+                breathbmobinfos.clear();
+                setLastSendStatisticTime(context);
+            }
+            
+            
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+    }
+    
+    public static void sendSavedTempData(final Context context) {
+        ThreadPool.getInstance().submitRunnable(
+                new AZRunnable("sendTempDataStatisticData", AZRunnable.RUNNABLE_HTTP_STATISTIC) {
+
+                    @Override
+                    public void brun() {
+                        sendTempDataStatistics(context);
+                    }
+                });
+    }
+    
+    private static void sendTempDataStatistics(Context context) {
+        try {
+            long currentTime = System.currentTimeMillis();
+            long lastSendTime = getLastSendStatisticTime(context);
+            
+            List<TemperatureDataInfo> tempinfos 
+                       = YingerbaoDatabase.getTemperatureInfoEnumClassList(context, currentTime, lastSendTime);
+            List<BmobObject> tempbmobinfos = new ArrayList<BmobObject>();
+            for (TemperatureDataInfo tempinfo : tempinfos) {
+                tempbmobinfos.add(tempinfo);
+                if (tempbmobinfos.size() == 50) {
+                    bmobBatchData(tempbmobinfos);
+                    tempbmobinfos.clear();
+                    setLastSendStatisticTime(context);
+                    Thread.sleep(500);
+                }
+            }
+            
+            if (tempbmobinfos.size() > 0 && tempbmobinfos.size() < 50) {
+                bmobBatchData(tempbmobinfos);
+                tempbmobinfos.clear();
+                setLastSendStatisticTime(context);
+            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+       
+    }
+
+    
+    
+    
+    
+    private static void setLastSendStatisticTime(Context context) {
+        if (context == null) {
+            SLog.w(TAG, "setLastSendStatisticTime mContext == null");
+            return;
+        }
+        PrivateParams.setSPLong(context, Constant.CUR_STATISTIC_TIME, System.currentTimeMillis());
+    }
+    
+    private static long getLastSendStatisticTime(Context context) {
+        if (context == null) {
+            SLog.e(TAG, "getLastSendStatisticTime mContext == null");
+            return 0;
+        }
+        long time = PrivateParams.getSPLong(context, Constant.CUR_STATISTIC_TIME);
+        return time;
+    }
+    
+    private static void bmobBatchData(final List<BmobObject> datainfos) {
+        try {
+            new BmobBatch().insertBatch(datainfos).doBatch(new QueryListListener<BatchResult>() {
+                @Override
+                public void done(List<BatchResult> o, BmobException e) {
+                    if(e==null){
+                        for(int i=0;i<o.size();i++){
+                            BatchResult result = o.get(i);
+                            BmobException ex =result.getError();
+                            if(ex==null){
+                                SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
+                            }else{
+                                SLog.e(TAG, i+" failed : "+ex.getMessage()+","+ex.getErrorCode());
+                            }
+                        }
+                    } else {
+                        SLog.e(TAG, "failed: "+e.getMessage()+","+e.getErrorCode());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
     }
 }

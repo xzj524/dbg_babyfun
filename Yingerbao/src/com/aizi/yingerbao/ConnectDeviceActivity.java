@@ -24,6 +24,7 @@ import com.aizi.yingerbao.device.fragment.DeviceConnectStatusFragment.OnDeviceCo
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.ScanDevicesService;
 import com.aizi.yingerbao.utility.PrivateParams;
+import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.HorizontalProgressBarWithNumber;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
@@ -64,7 +65,7 @@ onTitleBarClickListener {
         mDevConnectFragment 
             = (DeviceConnectStatusFragment)getFragmentManager().findFragmentById(R.id.deviceConnectFragment);
         
-        initScanService();
+        //initScanService();
         PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 0);
     }
     
@@ -166,6 +167,8 @@ onTitleBarClickListener {
                         PrivateParams.setSPLong(getApplicationContext(),
                                 Constant.SYNC_DATA_SUCCEED_TIMESTAMP, System.currentTimeMillis());
                     } 
+                    Utiliy.sendSavedBreathData(getApplicationContext());
+                    Utiliy.sendSavedTempData(getApplicationContext());
                     SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED");
                     finish();
                 }
@@ -197,12 +200,11 @@ onTitleBarClickListener {
     public void onDeviceConnected(Intent intent) {
         String action = intent.getAction();
         if (action.equals("com.aizi.yingerbao.scandevices")) {
-            SLog.e(TAG, "start scan bluetooth1");
             if (mScanService != null) {
-                SLog.e(TAG, "start scan bluetooth2");  
+                SLog.e(TAG, "start scan bluetooth");  
                 mScanService.startScanDevice();
             } else {
-                SLog.e(TAG, "start scan bluetooth3");
+                SLog.e(TAG, "init scan service");
                 initScanService();
             }
         } else if (action.equals("com.aizi.yingerbao.sync_finish")) {
@@ -215,6 +217,7 @@ onTitleBarClickListener {
                 isShowProgress = intent.getBooleanExtra("show_progress", false);
                 if (mProgressBar != null) {
                     if (isShowProgress) {
+                        mProgressBar.setProgress(0);
                         mProgressBar.setVisibility(View.VISIBLE); 
                     } else {
                         mProgressBar.setVisibility(View.GONE); 
@@ -311,6 +314,7 @@ onTitleBarClickListener {
             new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Constant.AIZI_USERACTIVTY_QUIT = 1;
                 mDevConnectFragment.setCurrentStateIdel();
                 PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 1);
                 BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(false);

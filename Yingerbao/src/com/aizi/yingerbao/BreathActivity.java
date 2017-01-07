@@ -46,6 +46,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Highlight;
+import com.github.mikephil.charting.utils.ValueFormatter;
 import com.umeng.analytics.MobclickAgent;
 
 import de.greenrobot.event.EventBus;
@@ -70,10 +71,12 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     long mBreathTimeforlast;
     boolean mBreatStart = false;
     Timer mTimer;
+    private BreathTimerTask mTimerTask;
     
     boolean mIsBreathSet = false;
     
     Button mControlBreathBtn;
+    int mDelayCount = 6;
     
     private  TopBarView mBreathTopbar;
     
@@ -111,6 +114,8 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
             }
         });
         
+        mTimer = new Timer(true);
+        
         mBreathChart = (LineChart) findViewById(R.id.breath_line_chart);
         mBreathStopChart = (BarChart) findViewById(R.id.breath_stop_barchart);
         mControlBreathBtn = (Button) findViewById(R.id.control_breath_button);
@@ -119,42 +124,34 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
             
             @Override
             public void onClick(View v) {
-                if (mBreatStart) {
+                /*if (mBreatStart) {
                     mBreatStart = false;
                     if (mTimer != null) {
                         mTimer.purge();
                         mTimer.cancel(); 
                     }
+                    
+                    if (mTimerTask != null) {
+                        mTimerTask.cancel();
+                    }
                     DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
                     mControlBreathBtn.setText(R.string.action_start_breath);
-                } else {
+                } else {*/
                     // 首先检测蓝牙是否连接
                     if (Utiliy.isBluetoothConnected(getApplicationContext())) {
                         if (!mBreatStart) {
-                            mBreatStart = true;
-                            mTimer = new Timer(true);
-                            TimerTask task = new TimerTask(){  
-                                public void run() {  
-                                Message message = new Message();      
-                                message.what = 1; 
-                                message.arg1 = mBreValue;
-                                message.arg2 = mBreathFreq;
-                                mHandler.sendMessage(message);  
-                                if (mBreValue != 5) {
-                                    SLog.e(TAG, "mBreathValue = " + mBreValue + " mBreathFreq = " + mBreathFreq);
-                                }
-                              }  
-                           };  
-                            mTimer.schedule(task,1000, 400); 
-                            
+                            mBreatStart = true;  
+                            if (mTimerTask != null) {
+                                mTimerTask.cancel();
+                            }
+                            mTimerTask = new BreathTimerTask();
+                            mTimer.schedule(mTimerTask,1000, 1000);
+                                
                             DeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
                             mControlBreathBtn.setText(R.string.action_stop);
                         } else {
                             mBreatStart = false;
-                            if (mTimer != null) {
-                                mTimer.purge();
-                                mTimer.cancel();
-                            }  
+                            
                             DeviceFactory.getInstance(getApplicationContext()).stopSendBreathData();
                             mControlBreathBtn.setText(R.string.action_start_breath);
                         }
@@ -162,7 +159,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                        showNormalDialog();
                     }
                 }
-            }
+           // }
         });
         
         EventBus.getDefault().register(this);
@@ -181,6 +178,23 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         dataTime.day = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
         
         updateBreathStopBarChartData(dataTime);
+    }
+    
+    
+    class BreathTimerTask extends TimerTask{
+
+        @Override
+        public void run() {
+            Message message = new Message();      
+            message.what = 1; 
+            message.arg1 = mBreValue;
+            message.arg2 = mBreathFreq;
+            mHandler.sendMessage(message); 
+            if (mBreValue != 5) {
+                SLog.e(TAG, "mBreathValue = " + mBreValue + " mBreathFreq = " + mBreathFreq);
+            }
+        }
+        
     }
     
     public void showNormalDialog(){
@@ -221,7 +235,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
             mTimer.purge();
             mTimer.cancel();
         }
-
     }
     
 
@@ -232,13 +245,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                      updateBreathWave(msg.arg1);
                      mBreValue = 5;
                      mBreathFreqData.setText(msg.arg2 + "");
-                    /* if (mBreatfreq) {
-                        mBreatfreq = false;
-                        if (mBreathPeriod > 0) {
-                            mBreathFreq = (int)((60 * 1000) / mBreathPeriod); 
-                            mBreathFreqData.setText(mBreathFreq + "");
-                        }
-                    }*/
                      break;      
                  }      
                  super.handleMessage(msg);  
@@ -246,25 +252,48 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         };  
         
         private void updateBreathWave(int preValue) {
-            for (int i = 0; i < 2; i++) {
-                if (i == 0) {
-                    generateNewWave(5); 
-                } else if (i == 1) {
-                    generateNewWave(preValue); 
-                } 
+            try {
+                
+                for (int i = 0; i < mDelayCount; i++) {
+                    if (i < mDelayCount -1) {
+                        generateNewWave(5);
+                    } else if (i == mDelayCount -1) {
+                        generateNewWave(preValue); 
+                    } 
+                }
+                
+               /* for (int i = 0; i < 6; i++) {
+                    if (i < 5) {
+                        generateNewWave(5);
+                    } else if (i == 5) {
+                        generateNewWave(preValue); 
+                    } 
+                }*/
+            } catch (Exception e) {
+                SLog.e(TAG, e);
             }
+            
         }
         
      
      public void onEventMainThread(final BabyBreath breaths) { 
+         
+         if (!mBreatStart) {
+            return;
+        }
 
          mBreValue = (int) (breaths.mBreathValue + (60 + Math.random() * 10));
          mBreathFreq = breaths.mBreathFreq;
          mBreathTimeforlast = breaths.mBreathTime;
+         mDelayCount = (int) (mBreathTimeforlast / 200);
+         if (mDelayCount < 6) {
+            mDelayCount = 6;
+         }
          
          SLog.e(TAG, "breath receivre data  mBreValue = " + mBreValue 
                  + " mBreathFreq = " + mBreathFreq
-                 + " mBreathTimeforlast = " + mBreathTimeforlast);
+                 + " mBreathTimeforlast = " + mBreathTimeforlast
+                 + " mDelayCount = " + mDelayCount);
      }
      
      public void onEventMainThread(DataTime dataTime) { 
@@ -439,30 +468,30 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         
         mBreathDate.setText(year + "年" + month + "月" + day + "日");
         
-   /*     BreathStopInfo breathinfo = new BreathStopInfo();
-        breathinfo.mBreathYear = year;
-        breathinfo.mBreathMonth = month;
-        breathinfo.mBreathDay = day;*/
+        BreathDataInfo breathinfo = new BreathDataInfo(getApplicationContext());
+        breathinfo.setBreathYear(year);
+        breathinfo.setBreathMonth(month);
+        breathinfo.setBreathDay(day);
         
-       // breathinfo.mBreathHour = 5;
+     /*   breathinfo.setBreathHour(7);
         
-     /*   for (int i = 0; i < 3; i++) {
-            breathinfo.mBreathMinute = 5+i;
+        for (int i = 0; i < 6; i++) {
+            breathinfo.setBreathMinute(23+i);
             YingerbaoDatabase.insertBreathInfo(getApplicationContext(), breathinfo);
         }*/
         
         
-      /*  for (int i = 0; i < 24; i++) {
-             breathinfo.mBreathHour = i;
+       /* for (int i = 0; i < 24; i++) {
+             breathinfo.setBreathHour(i);
          
              if (i == 5) {
-                 breathinfo.mBreathMinute = i;
+                 breathinfo.setBreathMinute(i);
              }else {
-                 breathinfo.mBreathMinute = 0;
+                 breathinfo.setBreathMinute(0);
              }
              YingerbaoDatabase.insertBreathInfo(getApplicationContext(), breathinfo);
-        }
-*/
+        }*/
+
         
         
         List<BreathDataInfo> breathInfoEnumClasses = 
@@ -478,6 +507,15 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         mBarDataSet.setHighLightColor(Color.GRAY);
         
         mBarDataSet.setColor(mColors[6]);
+        mBarDataSet.setValueFormatter(new ValueFormatter() {
+            
+            @Override
+            public String getFormattedValue(float arg0) {
+                // TODO Auto-generated method stub
+                return (int)arg0 + "次";
+            }
+        });
+        mBarDataSet.setValueTextSize(10);
         //BarData表示挣个柱形图的数据
         BarData mBarData = new BarData(getXAxisShowLable(),mBarDataSet);
         mBreathStopChart.setData(mBarData);
@@ -731,12 +769,26 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         
         xAxis.setDrawGridLines(true);
         xAxis.setDrawAxisLine(true);
+        xAxis.setAvoidFirstLastClipping(true);
 
         //获得左侧侧坐标轴
         YAxis leftAxis = mBreathStopChart.getAxisLeft();
         leftAxis.setLabelCount(5);
         leftAxis.setAxisMaxValue(10); // 设置Y轴最大值
         leftAxis.setAxisMinValue(0);// 设置Y轴最小值。
+        leftAxis.setTextSize(12);
+      //  Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
+        
+    
+        leftAxis.setValueFormatter(new ValueFormatter() {
+            
+            @Override
+            public String getFormattedValue(float arg0) {
+                // TODO Auto-generated method stub
+                int n = (int) arg0;
+                return n+" 次";
+            }
+        });
 
         //设置右侧坐标轴
         YAxis rightAxis = mBreathStopChart.getAxisRight();
@@ -753,7 +805,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
     private ArrayList<String> getXAxisShowLable() {
         ArrayList<String> m = new ArrayList<String>();
         for (int i = 0; i < 24; i++) {
-            m.add(i+1+"");
+            m.add(i + "点");
         }
         return m;
     }

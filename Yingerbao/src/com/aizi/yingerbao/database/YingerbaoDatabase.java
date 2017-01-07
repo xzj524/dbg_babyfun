@@ -23,7 +23,7 @@ public class YingerbaoDatabase {
     private static InfoDbOpenHelper mDbHelper = null;
     private static DbErrorHandler mDbErrorHandler = null;
     private static Object myLock = new Object();
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String DB_DIR = "/database";
     private static final String DATA_DIR = "/data";
     private static final String TAG = "YingerbaoDatabase";
@@ -378,7 +378,7 @@ public class YingerbaoDatabase {
      * @return BreathInfoEnumClass list
      */
     public static List<BreathDataInfo> getBreathInfoEnumClassList(Context context, long currentTime,
-            long lastSendTime, int offset, int count) {
+            long lastSendTime) {
         synchronized (myLock) {
             SQLiteDatabase db = getDb(context);
             if (db == null) {
@@ -390,21 +390,29 @@ public class YingerbaoDatabase {
                     + " WHERE " + BreathInfoEnum.BreathTimestamp.name()
                     + " < " + currentTime
                     + " AND " + BreathInfoEnum.BreathTimestamp.name()
-                    + " >= " + lastSendTime
-                    + " LIMIT " + count
-                    + " OFFSET " + offset + ";";
+                    + " >= " + lastSendTime + ";";
 
             Cursor cursor = null;
             try {
                 cursor = db.rawQuery(selection, null);
 
                 while (cursor.moveToNext()) {
-                    BreathDataInfo breathvalues = new BreathDataInfo(context);
-                    breathvalues.setBreathTimestamp(cursor.getLong(cursor.getColumnIndex(BreathInfoEnum.BreathTimestamp.name())));
-                    breathvalues.setBreathIsAlarm(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathIsAlarm.name())));
-                    breathvalues.setBreathDuration(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathDuration.name())));
+                    BreathDataInfo breathvalue = new BreathDataInfo(context);
+                    breathvalue.setBreathTimestamp(cursor.getLong(cursor.getColumnIndex(BreathInfoEnum.BreathTimestamp.name())));
+                    breathvalue.setBreathIsAlarm(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathIsAlarm.name())));
+                    breathvalue.setBreathDuration(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathDuration.name())));
+                    breathvalue.setBreathYear(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathYear.name())));
+                    breathvalue.setBreathMonth(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathMonth.name())));
+                    breathvalue.setBreathDay(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathDay.name())));
+                    breathvalue.setBreathHour(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathHour.name())));
+                    breathvalue.setBreathMinute(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathMinute.name())));
+                    breathvalue.setBreathSecond(cursor.getInt(cursor.getColumnIndex(BreathInfoEnum.BreathSecond.name())));
                     
-                    values.add(breathvalues);
+                    breathvalue.setPhoneImei(cursor.getString(cursor.getColumnIndex(BreathInfoEnum.BreathPhoneImei.name())));
+                    breathvalue.setPhoneNum(cursor.getString(cursor.getColumnIndex(BreathInfoEnum.BreathPhoneNum.name())));
+                    breathvalue.setDeviceMac(cursor.getString(cursor.getColumnIndex(BreathInfoEnum.BreathDeviceMac.name())));
+                    
+                    values.add(breathvalue);
 
                 }
             } catch (Exception e) {
@@ -514,7 +522,6 @@ public class YingerbaoDatabase {
             Cursor cursor = null;
             try {
                 cursor = db.rawQuery(selection, null);
-
                 while (cursor.moveToNext()) {
                     TemperatureDataInfo temperaturevalues = new TemperatureDataInfo(context);
                     temperaturevalues.setTemperatureTimestamp(cursor.getLong(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureTimestamp.name())));
@@ -536,7 +543,6 @@ public class YingerbaoDatabase {
                     db.close();
                 }
             }
-
             return values;
         }
     }
@@ -552,7 +558,7 @@ public class YingerbaoDatabase {
      * @return BreathInfoEnumClass list
      */
     public static List<TemperatureDataInfo> getTemperatureInfoEnumClassList(Context context, long currentTime,
-            long lastSendTime, int offset, int count) {
+            long lastSendTime) {
         synchronized (myLock) {
             SQLiteDatabase db = getDb(context);
             if (db == null) {
@@ -564,20 +570,25 @@ public class YingerbaoDatabase {
                     + " WHERE " + TemperatureInfoEnum.TemperatureTimestamp.name()
                     + " < " + currentTime
                     + " AND " + TemperatureInfoEnum.TemperatureTimestamp.name()
-                    + " >= " + lastSendTime
-                    + " LIMIT " + count
-                    + " OFFSET " + offset + ";";
+                    + " >= " + lastSendTime + ";";
 
             Cursor cursor = null;
             try {
                 cursor = db.rawQuery(selection, null);
 
                 while (cursor.moveToNext()) {
-                    TemperatureDataInfo temperaturevalues = new TemperatureDataInfo(context);
-                    temperaturevalues.setTemperatureTimestamp(cursor.getLong(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureTimestamp.name())));
-                    temperaturevalues.setTemperatureValue(cursor.getString(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureValue.name())));
+                    TemperatureDataInfo temperaturevalue = new TemperatureDataInfo(context);
+                    temperaturevalue.setTemperatureTimestamp(cursor.getLong(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureTimestamp.name())));
+                    temperaturevalue.setTemperatureValue(cursor.getString(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureValue.name())));
+                    temperaturevalue.setTemperatureYear(cursor.getInt(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureYear.name())));
+                    temperaturevalue.setTemperatureMonth(cursor.getInt(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureMonth.name())));
+                    temperaturevalue.setTemperatureDay(cursor.getInt(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureDay.name())));
+                    temperaturevalue.setTemperatureMinute(cursor.getInt(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureMinute.name())));
                     
-                    values.add(temperaturevalues);
+                    temperaturevalue.setPhoneImei(cursor.getString(cursor.getColumnIndex(TemperatureInfoEnum.TemperaturePhoneImei.name())));
+                    temperaturevalue.setPhoneNum(cursor.getString(cursor.getColumnIndex(TemperatureInfoEnum.TemperaturePhoneNum.name())));
+                    temperaturevalue.setDeviceMac(cursor.getString(cursor.getColumnIndex(TemperatureInfoEnum.TemperatureDeviceMac.name())));
+                    values.add(temperaturevalue);
                 }
             } catch (Exception e) {
                 SLog.d(TAG, "e getADBehaviorEnumClassList " + e.getMessage());

@@ -126,56 +126,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_horizontal">
-             
-          <LinearLayout 
-	        android:id="@+id/templist"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="10dp"
-	        android:orientation="vertical">
-	        <TextView 
-	            android:id="@+id/templist1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="10dp"
-	            android:textColor="@color/gray"
-	            android:text="40℃"/>
-	        <TextView 
-	            android:id="@+id/templist2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="16dp"
-	            android:textColor="@color/gray"
-	            android:text="35℃"/>
-	        <TextView 
-	            android:id="@+id/templist3"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="20dp"
-	            android:textColor="@color/gray"
-	            android:text="30℃"/>
-	        <TextView 
-	            android:id="@+id/templist4"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="20dp"
-	            android:textColor="@color/gray"
-	            android:text="25℃"/>
-	        <TextView 
-	            android:id="@+id/templist5"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="20dp"
-	            android:textColor="@color/gray"
-	            android:text="20℃"/>
-    </LinearLayout>
-    
      <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/temperature_linechart"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_height="260dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="20dp"
         android:background="@color/pink_new"/>
          
   </LinearLayout>  
@@ -185,14 +142,15 @@
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
          android:orientation="horizontal"
-         android:layout_marginLeft="60dp">
+         android:layout_marginLeft="60dp"
+         android:visibility="gone">
      
            <TextView 
                  android:id="@+id/temperature_time_0"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
              	 android:textColor="@color/gray"
-             	 android:text="0"/>
+             	 android:text="10"/>
  <!--            <TextView 
                  android:id="@+id/temperature_time_1"
                  android:layout_height="wrap_content"
@@ -207,7 +165,7 @@
                  android:id="@+id/temperature_time_3"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="3"
+             	 android:text="12"
              	 android:layout_marginLeft="24dp"
              	 android:textColor="@color/gray"/>
 <!--                <TextView 
@@ -224,7 +182,7 @@
                  android:id="@+id/temperature_time_6"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="6"
+             	 android:text="14"
              	 android:layout_marginLeft="24dp"
              	 android:textColor="@color/gray"/>
      <!--               <TextView 
@@ -241,7 +199,7 @@
                  android:id="@+id/temperature_time_9"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="9"
+             	 android:text="16"
              	 android:layout_marginLeft="24dp"
              	 android:textColor="@color/gray"/>
      <!--                 <TextView 
@@ -258,7 +216,7 @@
                  android:id="@+id/temperature_time_12"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="12"
+             	 android:text="18"
              	 android:layout_marginLeft="24dp"
              	 android:textColor="@color/gray"/>
       
@@ -277,7 +235,7 @@
                  android:id="@+id/temperature_time_15"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="15"
+             	 android:text="20"
              	 android:layout_marginLeft="24dp"
              	 android:textColor="@color/gray"/>
   <!--                           <TextView 
@@ -294,7 +252,7 @@
                  android:id="@+id/temperature_time_18"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="18"
+             	 android:text="22"
              	 android:layout_marginLeft="24dp"
              	 android:textColor="@color/gray"/>
      <!--                           <TextView 
@@ -311,7 +269,7 @@
                  android:id="@+id/temperature_time_21"
                  android:layout_height="wrap_content"
              	 android:layout_width="wrap_content"
-             	 android:text="21"
+             	 android:text="24"
              	 android:layout_marginLeft="24dp"
              	 android:textColor="@color/gray"/>
        <!--                            <TextView 

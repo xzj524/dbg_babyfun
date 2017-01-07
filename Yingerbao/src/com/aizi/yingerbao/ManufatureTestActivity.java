@@ -92,6 +92,7 @@ public class ManufatureTestActivity extends Activity implements onTitleBarClickL
             
             @Override
             public void onClick(View v) {
+                Constant.AIZI_USERACTIVTY_QUIT = 1;
                 BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(false);
             }
         });

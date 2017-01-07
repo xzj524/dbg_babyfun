@@ -1,10 +1,8 @@
 package com.aizi.yingerbao;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,18 +14,12 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
-import cn.bmob.v3.BmobBatch;
-import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BatchResult;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.QueryListListener;
-import cn.bmob.v3.listener.SaveListener;
+import android.widget.TextView;
 
 import com.aizi.yingerbao.constant.Constant;
-import com.aizi.yingerbao.database.TemperatureDataInfo;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
+import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
@@ -55,6 +47,9 @@ public class TestActivity extends Activity {
     Button mCheckDev;
     Button mFixDevtime;
     Button mUpdateRom;
+    Button mShowDeviceCharge;
+    
+    TextView mDevicechargetTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +60,9 @@ public class TestActivity extends Activity {
         listAdapter = new ArrayAdapter<String>(this, R.layout.message_detail);
         messageListView.setAdapter(listAdapter);
         messageListView.setDivider(null);
+        
+        mDevicechargetTextView = (TextView) findViewById(R.id.text_device_charge);
+        mDevicechargetTextView.setText("- -");
         
         EventBus.getDefault().register(this);
         
@@ -218,131 +216,9 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                
-                TemperatureDataInfo tempinfo = new TemperatureDataInfo(getApplicationContext());
-                
-                Calendar calendar = Calendar.getInstance();
-                tempinfo.setTemperatureYear(calendar.get(Calendar.YEAR));
-                tempinfo.setTemperatureMonth(calendar.get(Calendar.MONTH));
-                tempinfo.setTemperatureDay(calendar.get(Calendar.DAY_OF_MONTH));
-                tempinfo.setTemperatureMinute(calendar.get(Calendar.MINUTE));
-                tempinfo.setTemperatureTimestamp(System.currentTimeMillis());
-                
-                final List<BmobObject> tempinfos = new ArrayList<BmobObject>();
-                
-               // final List<TemperatureDataInfo> tempinfos = new ArrayList<TemperatureDataInfo>();
-                
-                for (int i = 0; i < 40; i++) {
-                   // tempinfo.setTemperatureValue("" + 100 + 26*Math.random());
-                    tempinfo.setTemperatureValue("" + 20 + 10 * Math.random());
-                    tempinfos.add(tempinfo);
-                   /* tempinfo.save(new SaveListener<String>() {
-
-                        @Override
-                        public void done(String objectID, BmobException e) {
-                            if (e == null) { 
-                                Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(),
-                                        "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });*/
+                if (Utiliy.isBluetoothConnected(getApplicationContext())) {
+                    DeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
                 }
-                
-              /*  for (TemperatureDataInfo temperatureinfo : tempinfos) {
-                    temperatureinfo.save(new SaveListener<String>() {
-
-                        @Override
-                        public void done(String objectID, BmobException e) {
-                            if (e == null) { 
-                                Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(),
-                                        "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }*/
-                SLog.e(TAG, "tempinfos size = " + tempinfos.size());
-                new Thread(new Runnable() {
-                    
-                    @Override
-                    public void run() {
-                       
-                        new BmobBatch().insertBatch(tempinfos).doBatch(new QueryListListener<BatchResult>() {
-
-                            @Override
-                            public void done(List<BatchResult> o, BmobException e) {
-                                if(e==null){
-                                    for(int i=0;i<o.size();i++){
-                                        BatchResult result = o.get(i);
-                                        BmobException ex =result.getError();
-                                        if(ex==null) {
-                                            SLog.e(TAG, "第"+i+"个数据批量添加成功："+result.getCreatedAt()+","+result.getObjectId()+","+result.getUpdatedAt());
-                                            //log("第"+i+"个数据批量添加成功："+result.getCreatedAt()+","+result.getObjectId()+","+result.getUpdatedAt());
-                                        } else {
-                                            SLog.e(TAG, "第"+i+"个数据批量添加失败："+ex.getMessage()+","+ex.getErrorCode());
-                                            //log("第"+i+"个数据批量添加失败："+ex.getMessage()+","+ex.getErrorCode());
-                                        }
-                                    }
-                                }else{
-                                    SLog.e(TAG, "失败："+e.getMessage()+","+e.getErrorCode());
-                                    //Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
-                    }
-                }).start();
-               
-                
-                
-              /*  TemperatureInfo temInfo = new TemperatureInfo();
-                temInfo.mTmYear = calendar.get(Calendar.YEAR);
-                temInfo.mTmMonth = calendar.get(Calendar.MONTH);
-                temInfo.mTmDay = calendar.get(Calendar.DAY_OF_MONTH);
-                temInfo.mTmMinute = calendar.get(Calendar.MINUTE);
-                temInfo.mTmValue = "36.9";
-                temInfo.mTmTimestamp = System.currentTimeMillis();
-                
-                temInfo.save(new SaveListener<String>() {
-
-                    @Override
-                    public void done(String objectID, BmobException e) {
-                        // TODO Auto-generated method stub
-                        if (e == null) { 
-                            Toast.makeText(getApplicationContext(), "数据库保存成功 objectID = " + objectID, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "数据库失败 e = " + e.getMessage() + " errorcode = " + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
-                
-               // DeviceFactory.getInstance(getApplicationContext()).setDeviceTime();
-               /*Utiliy.showFeverNotification(getApplicationContext(), 
-                        "孩子发烧了！！", "孩子发烧了，当前体温:" + "36.5。" + " 请及时就医。", "36.5");*/
-            
-               /*Utiliy.showBreathNotification(getApplicationContext(), 
-                       "呼吸停滞！！", "孩子呼吸停滞了， 请及时查看。", null);*/
-                //PendingIntent mPendingIntent = Utiliy.getDelayPendingIntent(getApplicationContext(), Constant.ALARM_WAIT_L1);
-                //Utiliy.setDelayAlarm(getApplicationContext(), 5 * 1000, mPendingIntent);
-                
-          //      DeviceFactory.getInstance(getApplicationContext()).getAllNoSyncInfo(2);
-                
-         /*       byte[] baseData = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
-                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 0);
-                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 1);
-                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 2);
-                BaseMessageHandler.sendACKBaseL1Msg(getApplicationContext(), baseData , 3);*/
-            
-               /* Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), ManufatureTestActivity.class);
-                startActivity(intent);*/
-              /*  long[] pattern = {500, 1000}; 
-                VibratorUtil.Vibrate(getApplicationContext(), pattern, true);
-                MediaUtil.getInstance(getApplicationContext()).startAlarm();*/
-                
             }
         });
         
@@ -356,6 +232,20 @@ public class TestActivity extends Activity {
                 if (Utiliy.isBluetoothConnected(getApplicationContext())) {
                     DeviceFactory.getInstance(getApplicationContext()).updateDeviceRom();
                 }
+            }
+        });
+        
+        mShowDeviceCharge = (Button) findViewById(R.id.btn_showdevicecharge);
+        mShowDeviceCharge.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+               // PrivateParams.setSPInt(mContext, Constant.CUR_STATISTIC_CHARGE, devCheckInfo.mDeviceCharge);
+                
+                int charg=PrivateParams.getSPInt(getApplicationContext(), Constant.CUR_STATISTIC_CHARGE, 0);
+                mDevicechargetTextView.setText("" + charg);
+                
+                DeviceFactory.getInstance(getApplicationContext()).updateDeviceConfig();
             }
         });
         
@@ -377,7 +267,16 @@ public class TestActivity extends Activity {
                 + calendar.get(Calendar.MILLISECOND)
                 + "]: ";
         
-        String transferdata = event.getStringExtra("transferdata");
+        
+        String transferdata = null;
+        if (event.hasExtra("transferdata")) {
+            transferdata = event.getStringExtra("transferdata");
+        }
+        
+        String devtimeString = null;
+        if (event.hasExtra("device_time")) {
+            devtimeString = event.getStringExtra("device_time");
+        }
         
         String action = event.getAction();
         String datalog = null;
@@ -387,6 +286,8 @@ public class TestActivity extends Activity {
         } else if (Constant.DATA_TRANSFER_SEND.equals(action)) {
             SLog.e(TAG, "HEX Send string l2load2 = " + transferdata);
             datalog = currentDateTimeString + " SEND: "+ transferdata;
+        } else if (Constant.DATA_TRANSFER_TIME.equals(action)) {
+            datalog = devtimeString;
         }
         
         if (!TextUtils.isEmpty(datalog)) {

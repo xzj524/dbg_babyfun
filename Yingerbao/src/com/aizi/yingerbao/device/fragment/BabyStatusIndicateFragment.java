@@ -13,7 +13,7 @@ import com.aizi.yingerbao.CriticalActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
-import com.aizi.yingerbao.utility.BaseMessageHandler;
+import com.aizi.yingerbao.utility.RecvMessageHandler;
 
 public class BabyStatusIndicateFragment extends Fragment{
     

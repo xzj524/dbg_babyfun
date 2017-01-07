@@ -222,7 +222,6 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
     
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         SMSSDK.unregisterEventHandler(mEventHandler);
     }
@@ -266,10 +265,10 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
         int result = msg.arg2;
         Object data = msg.obj;
          if (result == SMSSDK.RESULT_COMPLETE) {
-                System.out.println("--------result"+event);
              if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                  //Toast.makeText(getApplicationContext(), "成功验证", Toast.LENGTH_SHORT).show();
                  signup();
+                 finish();
                  new Thread(new Runnable() {
                      @Override
                      public void run() {
@@ -277,7 +276,7 @@ public class RegisterActivity extends Activity implements onTitleBarClickListene
                              if (mIsRegisterSucceed) {
                                  Thread.sleep(1000);
                                  SLog.e(TAG, "RegisterActivity finish");
-                                 finish();
+                                 
                              }
                          } catch (Exception e) {
                              SLog.e(TAG, e);

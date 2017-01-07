@@ -1,24 +1,31 @@
 package com.aizi.yingerbao.database;
 
+import com.aizi.yingerbao.utility.Utiliy;
+
 import android.content.Context;
 import cn.bmob.v3.BmobObject;
 
 
 public class TemperatureDataInfo extends BmobObject{
+   
+    protected long mTmTimestamp = 0;
+    protected int mTmYear = 0;
+    protected int mTmMonth = 0;
+    protected int mTmDay = 0;
+    protected int mTmMinute = 0;
     
+    protected String mTmValue;
     protected String mPhoneNumeber;
     protected String mPhoneImei;
     protected String mDeviceMac;
     protected String mDeviceType;
-    
-    public long mTmTimestamp = 0;
-    public String mTmValue;
-    public int mTmYear = 0;
-    public int mTmMonth = 0;
-    public int mTmDay = 0;
-    public int mTmMinute = 0;
+
+
     
     public TemperatureDataInfo(Context context) {
+        mPhoneNumeber = Utiliy.getPhoneNumber(context);
+        mPhoneImei = Utiliy.getPhoneImei(context);
+        mDeviceMac = Utiliy.getDeviceId(context);
         mDeviceType = "android";
     }
     

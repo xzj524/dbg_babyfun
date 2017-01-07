@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -27,7 +28,6 @@ import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DataTime;
-import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
@@ -38,6 +38,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ValueFormatter;
 import com.umeng.analytics.MobclickAgent;
 
 import de.greenrobot.event.EventBus;
@@ -52,6 +53,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     ImageView mCalendarView;
     boolean mTempStart = false;
     boolean mIsTempMeasuring = false;
+    
     
     TopBarView mTopView;
 
@@ -79,6 +81,8 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperature);
+        
+        EventBus.getDefault().register(this);
         
         mTopView = (TopBarView) findViewById(R.id.xiaohuhutopbar);
         mTopView.setClickListener(this);
@@ -143,16 +147,110 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         });
         
         mTempValue = (TextView) findViewById(R.id.tempvalue);
+        initXValues();   
+        initTempChart();
+        
+        if (yValsTem.size() > 0) {
+            yValsTem.clear();
+        }
+  
+        drawTempChart(yValsTem , false);
         Utiliy.initCurrentDataDate(getApplicationContext());
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
         DataTime dataTime = new DataTime();
-        dataTime.year = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_YEAR, 0);
-        dataTime.month = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_MONTH, 0);
-        dataTime.day = PrivateParams.getSPInt(getApplicationContext(), Constant.DATA_DATE_DAY, 0);
+        dataTime.year = year;
+        dataTime.month = month;
+        dataTime.day = day;
         updateTempStatus(dataTime);
-        EventBus.getDefault().register(this);
     }
     
     
+    private void initTempChart() {
+        XAxis xAxis = mTemperatureChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawLabels(true);   
+        xAxis.setDrawGridLines(true);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setTextSize(10);
+        
+        YAxis leftAxis = mTemperatureChart.getAxisLeft();  //得到图表的左侧Y轴实例
+        leftAxis.setDrawAxisLine(true);
+        leftAxis.setDrawLabels(true);
+        leftAxis.setAxisMaxValue(40); // 设置Y轴最大值
+        leftAxis.setAxisMinValue(10);// 设置Y轴最小值。
+        leftAxis.setStartAtZero(false);   //设置图表起点从0开始
+        
+        leftAxis.setLabelCount(6);
+        leftAxis.setDrawTopYLabelEntry(true);
+        leftAxis.setTextSize(14);
+        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setValueFormatter(new ValueFormatter() {
+            
+            @Override
+            public String getFormattedValue(float arg0) {
+                return (int)arg0 + "℃";
+            }
+        });
+        
+        YAxis rightAxis = mTemperatureChart.getAxisRight();  //得到图表的右侧Y轴实例
+        rightAxis.setDrawAxisLine(true);
+        rightAxis.setDrawLabels(false);
+        rightAxis.setAxisMaxValue(40); // 设置Y轴最大值
+        rightAxis.setAxisMinValue(10);// 设置Y轴最小值。
+        rightAxis.setStartAtZero(false);   //设置图表起点从0开始
+        rightAxis.setLabelCount(6);
+  
+        // no description text  
+        mTemperatureChart.setDescription("");// 数据描述  
+        mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
+      
+        // enable / disable grid background  
+        mTemperatureChart.setDrawGridBackground(false); // 是否显示表格颜色  
+       
+        // enable touch gestures  
+        mTemperatureChart.setTouchEnabled(true); // 设置是否可以触摸  
+  
+        mTemperatureChart.setDoubleTapToZoomEnabled(false);//设置双击不进行缩放
+        //mTemperatureChart.set
+  
+        // if disabled, scaling can be done on x- and y-axis separately  
+        mTemperatureChart.setPinchZoom(false);//   
+        // enable scaling and dragging  
+        mTemperatureChart.setDragEnabled(true);// 是否可以拖拽  
+        mTemperatureChart.setScaleEnabled(true);// 是否可以缩放  
+        mTemperatureChart.setSelected(true);
+        mTemperatureChart.setDragDecelerationEnabled(false);
+        
+        Legend l = mTemperatureChart.getLegend(); // 设置标示，就是那个一组y的value的  
+        l.setEnabled(false);
+    }
+
+    private void initXValues() {
+        if (xVals.size() > 0) {
+            xVals.clear();
+        }  
+        
+        int xval = 0;
+        for (int i = 0; i < 144; i++) {
+            if (i > 0) {
+                if ((i+1) % 6 == 0) {
+                    xval = (i+1) / 6;
+                    xVals.add(xval + "点");
+                } else {
+                    xval = 0;
+                    xVals.add("");
+                }
+            } else {
+                xval = 0;
+                xVals.add(xval + "点");
+            }
+        }
+    }
+
     public void onEventMainThread(Intent intent) { 
         String action = intent.getAction();
         if (Constant.DATA_REALTIME_TEMPERATURE.equals(action)) {
@@ -176,11 +274,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     @SuppressWarnings("unchecked")
     private void updateTempStatus(DataTime dataTime) {
         
-        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        if (yValsTem.size() > 0) {
-            yValsTem.clear();
-        }
-        
+
         int year =  dataTime.year;
         int month = dataTime.month;
         int day = dataTime.day;
@@ -194,126 +288,69 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         
         mTempDate.setText(year + "年" + month + "月" + day + "日");
         
-        List<TemperatureDataInfo> temperatureinfos 
-            = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
-        Collections.sort(temperatureinfos, new Comparator() {
-            public int compare(Object a, Object b) {
-                int one = ((TemperatureDataInfo) a).getTemperatureMinute();
-                int two = ((TemperatureDataInfo) b).getTemperatureMinute();
-                return one - two;
-            }
-        });
+        new FreshChartTask().execute(year, month, day);
         
-        if (xVals.size() > 0) {
-            xVals.clear();
-        }  
-        
-        for (int i = 0; i < 144; i++) {
-            xVals.add(i + "");
-            boolean isIntempinfo = false;
-            for (TemperatureDataInfo tempeinfo : temperatureinfos) {
-                int tempmin = tempeinfo.mTmMinute/10;
-                if (tempmin == i+1) {
-                    float tempvalue = Float.parseFloat(tempeinfo.getTemperatureValue());
-                    yValsTem.add(new Entry(tempvalue -10, i));
-                    isIntempinfo = true;
-                    break;
-                }
-            }
+      /*  new Thread(new Runnable() {
             
-            if (!isIntempinfo) {
-                yValsTem.add(new Entry(-1, i));
-            }
-        }
+            @Override
+            public void run() {
+                synchronized (this) {
+                    List<TemperatureDataInfo> temperatureinfos 
+                    = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
+                
+                    if (temperatureinfos.size() > 0) {
+                        Collections.sort(temperatureinfos, new Comparator() {
+                            public int compare(Object a, Object b) {
+                                int one = ((TemperatureDataInfo) a).getTemperatureMinute();
+                                int two = ((TemperatureDataInfo) b).getTemperatureMinute();
+                                return one - two;
+                            }
+                        });
+                        
+                       
+                        for (int i = 0; i < 144; i++) {
+                            boolean isIntempinfo = false;
+                            for (TemperatureDataInfo tempeinfo : temperatureinfos) {
+                                int tempmin = tempeinfo.getTemperatureMinute()/10;
+                                if (tempmin == i+1) {
+                                    float tempvalue = Float.parseFloat(tempeinfo.getTemperatureValue());
+                                    yValsTem.add(new Entry(tempvalue, i));
+                                    isIntempinfo = true;
+                                    break;
+                                }
+                            }
+                            
+                            if (!isIntempinfo) {
+                                yValsTem.add(new Entry(0, i));
+                            }
+                        }
+                    }
         
-        
-   /*     for (int i = 0; i < 144; i++) {
-            if (i < temperatureinfos.size()) {
-                float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
-                if (tempvalue != 0.255 && tempvalue != 1.255) {
-                    int tempmin = temperatureinfos.get(i).mTemperatureMinute/10;
-                    yValsTem.add(new Entry(tempvalue -10, tempmin));
-                    xVals.add(tempmin + "");
-                    
-                    
-                    SLog.e(TAG, "tempvalue from database = " + tempvalue 
-                            + " min = " + tempmin);
+                    LineDataSet tempSet = new LineDataSet(yValsTem, null);
+                    tempSet.setDrawCubic(true);
+                    tempSet.setDrawValues(false);
+                    tempSet.setDrawCircles(false);
+                    tempSet.setColor(Color.WHITE);
+                    tempSet.setFillColor(Color.WHITE);
+                    tempSet.setFillAlpha(100);
+                    tempSet.setDrawFilled(true);
+             
+                    ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+                    dataSets.add(tempSet);
+                    LineData data = new LineData(xVals, dataSets);
+                    setupChart(data, mColors[4]);
                 }
-            } 
-        }  
-        
-        if (xVals.size() > 0) {
-            xVals.clear();
-        }  
-        for (int i = 0; i < 144; i++) {
-            xVals.add(i + "");
-        }*/
-        
-/*        for (int i = 97; i < 109; i++) {
-            yValsTem.add(new Entry(10, i));
-        }*/
-
-        LineDataSet tempSet = new LineDataSet(yValsTem, null);
-        tempSet.setDrawCubic(true);
-        tempSet.setDrawValues(false);
-        tempSet.setDrawCircles(false);
-        tempSet.setColor(Color.WHITE);
-        tempSet.setFillColor(Color.WHITE);
-        tempSet.setFillAlpha(100);
-        tempSet.setDrawFilled(true);
- 
-        dataSets.add(tempSet);
-        LineData data = new LineData(xVals, dataSets);
-        setupChart(data, mColors[4]);
+            }
+        }).start();*/
     }
+    
+    
+    
     
  // 设置显示的样式  
     public void setupChart(LineData data, int color) {  
-   
-        XAxis xAxis = mTemperatureChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawLabels(false);        
-        
-        YAxis leftAxis = mTemperatureChart.getAxisLeft();  //得到图表的左侧Y轴实例
-        leftAxis.setDrawAxisLine(true);
-        leftAxis.setDrawLabels(false);
-        leftAxis.setAxisMaxValue(40); // 设置Y轴最大值
-        leftAxis.setAxisMinValue(25);// 设置Y轴最小值。
-        leftAxis.setStartAtZero(true);   //设置图表起点从0开始
-        
-        YAxis rightAxis = mTemperatureChart.getAxisRight();  //得到图表的右侧Y轴实例
-        rightAxis.setDrawAxisLine(true);
-        rightAxis.setDrawLabels(false);
-        rightAxis.setAxisMaxValue(40); // 设置Y轴最大值
-        rightAxis.setAxisMinValue(25);// 设置Y轴最小值。
-        rightAxis.setStartAtZero(true);   //设置图表起点从0开始
-  
-        // no description text  
-        mTemperatureChart.setDescription("");// 数据描述  
-        mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
-     
-        // enable / disable grid background  
-        mTemperatureChart.setDrawGridBackground(false); // 是否显示表格颜色  
-       
-        // enable touch gestures  
-        mTemperatureChart.setTouchEnabled(false); // 设置是否可以触摸  
-  
-        mTemperatureChart.setDoubleTapToZoomEnabled(true);//设置双击不进行缩放
-        //mTemperatureChart.set
-  
-        // if disabled, scaling can be done on x- and y-axis separately  
-        mTemperatureChart.setPinchZoom(false);//   
-        // enable scaling and dragging  
-        mTemperatureChart.setDragEnabled(false);// 是否可以拖拽  
-        mTemperatureChart.setScaleEnabled(false);// 是否可以缩放  
-  
-        //mTemperatureChart.setBackgroundColor(color);// 设置背景  
         // add data  
         mTemperatureChart.setData(data); // 设置数据  
-    
-        // get the legend (only possible after setting data)  
-        Legend l = mTemperatureChart.getLegend(); // 设置标示，就是那个一组y的value的  
-        l.setEnabled(false);
         // animate calls invalidate()...  
         mTemperatureChart.animateX(2000); // 立即执行的动画,x轴  
     }  
@@ -378,4 +415,116 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         super.onPause();
         MobclickAgent.onPause(this);
     }
+    
+    
+    
+    private class FreshChartTask extends AsyncTask<Integer, Integer, List<TemperatureDataInfo>> {
+        
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            
+            //mTemperatureChart.setNoDataTextDescription("这是测试数据");
+            mTemperatureChart.setNoDataText("正在初始化数据。。。");
+            if (yValsTem.size() > 0) {
+                yValsTem.clear();
+            }
+            drawTempChart(yValsTem, true);
+            
+        }
+
+        @Override
+        protected List<TemperatureDataInfo> doInBackground(Integer... params) {
+            int year = params[0];
+            int month = params[1];
+            int day = params[2];
+            List<TemperatureDataInfo> temperatureinfos 
+            = YingerbaoDatabase.getTemperatureInfoEnumClassList(getApplicationContext(), year, month, day);
+            Collections.sort(temperatureinfos, new Comparator() {
+                public int compare(Object a, Object b) {
+                    int one = ((TemperatureDataInfo) a).getTemperatureMinute();
+                    int two = ((TemperatureDataInfo) b).getTemperatureMinute();
+                    return one - two;
+                }
+            });
+            return temperatureinfos;
+        }
+ 
+        @Override
+        protected void onPostExecute(List<TemperatureDataInfo> temperatureinfos ) {
+            super.onPostExecute(temperatureinfos);
+            if (yValsTem.size() > 0) {
+                yValsTem.clear();
+            }
+            if (temperatureinfos.size() > 0) {
+                for (int i = 0; i < 144; i++) {
+                    boolean isIntempinfo = false;
+                    for (TemperatureDataInfo tempeinfo : temperatureinfos) {
+                        int tempmin = tempeinfo.getTemperatureMinute()/10;
+                        if (tempmin == i+1) {
+                            float tempvalue = Float.parseFloat(tempeinfo.getTemperatureValue());
+                            yValsTem.add(new Entry(tempvalue, i));
+                            isIntempinfo = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!isIntempinfo) {
+                        yValsTem.add(new Entry(0, i));
+                    }
+                }
+            }
+            
+            drawTempChart(yValsTem, false);
+        }
+
+    }
+    
+    private void drawTempChart(ArrayList<Entry> yVals, boolean isload) {
+        
+        if (yVals.size() == 0 && !isload) {
+            mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
+        }
+
+        LineDataSet tempSet = new LineDataSet(yVals, null);
+        tempSet.setDrawCubic(true);
+        tempSet.setDrawValues(false);
+        tempSet.setDrawCircles(false);
+        tempSet.setColor(Color.WHITE);
+        tempSet.setFillColor(Color.WHITE);
+        tempSet.setFillAlpha(100);
+        tempSet.setDrawFilled(true);
+      
+ 
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(tempSet);
+        LineData data = new LineData(xVals, dataSets);
+        setupChart(data, mColors[4]);
+    }
+    
+    /*     for (int i = 0; i < 144; i++) {
+    if (i < temperatureinfos.size()) {
+        float tempvalue = Float.parseFloat(temperatureinfos.get(i).getTemperatureValue());
+        if (tempvalue != 0.255 && tempvalue != 1.255) {
+            int tempmin = temperatureinfos.get(i).mTemperatureMinute/10;
+            yValsTem.add(new Entry(tempvalue -10, tempmin));
+            xVals.add(tempmin + "");
+            
+            
+            SLog.e(TAG, "tempvalue from database = " + tempvalue 
+                    + " min = " + tempmin);
+        }
+    } 
+}  
+
+if (xVals.size() > 0) {
+    xVals.clear();
+}  
+for (int i = 0; i < 144; i++) {
+    xVals.add(i + "");
+}*/
+
+/*        for (int i = 97; i < 109; i++) {
+    yValsTem.add(new Entry(10, i));
+}*/
 }

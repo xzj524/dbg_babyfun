@@ -11,13 +11,13 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -47,6 +47,8 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
     private EditText mResetPasswordView;
     private EditText mResetCheckCodeView;
     private TimeCount time;
+    private static boolean mIsResetPasswordSucceed = false;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,10 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
         topBarView = (TopBarView) findViewById(R.id.topbar);
         topBarView.setClickListener(this);
         
+        time = new TimeCount(60000, 1000);//构造CountDownTimer对象
+        
         SMSSDK.registerEventHandler(mEventHandler); //注册短信回调
+        initSDK();
         mResetPhoneView = (AutoCompleteTextView) findViewById(R.id.resetphonenumber);
         mResetPasswordView = (EditText) findViewById(R.id.reset_password);
         mResetCheckCodeView = (EditText) findViewById(R.id.reset_check_code_text);
@@ -93,10 +98,9 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
         });
         
         
-        mEventHandler = new EventHandler(){
+      /*  mEventHandler = new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
-                // TODO Auto-generated method stub
                 super.afterEvent(event, result, data);
                 
                 if (result == SMSSDK.RESULT_COMPLETE) {
@@ -123,11 +127,7 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
                             onCountryListGot((ArrayList<HashMap<String,Object>>) data);
                         } 
                     } 
-                } else{                  
-                    /*Toast.makeText(getApplicationContext(), "获取验证码失败或者验证失败", 
-                            Toast.LENGTH_SHORT).show();
-                    ((Throwable)data).printStackTrace(); */
-                    
+                } else {
                     try {
                         Throwable throwable = (Throwable) data;
                         JSONObject object = new JSONObject(throwable.getMessage());
@@ -155,10 +155,15 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
                     
                 }
             }
-        };
+        };*/
         
     }
     
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SMSSDK.unregisterEventHandler(mEventHandler);
+    }
     
     private void onCountryListGot(ArrayList<HashMap<String, Object>> countries) {
         // 解析国家列表
@@ -209,7 +214,7 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
                 }
             };
     
-            SMSSDK.registerEventHandler(eventHandler); // ע����Żص�
+            SMSSDK.registerEventHandler(eventHandler);
     
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,15 +248,13 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
         int result = msg.arg2;
         Object data = msg.obj;
          if (result == SMSSDK.RESULT_COMPLETE) {
-                System.out.println("--------result"+event);
              if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                 //Toast.makeText(getApplicationContext(), "成功验证", Toast.LENGTH_SHORT).show();
                  resetpasscode();
-                /* new Thread(new Runnable() {
+                 new Thread(new Runnable() {
                      @Override
                      public void run() {
                          try {
-                             if (mIsRegisterSucceed) {
+                             if (mIsResetPasswordSucceed) {
                                  Thread.sleep(1000);
                                  SLog.e(TAG, "RegisterActivity finish");
                                  finish();
@@ -260,7 +263,7 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
                              SLog.e(TAG, e);
                          }
                      }
-                    }).start();*/
+                    }).start();
              }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                  //Toast.makeText(getApplicationContext(), "获取验证码成功", Toast.LENGTH_SHORT).show();
                 
@@ -290,49 +293,40 @@ public class ResetPasswordActivity extends Activity  implements onTitleBarClickL
 
 
     private void resetpasscode() {
-        // TODO Auto-generated method stub
         try {
             String phone = mResetPhoneView.getText().toString();
             String password = mResetPasswordView.getText().toString();
-            final UserAccountInfo useraccountinfo = (UserAccountInfo) UserAccountInfo.getCurrentUser();
-            if (useraccountinfo.getMobilePhoneNumber().equals(phone)) {
-                
+            final BmobUser useraccountinfo = UserAccountInfo.getCurrentUser();
+            if (useraccountinfo != null) {
+                if (!useraccountinfo.getMobilePhoneNumber().equals(phone)
+                        ||TextUtils.isEmpty(phone) 
+                        || TextUtils.isEmpty(password)) {
+                    Toast.makeText(getApplicationContext(), 
+                            "请输入正确的手机号码或密码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
             
-            if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
-                Toast.makeText(getApplicationContext(), 
-                        "请输入正确的手机号码或密码", Toast.LENGTH_SHORT).show();
-                return;
-            }
             useraccountinfo.setUsername(phone);
             useraccountinfo.setMobilePhoneNumber(phone);
             useraccountinfo.setPassword(password);
-            useraccountinfo.setUserPassWord(password);
-            useraccountinfo.mUserTimestamp = System.currentTimeMillis();
-           /* useraccountinfo.update(new SaveListener<UserAccountInfo>() {
-
+           // useraccountinfo.setUserPassWord(password);
+           // useraccountinfo.mUserTimestamp = System.currentTimeMillis();
+            useraccountinfo.update(new UpdateListener() {
+                
                 @Override
-                public void done(UserAccountInfo useinfo, BmobException e) {
-                    if (e == null) {
-                        Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
-                        UserAccountDataBase.insertUserAccountInfo(getApplicationContext(), 
-                                useraccountinfo);  
-                        //mIsRegisterSucceed = true;
+                public void done(BmobException arg0) {
+                    if (arg0 == null) {
+                        Toast.makeText(getApplicationContext(), "重置密码成功", Toast.LENGTH_SHORT).show();
+                       /* UserAccountDataBase.insertUserAccountInfo(getApplicationContext(), 
+                                useraccountinfo);  */
+                        mIsResetPasswordSucceed = true;
                     } else {
-                        SLog.e(TAG, "errorcode = " + e.getErrorCode()
-                                + " errormsg = " + e.getMessage());
-                        
-                        if (e.getErrorCode() == 202) { // already token
-                            Toast.makeText(getApplicationContext(),
-                                    "已经注册过，请重新登录", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), 
-                                    "注册失败，请检查网络连接", Toast.LENGTH_SHORT).show();
-                        }
-                        //mIsRegisterSucceed = false;
+                        Toast.makeText(getApplicationContext(), "重置密码失败", Toast.LENGTH_SHORT).show();
+                        mIsResetPasswordSucceed = false;
                     }
                 }
-            });*/
+            });
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

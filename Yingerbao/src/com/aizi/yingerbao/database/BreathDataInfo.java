@@ -1,30 +1,34 @@
 package com.aizi.yingerbao.database;
 
+import com.aizi.yingerbao.utility.Utiliy;
+
 import android.content.Context;
 import cn.bmob.v3.BmobObject;
 
 
 public class BreathDataInfo extends BmobObject {
+  
+    protected long mBreathTimestamp = 0;
+    protected int mBreathIsAlarm = 0;
+    protected int mBreathDuration = 0;
+    protected int mBreathYear = 0;
+    protected int mBreathMonth = 0;
+    protected int mBreathDay = 0;
+    protected int mBreathHour = 0;
+    protected int mBreathMinute = 0;
+    protected int mBreathSecond = 0;
     
     protected String mPhoneNumeber;
     protected String mPhoneImei;
     protected String mDeviceMac;
     protected String mDeviceType;
     
-    public long mBreathTimestamp = 0;
-    public int mBreathIsAlarm = 0;
-    public int mBreathDuration = 0;
-    public int mBreathYear = 0;
-    public int mBreathMonth = 0;
-    public int mBreathDay = 0;
-    public int mBreathHour = 0;
-    public int mBreathMinute = 0;
-    public int mBreathSecond = 0;
+
     
     public BreathDataInfo(Context context) {
-/*        mPhoneImei = Utiliy.getPhoneImei(mContext);
-        mPhoneNumeber = Utiliy.getPhoneNumber(mContext);
-        mDeviceMac = Utiliy.getDeviceId(mContext);*/
+        mPhoneNumeber = Utiliy.getPhoneNumber(context);
+        mPhoneImei = Utiliy.getPhoneImei(context);
+        mDeviceMac = Utiliy.getDeviceId(context);
         mDeviceType = "android";
     }
     

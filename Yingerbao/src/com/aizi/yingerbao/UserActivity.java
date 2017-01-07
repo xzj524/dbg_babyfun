@@ -101,8 +101,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             }
         });
         
-
-        
         mBatteryView = (BatteryView) findViewById(R.id.battery_view);
         mBatteryView.setPower(95);
         
@@ -122,6 +120,9 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
                 Utiliy.showConnectDialog(this);
             }
         }
+        
+        //PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USERACTIVTY_QUIT, "false");
+        Constant.AIZI_USERACTIVTY_QUIT = 0;
     }
 
     @Override
@@ -144,8 +145,9 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
     protected void onDestroy() {
         super.onDestroy();
         try {
+            Constant.AIZI_USERACTIVTY_QUIT = 1;
             PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-            BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(true);
+            BluetoothApi.getInstance(getApplicationContext()).mBluetoothService.disconnect(false);
             BluetoothApi.getInstance(getApplicationContext()).unregisterEventBus();
             CommandCenter.getInstance(getApplicationContext()).clearInterfaceQueue();
             PrivateParams.setSPInt(getApplicationContext(), "check_device_status", 0);
@@ -153,6 +155,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             PrivateParams.setSPInt(getApplicationContext(), "search_device_status", 0);
             PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 0);
             //BluetoothApi.getInstance(getApplicationContext()).unbindBluetoothService();
+            //PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USERACTIVTY_QUIT, "true");
             
             cancelAllAlarmPendingIntent(getApplicationContext());
         } catch (Exception e) {
