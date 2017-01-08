@@ -302,7 +302,6 @@ public class BluetoothService extends Service {
      */
     public boolean connect(final String address, boolean isrepeat) {
         
-        //disconnect(true);
         close();
         boolean isInit = initBluetooth();
         if (isInit) {

@@ -1,5 +1,7 @@
 package com.aizi.yingerbao.bluttooth;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,7 +18,6 @@ import com.aizi.yingerbao.eventbus.AsycEvent;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
 import com.aizi.yingerbao.thread.AZRunnable;
-import com.aizi.yingerbao.thread.ThreadPool;
 import com.aizi.yingerbao.utility.Utiliy;
 
 import de.greenrobot.event.EventBus;
@@ -24,9 +25,8 @@ import de.greenrobot.event.EventBus;
 public class BluetoothApi {
     
     private static final String TAG = BluetoothApi.class.getSimpleName();
-    protected static final long SLEEP_TIME = 1;
-    private static Object mWriteLock = new Object();
-    
+    protected static final long SLEEP_TIME = 1 * 1000;
+ 
     private static BluetoothApi mInstance;
     public BluetoothService mBluetoothService = null;
     // 建立一个装数据的队列
@@ -34,22 +34,25 @@ public class BluetoothApi {
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
     Consumer consumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
     Context mContext;
-    String mWriteContent;
-    private static boolean mIsWriteSucceed = true;
-    private static int mWriteWaittimes = 0;
-    
-    AsycEvent mWriteAsycEvent;
-    
-    
+    private WriteTimerTask mTimerTask;
+    Timer mTimer;
+    static AsycEvent mWriteAsycEvent;
+    private static final Object synchronizedLock = new Object();
+    private int mRetryTimes = 0;
+
     public BluetoothApi(Context context) {
         EventBus.getDefault().register(this);
         bindBluetoothService(context);
         mContext = context;
         mExecutorService.submit(consumer);
+        mTimer = new Timer(true);
     }
     
     public void unregisterEventBus() {
         EventBus.getDefault().unregister(this);
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+        }
     }
 
     public static BluetoothApi getInstance(Context context) {
@@ -83,28 +86,34 @@ public class BluetoothApi {
                     try {
                         if (intent.hasExtra("write_result")) {
                             boolean write_result = intent.getBooleanExtra("write_result", false);
-                            if (write_result) {
-                                String write_content = intent.getStringExtra("write_content");
-                                if (write_content.equals(mWriteContent)) {
-                                    mIsWriteSucceed = true;
-                                    SLog.e(TAG, "onBluetoothWrite write byte succeed");
-                                } else {
-                                    SLog.e(TAG, "onBluetoothWrite write byte failed");
-                                }
-                                
-                                if (mWriteAsycEvent != null 
-                                        && !mWriteAsycEvent.mIsWait) {
-                                    Utiliy.reflectTranDataType(mContext, 0);
-                                }
-                            } else {
-                                if (mWriteAsycEvent != null 
-                                        && !mWriteAsycEvent.mIsWait) {
-                                    Utiliy.reflectTranDataType(mContext, 2);
-                                }
+                            String write_content = intent.getStringExtra("write_content");
+                            SLog.e(TAG, "onBluetoothWrite Result = " + write_result
+                                    + " Content = " + write_content);
+                            if (mWriteAsycEvent != null) {
+                                if (!mWriteAsycEvent.isAck) { // 如果不是ACK
+                                    if (write_result) { // 写数据成功
+                                        if (!mWriteAsycEvent.mIsWait) { // 不需要等待返回结果的命令
+                                            Utiliy.reflectTranDataType(mContext, 0); //返回写成功
+                                        }
+                                    } else { // 写数据失败
+                                        if (mRetryTimes < 3) {
+                                            writeByte(mWriteAsycEvent.getByte());
+                                            resetTimerTask();
+                                            mRetryTimes++;
+                                            return;
+                                        } else {
+                                            Utiliy.reflectTranDataType(mContext, 2); //返回写失败
+                                            mRetryTimes = 0;
+                                        }  
+                                    }
+                                } 
                             }
-                            
-                            synchronized (mWriteLock) {
-                                mWriteLock.notifyAll();
+ 
+                            synchronized (synchronizedLock) {
+                                if (mTimerTask != null) {
+                                    mTimerTask.cancel();
+                                }
+                                synchronizedLock.notifyAll();
                             }
                         }
                     } catch (Exception e) {
@@ -112,77 +121,37 @@ public class BluetoothApi {
                     }
                    
                 }
+
+
             });
-                SLog.e(TAG, "onServiceConnected mService= " + mBluetoothService);
-                if (!mBluetoothService.initBluetooth()) {
-                    SLog.e(TAG, "Unable to initialize Bluetooth");
-                }
+            SLog.e(TAG, "onServiceConnected mService= " + mBluetoothService);
+            if (!mBluetoothService.initBluetooth()) {
+                SLog.e(TAG, "Unable to initialize Bluetooth");
+            }
         }
         public void onServiceDisconnected(ComponentName classname) {
-            //mBluetoothService.disconnect(true);
             mBluetoothService = null;
         }
     };
     
     public synchronized void RecvEvent(AsycEvent event) { 
         try {
-            /*mWriteAsycEvent = event;
-            writeAsycEvent(mWriteAsycEvent);*/
-            
             Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
             mExecutorService.submit(producer);
-            
-         /*   if (writeByte(event.getByte())) {
-                if (!mIsWaitResult) { // 不需要设备返回结果
-                    Utiliy.reflectTranDataType(mContext, 0);
-                }
-            }*/
-            //writeByte(event.getByte());
-
-            /*new Thread(new Runnable() {
-                
-                @Override
-                public void run() {
-                    try {
-                        while (true) {
-                            synchronized (mWriteLock) {
-                                
-                                if (mIsWriteSucceed) {
-                                    mWriteWaittimes = 0;
-                                    writeByte(event.getByte());
-                                    break;
-                                } else {
-                                    mWriteWaittimes++;
-                                    if (mWriteWaittimes > 2) { // 等待2秒
-                                        mWriteWaittimes = 0;
-                                        mIsWriteSucceed = true;
-                                    } else {
-                                        Thread.sleep(1000); // 休眠1000ms
-                                        }
-                                    }
-                                    
-                                }
-                            }
-                        } catch (Exception e) {
-                            SLog.e(TAG, e);
-                        }
-                    }
-                }).start();
-*/  
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            }
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
      } 
     
 
-    AZRunnable bluetoothwriteTimeOutRunnable = new AZRunnable("bluetoothwriteTimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
+    static AZRunnable bluetoothwriteTimeOutRunnable = new AZRunnable("bluetoothwriteTimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
         @Override
         public void brun() {
             try {
                 Thread.sleep(SLEEP_TIME);
-                synchronized (mWriteLock) {
+                synchronized (synchronizedLock) {
                     mWriteAsycEvent = null;
-                    mWriteLock.notifyAll();
+                    synchronizedLock.notifyAll();
                 }
             } catch (Exception e) {
                 SLog.e(TAG, e);
@@ -202,13 +171,85 @@ public class BluetoothApi {
         boolean wrres = false;
         if (mBluetoothService != null) {
             wrres = mBluetoothService.writeBaseRXCharacteristic(wrByte);
-            mWriteContent = Utiliy.printHexString(wrByte);
-           /* RecvMessageHandler.isWriteSuccess = false;
-            if (wrres) {
-                mIsWriteSucceed = false;
-            }*/
         }
         return wrres;
+    }
+    
+    class WriteTimerTask extends TimerTask{
+
+        @Override
+        public void run() {
+            synchronized (synchronizedLock) {
+                mWriteAsycEvent = null;
+                synchronizedLock.notifyAll();
+            } 
+        }
+    }
+    
+
+    
+    // 定义生产者
+    class Producer implements Runnable {
+        private String instance;
+        private SendDataQueue sendqueue;
+        private AsycEvent mAsycEvent;
+
+        public Producer(String instance, SendDataQueue sendqueue, AsycEvent asycevent) {
+            this.instance = instance;
+            this.sendqueue = sendqueue;
+            this.mAsycEvent = asycevent;
+        }
+
+        public void run() {
+            try {
+                 sendqueue.produce(mAsycEvent);
+            } catch (InterruptedException ex) {
+                SLog.e(TAG, ex);
+            }
+        }
+    }
+
+    // 定义消费者
+    class Consumer implements Runnable {
+        private String instance;
+        private SendDataQueue sendqueue;
+
+        public Consumer(String instance, SendDataQueue sendqueue) {
+            this.instance = instance;
+            this.sendqueue = sendqueue;
+        }
+
+        public void run() {
+            try {
+                while (true) {
+                    //SLog.e(TAG, "Bluetooth Consumer wait before 1");
+                    mWriteAsycEvent =  sendqueue.consume();
+                    resetTimerTask();
+                    writeByte(mWriteAsycEvent.getByte());
+                    //SLog.e(TAG, "Bluetooth Consumer wait before 2");
+                    synchronized (synchronizedLock) {
+                        try {  
+                            //SLog.e(TAG, "Bluetooth Consumer wait before 3");
+                            synchronizedLock.wait();
+                        } catch (Exception e) {
+                            SLog.e(TAG, e);
+                        }
+                        //SLog.e(TAG, "Bluetooth Consumer wait before 4");
+                    }
+                }
+            } catch (InterruptedException ex) {
+                SLog.e(TAG, ex);
+            }
+        }
+    }
+    
+    
+    private void resetTimerTask() {
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+        }
+        mTimerTask = new WriteTimerTask();
+        mTimer.schedule(mTimerTask, SLEEP_TIME);
     }
     
     /**
@@ -249,74 +290,4 @@ public class BluetoothApi {
         }
     }
     
-    
-    // 定义生产者
-    class Producer implements Runnable {
-        private String instance;
-        private SendDataQueue sendqueue;
-        private AsycEvent mAsycEvent;
-
-        public Producer(String instance, SendDataQueue sendqueue, AsycEvent asycevent) {
-            this.instance = instance;
-            this.sendqueue = sendqueue;
-            this.mAsycEvent = asycevent;
-        }
-
-        public void run() {
-            try {
-                 sendqueue.produce(mAsycEvent);
-                 SLog.e(TAG, "SendQueue Produce AsycEvent");
-            } catch (InterruptedException ex) {
-                SLog.e(TAG, ex);
-            }
-        }
-    }
-
-    // 定义消费者
-    class Consumer implements Runnable {
-        private String instance;
-        private SendDataQueue sendqueue;
-
-        public Consumer(String instance, SendDataQueue sendqueue) {
-            this.instance = instance;
-            this.sendqueue = sendqueue;
-        }
-
-        public void run() {
-            try {
-               // int waittimes = 0;
-                while (true) {
-                    //if (RecvMessageHandler.isWriteSuccess) {
-                        //waittimes = 0;
-                        mWriteAsycEvent =  sendqueue.consume();
-                        writeByte(mWriteAsycEvent.getByte());
-                        ThreadPool.getInstance().submitRunnable(bluetoothwriteTimeOutRunnable);
-                        synchronized (mWriteLock) {
-                            try {
-                                mWriteLock.wait();
-                            } catch (Exception e) {
-                                SLog.e(TAG, e);
-                            }
-                        }
-                       /* if (event.isAck) {
-                            RecvMessageHandler.isWriteSuccess = true;
-                        }*/
-                   /* } else {
-                        waittimes++;
-                        if (waittimes > 10) {
-                            waittimes = 0;
-                            RecvMessageHandler.repeattime++;
-                            if (RecvMessageHandler.repeattime < 3) {
-                                sendqueue.produce(event);
-                            } 
-                            RecvMessageHandler.isWriteSuccess = true;
-                        }
-                    }*/
-                    //Thread.sleep(1000); // 休眠1000ms
-                }
-            } catch (InterruptedException ex) {
-                SLog.e(TAG, ex);
-            }
-        }
-    }
 }

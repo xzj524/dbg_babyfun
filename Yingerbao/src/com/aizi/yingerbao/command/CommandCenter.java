@@ -1,5 +1,7 @@
 package com.aizi.yingerbao.command;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,7 +12,6 @@ import android.content.Context;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.thread.AZRunnable;
-import com.aizi.yingerbao.thread.ThreadPool;
 import com.aizi.yingerbao.utility.Utiliy;
 
 public class CommandCenter {
@@ -19,7 +20,7 @@ public class CommandCenter {
     private static SendDataQueue mSendDataQueue = new SendDataQueue();
     static CommandSendRequest mCommandSendRequest;
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
-    Consumer consumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
+    Consumer consumer = new Consumer(Constant.AIZI_COMMAND_DATA, mSendDataQueue);
     static Context mContext;
     static boolean mIsCompleted = false;
     static int mCountingNum = 0;
@@ -27,10 +28,13 @@ public class CommandCenter {
     private static final Object synchronizedLock = new Object();
     private static int SLEEP_TIME = 8 * 1000;
     private static int mRetryTimes = 0;
+    private CommandTimerTask mTimerTask;
+    Timer mTimer;
     
     public CommandCenter(Context context) {
         mContext = context;
         mExecutorService.submit(consumer);
+        mTimer = new Timer(true);
     }
 
     public static CommandCenter getInstance(Context context) {
@@ -39,6 +43,16 @@ public class CommandCenter {
         } else {
             mInstance = new CommandCenter(context);
             return mInstance;
+        }
+    }
+    
+    class CommandTimerTask extends TimerTask{
+
+        @Override
+        public void run() {
+            synchronized (synchronizedLock) {
+                synchronizedLock.notifyAll();
+            } 
         }
     }
 
@@ -64,8 +78,9 @@ public class CommandCenter {
                     synchronized (synchronizedLock) { //传输成功之后继续下一个
                         SLog.e(TAG, "CommandCenter mCommandSendRequest  completed notifyALL");
                         synchronizedLock.notifyAll();
-                        ThreadPool.getInstance().shutDown();
-                        
+                        if (mTimerTask != null) {
+                            mTimerTask.cancel();
+                        }
                         mIsCompleted = true;
                         mCountingNum = 0;
                     }
@@ -74,25 +89,35 @@ public class CommandCenter {
                 case Constant.TRANSFER_TYPE_NOT_COMPLETED: // 数据传输未完成
                     mIsCompleted = false;
                     mCountingNum = 0;
-                    ThreadPool.getInstance().shutDown();
-                    ThreadPool.getInstance().submitRunnable(timeOutRunnable);
+                    resetTimerTask();
+                    /*ThreadPool.getInstance().shutDown();
+                    ThreadPool.getInstance().submitRunnable(timeOutRunnable);*/
                     break;
                 case Constant.TRANSFER_TYPE_ERROR: // 数据传输出错
                     synchronized (synchronizedLock) { //传输失败之后继续下一个
-                        if (mRetryTimes < 3) {
+              /*          if (mRetryTimes < 3) {
                             // 重新加入任务队列
                             SLog.e(TAG, "RETRY TIMES = " + mRetryTimes);
                             mCommandSendRequest.send(true);
                             mCountingNum = 0;
-                            ThreadPool.getInstance().submitRunnable(timeOutRunnable);
+                            resetTimerTask();
+                            //ThreadPool.getInstance().submitRunnable(timeOutRunnable);
                             mRetryTimes++;
                         } else {
                             // 超过重试次数之后，不再重试
                             mRetryTimes = 0;
-                            mIsCompleted = true;
-                            synchronizedLock.notifyAll();
+                            mIsCompleted = true;*/
+                        if (mTimerTask != null) {
+                            mTimerTask.cancel();
                         }
+                        synchronizedLock.notifyAll();
+                            
+                      //  }
                     }
+                    break;
+                case  Constant.TRANSFER_TYPE_ERROR_CLEAR:
+                    clearInterfaceQueue();
+                    synchronizedLock.notifyAll();
                     break;
                 default:
                     break;
@@ -106,10 +131,22 @@ public class CommandCenter {
     public void clearInterfaceQueue() {
         try {
             mSendDataQueue.clear();
+            if (mTimerTask != null) {
+                mTimerTask.cancel();
+            }
         } catch (InterruptedException e) {
             SLog.e(TAG, e);
         }
     }
+    
+    private void resetTimerTask() {
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+        }
+        mTimerTask = new CommandTimerTask();
+        mTimer.schedule(mTimerTask, SLEEP_TIME);
+    }
+    
     
     
    static AZRunnable timeOutRunnable = new AZRunnable("sendtimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
@@ -175,16 +212,18 @@ public class CommandCenter {
         public void run() {
             try {
                 while (true) {
+                    //SLog.e(TAG, "CommandCenter mCommandSendRequestING 1");
                     mCommandSendRequest =  sendqueue.consume();
+                    resetTimerTask();
                     mCommandSendRequest.send(false);
                     mIsCompleted = false;
-                    mCountingNum = 0;
-                    ThreadPool.getInstance().submitRunnable(timeOutRunnable);
+                    mCountingNum = 0;                   
                     synchronized (synchronizedLock) {
                         try {
-                            SLog.e(TAG, "CommandCenter mCommandSendRequestING");
+                            //SLog.e(TAG, "CommandCenter mCommandSendRequestING 2");
                             synchronizedLock.wait();
-                            SLog.e(TAG, "CommandCenter mCommandSendRequest completed");
+                           // SLog.e(TAG, "CommandCenter mCommandSendRequestING 3");
+                           // SLog.e(TAG, "CommandCenter mCommandSendRequest completed");
                         } catch (Exception e) {
                             SLog.e(TAG, e);
                         }
@@ -203,9 +242,7 @@ public class CommandCenter {
      */
     public static class SendDataQueue {
         // 发送数据队列，能容纳一百个数据
-        //BlockingQueue<String> basket = new LinkedBlockingQueue<String>(3);
         BlockingQueue<CommandSendRequest> commandqueue = new LinkedBlockingQueue<CommandSendRequest>(100);
-        //PriorityBlockingQueue<AsycEvent> priorityBlockingQueue = new PriorityBlockingQueue<AsycEvent>(100);
 
         // 生产数据
         public void produce(CommandSendRequest event) throws InterruptedException {

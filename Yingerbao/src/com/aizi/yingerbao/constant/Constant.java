@@ -132,6 +132,9 @@ public class Constant {
     public static final String AIZI_USER_ACCOUNT = "aizi_user_account";
     
     /** 数据传输标识  */
+    public static final String AIZI_COMMAND_DATA = "aizi_command_data";
+    
+    /** 数据传输标识  */
     public static final String AIZI_SEND_DATA = "aizi_send_data";
 
     public static final String REQUEST_KEY_SEND_CODE = "request_key_send_code";
@@ -148,6 +151,8 @@ public class Constant {
     public static final int TRANSFER_TYPE_NOT_COMPLETED = 1;
     
     public static final int TRANSFER_TYPE_ERROR = 2;
+    
+    public static final int TRANSFER_TYPE_ERROR_CLEAR = 3;
     
     
 

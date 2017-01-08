@@ -153,12 +153,16 @@ public class MessageParse {
             
             boolean ischecked = IsDeviceChecked(devCheckInfo);
             if (ischecked) {
-                
+                // 校验设备接口调用成功
+                Utiliy.reflectTranDataType(mContext, 0);
                 int isDeviceActivited = (keyValue[13] & 0x10) >> 4;
                 int totaldatalen =  
                          devCheckInfo.mNoSyncTempDataLength // 温度数据长度
                         + devCheckInfo.mNoSyncBreathDataLength // 呼吸停滞数据长度
-                        + devCheckInfo.mNoSyncExceptionLength; // 异常数据changdu
+                        + devCheckInfo.mNoSyncExceptionLength; // 异常数据长度
+                Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
+                intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
+                EventBus.getDefault().post(intent);
                 
                 PrivateParams.setSPInt(mContext, "NoSyncDataLength", totaldatalen);
                 PrivateParams.setSPInt(mContext, "GetCheckinfo", 1);
@@ -168,36 +172,27 @@ public class MessageParse {
                         + " BreathDataLength = " + devCheckInfo.mNoSyncBreathDataLength
                         + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
                         + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus
-                        + " isDeviceActivited = " + isDeviceActivited;
-                
-                // 校验设备成功
-                Utiliy.reflectTranDataType(mContext, 0);
-                
+                        + " isDeviceActivited = " + isDeviceActivited;           
                 SLog.e(TAG, result);
                 Utiliy.dataToFile(result);
                 
                 if (PrivateParams.getSPInt(mContext, "check_device_status", 0) == 2) {
-                    // 表示设备身份验证超时
-                    return;
+                    return;// 表示设备身份验证超时
                 }
                 // 设置检查设备状态，成功
                 PrivateParams.setSPInt(mContext, "check_device_status", 3);
                 
                 if (PrivateParams.getSPInt(mContext, "connect_interrupt", 0) == 1) {
-                    // 检测到连接过程中断
-                    return;
+                    return; // 检测到连接过程中断
                 }
                 
                 if (PrivateParams.getSPString(mContext, Constant.AIZI_IS_CONNECT_REPEAT).equals("true")) {
                     return;
                 }
-     
-                Intent intent = new Intent(Constant.ACTION_TOTAL_DATA_LEN);
-                intent.putExtra(Constant.NOT_SYNC_DATA_LEN, totaldatalen);
-                EventBus.getDefault().post(intent);
-      
-                if (isDeviceActivited == 0) {
-                    // 如果没有激活过设备则进行激活
+                
+                Thread.sleep(500); // 身份验证完成之后延时500ms
+
+                if (isDeviceActivited == 0) { // 如果没有激活过设备则进行激活
                     DeviceFactory.getInstance(mContext).activateDevice();
                     mIsDeviceActivited = false;
                 } else {
@@ -208,7 +203,7 @@ public class MessageParse {
                     DeviceFactory.getInstance(mContext).updateDeviceConfig();
                 }
 
-                setDeviceTime(devCheckInfo);
+                setDeviceTime(devCheckInfo); // 校时操作
                 
                 long curtime = System.currentTimeMillis();
                 long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
@@ -326,7 +321,6 @@ public class MessageParse {
         }
         mSyncDataPendingIntent = Utiliy.getDelayPendingIntent(mContext, Constant.ALARM_WAIT_SYNC_DATA);
         Utiliy.setDelayAlarm(mContext, Constant.WAIT_SYNC_PERIOD, mSyncDataPendingIntent);
-        SLog.e(TAG, "setAlarm  SyncData ");
     }
 
 
@@ -386,7 +380,6 @@ public class MessageParse {
     }   
 
     private void handleData(List<KeyPayload> params) {
-        SLog.e(TAG, "handleData List<KeyPayload> params");
         for (KeyPayload kpload:params) {
             if (kpload.key == 2) { // 接收到实时数据
                 SLog.e(TAG, "receive  realtime data");
@@ -406,7 +399,6 @@ public class MessageParse {
                 SLog.e(TAG, "receiver humit data " + kpload.keyLen);
                 handleHumbitData(kpload.keyValue);
             } else if (kpload.key == 10) { // 实时温度数据
-                SLog.e(TAG, "receiver realtime temp data " + kpload.keyLen);
                 handleRealTimeTemperatureData(kpload.keyValue);
             } else if (kpload.key == 12) { // 呼吸停滞数据
                 SLog.e(TAG, "receiver breath stop data " + kpload.keyLen);
@@ -553,10 +545,8 @@ public class MessageParse {
         
         String tempString;
         if (PNValue == 1) {
-            SLog.e(TAG, "temp = " + "-" + tempHigh + "." + tempLow);
             tempString = "-" + tempHigh + "." + tempLow;
         } else {
-            SLog.e(TAG, "temp = " + tempHigh + "." + tempLow);
             tempString = tempHigh + "." + tempLow;
         }
         
@@ -580,7 +570,6 @@ public class MessageParse {
         
     }
 
-
     private void handleBreathStopData(byte[] keyValue) {
         
         Intent intent = new Intent(Constant.ACTION_RECE_DATA);
@@ -588,8 +577,6 @@ public class MessageParse {
         EventBus.getDefault().post(intent);
 
         BreathDataInfo breathinfo = new BreathDataInfo(mContext);
-        int breathinfolength = 0;
-      //  List<BmobObject> breathdatainfos = new ArrayList<BmobObject>();
         int breathstoplength = keyValue.length;
         if (breathstoplength % 8 == 0) {
             for (int i = 0; i < keyValue.length/8; i++) {
@@ -617,12 +604,6 @@ public class MessageParse {
                 breathinfo.setBreathDuration(keyValue[5 + i*8] & 0xff);
                 breathinfo.setBreathTimestamp(System.currentTimeMillis());
                 YingerbaoDatabase.insertBreathInfo(mContext, breathinfo);
-                /*breathdatainfos.add(breathinfo);
-                breathinfolength = breathdatainfos.size();
-                if (breathinfolength == 50) {
-                    bmobBatchData(breathdatainfos); 
-                    breathdatainfos.clear();
-                }*/
               
                 String breathlog = "Breath Stop Info = " + year + " month = " + month
                         + " day = " + day + " hour = " + hour
@@ -632,11 +613,6 @@ public class MessageParse {
                 Utiliy.dataToFile(breathlog);
             }
         }
-        
-     /*   if (breathinfolength > 0 && breathinfolength < 50) {
-            bmobBatchData(breathdatainfos);
-            breathdatainfos.clear();
-        }*/
 
         Utiliy.reflectTranDataType(mContext, 1);
         setSyncDataAlarm();
@@ -993,20 +969,19 @@ public class MessageParse {
                         if (settimeresult == 0 || settimeresult == 1) {
                             //设置时间成功
                             Utiliy.reflectTranDataType(mContext, 0);
-                            if (!mIsDeviceTimed) {
+                            if (!mIsDeviceTimed && mIsDeviceActivited) {
+                                mIsDeviceTimed = true;
                                 Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
                                 intent.putExtra(Constant.IS_SYNC_DATA, mIsSyncData);
                                 EventBus.getDefault().post(intent); 
                             }
-                           
-                            
                         } else if (settimeresult == 2) {
-                          //设置时间失败
+                            //设置时间失败
                             Utiliy.reflectTranDataType(mContext, 2);
-                            if (!mIsDeviceTimed) {
+                          /*  if (!mIsDeviceTimed) { // 设置时间失败不应该阻塞后续的流程
                                 Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_FAILED);
                                 EventBus.getDefault().post(intent); 
-                            }
+                            }*/
                         }
                         SLog.e(TAG, result);
                         Utiliy.dataToFile(result);
@@ -1016,22 +991,20 @@ public class MessageParse {
                         int activateresult = kpload.keyValue[0] & 0x0f;
                         String result = null;
                         if (activateresult == 0) { // 激活设备成功
-                            //AsyncDeviceFactory.getInstance(mContext).getDeviceTime();
                             PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 1);
-                            result =  "activate device success ";
-                            //激活设备成功
+                            result =  "Activate device success "; //激活设备成功
                             Utiliy.reflectTranDataType(mContext, 0);
-                            
                             if (mIsDeviceTimed && !mIsDeviceActivited) {
+                                mIsDeviceActivited = true;
                                 Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
                                 intent.putExtra(Constant.IS_SYNC_DATA, mIsSyncData);
                                 EventBus.getDefault().post(intent); 
                             }
-                        } else {
+                        } else { // 激活设备失败
                             PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 0);
                             result =  "Activate Device Failed";
                             //激活设备失败
-                            Utiliy.reflectTranDataType(mContext, 2);
+                            Utiliy.reflectTranDataType(mContext, 3); // 返回错误并清理命令，激活失败同身份验证失败
                             if (mIsDeviceTimed && !mIsDeviceActivited) {
                                 Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_FAILED);
                                 EventBus.getDefault().post(intent); 
@@ -1045,42 +1018,6 @@ public class MessageParse {
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
-    }
-
-    private void setDeviceTime(DeviceTime devTime) {
-        try {
-            Calendar calendar = Calendar.getInstance(); 
-            int year = calendar.get(Calendar.YEAR) - 2000;
-            int month = calendar.get(Calendar.MONTH)+1;
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int min = calendar.get(Calendar.MINUTE);
-            int second = calendar.get(Calendar.SECOND);
-            
-            SLog.e(TAG, "phonetime  year = " + year 
-                    + " month = " + month
-                    + " day = " + day
-                    + " hour = " + hour
-                    + " minu = " + min
-                    + " second = " + second);
-            SLog.e(TAG, "devicetime  year = " + devTime.year 
-                    + " month = " + devTime.month
-                    + " day = " + devTime.day
-                    + " hour = " + devTime.hour
-                    + " minu = " + devTime.min
-                    + " second = " + devTime.second);
-            
-            if (year != devTime.year
-                    || month != devTime.month
-                    || day != devTime.day
-                    || hour != devTime.hour
-                    || Math.abs(min - devTime.min) > 5) {
-                DeviceFactory.getInstance(mContext).setDeviceTime();
-            }
-        } catch (Exception e) {
-            SLog.e(TAG, e);
-        }
-        
     }
 
 

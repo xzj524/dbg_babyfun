@@ -14,6 +14,7 @@ import com.aizi.yingerbao.TestActivity;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.login.LoginActivity;
+import com.aizi.yingerbao.login.UserPrivateInfoActivity;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
@@ -36,6 +37,7 @@ public class SlidingMenuHelper {
     ViewGroup mAboutGroup;
     
     TextView mUserAccountTextView;
+    String mUseraccount;
     
 
     private SlidingMenu mSlidingMenu;
@@ -63,11 +65,11 @@ public class SlidingMenuHelper {
         
         mUserAccountTextView = (TextView) findViewById(R.id.useraccount);
         
-        String useraccount = PrivateParams.getSPString(mActivity, Constant.AIZI_USER_ACCOUNT);
+        mUseraccount = PrivateParams.getSPString(mActivity, Constant.AIZI_USER_ACCOUNT);
         
-        if (!TextUtils.isEmpty(useraccount)) {
-            mUserAccountTextView.setText(useraccount);
-            SLog.e(TAG, "useraccount = " + useraccount);
+        if (!TextUtils.isEmpty(mUseraccount)) {
+            mUserAccountTextView.setText(mUseraccount);
+            SLog.e(TAG, "useraccount = " + mUseraccount);
         } else {
             mUserAccountTextView.setText("用户登录");
             SLog.e(TAG, "useraccount = " + "用户登录");
@@ -78,7 +80,14 @@ public class SlidingMenuHelper {
             
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mActivity.getApplicationContext(), LoginActivity.class);
+                Intent intent = null;
+                if (!TextUtils.isEmpty(mUseraccount)) {
+                    intent = new Intent(mActivity.getApplicationContext(), UserPrivateInfoActivity.class);
+                    intent.putExtra("user_private_account", mUseraccount);
+                } else {
+                    intent = new Intent(mActivity.getApplicationContext(), LoginActivity.class);
+                }
+                 
                 mActivity.startActivity(intent);
             }
         });

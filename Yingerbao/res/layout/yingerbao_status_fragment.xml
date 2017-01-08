@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-     >
+    android:layout_height="wrap_content">
  
     <RelativeLayout
         android:id="@+id/connectingRelativeLayout"
@@ -38,7 +37,9 @@
 		           android:layout_width="wrap_content"
 		           android:layout_height="wrap_content"
 		           android:layout_gravity="center_horizontal"
-		           android:text="@string/click_start" />
+		           android:text="@string/click_start"
+		           android:textSize="@dimen/common_device_status_text_size"
+		           android:textColor="@color/white" />
          </LinearLayout>
         
   
@@ -56,7 +57,9 @@
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
 	           android:layout_gravity="center_horizontal"
-	           android:text="@string/start_connect" />
+	           android:text="@string/start_connect"
+	           android:textColor="@color/white" 
+	           android:textSize="@dimen/common_device_status_text_size"/>
         </LinearLayout>
         
         <LinearLayout
@@ -72,7 +75,9 @@
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
 	           android:layout_gravity="center_horizontal"
-	           android:text="@string/check_device" />
+	           android:text="@string/check_device"
+	           android:textColor="@color/white"
+	           android:textSize="@dimen/common_device_status_text_size" />
         </LinearLayout>
         
          <LinearLayout
@@ -88,7 +93,9 @@
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
 	           android:layout_gravity="center_horizontal"
-	           android:text="@string/check_device_fail" />
+	           android:text="@string/check_device_fail"
+	           android:textColor="@color/white"
+	           android:textSize="@dimen/common_device_status_text_size" />
         </LinearLayout>
         
         <LinearLayout
@@ -108,7 +115,9 @@
                 android:lineSpacingExtra="2dp"
 				android:lineSpacingMultiplier="1"
                 android:gravity="center_horizontal"
-                android:text="@string/connecting_device_success" />
+                android:text="@string/connecting_device_success"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_device_status_text_size" />
 
         </LinearLayout>
         
@@ -125,7 +134,9 @@
 		           android:layout_width="wrap_content"
 		           android:layout_height="wrap_content"
 		           android:layout_gravity="center_horizontal"
-		           android:text="@string/connecting_device_sync_data" />
+		           android:text="@string/connecting_device_sync_data"
+		           android:textColor="@color/white"
+		           android:textSize="@dimen/common_device_status_text_size" />
         </LinearLayout>
         
         <LinearLayout
@@ -141,7 +152,9 @@
 		           android:layout_width="wrap_content"
 		           android:layout_height="wrap_content"
 		           android:layout_gravity="center_horizontal"
-		           android:text="@string/connecting_device_sync_data_fail" />
+		           android:text="@string/connecting_device_sync_data_fail" 
+		           android:textColor="@color/white"
+		           android:textSize="@dimen/common_device_status_text_size"/>
         </LinearLayout>
         
         
@@ -162,10 +175,24 @@
                 android:lineSpacingExtra="2dp"
 				android:lineSpacingMultiplier="1"
                 android:gravity="center_horizontal"
-                android:text="@string/connecting_device_fail" />
+                android:text="@string/connecting_device_fail"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_device_status_text_size" />
 
         </LinearLayout>
 
     </RelativeLayout>
+    
+        <TextView 
+            android:id="@+id/user_notify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/connectingRelativeLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_device_status_text_size" 
+            android:text="@string/user_notify"
+            android:visibility="gone"/>
 
 </RelativeLayout>

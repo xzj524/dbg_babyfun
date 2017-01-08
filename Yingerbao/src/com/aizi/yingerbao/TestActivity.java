@@ -16,8 +16,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aizi.yingerbao.baseheader.BaseL2Message;
+import com.aizi.yingerbao.baseheader.KeyPayload;
+import com.aizi.yingerbao.bluttooth.BluetoothApi;
+import com.aizi.yingerbao.command.CommandCenter;
+import com.aizi.yingerbao.command.CommandSendRequest;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
+import com.aizi.yingerbao.eventbus.AsycEvent;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
@@ -245,7 +251,23 @@ public class TestActivity extends Activity {
                 int charg=PrivateParams.getSPInt(getApplicationContext(), Constant.CUR_STATISTIC_CHARGE, 0);
                 mDevicechargetTextView.setText("" + charg);
                 
-                DeviceFactory.getInstance(getApplicationContext()).updateDeviceConfig();
+                byte[] bsdata = new byte[1];
+                bsdata[0] = 9;
+                //DeviceFactory.getInstance(getApplicationContext()).updateDeviceConfig();
+                //BluetoothApi.getInstance(getApplicationContext()).RecvEvent(new AsycEvent(bsdata ));
+                
+                
+                KeyPayload keyPayload = new KeyPayload();
+                keyPayload.key = 5;
+                keyPayload.keyLen = 0;
+                //keyPayload.keyValue = getProfileInfo();
+                
+                BaseL2Message bsl2Msg 
+                = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+                        Constant.BASE_VERSION_CODE, keyPayload);
+                new CommandSendRequest(getApplicationContext(), bsl2Msg).addSendTask();
+                //CommandSendRequest commandsendRequest = null;
+                //CommandCenter.getInstance(getApplicationContext()).addCallbackRequest(commandsendRequest);
             }
         });
         

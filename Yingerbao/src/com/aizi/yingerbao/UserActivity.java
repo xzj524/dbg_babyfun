@@ -111,7 +111,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         mSlidingMenuHelper.initSlidingMenu();
         
         BluetoothApi.getInstance(getApplicationContext());
-        PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
+        //PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
         if (PrivateParams.getSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 0) == 0) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.YingerBaoActivity;
@@ -55,6 +56,8 @@ public class DeviceConnectStatusFragment extends Fragment{
     PendingIntent mSyncDataPendingIntent;
     public PendingIntent mSearchPendingIntent;
     boolean mIsConnectDevice = false;
+    
+    TextView mUserNotifyTextView;
 
     /** 连接时候的progress */
     private ImageView mProgressImageView;
@@ -110,6 +113,8 @@ public class DeviceConnectStatusFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View deviceStatusView = inflater.inflate(R.layout.yingerbao_status_fragment, container, false);
+        
+        mUserNotifyTextView = (TextView) deviceStatusView.findViewById(R.id.user_notify);
         
         mProgressImageView = (ImageView) deviceStatusView.findViewById(R.id.progressImageView);
         mProgressImageView.setOnClickListener(new UpdateStatusOnclickListener());
@@ -207,6 +212,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             setSearchDeviceTimeout();
             
             mConnectingInfoViewGroup.setVisibility(View.VISIBLE);
+            mUserNotifyTextView.setVisibility(View.VISIBLE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mClickConnectViewGroup.setVisibility(View.GONE);
@@ -231,6 +237,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mClickConnectViewGroup.setVisibility(View.GONE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mUserNotifyTextView.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             
             Intent checkintent = new Intent("com.aizi.yingerbao.checkdevice");
@@ -248,6 +255,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mClickConnectViewGroup.setVisibility(View.GONE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mUserNotifyTextView.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
@@ -263,6 +271,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mSyncDataFailedViewGroup.setVisibility(View.GONE);
             mClickConnectViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mUserNotifyTextView.setVisibility(View.GONE);
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             mCheckDeviceFailedViewGroup.setVisibility(View.GONE);
@@ -284,6 +293,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.VISIBLE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mUserNotifyTextView.setVisibility(View.GONE);
             mSyncDataViewGroup.setVisibility(View.GONE);
             mSyncDataFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
@@ -301,6 +311,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mUserNotifyTextView.setVisibility(View.GONE);
             mSyncDataViewGroup.setVisibility(View.GONE);
             mSyncDataFailedViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
@@ -327,6 +338,7 @@ public class DeviceConnectStatusFragment extends Fragment{
                 mConnectedFailedViewGroup.setVisibility(View.GONE);
                 mConnectedSucceedViewGroup.setVisibility(View.GONE);
                 mConnectingInfoViewGroup.setVisibility(View.GONE);
+                mUserNotifyTextView.setVisibility(View.GONE);
                 mSyncDataViewGroup.setVisibility(View.GONE);
                 mSyncDataFailedViewGroup.setVisibility(View.GONE);
                 mCheckDeviceViewGroup.setVisibility(View.VISIBLE);
@@ -340,6 +352,7 @@ public class DeviceConnectStatusFragment extends Fragment{
                 setSearchDeviceTimeout();
                 
                 mConnectingInfoViewGroup.setVisibility(View.VISIBLE);
+                mUserNotifyTextView.setVisibility(View.VISIBLE);
                 mConnectedSucceedViewGroup.setVisibility(View.GONE);
                 mConnectedFailedViewGroup.setVisibility(View.GONE);
                 mClickConnectViewGroup.setVisibility(View.GONE);
@@ -360,6 +373,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mUserNotifyTextView.setVisibility(View.GONE);
             mSyncDataViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
         } else if (mCurrentState == ConnectDeviceState.REPEAT_SYNCING_DATA) {
@@ -382,6 +396,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mConnectedFailedViewGroup.setVisibility(View.GONE);
             mConnectedSucceedViewGroup.setVisibility(View.GONE);
             mConnectingInfoViewGroup.setVisibility(View.GONE);
+            mUserNotifyTextView.setVisibility(View.GONE);
             mSyncDataViewGroup.setVisibility(View.VISIBLE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
             setSyncDataProgresShow(true);
@@ -496,10 +511,8 @@ public class DeviceConnectStatusFragment extends Fragment{
                 isSyncData = event.getBooleanExtra(Constant.IS_SYNC_DATA, true);
             }
             if (isSyncData) {
-                SLog.e(TAG, "sync data has consumed six hour ");
                 mCurrentState = ConnectDeviceState.SYNCING_DATA;
             }else {
-                SLog.e(TAG, "sync data don not consumed six hour");
                 mCurrentState = ConnectDeviceState.SYNC_DATA_SUCCEED;
             } 
             doUpdateStatusClick();

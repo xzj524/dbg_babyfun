@@ -6,6 +6,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_xiaohuhu">婴儿保</string>
     <string name="title_activity_breath">宝宝呼吸</string>
+    <string name="title_activity_userprivateinfo">个人信息</string>
     <string name="title_activity_temperature">温度计</string>
     <string name="title_search_bluetooth">搜索婴儿保</string>
     <string name="title_activity_device_list">DeviceListActivity</string>
@@ -13,8 +14,9 @@
     <!-- 主界面 -->
     <string name="main_name">婴儿保</string>
     <string name="click_start">点击进行连接同步数据</string>
-    <string name="start_connect">正在搜索设备</string>
-    <string name="check_device">正在校验设备</string>
+    <string name="start_connect">正在搜索婴儿保</string>
+    <string name="user_notify">请将婴儿保靠近手机\n\t\t摇晃持续2秒以上</string>
+    <string name="check_device">正在校验婴儿保</string>
     <string name="check_device_fail">校验设备失败\n请重试</string>
     <string name="sync_data">正在同步数据...</string>
     <string name="show_device_status">宝宝状态</string>
@@ -25,11 +27,11 @@
     <string name="select_device">请选择设备：</string>
     <string name="scanning">正在扫描中...</string>
     <string name="setting">设置</string>
-    <string name="connecting_device_success">设备已连接\n可以使用啦！</string>
-    <string name="connect_device_done">设备已连接</string>
+    <string name="connecting_device_success">婴儿保已连接\n可以使用啦！</string>
+    <string name="connect_device_done">婴儿保已连接</string>
     <string name="connecting_device_sync_data">数据同步中。。。</string>
-    <string name="connecting_device_sync_data_fail">数据同步失败\n请重试</string>
-    <string name="connecting_device_fail">找不到设备\n请重新检测</string>
+    <string name="connecting_device_sync_data_fail">数据同步失败\n请点击重试</string>
+    <string name="connecting_device_fail">找不到婴儿保\n请点击重新检测</string>
     <string name="connecting_router_one_abnormal">检测到一个问题\n点击查看</string>
     <string name="connecting_router_two_abnormal">检测到两个问题\n点击查看</string>
     <string name="check_router_status_abnormal">问题</string>
@@ -80,5 +82,6 @@
     <string name="title_activity_baby_breath_emergency">BabyBreathEmergencyActivity</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_manufature_test">工厂测试</string>
+    <string name="title_activity_user_private_info">UserPrivateInfoActivity</string>
 
 </resources>

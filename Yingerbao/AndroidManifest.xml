@@ -220,11 +220,14 @@
         </activity>
         <activity
             android:name=".ManufatureTestActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_manufature_test"
-            android:screenOrientation="portrait" 
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-      		android:configChanges="orientation|keyboardHidden">
-  
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+        </activity>
+        <activity
+            android:name=".login.UserPrivateInfoActivity"
+            android:label="@string/title_activity_user_private_info" >
         </activity>
     </application>
 

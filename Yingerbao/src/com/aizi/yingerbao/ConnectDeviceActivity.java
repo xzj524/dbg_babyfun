@@ -41,7 +41,7 @@ onTitleBarClickListener {
     
     int mTotalSyncDataLen = 0;
     int mIncrementDataLen = 0;
-    int mCurSyncDataLen = 0;
+    int mCurSyncDataLen = 0; // 百分比
 
     TopBarView mConnectTopBarView;
     
@@ -139,6 +139,7 @@ onTitleBarClickListener {
             if (msg.what == MSG_PROGRESS_UPDATE) {
                 progress = mProgressBar.getProgress();
                 if (progress <= mCurSyncDataLen) {
+                    mProgressBar.setVisibility(View.VISIBLE); 
                     mProgressBar.setProgress(++progress);
                     mHandler.sendEmptyMessageDelayed(MSG_PROGRESS_UPDATE, 100);
                 } else {
@@ -147,12 +148,13 @@ onTitleBarClickListener {
             } else if (msg.what == MSG_PROGRESS_COMPLETED) {
                 mCurSyncDataLen = 0;
                 int res = msg.arg1;
-                if (res == 0 || res == 1) { // 数据同步完成或者没有产生新的数据
+                //if (res == 0 || res == 1) { // 数据同步完成或者没有产生新的数据
                     mHandler.sendEmptyMessage(MSG_PROGRESS_AUTO_COMPLETED);
-                } else if (res == 2) { // 同步数据出错
+                //} 
+                    /*else if (res == 2) { // 同步数据出错
                     mDevConnectFragment.setSyncDataFailed();
                     mDevConnectFragment.doUpdateStatusClick();
-                }
+                }*/
             } else if (msg.what == MSG_PROGRESS_AUTO_COMPLETED) {
                 progress = mProgressBar.getProgress();
                 if (progress < 100) {
@@ -180,7 +182,7 @@ onTitleBarClickListener {
     protected void onDestroy() {
         super.onDestroy();
         mTotalSyncDataLen = 0;
-        unbindService(mScanServiceConnection);
+        //unbindService(mScanServiceConnection);
         EventBus.getDefault().unregister(this);//反注册EventBus  
         mHandler.removeMessages(MSG_PROGRESS_UPDATE);
         mHandler.removeMessages(MSG_PROGRESS_COMPLETED);
@@ -218,10 +220,9 @@ onTitleBarClickListener {
                 if (mProgressBar != null) {
                     if (isShowProgress) {
                         mProgressBar.setProgress(0);
-                        mProgressBar.setVisibility(View.VISIBLE); 
-                    } else {
-                        mProgressBar.setVisibility(View.GONE); 
-                    } 
+                        //mProgressBar.setVisibility(View.VISIBLE); 
+                    }
+                    mProgressBar.setVisibility(View.GONE);  
                 }
             }
         }
@@ -263,7 +264,7 @@ onTitleBarClickListener {
                     message.what = MSG_PROGRESS_UPDATE; 
                     message.arg1 = mCurSyncDataLen;
                     mHandler.sendMessage(message);  
-                    SLog.e(TAG, "RECV  SYNC DATA  mCurSyncDataLen " + mCurSyncDataLen);
+                    SLog.e(TAG, "RECV  SYNC DATA  mCurSyncDataRate " + mCurSyncDataLen);
                 }
             }
         } else if (action.equals(Constant.ACTION_TOTAL_DATA_LEN)) {
