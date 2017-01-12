@@ -7,7 +7,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@color/pink_new"
     tools:context="${relativePackage}.${activityClass}" >
-
            
     <com.aizi.yingerbao.view.TopBarView  
         android:id="@+id/userprivatetopbar"  
@@ -22,54 +21,79 @@
       <ScrollView
         android:id="@+id/userinfo_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="40dp" >
+        android:layout_height="match_parent" 
+        android:layout_below="@id/userprivatetopbar">
 
         <LinearLayout
             android:id="@+id/user_private_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical" >
-            
+            android:orientation="vertical" 
+            android:layout_marginTop="40dp">
                            
 	       <ImageView 
 	            android:id="@+id/center_icon"
 	            android:layout_width="80dp"
 	            android:layout_height="80dp"
 	            android:layout_gravity="center"
-	            android:layout_marginTop="20dp"
 	            android:src="@drawable/yingerbao_512"/>
             
             <RelativeLayout
                 android:id="@+id/login_phone_number"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/logininfobackground">
                 
                  <TextView 
 		            android:id="@+id/user_priviate"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:layout_centerVertical="true"
-		            android:layout_marginTop="20dp"
 		            android:layout_marginLeft="10dp"
+		            android:layout_centerVertical="true"
 		            android:textColor="@color/white"
 		            android:textSize="@dimen/common_device_status_text_size" 
 		            android:text="手机号码："/>
                  
-               
-                
+                 <TextView 
+                     android:id="@+id/user_private_phone"
+                     android:layout_width="wrap_content"
+		             android:layout_height="wrap_content"
+		             android:textColor="@color/white"
+		             android:layout_centerVertical="true"
+		             android:layout_alignParentRight="true"
+		             android:layout_marginRight="10dp"
+		             android:textSize="@dimen/common_device_status_text_size" />                
                              
             </RelativeLayout>
             
-             <ImageView 
-                    android:id="@+id/center_line"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/centerline"/>
+             
+             
+         <LinearLayout 
+	         android:id="@+id/userbutton"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_gravity="center"
+	         android:layout_marginTop="200dp"
+	         android:orientation="vertical">
+                 
+             <Button 
+                 android:id="@+id/resetpasscode"
+                 android:layout_width="160dp"
+		         android:layout_height="40dp"
+		         android:text="重置密码"
+		         android:textColor="@color/white"
+		         android:background="@drawable/logininfobackground"/>
+	         
+	      <!--   <Button 
+		         android:id="@+id/resetpasscode"
+		         android:layout_width="wrap_content"
+		         android:layout_height="wrap_content"
+		         android:text="重置密码"
+			     android:textColor="@color/white"
+			     android:gravity="center_horizontal"
+			     android:background="@drawable/logininfobackground"/> -->
+     </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

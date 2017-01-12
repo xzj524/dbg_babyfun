@@ -193,6 +193,10 @@ public class Constant {
     /** 设备时间数据  */
     public static final String DATA_TRANSFER_TIME = "com.data.transfer.devicetime";
     
+    public static final String DATA_TEMP_ALARM_VALUE_NEW = "com.data.temp.alarmvalue_new";
+    
+    public static final String DATA_TEMP_ALARM_VALUE_OLD = "com.data.temp.alarmvalue_old";
+    
   
 
     public static void setSearchRange(int searchparam) {

@@ -89,17 +89,8 @@
 		        android:id="@+id/tempdatelist"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="@dimen/data_calender_left_margin"
 		        android:orientation="vertical">
-	        
-                <TextView 
-			        android:id="@+id/temperature"
-			        android:layout_height="wrap_content"
-			        android:layout_width="wrap_content"
-			        android:text="环境温度："
-			        android:textSize="@dimen/data_calender_text_size"
-			        android:textColor="@color/gray"/>
-                
+		        
                  <TextView 
 			        android:id="@+id/temperaturedate"
 			        android:layout_height="wrap_content"
@@ -107,7 +98,64 @@
 			        android:text="2016年12月12日"
 			        android:textSize="@dimen/data_calender_text_size"
 			        android:textColor="@color/gray"/>
+	        
+                <TextView 
+			        android:id="@+id/temperature"
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:text="环境温度："
+			        android:textSize="@dimen/data_calender_text_size"
+			        android:textColor="@color/gray"/>    
+                
                  </LinearLayout>
+                 
+            
+            <LinearLayout 
+		        android:id="@+id/tempdatealarmlist"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="@dimen/data_calender_left_margin"
+		        android:orientation="horizontal"
+		       >
+		        
+                 <TextView 
+			        android:id="@+id/temperaturealarm"
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:text="报警温度值："
+			        android:textSize="@dimen/data_calender_text_size"
+			        android:textColor="@color/gray"/>
+	        
+                <TextView 
+			        android:id="@+id/temperaturealarmvalue"
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:text="37.5"
+			        android:textSize="@dimen/data_calender_text_size"
+			        android:textColor="@color/gray"/> 
+			        
+                 <TextView 
+			         android:id="@+id/tempalarmunit"
+			         android:layout_width="wrap_content"
+			         android:layout_height="wrap_content"
+			         android:textColor="@color/gray"
+			         android:text="℃"
+			         android:textSize="@dimen/data_calender_text_size"/>
+                 
+                 <Button 
+                     android:id="@+id/changealarmvalue"
+                     android:layout_width="48dp"
+                     android:layout_height="30dp"
+                     android:text="修改"
+                     android:textSize="30px"
+                     android:textColor="@color/white"
+                     android:layout_marginLeft="4dp"
+                     android:background="@color/color_gray"/>
+                
+              </LinearLayout>
+                 
+                 
+            
 	         
             
             <ImageView 

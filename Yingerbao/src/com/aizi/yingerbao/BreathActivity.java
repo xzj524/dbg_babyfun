@@ -145,7 +145,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
                                 mTimerTask.cancel();
                             }
                             mTimerTask = new BreathTimerTask();
-                            mTimer.schedule(mTimerTask,1000, 1000);
+                            mTimer.schedule(mTimerTask,1000, 1500);
                                 
                             DeviceFactory.getInstance(getApplicationContext()).startSendBreathData();
                             mControlBreathBtn.setText(R.string.action_stop);
@@ -812,7 +812,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
 
     @Override
     public void onBackClick() {
-        // TODO Auto-generated method stub
         finish();
     }
 

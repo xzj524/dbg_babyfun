@@ -15,11 +15,14 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import cn.qqtheme.framework.picker.NumberPicker;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.TemperatureDataInfo;
@@ -28,6 +31,7 @@ import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.fragment.SimpleCalendarDialogFragment;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.synctime.DataTime;
+import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
@@ -48,8 +52,10 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     private static final String TAG = TemperatureActivity.class.getSimpleName();
     LineChart mTemperatureChart;
     Button mTempButton;
+    Button mSetTempAlarmValueButton;
     TextView mTempValue;
     TextView mTempDate;
+    TextView mTempAlarmValueTextView;
     ImageView mCalendarView;
     boolean mTempStart = false;
     boolean mIsTempMeasuring = false;
@@ -146,7 +152,48 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
             }
         });
         
+        mSetTempAlarmValueButton = (Button) findViewById(R.id.changealarmvalue);
+        mSetTempAlarmValueButton.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                NumberPicker picker = new NumberPicker(TemperatureActivity.this);
+                picker.setAnimationStyle(R.style.Animation_CustomPopup);
+                picker.setOffset(1);//偏移量
+                picker.setRange(30, 43, 0.5);//数字范围
+                picker.setSelectedItem(37.5);
+                picker.setLabel("℃");
+                picker.setTitleText("报警温度值");
+                picker.setOnNumberPickListener(new NumberPicker.OnNumberPickListener() {
+                    @Override
+                    public void onNumberPicked(int index, Number item) {
+                        SLog.e(TAG, "index=" + index + ", item=" + item.doubleValue());
+                        double tempalarmvalue = item.doubleValue();
+                        mTempAlarmValueTextView.setText(""+tempalarmvalue);
+                        DeviceFactory.getInstance(getApplicationContext())
+                                .setTemperatureAlarmConfig(tempalarmvalue, 0);
+                        PrivateParams.setSPString(getApplicationContext(), 
+                                Constant.DATA_TEMP_ALARM_VALUE_NEW, ""+tempalarmvalue);
+                    }
+                });
+                picker.show();
+            }
+        });
+        
         mTempValue = (TextView) findViewById(R.id.tempvalue);
+        mTempAlarmValueTextView = (TextView) findViewById(R.id.temperaturealarmvalue);
+        
+        String newalarmString = PrivateParams.getSPString(getApplicationContext(), Constant.DATA_TEMP_ALARM_VALUE_NEW);
+        if (!TextUtils.isEmpty(newalarmString)) {
+            mTempAlarmValueTextView.setText(newalarmString);
+        } else {
+            String oldalarmString = PrivateParams.getSPString(getApplicationContext(), Constant.DATA_TEMP_ALARM_VALUE_OLD);
+            if (!TextUtils.isEmpty(oldalarmString)) {
+                mTempAlarmValueTextView.setText(oldalarmString);
+            } else {
+                mTempAlarmValueTextView.setText("37.5");
+            }
+        }
         initXValues();   
         initTempChart();
         

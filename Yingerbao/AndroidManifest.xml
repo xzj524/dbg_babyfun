@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aizi.yingerbao"
-    android:versionCode="5"
-    android:versionName="1.4.1" >
+    android:versionCode="6"
+    android:versionName="1.4.2" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -83,13 +83,7 @@
             android:screenOrientation="portrait" >
         </activity>
 
-        <receiver android:name=".receiver.BabyStatusReceiver" >
-            <intent-filter>
-                <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_SERVICES_DISCOVERED" />
-                <action android:name="com.nordicsemi.nrfUART.ACTION_DATA_AVAILABLE" />
-                <action android:name="com.nordicsemi.nrfUART.ACTION_GATT_DISCONNECTED" />
-            </intent-filter>
-        </receiver>
+  
         <receiver android:name=".receiver.AlarmManagerReceiver" >
             <intent-filter>
                 <action android:name="com.aizi.yingerbao.action.alarm.message" />
@@ -146,6 +140,12 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+            
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -192,11 +192,7 @@
             android:name=".UserActivity"
             android:label="@string/title_activity_user"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+           
         </activity>
         <activity
             android:name=".BreathActivity"

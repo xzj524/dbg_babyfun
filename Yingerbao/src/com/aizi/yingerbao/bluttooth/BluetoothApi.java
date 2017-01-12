@@ -1,5 +1,7 @@
 package com.aizi.yingerbao.bluttooth;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -17,10 +19,7 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.eventbus.AsycEvent;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.service.BluetoothService;
-import com.aizi.yingerbao.thread.AZRunnable;
 import com.aizi.yingerbao.utility.Utiliy;
-
-import de.greenrobot.event.EventBus;
 
 public class BluetoothApi {
     
@@ -32,30 +31,31 @@ public class BluetoothApi {
     // 建立一个装数据的队列
     public SendDataQueue mSendDataQueue = new SendDataQueue();
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
-    Consumer consumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
+    Consumer mConsumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
     Context mContext;
     private WriteTimerTask mTimerTask;
     Timer mTimer;
     static AsycEvent mWriteAsycEvent;
     private static final Object synchronizedLock = new Object();
     private int mRetryTimes = 0;
+    private boolean mWriteResult = false;
+    
+    List<AsycEvent> mTempAsycEvents = new ArrayList<AsycEvent>();
 
     public BluetoothApi(Context context) {
-        EventBus.getDefault().register(this);
         bindBluetoothService(context);
         mContext = context;
-        mExecutorService.submit(consumer);
+        mExecutorService.submit(mConsumer);
         mTimer = new Timer(true);
     }
     
     public void unregisterEventBus() {
-        EventBus.getDefault().unregister(this);
         if (mTimerTask != null) {
             mTimerTask.cancel();
         }
     }
 
-    public static BluetoothApi getInstance(Context context) {
+    public static synchronized BluetoothApi getInstance(Context context) {
         if (mInstance != null) {
             return mInstance;
         } else {
@@ -85,6 +85,17 @@ public class BluetoothApi {
                 public void onBluetoothWrite(Intent intent) {
                     try {
                         if (intent.hasExtra("write_result")) {
+                            if (!mWriteResult) { // 写失败，不处理回调
+                                SLog.e(TAG, "Do not handle onBluetoothWrite Result");
+                                Utiliy.logToFile("Do not handle onBluetoothWrite Result");
+                                /*synchronized (synchronizedLock) {
+                                    if (mTimerTask != null) {
+                                        mTimerTask.cancel();
+                                    }
+                                    synchronizedLock.notifyAll();
+                                }*/
+                                return;
+                            }
                             boolean write_result = intent.getBooleanExtra("write_result", false);
                             String write_content = intent.getStringExtra("write_content");
                             SLog.e(TAG, "onBluetoothWrite Result = " + write_result
@@ -118,11 +129,8 @@ public class BluetoothApi {
                         }
                     } catch (Exception e) {
                         SLog.e(TAG, e);
-                    }
-                   
+                    }  
                 }
-
-
             });
             SLog.e(TAG, "onServiceConnected mService= " + mBluetoothService);
             if (!mBluetoothService.initBluetooth()) {
@@ -136,34 +144,12 @@ public class BluetoothApi {
     
     public synchronized void RecvEvent(AsycEvent event) { 
         try {
-            Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
-            mExecutorService.submit(producer);
+            /*Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
+            mExecutorService.submit(producer);*/
+            mSendDataQueue.offer(event);
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
-     } 
-    
-
-    static AZRunnable bluetoothwriteTimeOutRunnable = new AZRunnable("bluetoothwriteTimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
-        @Override
-        public void brun() {
-            try {
-                Thread.sleep(SLEEP_TIME);
-                synchronized (synchronizedLock) {
-                    mWriteAsycEvent = null;
-                    synchronizedLock.notifyAll();
-                }
-            } catch (Exception e) {
-                SLog.e(TAG, e);
-            }
-        }
-    };
-    
-    
-    public void onEvent(AsycEvent event) { 
-        Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
-        mExecutorService.submit(producer);
-        SLog.e(TAG, "onEvent WritByte");
      } 
     
     
@@ -202,7 +188,8 @@ public class BluetoothApi {
 
         public void run() {
             try {
-                 sendqueue.produce(mAsycEvent);
+                 //sendqueue.produce(mAsycEvent);
+                sendqueue.offer(mAsycEvent);
             } catch (InterruptedException ex) {
                 SLog.e(TAG, ex);
             }
@@ -222,20 +209,77 @@ public class BluetoothApi {
         public void run() {
             try {
                 while (true) {
-                    //SLog.e(TAG, "Bluetooth Consumer wait before 1");
+                    SLog.e(TAG, "Consumer Runnable 1");
                     mWriteAsycEvent =  sendqueue.consume();
-                    resetTimerTask();
-                    writeByte(mWriteAsycEvent.getByte());
-                    //SLog.e(TAG, "Bluetooth Consumer wait before 2");
-                    synchronized (synchronizedLock) {
-                        try {  
-                            //SLog.e(TAG, "Bluetooth Consumer wait before 3");
-                            synchronizedLock.wait();
-                        } catch (Exception e) {
-                            SLog.e(TAG, e);
+                    if (mTempAsycEvents.size() > 0) {
+                        for (AsycEvent asycEvent : mTempAsycEvents) {
+                            sendqueue.offer(asycEvent);
                         }
-                        //SLog.e(TAG, "Bluetooth Consumer wait before 4");
+                        //清空临时存储元素
+                        mTempAsycEvents.clear();
                     }
+                    SLog.e(TAG, "Consumer Runnable 2");
+                    resetTimerTask();
+                    mWriteResult = writeByte(mWriteAsycEvent.getByte());
+                    if (mWriteResult) {
+                        synchronized (synchronizedLock) {
+                            try {  
+                                SLog.e(TAG, "Consumer Runnable 3");
+                                synchronizedLock.wait();
+                                SLog.e(TAG, "Consumer Runnable 4");
+                            } catch (Exception e) {
+                                SLog.e(TAG, e);
+                            }
+                        }
+                    } else if (!mWriteResult && mWriteAsycEvent.isAck) {
+                      continue;  
+                    } else {
+                        //将队列的内容保存下来
+                        if (sendqueue.queuesize() > 0) { //队列中还有内容
+                            for (int i = 0; i < sendqueue.queuesize(); i++) {
+                                if (sendqueue.poll() != null) {
+                                    mTempAsycEvents.add(sendqueue.poll());
+                                }   
+                            }
+                        }
+                        
+                        sendqueue.offer(mWriteAsycEvent);
+                        //sendqueue.clearqueue(); // 清除命令队列
+                        
+                        //RecvEvent(mWriteAsycEvent);
+                    }
+                    
+                    
+                    
+                    /*else { // Command写失败，需重试
+                        //RecvEvent(mWriteAsycEvent);
+                        mWriteResult = writeByte(mWriteAsycEvent.getByte());
+                        if (mWriteResult) {
+                            synchronized (synchronizedLock) {
+                                try {  
+                                    SLog.e(TAG, "Consumer Runnable 3");
+                                    synchronizedLock.wait();
+                                    SLog.e(TAG, "Consumer Runnable 4");
+                                } catch (Exception e) {
+                                    SLog.e(TAG, e);
+                                }
+                            }
+                        } else {
+                            mWriteResult = writeByte(mWriteAsycEvent.getByte());
+                            if (mWriteResult) {
+                                synchronized (synchronizedLock) {
+                                    try {  
+                                        SLog.e(TAG, "Consumer Runnable 3");
+                                        synchronizedLock.wait();
+                                        SLog.e(TAG, "Consumer Runnable 4");
+                                    } catch (Exception e) {
+                                        SLog.e(TAG, e);
+                                    }
+                                }
+                            } 
+                        }
+                    }*/
+                    
                 }
             } catch (InterruptedException ex) {
                 SLog.e(TAG, ex);
@@ -279,6 +323,12 @@ public class BluetoothApi {
             return asyceventqueue.element();
         }
         
+        // 消费数据
+        public AsycEvent poll() throws InterruptedException {
+            // 取数据 但是不阻塞
+            return asyceventqueue.poll();
+        }
+        
         // wait
         public void waitfor() throws InterruptedException {
             asyceventqueue.wait();
@@ -287,6 +337,17 @@ public class BluetoothApi {
         // wait
         public void clearqueue() throws InterruptedException {
             asyceventqueue.clear();
+        }
+        
+       // size
+        public int queuesize() throws InterruptedException {
+            return asyceventqueue.size();
+        }
+        
+        // size
+        public void offer(AsycEvent asycEvent) throws InterruptedException {
+            asyceventqueue.offer(asycEvent);
+             //asyceventqueue.add(asycEvent);
         }
     }
     

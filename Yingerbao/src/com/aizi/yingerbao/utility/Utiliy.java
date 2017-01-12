@@ -710,7 +710,7 @@ public class Utiliy {
                             BatchResult result = o.get(i);
                             BmobException ex =result.getError();
                             if(ex==null){
-                                SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
+                                //SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
                             }else{
                                 SLog.e(TAG, i+" failed : "+ex.getMessage()+","+ex.getErrorCode());
                             }

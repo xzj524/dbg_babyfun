@@ -311,7 +311,7 @@ public class SyncDeviceImpl implements SyncDevice{
             = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_BIND, 
                     Constant.BASE_VERSION_CODE, keyPayload);
             new CommandSendRequest(mContext, bsl2Msg).addSendTask();
-            String str = "checkDeviceValid";
+            String str = "checkDeviceValid add send task";
             Utiliy.dataToFile(str);
         }
         return null;
@@ -419,5 +419,41 @@ public class SyncDeviceImpl implements SyncDevice{
             SLog.e(TAG, e);
         }
         return configinfo;
+    }
+
+    @Override
+    public DeviceResponse<?> setTemperatureAlarmConfig(double highlevel, double lowlevel) {
+        SLog.e(TAG, " setTemperatureAlarmConfig ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 17;
+            keyPayload.keyLen = 4;
+            keyPayload.keyValue = getTempConfig(mContext, highlevel, lowlevel);
+            
+            BaseL2Message bsl2Msg 
+            = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+            new CommandSendRequest(mContext, bsl2Msg).addSendTask();
+            String str = "updateDeviceConfig";
+            Utiliy.dataToFile(str);
+        }
+        return null;
+    }
+
+    private byte[] getTempConfig(Context context, double highlevel, double lowlevel) {
+        byte[] tempconfig = new byte[4];
+        try {
+            String[] dString = String.valueOf(highlevel).split("\\.");
+            tempconfig[0] = (byte)(Integer.parseInt(dString[0]));
+            tempconfig[1] = (byte)(Integer.parseInt(dString[1]));
+            
+            dString = String.valueOf(lowlevel).split("\\.");
+            tempconfig[2] = (byte)(Integer.parseInt(dString[0]));
+            tempconfig[3] = (byte)(Integer.parseInt(dString[1]));
+            
+        } catch (Exception e) {
+            SLog.e(TAG, e);
+        }
+        return tempconfig;
     }
 }

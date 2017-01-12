@@ -126,11 +126,32 @@
                 android:textColor="@color/gray"
                 android:background="@color/login_user" />
             
+           <RelativeLayout
+                android:id="@+id/login_option"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp">
+
+                 
+                 <TextView 
+                     android:id="@+id/register_user_account"
+                     android:layout_width="wrap_content"
+		             android:layout_height="wrap_content"
+		             android:textColor="@color/white"
+		             android:layout_centerVertical="true"
+		             android:layout_alignParentRight="true"
+		             android:layout_marginRight="10dp"
+		             android:textSize="@dimen/common_device_status_text_size"
+		             android:text="注册账号" />                
+                             
+            </RelativeLayout>
+            
        <RelativeLayout 
            android:id="@+id/user_action"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:paddingTop="20dp">
+           android:paddingTop="20dp"
+           android:visibility="gone">
                  
            <ImageView 
                android:id="@+id/forget_password"

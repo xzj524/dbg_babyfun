@@ -42,6 +42,8 @@ public interface SyncDevice {
     DeviceResponse<?> updateDeviceRom();
 
     DeviceResponse<?> updateDeviceConfig();
+    
+    DeviceResponse<?> setTemperatureAlarmConfig(double highlevel, double lowlevel);
 
 
 }

@@ -141,31 +141,26 @@ onTitleBarClickListener {
                 if (progress <= mCurSyncDataLen) {
                     mProgressBar.setVisibility(View.VISIBLE); 
                     mProgressBar.setProgress(++progress);
-                    mHandler.sendEmptyMessageDelayed(MSG_PROGRESS_UPDATE, 100);
+                    mHandler.sendEmptyMessageDelayed(MSG_PROGRESS_UPDATE, 50);
                 } else {
                     mHandler.removeMessages(MSG_PROGRESS_UPDATE);
                 }
             } else if (msg.what == MSG_PROGRESS_COMPLETED) {
                 mCurSyncDataLen = 0;
                 int res = msg.arg1;
-                //if (res == 0 || res == 1) { // 数据同步完成或者没有产生新的数据
-                    mHandler.sendEmptyMessage(MSG_PROGRESS_AUTO_COMPLETED);
-                //} 
-                    /*else if (res == 2) { // 同步数据出错
-                    mDevConnectFragment.setSyncDataFailed();
-                    mDevConnectFragment.doUpdateStatusClick();
-                }*/
+                mHandler.sendEmptyMessage(MSG_PROGRESS_AUTO_COMPLETED);
             } else if (msg.what == MSG_PROGRESS_AUTO_COMPLETED) {
                 progress = mProgressBar.getProgress();
                 if (progress < 100) {
                     mProgressBar.setProgress(++progress);
-                    mHandler.sendEmptyMessageDelayed(MSG_PROGRESS_AUTO_COMPLETED, 100);
-                    SLog.e(TAG, "MSG_PROGRESS_AUTO_COMPLETED 3");
+                    mHandler.sendEmptyMessageDelayed(MSG_PROGRESS_AUTO_COMPLETED, 50);
                 } else {
                     mHandler.removeMessages(MSG_PROGRESS_AUTO_COMPLETED);
                     if (mDevConnectFragment != null) {
                         mDevConnectFragment.setSyncDataSucceed();
                         mDevConnectFragment.doUpdateStatusClick();
+                        SLog.e(TAG, "doUpdateStatusClick setSyncDataSucceed "
+                                    + mDevConnectFragment.getCurrentState());
                         PrivateParams.setSPLong(getApplicationContext(),
                                 Constant.SYNC_DATA_SUCCEED_TIMESTAMP, System.currentTimeMillis());
                     } 
@@ -220,11 +215,16 @@ onTitleBarClickListener {
                 if (mProgressBar != null) {
                     if (isShowProgress) {
                         mProgressBar.setProgress(0);
-                        //mProgressBar.setVisibility(View.VISIBLE); 
+                    } else {
+                        mProgressBar.setVisibility(View.GONE); 
                     }
-                    mProgressBar.setVisibility(View.GONE);  
+                     
                 }
             }
+        } else if (action.equals("com.aizi.yingerbao.sync_data_fail")) {
+            Message message = new Message(); 
+            message.what = MSG_PROGRESS_COMPLETED;
+            mHandler.sendMessage(message); 
         }
     }
 

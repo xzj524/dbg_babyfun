@@ -13,6 +13,8 @@ import java.util.List;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
+import android.widget.Toast;
 import cn.bmob.v3.BmobBatch;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BatchResult;
@@ -179,16 +181,13 @@ public class MessageParse {
                 if (PrivateParams.getSPInt(mContext, "check_device_status", 0) == 2) {
                     return;// 表示设备身份验证超时
                 }
-                // 设置检查设备状态，成功
-                PrivateParams.setSPInt(mContext, "check_device_status", 3);
+               
                 
                 if (PrivateParams.getSPInt(mContext, "connect_interrupt", 0) == 1) {
                     return; // 检测到连接过程中断
                 }
                 
-                if (PrivateParams.getSPString(mContext, Constant.AIZI_IS_CONNECT_REPEAT).equals("true")) {
-                    return;
-                }
+                
                 
                 Thread.sleep(500); // 身份验证完成之后延时500ms
 
@@ -205,9 +204,13 @@ public class MessageParse {
 
                 setDeviceTime(devCheckInfo); // 校时操作
                 
+                if (PrivateParams.getSPString(mContext, Constant.AIZI_IS_CONNECT_REPEAT).equals("true")) {
+                    return; // 连接断开之后重试，不用继续读取数据。
+                }
+                
                 long curtime = System.currentTimeMillis();
                 long syncdatatime = PrivateParams.getSPLong(mContext, Constant.SYNC_DATA_SUCCEED_TIMESTAMP);
-                if ((curtime - syncdatatime > WAIT_LOAD_DATA_TIME && totaldatalen > 60) 
+                if ((curtime - syncdatatime > WAIT_LOAD_DATA_TIME || totaldatalen > 60) 
                         || devCheckInfo.mNoSyncBreathDataLength > 0) {           
                     // 距上次同步数据超过六小时，并且未同步数据大于60,或者呼吸停滞数据存在时.
                     SLog.e(TAG, "sync data has consumed six hour ");
@@ -629,7 +632,7 @@ public class MessageParse {
                             BatchResult result = o.get(i);
                             BmobException ex =result.getError();
                             if(ex==null){
-                                SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
+                                //SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
                             }else{
                                 SLog.e(TAG, i+" failed : "+ex.getMessage()+","+ex.getErrorCode());
                             }
@@ -926,7 +929,6 @@ public class MessageParse {
     }
 
     public void handleSettings(List<KeyPayload> params) {
-        // TODO Auto-generated method stub 
         try {
             for (KeyPayload kpload : params) {
                 if (kpload.key == 4) { // 请求时间返回
@@ -969,8 +971,12 @@ public class MessageParse {
                         if (settimeresult == 0 || settimeresult == 1) {
                             //设置时间成功
                             Utiliy.reflectTranDataType(mContext, 0);
+                            SLog.e(TAG, " mIsDeviceTimed = " + mIsDeviceTimed 
+                                     + " mIsDeviceActivited = " + mIsDeviceActivited);
                             if (!mIsDeviceTimed && mIsDeviceActivited) {
                                 mIsDeviceTimed = true;
+                                // 设置检查设备状态，成功
+                                PrivateParams.setSPInt(mContext, "check_device_status", 3);
                                 Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
                                 intent.putExtra(Constant.IS_SYNC_DATA, mIsSyncData);
                                 EventBus.getDefault().post(intent); 
@@ -994,8 +1000,10 @@ public class MessageParse {
                             PrivateParams.setSPInt(mContext, Constant.ACTIVATE_RESULT, 1);
                             result =  "Activate device success "; //激活设备成功
                             Utiliy.reflectTranDataType(mContext, 0);
-                            if (mIsDeviceTimed && !mIsDeviceActivited) {
-                                mIsDeviceActivited = true;
+                            mIsDeviceActivited = true;
+                            if (mIsDeviceTimed) {      
+                                // 设置检查设备状态，成功
+                                PrivateParams.setSPInt(mContext, "check_device_status", 3);
                                 Intent intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
                                 intent.putExtra(Constant.IS_SYNC_DATA, mIsSyncData);
                                 EventBus.getDefault().post(intent); 
@@ -1013,6 +1021,32 @@ public class MessageParse {
                         SLog.e(TAG, result);
                         Utiliy.dataToFile(result);
                     }
+                } else if (kpload.key == 18) { // 温度范围设置返回key
+                    if (kpload.keyLen == 1) {
+                        int settempalarmresult = kpload.keyValue[0] & 0x0f;
+                        if (settempalarmresult == 0) { // 设置成功
+                            Toast.makeText(mContext.getApplicationContext(), "设置温度报警值成功", Toast.LENGTH_SHORT).show();
+                            SLog.e(TAG, "set temperature ALARM succeed");
+                           
+                            String newalarmvalue = PrivateParams.getSPString(mContext, Constant.DATA_TEMP_ALARM_VALUE_NEW);
+                            if (TextUtils.isEmpty(newalarmvalue)) {
+                                PrivateParams.setSPString(mContext, Constant.DATA_TEMP_ALARM_VALUE_NEW, "37.5");
+                            } else {
+                                PrivateParams.setSPString(mContext, Constant.DATA_TEMP_ALARM_VALUE_OLD, newalarmvalue);
+                            }
+                            return;
+                        } else if (settempalarmresult == 1) {
+                            Toast.makeText(mContext, "设置温度报警值不合法", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, "设置温度报警值失败", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(mContext, "设置温度报警值失败", Toast.LENGTH_SHORT).show();
+                    }
+                    String oldalarmvalue = PrivateParams.getSPString(mContext, Constant.DATA_TEMP_ALARM_VALUE_OLD);
+                    if (!TextUtils.isEmpty(oldalarmvalue)) {
+                        PrivateParams.setSPString(mContext, Constant.DATA_TEMP_ALARM_VALUE_NEW, oldalarmvalue);
+                    }    
                 }
             }
         } catch (Exception e) {

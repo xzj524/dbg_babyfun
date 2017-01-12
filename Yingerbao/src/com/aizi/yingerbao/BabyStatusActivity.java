@@ -14,20 +14,17 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.chart.BarChartFragment;
 import com.aizi.yingerbao.chart.SleepyChart;
-import com.aizi.yingerbao.chart.SleepyPieChart;
 import com.aizi.yingerbao.chart.SleepyChart.SetTextViewListener;
+import com.aizi.yingerbao.chart.SleepyPieChart;
 import com.aizi.yingerbao.device.fragment.BabyRealTimeStatusFragment;
 import com.aizi.yingerbao.deviceinterface.AsyncDeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.receiver.BabyStatusReceiver;
-import com.aizi.yingerbao.receiver.BabyStatusReceiver.DataStatusInteraction;
 import com.aizi.yingerbao.service.BluetoothService;
 import com.aizi.yingerbao.utility.Utiliy;
 
-public class BabyStatusActivity extends Activity implements DataStatusInteraction, SetTextViewListener{
+public class BabyStatusActivity extends Activity implements SetTextViewListener{
     
     BabyRealTimeStatusFragment realTimeStatusFragment;
     BarChartFragment babyChartFragment;
@@ -64,8 +61,8 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         AsyncDeviceFactory.getInstance(getApplicationContext()).getAllSyncInfo();
         SLog.e("BabyStatusActivity", "getAllSyncInfo");
         
-        BabyStatusReceiver babyStatusReceiver = new BabyStatusReceiver();
-        babyStatusReceiver.setDataStatusInteractionListener(this);
+        //BabyStatusReceiver babyStatusReceiver = new BabyStatusReceiver();
+        //babyStatusReceiver.setDataStatusInteractionListener(this);
   
         mFragmentMan = getFragmentManager();
         sleepyChartFragment = (SleepyChart) mFragmentMan.findFragmentById(R.id.babySleepChartFragment);
@@ -90,12 +87,7 @@ public class BabyStatusActivity extends Activity implements DataStatusInteractio
         super.onStart();
     }
 
-    @Override
-    public void setData(Intent intent) {
-        // TODO Auto-generated method stub
-        //Toast.makeText(getApplicationContext(), " 使能notification", Toast.LENGTH_SHORT).show();
-        int dataType = intent.getIntExtra(BluetoothService.EXTRA_TYPE, 0);
-    }
+
    
     class MyHandler extends Handler{
         @Override

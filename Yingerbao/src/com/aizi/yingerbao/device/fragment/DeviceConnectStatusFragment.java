@@ -107,7 +107,6 @@ public class DeviceConnectStatusFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mCurrentState = ConnectDeviceState.IDEL;
     }
 
     @Override
@@ -140,6 +139,7 @@ public class DeviceConnectStatusFragment extends Fragment{
         }
         SLog.e(TAG, "current state = " + mCurrentState);
         doUpdateStatusClick();
+        SLog.e(TAG, "doUpdateStatusClick onCreateView " + mCurrentState);
         
         EventBus.getDefault().register(this);
         registerMessageReceiver();
@@ -194,6 +194,7 @@ public class DeviceConnectStatusFragment extends Fragment{
         @Override
         public void onClick(View v) {
             doUpdateStatusClick();
+            SLog.e(TAG, "doUpdateStatusClick onClick " + mCurrentState);
         }
     }
 
@@ -280,8 +281,6 @@ public class DeviceConnectStatusFragment extends Fragment{
                 Intent checkintent = new Intent("com.aizi.yingerbao.sync_finish");
                 mListener.onDeviceConnected(checkintent);
             }
-           
-            
         } else if (mCurrentState == ConnectDeviceState.FAIL) {
             SLog.e(TAG, "Scan Bluetooth Service failed or disconnect");
             mIsConnectingAnimation = false;
@@ -377,7 +376,7 @@ public class DeviceConnectStatusFragment extends Fragment{
             mSyncDataViewGroup.setVisibility(View.GONE);
             mCheckDeviceViewGroup.setVisibility(View.GONE);
         } else if (mCurrentState == ConnectDeviceState.REPEAT_SYNCING_DATA) {
-            mCurrentState = ConnectDeviceState.SYNCING_DATA;
+            mCurrentState = ConnectDeviceState.REPEAT_SYNC_DATA;
             mProgressImageView.startAnimation(mProgressAnimation);
             
             DeviceFactory.getInstance(mContext).getExceptionEvent();
@@ -438,7 +437,8 @@ public class DeviceConnectStatusFragment extends Fragment{
         REPEAT_CHECKING_DEVICE, //重新校验设备
         CHECKING_DEVICE_FAILED, // 校验设备失败
         SYNCING_DATA, // 正在同步数据
-        REPEAT_SYNCING_DATA, // 重新同步数据
+        REPEAT_SYNC_DATA, // 重新同步数据
+        REPEAT_SYNCING_DATA, // 重新同步数据中
         SYNC_DATA_FAILED, // 同步数据失败
         SYNC_DATA_SUCCEED, // 同步数据成功
         FATAL_DEVICE_NOT_CONNECT, // 无法连接
@@ -484,12 +484,15 @@ public class DeviceConnectStatusFragment extends Fragment{
             SLog.e(TAG, "Device is connected!!  Ready for check device"); 
             setCurrentStateConnected();
             doUpdateStatusClick();
+            SLog.e(TAG, "doUpdateStatusClick onEventMainThread ACTION_GATT_SERVICES_DISCOVERED " + mCurrentState);
         } else if (action.equals(BluetoothService.ACTION_GATT_DISCONNECTED)) {
             setCurrentStateFailed();
             doUpdateStatusClick();
+            SLog.e(TAG, "doUpdateStatusClick onEventMainThread " + mCurrentState);
         } else if (action.equals(Constant.DATA_TRANSFER_COMPLETED)) {
             setSyncDataSucceed();
             doUpdateStatusClick();
+            SLog.e(TAG, "doUpdateStatusClick onEventMainThread  DATA_TRANSFER_COMPLETED " + mCurrentState);
             Intent intent = new Intent(mContext, YingerBaoActivity.class);
             startActivity(intent);
         } else if (action.equals(Constant.BLUETOOTH_SCAN_FOUND)) {
@@ -505,6 +508,7 @@ public class DeviceConnectStatusFragment extends Fragment{
         } else if (action.equals(Constant.BLUETOOTH_SCAN_NOT_FOUND)) {
             setCurrentStateFailed();
             doUpdateStatusClick();
+            SLog.e(TAG, "doUpdateStatusClick onEventMainThread  BLUETOOTH_SCAN_NOT_FOUND " + mCurrentState);
         } else if (action.equals(Constant.ACTION_CHECKDEVICE_SUCCEED)) {
             boolean isSyncData = true;
             if (event.hasExtra(Constant.IS_SYNC_DATA)) {
@@ -516,9 +520,11 @@ public class DeviceConnectStatusFragment extends Fragment{
                 mCurrentState = ConnectDeviceState.SYNC_DATA_SUCCEED;
             } 
             doUpdateStatusClick();
+            SLog.e(TAG, "doUpdateStatusClick onEventMainThread  ACTION_CHECKDEVICE_SUCCEED " + mCurrentState);
         } else if (action.equals(Constant.ACTION_CHECKDEVICE_FAILED)) {
             setCheckDeviceFailed();
             doUpdateStatusClick();
+            SLog.e(TAG, "doUpdateStatusClick onEventMainThread  ACTION_CHECKDEVICE_FAILED " + mCurrentState);
         }
     } 
   
@@ -556,14 +562,24 @@ public class DeviceConnectStatusFragment extends Fragment{
                             // 设置检查设备状态，失败
                             PrivateParams.setSPInt(mContext, "check_device_status", 2);
                             SLog.e(TAG, "CHECKING_DEVICE_FAILED ");  
+                            doUpdateStatusClick();
+                            SLog.e(TAG, "doUpdateStatusClick MessageReceiver  CHECKING_DEVICE " + mCurrentState);
                         }
                         break;
                     case 2:
                         if (mCurrentState == ConnectDeviceState.SYNCING_DATA) {
-                            mCurrentState = ConnectDeviceState.SYNC_DATA_FAILED;
-                            // 读取数据状态，失败
-                            PrivateParams.setSPInt(mContext, "sync_data_status", 2);
-                            SLog.e(TAG, "SYNC_DATA_FAILED ");  
+                            if (!Utiliy.isBluetoothConnected(mContext.getApplicationContext())) { // 在蓝牙连接失败的情况下，更新状态
+                                mCurrentState = ConnectDeviceState.SYNC_DATA_FAILED;
+                                // 读取数据状态，失败
+                                PrivateParams.setSPInt(mContext, "sync_data_status", 2);
+                                SLog.e(TAG, "SYNC_DATA_FAILED ");  
+                                doUpdateStatusClick();
+                                SLog.e(TAG, "doUpdateStatusClick MessageReceiver  SYNCING_DATA " + mCurrentState);
+                            } else {
+                                Intent syncintent = new Intent("com.aizi.yingerbao.sync_data_fail");
+                                mListener.onDeviceConnected(syncintent); // 展示进度条
+                            }
+                           
                         }
                         break;
                     case 3:                          
@@ -574,12 +590,14 @@ public class DeviceConnectStatusFragment extends Fragment{
                             // 搜索设备状态，失败
                             PrivateParams.setSPInt(mContext, "search_device_status", 2);
                             SLog.e(TAG, "SEARCH_DEVICE_FAILED ");  
+                            doUpdateStatusClick();
+                            SLog.e(TAG, "doUpdateStatusClick MessageReceiver  SEARCHING_DEVICE " + mCurrentState); 
                         }
                         break;
                     default:
                         break;
                   }
-                  doUpdateStatusClick();
+                  
               }
           }
       }

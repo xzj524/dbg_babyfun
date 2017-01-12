@@ -12,7 +12,7 @@
         android:layout_width="match_parent"  
         android:layout_height="wrap_content"  
         custom:titleText="@string/about_title"   
-        custom:titleSize="12sp"   
+        custom:titleSize="10sp"   
         custom:titleColor="@color/gray"   
         custom:leftBtn="@drawable/title_back_icon_pressed"/> 
         

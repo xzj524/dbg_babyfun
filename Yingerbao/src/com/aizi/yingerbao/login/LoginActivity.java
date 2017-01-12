@@ -31,12 +31,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobConfig;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.smssdk.SMSSDK;
 
 import com.aizi.yingerbao.ConnectDeviceActivity;
 import com.aizi.yingerbao.R;
+import com.aizi.yingerbao.UserActivity;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.userdatabase.UserAccountDataBase;
@@ -62,6 +65,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private View mLoginFormView;
     private ImageView mForgotPasswordView;
     private ImageView mRegisterView;
+    
+    TextView mResetPassCode;
+    TextView mRegisterAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,26 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         setContentView(R.layout.activity_login);
         
         SMSSDK.initSDK(this, "18320567edb8c", "099b55f2d0f7a8897a6fd1b70e0d4b55");
+        
+        Bmob.initialize(this, "d32cb6a0c62e9652f4f618ad60a76525", "Bomb");
+        
+        BmobConfig config =new BmobConfig.Builder(this)
+        //设置appkey
+        .setApplicationId("d32cb6a0c62e9652f4f618ad60a76525")
+        //请求超时时间（单位为秒）：默认15s
+        .setConnectTimeout(30)
+        //文件分片上传时每片的大小（单位字节），默认512*1024
+        .setUploadBlockSize(1024*1024)
+        //文件的过期时间(单位为秒)：默认1800s
+        .setFileExpiration(2500)
+        .build();
+        Bmob.initialize(config);
+        
+        if (PrivateParams.getSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 0) == 1) {
+            Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+            startActivity(intent);
+            finish();
+        }
       
         // Set up the login form.
         mPhoneView = (AutoCompleteTextView) findViewById(R.id.phonenumber);
@@ -111,6 +137,30 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         //注册账号
         mRegisterView = (ImageView) findViewById(R.id.register_account);
         mRegisterView.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+        
+        
+      /*  mResetPassCode = (TextView) findViewById(R.id.reset_passcode);
+        mResetPassCode.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });*/
+        
+        //注册账号
+        mRegisterAccount = (TextView) findViewById(R.id.register_user_account);
+        mRegisterAccount.setOnClickListener(new OnClickListener() {
             
             @Override
             public void onClick(View v) {
@@ -183,6 +233,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     if (e == null) {
                         PrivateParams.setSPInt(getApplicationContext(), Constant.LOGIN_VALUE, 1);
                         PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USER_ACCOUNT, phonenumber);
+                        Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+                        startActivity(intent);
                         finish();
                     } else {
                         SLog.e(TAG, "login errorcode = " + e.getErrorCode()
@@ -349,9 +401,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             if (success) {
                 PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USER_ACCOUNT, mPhoneNumber);
-                finish();
                 Intent intent = new Intent(getApplicationContext(), ConnectDeviceActivity.class);
                 startActivity(intent);
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

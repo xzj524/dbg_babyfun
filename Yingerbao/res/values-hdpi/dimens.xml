@@ -12,7 +12,7 @@
 	<dimen name="data_calender_left_margin">20dp</dimen>
 	<dimen name="data_calender_text_size">24px</dimen>
 	<dimen name="breath_data_calender_icon_left_margin">64dp</dimen>
-	<dimen name="temp_data_calender_icon_left_margin">154dp</dimen>
+	<dimen name="temp_data_calender_icon_left_margin">10dp</dimen>
 	
 	 <!-- 搜索设备界面 -->
     <dimen name="search_dev_text_size">24px</dimen>

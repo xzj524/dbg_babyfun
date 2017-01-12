@@ -53,7 +53,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
         
-        Bmob.initialize(this, "d32cb6a0c62e9652f4f618ad60a76525", "Bomb");
+       /* Bmob.initialize(this, "d32cb6a0c62e9652f4f618ad60a76525", "Bomb");
         
         BmobConfig config =new BmobConfig.Builder(this)
         //设置appkey
@@ -65,7 +65,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         //文件的过期时间(单位为秒)：默认1800s
         .setFileExpiration(2500)
         .build();
-        Bmob.initialize(config);
+        Bmob.initialize(config);*/
         
         
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
@@ -74,6 +74,7 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         UpdateHelper.getInstance().autoUpdate(getPackageName(), false, intervalMillis);
         
         CommandCenter.getInstance(getApplicationContext());
+        BluetoothApi.getInstance(getApplicationContext());
         
         MobclickAgent.startWithConfigure(
                 new UMAnalyticsConfig(getApplicationContext(), 
@@ -121,7 +122,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             }
         }
         
-        //PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USERACTIVTY_QUIT, "false");
         Constant.AIZI_USERACTIVTY_QUIT = 0;
     }
 
@@ -154,9 +154,6 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
             PrivateParams.setSPInt(getApplicationContext(), "sync_data_status", 0);
             PrivateParams.setSPInt(getApplicationContext(), "search_device_status", 0);
             PrivateParams.setSPInt(getApplicationContext(), "connect_interrupt", 0);
-            //BluetoothApi.getInstance(getApplicationContext()).unbindBluetoothService();
-            //PrivateParams.setSPString(getApplicationContext(), Constant.AIZI_USERACTIVTY_QUIT, "true");
-            
             cancelAllAlarmPendingIntent(getApplicationContext());
         } catch (Exception e) {
             SLog.e(TAG, e);

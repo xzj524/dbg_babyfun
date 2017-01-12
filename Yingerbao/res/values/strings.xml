@@ -16,7 +16,7 @@
     <string name="click_start">点击进行连接同步数据</string>
     <string name="start_connect">正在搜索婴儿保</string>
     <string name="user_notify">请将婴儿保靠近手机\n\t\t摇晃持续2秒以上</string>
-    <string name="check_device">正在校验婴儿保</string>
+    <string name="check_device">正在验证婴儿保</string>
     <string name="check_device_fail">校验设备失败\n请重试</string>
     <string name="sync_data">正在同步数据...</string>
     <string name="show_device_status">宝宝状态</string>
@@ -62,7 +62,8 @@
     <!-- 登录注册界面 -->
     <string name="prompt_phonenumber">请输入手机号码</string>
     <string name="prompt_password">请输入密码 </string>
-    <string name="prompt_reset_password">请输入新密码 </string>
+    <string name="prompt_reset_old_password">请输入旧密码 </string>
+    <string name="prompt_reset_new_password">请输入新密码 </string>
     <string name="prompt_register_password">请输入密码 </string>
     <string name="prompt_checkcode">请输入验证码</string>
     <string name="action_sign_in"> 登    录</string>

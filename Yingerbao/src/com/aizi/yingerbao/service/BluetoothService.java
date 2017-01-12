@@ -114,14 +114,15 @@ public class BluetoothService extends Service {
                 connectionAction = ACTION_GATT_DISCONNECTED;
                 SLog.e(TAG, "Disconnected from GATT server.");   
                 PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-                if (mBluetoothGatt != null) {
-                    mBluetoothGatt.close();
-                    if (!TextUtils.isEmpty(mBluetoothDeviceAddress)
-                            && Constant.AIZI_USERACTIVTY_QUIT != 1) {
-                        connect(mBluetoothDeviceAddress, true);
-                    }
+//                if (mBluetoothGatt != null) {
+//                    mBluetoothGatt.close();
+                close();
+                if (!TextUtils.isEmpty(mBluetoothDeviceAddress)
+                        && Constant.AIZI_USERACTIVTY_QUIT != 1) {
+                    connect(mBluetoothDeviceAddress, true);
                 }
-                broadcastUpdate(connectionAction);
+                //}
+                //broadcastUpdate(connectionAction);
             }
         }
 

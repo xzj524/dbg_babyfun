@@ -16,14 +16,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import cn.qqtheme.framework.picker.NumberPicker;
+
 import com.aizi.yingerbao.baseheader.BaseL2Message;
 import com.aizi.yingerbao.baseheader.KeyPayload;
-import com.aizi.yingerbao.bluttooth.BluetoothApi;
-import com.aizi.yingerbao.command.CommandCenter;
 import com.aizi.yingerbao.command.CommandSendRequest;
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.deviceinterface.DeviceFactory;
-import com.aizi.yingerbao.eventbus.AsycEvent;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.utility.PrivateParams;
 import com.aizi.yingerbao.utility.Utiliy;
@@ -246,30 +245,30 @@ public class TestActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-               // PrivateParams.setSPInt(mContext, Constant.CUR_STATISTIC_CHARGE, devCheckInfo.mDeviceCharge);
-                
                 int charg=PrivateParams.getSPInt(getApplicationContext(), Constant.CUR_STATISTIC_CHARGE, 0);
                 mDevicechargetTextView.setText("" + charg);
                 
-                byte[] bsdata = new byte[1];
-                bsdata[0] = 9;
-                //DeviceFactory.getInstance(getApplicationContext()).updateDeviceConfig();
-                //BluetoothApi.getInstance(getApplicationContext()).RecvEvent(new AsycEvent(bsdata ));
-                
-                
-                KeyPayload keyPayload = new KeyPayload();
-                keyPayload.key = 5;
-                keyPayload.keyLen = 0;
-                //keyPayload.keyValue = getProfileInfo();
-                
-                BaseL2Message bsl2Msg 
-                = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
-                        Constant.BASE_VERSION_CODE, keyPayload);
-                new CommandSendRequest(getApplicationContext(), bsl2Msg).addSendTask();
-                //CommandSendRequest commandsendRequest = null;
-                //CommandCenter.getInstance(getApplicationContext()).addCallbackRequest(commandsendRequest);
+                NumberPicker picker = new NumberPicker(TestActivity.this);
+                picker.setAnimationStyle(R.style.Animation_CustomPopup);
+                picker.setOffset(1);//偏移量
+                picker.setRange(30, 43, 0.5);//数字范围
+                picker.setSelectedItem(37.5);
+                picker.setLabel("℃");
+                picker.setTitleText("报警温度值");
+                picker.setOnNumberPickListener(new NumberPicker.OnNumberPickListener() {
+                    @Override
+                    public void onNumberPicked(int index, Number item) {
+                        //showToast("index=" + index + ", item=" + item.doubleValue());
+                        SLog.e(TAG, "index=" + index + ", item=" + item.doubleValue());
+                    }
+                });
+                picker.show();
             }
         });
+        
+        
+        
+        
         
     }
     

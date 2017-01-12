@@ -37,7 +37,7 @@ public class CommandCenter {
         mTimer = new Timer(true);
     }
 
-    public static CommandCenter getInstance(Context context) {
+    public static synchronized CommandCenter getInstance(Context context) {
         if (mInstance != null) {
             return mInstance;
         } else {
@@ -146,59 +146,7 @@ public class CommandCenter {
         mTimerTask = new CommandTimerTask();
         mTimer.schedule(mTimerTask, SLEEP_TIME);
     }
-    
-    
-    
-   static AZRunnable timeOutRunnable = new AZRunnable("sendtimeOutRunnable", AZRunnable.RUNNABLE_TIMER) {
-        @Override
-        public void brun() {
-            try {
-                Thread.sleep(SLEEP_TIME);
-                synchronized (synchronizedLock) {
-                    
-                    if (Utiliy.isBluetoothConnected(mContext)) {
-                        Utiliy.reflectTranDataType(mContext, 2);
-                        SLog.e(TAG, "reflectTranDataType  2 mCountingNum = " + mCountingNum);
-                    } else {
-                        mRetryTimes = 0;
-                        mSendDataQueue.clear();
-                        synchronizedLock.notifyAll();
-                        SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
-                    }
-                    
-                    
-                    /*while (true) {
-                        if (mIsCompleted) {
-                            synchronizedLock.notifyAll();
-                            SLog.e(TAG, "Command is comleted!");
-                            break;
-                        } else {
-                            Thread.sleep(500);
-                            mCountingNum++;
-                            if (mCountingNum > 15) { // 超时
-                                if (Utiliy.isBluetoothConnected(mContext)) {
-                                    handleIntent(2);
-                                    SLog.e(TAG, "reflectTranDataType  2 mCountingNum = " + mCountingNum);
-                                } else {
-                                    mRetryTimes = 0;
-                                    BluetoothApi.getInstance(mContext).mSendDataQueue.clearqueue();
-                                    synchronizedLock.notifyAll();
-                                    SLog.e(TAG, "CommandCenter mCommandSendRequest  time out notifyALL");
-                                }
-                                
-                                break;
-                            }
-                            
-                        }
-                    }*/
-                }
-            } catch (Exception e) {
-                //SLog.e(TAG, e);
-            }
-        }
-    };
-    
-    
+        
  // 定义消费者
     class Consumer implements Runnable {
         private String instance;
