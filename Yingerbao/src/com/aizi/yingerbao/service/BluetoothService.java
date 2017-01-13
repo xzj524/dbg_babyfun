@@ -376,7 +376,7 @@ public class BluetoothService extends Service {
         }
         SLog.e(TAG, "mBluetoothGatt closed");
         
-        mBluetoothDeviceAddress = null;
+        //mBluetoothDeviceAddress = null;
         mBluetoothGatt.close();
         mBluetoothGatt = null;
         PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);

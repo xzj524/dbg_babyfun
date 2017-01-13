@@ -252,7 +252,8 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         rightAxis.setLabelCount(6);
   
         // no description text  
-        mTemperatureChart.setDescription("");// 数据描述  
+        mTemperatureChart.setDescription("采集历史温度");// 数据描述  
+        mTemperatureChart.setDescriptionColor(Color.WHITE);
         mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
       
         // enable / disable grid background  
