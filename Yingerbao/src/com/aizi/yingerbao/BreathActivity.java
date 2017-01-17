@@ -115,7 +115,6 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
         });
         
         mTimer = new Timer(true);
-        
         mBreathChart = (LineChart) findViewById(R.id.breath_line_chart);
         mBreathStopChart = (BarChart) findViewById(R.id.breath_stop_barchart);
         mControlBreathBtn = (Button) findViewById(R.id.control_breath_button);
@@ -719,7 +718,7 @@ public class BreathActivity extends Activity implements onTitleBarClickListener{
      */
     private void initBreathStopBarChart() {
         mBreathStopChart.setDescription("呼吸停滞分布（次数/小时）");
-        mBreathStopChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
+        mBreathStopChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_breath_data));
         mBreathStopChart.setDrawGridBackground(false);//设置网格背景
         mBreathStopChart.setScaleEnabled(true);//设置缩放
         mBreathStopChart.setDoubleTapToZoomEnabled(false);//设置双击不进行缩放

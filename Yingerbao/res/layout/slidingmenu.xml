@@ -72,9 +72,69 @@
     
             </RelativeLayout>
             
+              <LinearLayout
+		         android:id="@+id/line_2"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="@color/white"
+				 android:orientation="vertical" >
+		 		</LinearLayout>
+		 		
+                  
+            <RelativeLayout
+                android:id="@+id/device_explain"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+	                <TextView
+	                    android:id="@+id/device_explain_text"
+	                    android:layout_marginLeft="40dp"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerVertical="true"
+	                    android:duplicateParentState="true"
+	                    android:text="使用说明"
+	                    android:textColor="@color/white"
+		            android:textSize="@dimen/common_device_status_text_size"/>
+    
+            </RelativeLayout>
+            
             
           	   <LinearLayout
-		         android:id="@+id/line_2"
+		         android:id="@+id/line_3"
+				 android:layout_width="match_parent" 
+				 android:layout_height="1dp"
+				 android:background="@color/white"
+				 android:orientation="vertical" >
+		 		</LinearLayout>
+		 		
+          	   
+          	   <RelativeLayout
+                android:id="@+id/shopping_yingerbao"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:background="@drawable/setting_item_bottom_selector"
+                android:clickable="true"
+                android:paddingRight="@dimen/setting_item_icon_title_padding" >
+
+	                <TextView
+	                    android:id="@+id/shopping_text"
+	                    android:layout_marginLeft="40dp"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerVertical="true"
+	                    android:duplicateParentState="true"
+	                    android:text="购买婴儿保"
+	                    android:textColor="@color/white"
+		            android:textSize="@dimen/common_device_status_text_size"/>
+    
+            </RelativeLayout>
+
+             <LinearLayout
+		         android:id="@+id/line_4"
 				 android:layout_width="match_parent" 
 				 android:layout_height="1dp"
 				 android:background="@color/white"
@@ -104,7 +164,7 @@
             </RelativeLayout>
 
              <LinearLayout
-		         android:id="@+id/line_3"
+		         android:id="@+id/line_5"
 				 android:layout_width="match_parent" 
 				 android:layout_height="1dp"
 				 android:background="@color/white"

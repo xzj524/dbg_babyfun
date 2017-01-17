@@ -29,13 +29,13 @@ public class BluetoothApi {
     private static BluetoothApi mInstance;
     public BluetoothService mBluetoothService = null;
     // 建立一个装数据的队列
-    public SendDataQueue mSendDataQueue = new SendDataQueue();
+    SendDataQueue mSendDataQueue = new SendDataQueue();
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
     Consumer mConsumer = new Consumer(Constant.AIZI_SEND_DATA, mSendDataQueue);
     Context mContext;
     private WriteTimerTask mTimerTask;
     Timer mTimer;
-    static AsycEvent mWriteAsycEvent;
+    AsycEvent mWriteAsycEvent;
     private static final Object synchronizedLock = new Object();
     private int mRetryTimes = 0;
     private boolean mWriteResult = false;
@@ -86,14 +86,14 @@ public class BluetoothApi {
                     try {
                         if (intent.hasExtra("write_result")) {
                             if (!mWriteResult) { // 写失败，不处理回调
-                                SLog.e(TAG, "Do not handle onBluetoothWrite Result");
-                                Utiliy.logToFile("Do not handle onBluetoothWrite Result");
-                                /*synchronized (synchronizedLock) {
+                                SLog.e(TAG, "Do not handle onBluetoothWrite Result = " + mWriteResult);
+                                Utiliy.logToFile("Do not handle onBluetoothWrite Result = " + mWriteResult);
+                                synchronized (synchronizedLock) {
                                     if (mTimerTask != null) {
                                         mTimerTask.cancel();
                                     }
                                     synchronizedLock.notifyAll();
-                                }*/
+                                }
                                 return;
                             }
                             boolean write_result = intent.getBooleanExtra("write_result", false);
@@ -147,6 +147,7 @@ public class BluetoothApi {
             /*Producer producer = new Producer(Constant.AIZI_SEND_DATA, mSendDataQueue, event);
             mExecutorService.submit(producer);*/
             mSendDataQueue.offer(event);
+            SLog.e(TAG, "RecvEvent = " + Utiliy.printHexString(event.getByte()));
         } catch (Exception e) {
             SLog.e(TAG, e);
         }
@@ -189,7 +190,7 @@ public class BluetoothApi {
         public void run() {
             try {
                  //sendqueue.produce(mAsycEvent);
-                sendqueue.offer(mAsycEvent);
+                 sendqueue.offer(mAsycEvent);
             } catch (InterruptedException ex) {
                 SLog.e(TAG, ex);
             }
@@ -209,8 +210,6 @@ public class BluetoothApi {
         public void run() {
             try {
                 while (true) {
-                    SLog.e(TAG, "Consumer Runnable 1");
-                    mWriteAsycEvent =  sendqueue.consume();
                     if (mTempAsycEvents.size() > 0) {
                         for (AsycEvent asycEvent : mTempAsycEvents) {
                             sendqueue.offer(asycEvent);
@@ -218,6 +217,9 @@ public class BluetoothApi {
                         //清空临时存储元素
                         mTempAsycEvents.clear();
                     }
+                    SLog.e(TAG, "Consumer Runnable 1 size = " + sendqueue.queuesize());
+                    mWriteAsycEvent =  sendqueue.consume();
+                   
                     SLog.e(TAG, "Consumer Runnable 2");
                     resetTimerTask();
                     mWriteResult = writeByte(mWriteAsycEvent.getByte());
@@ -242,11 +244,8 @@ public class BluetoothApi {
                                 }   
                             }
                         }
-                        
                         sendqueue.offer(mWriteAsycEvent);
-                        //sendqueue.clearqueue(); // 清除命令队列
-                        
-                        //RecvEvent(mWriteAsycEvent);
+                        Thread.sleep(300);
                     }
                     
                     
@@ -347,7 +346,6 @@ public class BluetoothApi {
         // size
         public void offer(AsycEvent asycEvent) throws InterruptedException {
             asyceventqueue.offer(asycEvent);
-             //asyceventqueue.add(asycEvent);
         }
     }
     

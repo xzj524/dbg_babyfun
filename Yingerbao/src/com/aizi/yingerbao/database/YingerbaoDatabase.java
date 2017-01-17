@@ -66,11 +66,17 @@ public class YingerbaoDatabase {
             if (mDbHelper == null) {
                 String dbName = null;
                 
-                File dbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + DATA_DIR + File.separator
+                File dbDir = new File(Environment.getDataDirectory().getAbsolutePath() + DATA_DIR + File.separator
+                        + context.getPackageName() + DB_DIR);
+                SLog.d(TAG, "File Path is  " + Environment.getDataDirectory().getAbsolutePath() 
+                        + DATA_DIR + File.separator
+                        + context.getPackageName() + DB_DIR);
+                
+               /* File dbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + DATA_DIR + File.separator
                         + context.getPackageName() + DB_DIR);
                 SLog.d(TAG, "File Path is  " + Environment.getExternalStorageDirectory().getAbsolutePath() 
                         + DATA_DIR + File.separator
-                        + context.getPackageName() + DB_DIR);
+                        + context.getPackageName() + DB_DIR);*/
 
                 if (!dbDir.exists()) {
                     dbDir.mkdirs();

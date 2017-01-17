@@ -6,6 +6,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_xiaohuhu">婴儿保</string>
     <string name="title_activity_breath">宝宝呼吸</string>
+    <string name="title_activity_explain">使用说明</string>
     <string name="title_activity_userprivateinfo">个人信息</string>
     <string name="title_activity_temperature">温度计</string>
     <string name="title_search_bluetooth">搜索婴儿保</string>
@@ -17,7 +18,7 @@
     <string name="start_connect">正在搜索婴儿保</string>
     <string name="user_notify">请将婴儿保靠近手机\n\t\t摇晃持续2秒以上</string>
     <string name="check_device">正在验证婴儿保</string>
-    <string name="check_device_fail">校验设备失败\n请重试</string>
+    <string name="check_device_fail">校验设备失败\n\t请点击重试</string>
     <string name="sync_data">正在同步数据...</string>
     <string name="show_device_status">宝宝状态</string>
     <string name="reset_user_password">重置密码</string>
@@ -27,19 +28,28 @@
     <string name="select_device">请选择设备：</string>
     <string name="scanning">正在扫描中...</string>
     <string name="setting">设置</string>
-    <string name="connecting_device_success">婴儿保已连接\n可以使用啦！</string>
+    <string name="connecting_device_success">婴儿保已连接\n\t\t可以使用啦！</string>
     <string name="connect_device_done">婴儿保已连接</string>
     <string name="connecting_device_sync_data">数据同步中。。。</string>
-    <string name="connecting_device_sync_data_fail">数据同步失败\n请点击重试</string>
+    <string name="connecting_device_sync_data_fail">数据同步失败\n\t请点击重试</string>
     <string name="connecting_device_fail">找不到婴儿保\n请点击重新检测</string>
     <string name="connecting_router_one_abnormal">检测到一个问题\n点击查看</string>
     <string name="connecting_router_two_abnormal">检测到两个问题\n点击查看</string>
     <string name="check_router_status_abnormal">问题</string>
     <!-- 报警界面 -->
-    <string name="baby_fever">孩子发烧了！！</string>
-    <string name="baby_breath_stop">孩子呼吸停滞了！！</string>
-    <string name="baby_breath_stop_info">孩子呼吸停滞了\n请及时查看！</string>
+    <string name="baby_fever">宝宝体温异常</string>
+    <string name="baby_breath_stop">宝宝呼吸暂停</string>
+    <string name="baby_breath_stop_info">宝宝呼吸发生了一次暂停\n请及时查看！</string>
 
+    <!-- 使用说明界面 -->
+
+    <string name="explain_title_breath_stop">呼吸停滞：</string>
+    <string name="explain_content_breath_stop">\t\t\t呼吸停止时间持续5～10秒以后继续呼吸，又称为周期性呼吸。周期性呼吸是良性的，因呼吸停止时间短，故不影响气体交换。\n\t\t婴儿保检测到宝宝呼吸停滞现象后会记录下来。</string>
+    <string name="explain_title_breath_alarm">呼吸暂停：</string>
+    <string name="explain_content_breath_alarm">\t\t\t呼吸停止时间超过15秒，或呼吸停止不超过15～20秒，但伴有心跳减慢，皮肤青紫或苍白，肌肉张力减低，是一种严重现象，可引起脑损害。\n\t\t婴儿保检测到宝宝呼吸停止时间超过15秒会发起报警提示。</string>
+	<string name="explain_title_breath_bpm">BPM：</string>
+	<string name="explain_content_breath_bpm">每分钟呼吸次数。</string>
+	<string name="explain_from">参考资料：百度百科</string>
     <!-- 关于界面 -->
     <string name="about_title">关于</string>
     <string name="title_activity_baby_status">BabyStatusActivity</string>
@@ -79,10 +89,13 @@
     <string name="action_start_temp">实时温度监测</string>
     <string name="action_measure_temp">正在检测温度</string>
     <string name="action_stop">停止</string>
-    <string name="date_no_data">该日无数据</string>
+    <string name="date_initing_data">正在初始化数据 。。。</string>
+    <string name="date_no_temp_data">该日无温度记录</string>
+    <string name="date_no_breath_data">该日无呼吸停滞现象</string>
     <string name="title_activity_baby_breath_emergency">BabyBreathEmergencyActivity</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_manufature_test">工厂测试</string>
     <string name="title_activity_user_private_info">UserPrivateInfoActivity</string>
+    <string name="title_activity_browser_show">BrowserShowActivity</string>
 
 </resources>

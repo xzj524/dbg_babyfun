@@ -11,14 +11,12 @@ import android.content.Context;
 
 import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.logging.SLog;
-import com.aizi.yingerbao.thread.AZRunnable;
-import com.aizi.yingerbao.utility.Utiliy;
 
 public class CommandCenter {
     private static final String TAG = "CommandCenter";
     private static CommandCenter mInstance;
-    private static SendDataQueue mSendDataQueue = new SendDataQueue();
-    static CommandSendRequest mCommandSendRequest;
+    private SendDataQueue mSendDataQueue = new SendDataQueue();
+    CommandSendRequest mCommandSendRequest;
     ExecutorService mExecutorService = Executors.newCachedThreadPool();
     Consumer consumer = new Consumer(Constant.AIZI_COMMAND_DATA, mSendDataQueue);
     static Context mContext;
@@ -64,7 +62,9 @@ public class CommandCenter {
             }
             
             if (mSendDataQueue != null) {
-                mSendDataQueue.produce(commandsendRequest);
+                //mSendDataQueue.produce(commandsendRequest);
+                boolean isPutQueue = mSendDataQueue.offer(commandsendRequest);
+                SLog.e(TAG, "addCallbackRequest isPutQueue = " + isPutQueue);
             }    
         } catch (Exception e) {
             SLog.e(TAG, e);
@@ -90,8 +90,6 @@ public class CommandCenter {
                     mIsCompleted = false;
                     mCountingNum = 0;
                     resetTimerTask();
-                    /*ThreadPool.getInstance().shutDown();
-                    ThreadPool.getInstance().submitRunnable(timeOutRunnable);*/
                     break;
                 case Constant.TRANSFER_TYPE_ERROR: // 数据传输出错
                     synchronized (synchronizedLock) { //传输失败之后继续下一个
@@ -160,7 +158,6 @@ public class CommandCenter {
         public void run() {
             try {
                 while (true) {
-                    //SLog.e(TAG, "CommandCenter mCommandSendRequestING 1");
                     mCommandSendRequest =  sendqueue.consume();
                     resetTimerTask();
                     mCommandSendRequest.send(false);
@@ -168,10 +165,7 @@ public class CommandCenter {
                     mCountingNum = 0;                   
                     synchronized (synchronizedLock) {
                         try {
-                            //SLog.e(TAG, "CommandCenter mCommandSendRequestING 2");
                             synchronizedLock.wait();
-                           // SLog.e(TAG, "CommandCenter mCommandSendRequestING 3");
-                           // SLog.e(TAG, "CommandCenter mCommandSendRequest completed");
                         } catch (Exception e) {
                             SLog.e(TAG, e);
                         }
@@ -196,6 +190,10 @@ public class CommandCenter {
         public void produce(CommandSendRequest event) throws InterruptedException {
             // put方法放入数据，若asyceventqueue满了，等到asyceventqueue有位置
             commandqueue.put(event);
+        }
+        
+        public boolean offer(CommandSendRequest event) throws InterruptedException {
+            return commandqueue.offer(event);
         }
 
         // 消费数据

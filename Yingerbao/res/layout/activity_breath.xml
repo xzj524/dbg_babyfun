@@ -76,6 +76,7 @@
 		        android:id="@+id/breath_line_chart"
 		        android:layout_width="match_parent"
 		        android:layout_height="100dp"
+		        android:layout_marginTop="20dp"
 		        android:background="@color/pink_new"/>
 
 		      
@@ -98,7 +99,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="4dp">
                
             <LinearLayout 
 		        android:id="@+id/templist"
@@ -113,26 +114,20 @@
 			        android:layout_width="wrap_content"
 			        android:textSize="@dimen/data_calender_text_size"
 			        android:textColor="@color/gray"
-			        android:layout_marginLeft="30dp"/>
-				       
-                  <TextView 
-			        android:id="@+id/breathstoptextview"
-			        android:layout_height="wrap_content"
-			        android:layout_width="wrap_content"
-			        android:text="（呼吸停滞5秒记录一次）"
-			        android:textSize="@dimen/data_calender_text_size"
-			        android:textColor="@color/gray"/>
+			        android:gravity="center_vertical"
+			        android:layout_marginLeft="20dp"
+			        android:paddingTop="6dp"/>
 
                  </LinearLayout>
 	        
             
-            <ImageView 
-                android:id="@+id/breathstop_calendar"
-                android:layout_height="28dp"
-		        android:layout_width="28dp"
-		        android:src="@drawable/calendar"
-		        android:layout_marginTop="6dp"
-		        android:layout_marginLeft="@dimen/breath_data_calender_icon_left_margin"/>
+	            <ImageView 
+	                android:id="@+id/breathstop_calendar"
+	                android:layout_height="28dp"
+			        android:layout_width="28dp"
+			        android:src="@drawable/calendar"
+			        android:layout_marginTop="6dp"
+			        android:layout_marginLeft="@dimen/breath_data_calender_icon_left_margin"/>
             </LinearLayout>
 		    
 	        <com.github.mikephil.charting.charts.BarChart

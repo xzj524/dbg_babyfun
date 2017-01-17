@@ -2,13 +2,18 @@ package com.aizi.yingerbao.slidingmenu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aizi.yingerbao.AboutActivity;
+import com.aizi.yingerbao.BabyBreathEmergencyActivity;
+import com.aizi.yingerbao.BabyFeverEmergencyActivity;
+import com.aizi.yingerbao.BrowserShowActivity;
 import com.aizi.yingerbao.ConnectDeviceActivity;
+import com.aizi.yingerbao.ExplainActivity;
 import com.aizi.yingerbao.R;
 import com.aizi.yingerbao.TestActivity;
 import com.aizi.yingerbao.constant.Constant;
@@ -35,6 +40,8 @@ public class SlidingMenuHelper {
     ViewGroup mSearchGroup;
     
     ViewGroup mAboutGroup;
+    ViewGroup mExplainGroup;
+    ViewGroup mBuyYingerbaoGroup;
     
     TextView mUserAccountTextView;
     String mUseraccount;
@@ -102,6 +109,32 @@ public class SlidingMenuHelper {
                 mActivity.startActivity(intent);
             }
         });
+        
+        mExplainGroup = (ViewGroup) findViewById(R.id.device_explain);
+        mExplainGroup.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity.getApplicationContext(), ExplainActivity.class);
+                mActivity.startActivity(intent);
+            }
+        });
+        
+        mBuyYingerbaoGroup = (ViewGroup) findViewById(R.id.shopping_yingerbao);
+        mBuyYingerbaoGroup.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                String mWeidianUrl = "https://weidian.com/item.html?itemID=2019786672";
+                Uri contentUri = Uri.parse(mWeidianUrl);
+                intent.setData(contentUri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mActivity.startActivity(intent);   
+            }
+        });
+        
         
         mAboutGroup = (ViewGroup) findViewById(R.id.appabout);
         mAboutGroup.setOnClickListener(new View.OnClickListener() {

@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"  
         custom:titleText="@string/title_activity_userprivateinfo"   
         custom:titleSize="@dimen/title_text_size"   
-        custom:titleColor="@color/gray"   
-        custom:leftBtn="@drawable/title_back_icon_pressed"/> 
+        custom:titleColor="@color/white"   
+        custom:leftBtn="@drawable/smarthome_add_device_back_nor"/> 
     
     
       <ScrollView

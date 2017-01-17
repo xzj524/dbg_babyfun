@@ -252,9 +252,9 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         rightAxis.setLabelCount(6);
   
         // no description text  
-        mTemperatureChart.setDescription("采集历史温度");// 数据描述  
+        mTemperatureChart.setDescription("历史采集温度");// 数据描述  
         mTemperatureChart.setDescriptionColor(Color.WHITE);
-        mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
+        mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_temp_data));
       
         // enable / disable grid background  
         mTemperatureChart.setDrawGridBackground(false); // 是否显示表格颜色  
@@ -472,8 +472,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
         protected void onPreExecute() {
             super.onPreExecute();
             
-            //mTemperatureChart.setNoDataTextDescription("这是测试数据");
-            mTemperatureChart.setNoDataText("正在初始化数据。。。");
+            mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_initing_data));
             if (yValsTem.size() > 0) {
                 yValsTem.clear();
             }
@@ -531,7 +530,7 @@ public class TemperatureActivity extends Activity implements onTitleBarClickList
     private void drawTempChart(ArrayList<Entry> yVals, boolean isload) {
         
         if (yVals.size() == 0 && !isload) {
-            mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_data));
+            mTemperatureChart.setNoDataText(getApplicationContext().getResources().getString(R.string.date_no_temp_data));
         }
 
         LineDataSet tempSet = new LineDataSet(yVals, null);

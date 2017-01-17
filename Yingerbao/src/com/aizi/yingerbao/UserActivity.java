@@ -11,8 +11,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobConfig;
 
 import com.aizi.yingerbao.bluttooth.BluetoothApi;
 import com.aizi.yingerbao.command.CommandCenter;
@@ -28,6 +26,8 @@ import com.aizi.yingerbao.view.BatteryView;
 import com.aizi.yingerbao.view.CircleButton;
 import com.aizi.yingerbao.view.TopBarView;
 import com.aizi.yingerbao.view.TopBarView.onTitleBarClickListener;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
 import com.qihoo.appstore.common.updatesdk.lib.UpdateHelper;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.MobclickAgent.EScenarioType;
@@ -52,6 +52,8 @@ public class UserActivity extends Activity implements onTitleBarClickListener {
         
         AsyncDeviceFactory.getInstance(getApplicationContext());
         MessageParse.getInstance(getApplicationContext());
+        
+        PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, "5L369pfWbrGISxw5cnbqKshS");
         
        /* Bmob.initialize(this, "d32cb6a0c62e9652f4f618ad60a76525", "Bomb");
         

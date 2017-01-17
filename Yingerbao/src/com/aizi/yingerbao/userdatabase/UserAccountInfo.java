@@ -11,6 +11,15 @@ public class UserAccountInfo extends BmobUser{
     private String mUserPosition;
     private String mBabySex;
     private int mBabyAgeMonth = 0;
+    private String mBDPushChannelID;
+    
+    public String geBDPushChannelID() {
+        return this.mBDPushChannelID;
+    }
+
+    public void setBDPushChannelID(String channelid) {
+        this.mBDPushChannelID = channelid;
+    }
     
     public String getUserName() {
         return this.mUserName;

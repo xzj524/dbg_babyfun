@@ -43,6 +43,7 @@ import com.aizi.yingerbao.constant.Constant;
 import com.aizi.yingerbao.database.BreathDataInfo;
 import com.aizi.yingerbao.database.TemperatureDataInfo;
 import com.aizi.yingerbao.database.YingerbaoDatabase;
+import com.aizi.yingerbao.deviceinterface.DeviceFactory;
 import com.aizi.yingerbao.logging.SLog;
 import com.aizi.yingerbao.receiver.AlarmManagerReceiver;
 import com.aizi.yingerbao.thread.AZRunnable;
@@ -62,6 +63,8 @@ public class Utiliy {
     public static final String ACTION_PRIVATE_NOTIFICATION_DELETE = "com.baidu.android.pushservice.action.privatenotification.DELETE";
 
     private static final String TAG = "Utiliy";
+    
+    static boolean mIsLogtoFile = false;
   
     /**
      * 睡眠的状态
@@ -94,6 +97,8 @@ public class Utiliy {
     }
     
     
+  
+    
     /** 
      * @Description: 显示连接对话框
      * @Context
@@ -104,10 +109,8 @@ public class Utiliy {
         final AlertDialog.Builder normalDialog = 
             new AlertDialog.Builder(context);
         normalDialog.setIcon(R.drawable.yingerbao_96);
-        normalDialog.setTitle("连接设备");
+        normalDialog.setTitle("连接婴儿保");
         normalDialog.setMessage("设备未连接，是否连接设备?\n请先摇动设备保证能够正确连接。");
-        //normalDialog.setTitle(title);
-        //normalDialog.setMessage(content);
         normalDialog.setPositiveButton("确定", 
             new DialogInterface.OnClickListener() {
             @Override
@@ -129,7 +132,7 @@ public class Utiliy {
     }
     
     /** 
-     * @Description: 显示连接对话框
+     * @Description: 显示退出对话框
      * @Context
      */
     
@@ -180,26 +183,29 @@ public class Utiliy {
     public static synchronized void logToFile(String logStr) {
 
         try {
-            String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
-            Calendar calendar = Calendar.getInstance();
-            String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
-                    + calendar.get(Calendar.MINUTE) + ":"
-                    + calendar.get(Calendar.SECOND) + ":"
-                    + calendar.get(Calendar.MILLISECOND)
-                    + "]: ";
-            String writeStr = time + " " + currentDateTimeString + " " + logStr + "\n\r";
-            String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-            File dir = new File(sdPath + "/" +Constant.EXTERNAL_FILE_LOC);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMdd");
-            Date today = new Date();
-            String date = dateformat.format(today);
-            File logFile = new File(sdPath, Constant.EXTERNAL_FILE_LOC + "/" + "aizi_" + date + ".log");
-            FileWriter fw = new FileWriter(logFile, true);
-            fw.write(writeStr);
-            fw.close();
+            
+                String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
+                Calendar calendar = Calendar.getInstance();
+                String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                        + calendar.get(Calendar.MINUTE) + ":"
+                        + calendar.get(Calendar.SECOND) + ":"
+                        + calendar.get(Calendar.MILLISECOND)
+                        + "]: ";
+                String writeStr = time + " " + currentDateTimeString + " " + logStr + "\n\r";
+                String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                File dir = new File(sdPath + "/" +Constant.EXTERNAL_FILE_LOC);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMdd");
+                Date today = new Date();
+                String date = dateformat.format(today);
+                File logFile = new File(sdPath, Constant.EXTERNAL_FILE_LOC + "/" + "aizi_" + date + ".log");
+                FileWriter fw = new FileWriter(logFile, true);
+                fw.write(writeStr);
+                fw.close();
+            
+            
         } catch (Throwable e) {
             SLog.e(TAG, e);
         }
@@ -209,24 +215,26 @@ public class Utiliy {
     public static synchronized void dataToFile(String logStr) {
 
         try {
-            String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
-            Calendar calendar = Calendar.getInstance();
-            String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
-                    + calendar.get(Calendar.MINUTE) + ":"
-                    + calendar.get(Calendar.SECOND) + ":"
-                    + calendar.get(Calendar.MILLISECOND)
-                    + "]: ";
-            String writeStr = time + " " + currentDateTimeString + " " + logStr + "\n\r";
-            String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-            File dir = new File(sdPath + "/" +Constant.EXTERNAL_FILE_DATA);
-            if (!dir.exists()) {
-                dir.mkdirs();
+            if (mIsLogtoFile) {
+                String time = new SimpleDateFormat("yyyy-MM-dd ").format(new Date());
+                Calendar calendar = Calendar.getInstance();
+                String currentDateTimeString = "[" + calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                        + calendar.get(Calendar.MINUTE) + ":"
+                        + calendar.get(Calendar.SECOND) + ":"
+                        + calendar.get(Calendar.MILLISECOND)
+                        + "]: ";
+                String writeStr = time + " " + currentDateTimeString + " " + logStr + "\n\r";
+                String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                File dir = new File(sdPath + "/" +Constant.EXTERNAL_FILE_DATA);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+               
+                File logFile = new File(sdPath, Constant.EXTERNAL_FILE_DATA + "/" + "aizi_data_" + time + ".log");
+                FileWriter fw = new FileWriter(logFile, true);
+                fw.write(writeStr);
+                fw.close();
             }
-           
-            File logFile = new File(sdPath, Constant.EXTERNAL_FILE_DATA + "/" + "aizi_data_" + time + ".log");
-            FileWriter fw = new FileWriter(logFile, true);
-            fw.write(writeStr);
-            fw.close();
         } catch (Exception e) {
             SLog.e(TAG, e);
         }

@@ -456,4 +456,25 @@ public class SyncDeviceImpl implements SyncDevice{
         }
         return tempconfig;
     }
+
+    @Override
+    public DeviceResponse<?> resetManuSettings(int settype) {
+        SLog.e(TAG, " resetManuSettings ");
+        if (Utiliy.isBluetoothConnected(mContext)) {
+            KeyPayload keyPayload = new KeyPayload();
+            keyPayload.key = 22;
+            keyPayload.keyLen = 1;
+            keyPayload.keyValue = getDataType(settype);
+            
+            BaseL2Message bsl2Msg 
+                = Utiliy.generateBaseL2Msg(Constant.COMMAND_ID_SETTING, 
+                    Constant.BASE_VERSION_CODE, keyPayload);
+        
+            new CommandSendRequest(mContext, false, bsl2Msg).addSendTask();
+            String str = "resetManuSettings";
+            Utiliy.dataToFile(str);
+        }
+
+        return null;
+    }
 }

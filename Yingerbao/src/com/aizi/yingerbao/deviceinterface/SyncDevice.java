@@ -45,5 +45,5 @@ public interface SyncDevice {
     
     DeviceResponse<?> setTemperatureAlarmConfig(double highlevel, double lowlevel);
 
-
+    DeviceResponse<?> resetManuSettings(int settype);
 }

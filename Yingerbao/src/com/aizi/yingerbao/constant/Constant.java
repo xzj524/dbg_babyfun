@@ -14,6 +14,9 @@ public class Constant {
     /** 报警时振动频率 **/
     public static final long[] EMERGENCY_PATTERN = {500, 1000}; 
     
+    /** 关于版本号前缀 **/
+    public static final String BD_PUSH_CHANNELID = "bd_push_channelid";
+    
     public static final UUID BLE_UUID_NUS_SERVICE = UUID.fromString("00000001-0000-1000-8000-00805f9b34fb");
     public static final UUID BLE_UUID_NUS_TX_CHARACTERISTIC = UUID.fromString("00000002-0000-1000-8000-00805f9b34fb");
     public static final UUID BLE_UUID_NUS_RX_CHARACTERISTIC = UUID.fromString("00000003-0000-1000-8000-00805f9b34fb");

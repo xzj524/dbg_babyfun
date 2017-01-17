@@ -49,6 +49,7 @@ public class MessageParse {
     boolean mIsDeviceActivited = false;
     boolean mIsDeviceTimed = false;
     boolean mIsSyncData = true;
+  
     
     private static final int RECV_DATA_COUNT = 1440;
     private static final int WAIT_LOAD_DATA_TIME = 1000 * 60 * 60 * 6;
@@ -172,6 +173,7 @@ public class MessageParse {
                 String result = "CheckDevice return SleepDataLength = " + devCheckInfo.mNoSyncSleepDataLength
                         + " TempDataLength = " + devCheckInfo.mNoSyncTempDataLength
                         + " BreathDataLength = " + devCheckInfo.mNoSyncBreathDataLength
+                        + " ExceptionDataLength = " + devCheckInfo.mNoSyncExceptionLength
                         + " mDeviceCharge = " + devCheckInfo.mDeviceCharge
                         + " mDeviceStatus = " + (int)devCheckInfo.mDeviceStatus
                         + " isDeviceActivited = " + isDeviceActivited;           
@@ -205,6 +207,9 @@ public class MessageParse {
                 setDeviceTime(devCheckInfo); // 校时操作
                 
                 if (PrivateParams.getSPString(mContext, Constant.AIZI_IS_CONNECT_REPEAT).equals("true")) {
+                    intent = new Intent(Constant.ACTION_CHECKDEVICE_SUCCEED);
+                    intent.putExtra(Constant.IS_SYNC_DATA, false);
+                    EventBus.getDefault().post(intent);
                     return; // 连接断开之后重试，不用继续读取数据。
                 }
                 
@@ -608,7 +613,7 @@ public class MessageParse {
                 breathinfo.setBreathTimestamp(System.currentTimeMillis());
                 YingerbaoDatabase.insertBreathInfo(mContext, breathinfo);
               
-                String breathlog = "Breath Stop Info = " + year + " month = " + month
+                String breathlog = "BreathStopInfo = " + year + " month = " + month
                         + " day = " + day + " hour = " + hour
                         + " minu = " + minu + " second = " + second
                         + " isAlarm = " + isAlarm + " duration = " + breathinfo.getBreathDuration();
@@ -634,7 +639,7 @@ public class MessageParse {
                             if(ex==null){
                                 //SLog.e(TAG, i+" succeed : "+result.getCreatedAt()+", "+result.getObjectId()+", "+result.getUpdatedAt());
                             }else{
-                                SLog.e(TAG, i+" failed : "+ex.getMessage()+","+ex.getErrorCode());
+                                SLog.e(TAG, i+" failed : "+ ex.getMessage()+","+ex.getErrorCode());
                             }
                         }
                     } else {

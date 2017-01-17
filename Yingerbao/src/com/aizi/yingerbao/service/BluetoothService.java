@@ -114,15 +114,14 @@ public class BluetoothService extends Service {
                 connectionAction = ACTION_GATT_DISCONNECTED;
                 SLog.e(TAG, "Disconnected from GATT server.");   
                 PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 0);
-//                if (mBluetoothGatt != null) {
-//                    mBluetoothGatt.close();
                 close();
                 if (!TextUtils.isEmpty(mBluetoothDeviceAddress)
                         && Constant.AIZI_USERACTIVTY_QUIT != 1) {
-                    connect(mBluetoothDeviceAddress, true);
+                    mConnectTimes++;
+                    if (mConnectTimes < 3) {
+                        connect(mBluetoothDeviceAddress, true);
+                    } 
                 }
-                //}
-                //broadcastUpdate(connectionAction);
             }
         }
 
@@ -178,7 +177,6 @@ public class BluetoothService extends Service {
                     PrivateParams.setSPInt(getApplicationContext(), Constant.BLUETOOTH_IS_READY, 1);
                     
                     broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
-                    mConnectTimes = 0;
                     
                     // 设置定时器，用于定时同步数据
                     //Utiliy.cancelAlarmPdIntent(getApplicationContext(), Utiliy.getRepeatAlarmPendingIntent(getApplicationContext()));
@@ -325,6 +323,9 @@ public class BluetoothService extends Service {
                     + isrepeat + " deviceaddress = " + device.getAddress());
             mBluetoothDeviceAddress = address;
             mIsConnectRepeat = isrepeat;
+            if (!mIsConnectRepeat) {
+                mConnectTimes = 0;
+            }
             PrivateParams.setSPString(getApplicationContext(),
                     Constant.AIZI_IS_CONNECT_REPEAT, ""+mIsConnectRepeat);
             return true;

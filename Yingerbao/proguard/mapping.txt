@@ -12787,16 +12787,35 @@ cn.smssdk.utils.b -> cn.smssdk.utils.b:
     java.lang.String getSDKTag() -> getSDKTag
     java.lang.String getAppkey() -> getAppkey
 com.aizi.yingerbao.AboutActivity -> com.aizi.yingerbao.AboutActivity:
-    java.lang.String TAG -> d
+    java.lang.String TAG -> e
     com.aizi.yingerbao.view.TopBarView mAboutTopView -> a
     android.widget.TextView mAppVersionTextView -> b
     android.widget.Button mCheckUpdate -> c
-    27:50:void onCreate(android.os.Bundle) -> onCreate
-    55:56:void onBackClick() -> a
-    68:68:void onCalendarClick() -> b
+    android.widget.Button mResetManuSettings -> d
+    32:64:void onCreate(android.os.Bundle) -> onCreate
+    69:70:void onBackClick() -> a
+    82:82:void onCalendarClick() -> b
+    92:118:void showResetManuDialog(android.content.Context) -> a
+    124:145:void showNormalDialog() -> c
 com.aizi.yingerbao.AboutActivity$1 -> com.aizi.yingerbao.a:
     com.aizi.yingerbao.AboutActivity this$0 -> a
-    38:41:void onClick(android.view.View) -> onClick
+    43:44:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.AboutActivity$2 -> com.aizi.yingerbao.b:
+    com.aizi.yingerbao.AboutActivity this$0 -> a
+    52:55:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.AboutActivity$3 -> com.aizi.yingerbao.c:
+    com.aizi.yingerbao.AboutActivity this$0 -> a
+    android.content.Context val$context -> b
+    102:107:void onClick(android.content.DialogInterface,int) -> onClick
+com.aizi.yingerbao.AboutActivity$4 -> com.aizi.yingerbao.d:
+    com.aizi.yingerbao.AboutActivity this$0 -> a
+    114:114:void onClick(android.content.DialogInterface,int) -> onClick
+com.aizi.yingerbao.AboutActivity$5 -> com.aizi.yingerbao.e:
+    com.aizi.yingerbao.AboutActivity this$0 -> a
+    132:134:void onClick(android.content.DialogInterface,int) -> onClick
+com.aizi.yingerbao.AboutActivity$6 -> com.aizi.yingerbao.f:
+    com.aizi.yingerbao.AboutActivity this$0 -> a
+    141:141:void onClick(android.content.DialogInterface,int) -> onClick
 com.aizi.yingerbao.BabyBreathActivity -> com.aizi.yingerbao.BabyBreathActivity:
     java.lang.String TAG -> k
     android.app.FragmentManager mFragmentMan -> l
@@ -12820,10 +12839,10 @@ com.aizi.yingerbao.BabyBreathActivity -> com.aizi.yingerbao.BabyBreathActivity:
     173:173:void onCalendarClick() -> b
     70:70:void access$0(com.aizi.yingerbao.BabyBreathActivity,int) -> a
     28:28:android.widget.TextView access$1(com.aizi.yingerbao.BabyBreathActivity) -> a
-com.aizi.yingerbao.BabyBreathActivity$1 -> com.aizi.yingerbao.b:
+com.aizi.yingerbao.BabyBreathActivity$1 -> com.aizi.yingerbao.g:
     com.aizi.yingerbao.BabyBreathActivity this$0 -> a
     83:97:void handleMessage(android.os.Message) -> handleMessage
-com.aizi.yingerbao.BabyBreathActivity$2 -> com.aizi.yingerbao.c:
+com.aizi.yingerbao.BabyBreathActivity$2 -> com.aizi.yingerbao.h:
     com.aizi.yingerbao.BabyBreathActivity this$0 -> a
     103:118:void run() -> run
 com.aizi.yingerbao.BabyBreathEmergencyActivity -> com.aizi.yingerbao.BabyBreathEmergencyActivity:
@@ -12834,10 +12853,10 @@ com.aizi.yingerbao.BabyBreathEmergencyActivity -> com.aizi.yingerbao.BabyBreathE
     63:65:void onDestroy() -> onDestroy
     70:72:void onPause() -> onPause
     77:79:void onResume() -> onResume
-com.aizi.yingerbao.BabyBreathEmergencyActivity$1 -> com.aizi.yingerbao.d:
+com.aizi.yingerbao.BabyBreathEmergencyActivity$1 -> com.aizi.yingerbao.i:
     com.aizi.yingerbao.BabyBreathEmergencyActivity this$0 -> a
     43:45:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.BabyBreathEmergencyActivity$2 -> com.aizi.yingerbao.e:
+com.aizi.yingerbao.BabyBreathEmergencyActivity$2 -> com.aizi.yingerbao.j:
     com.aizi.yingerbao.BabyBreathEmergencyActivity this$0 -> a
     54:57:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.BabyExplainActivity -> com.aizi.yingerbao.BabyExplainActivity:
@@ -12845,7 +12864,7 @@ com.aizi.yingerbao.BabyExplainActivity -> com.aizi.yingerbao.BabyExplainActivity
     android.widget.TextView mContentTextView -> b
     android.widget.Button mButton -> c
     19:43:void onCreate(android.os.Bundle) -> onCreate
-com.aizi.yingerbao.BabyExplainActivity$1 -> com.aizi.yingerbao.f:
+com.aizi.yingerbao.BabyExplainActivity$1 -> com.aizi.yingerbao.k:
     com.aizi.yingerbao.BabyExplainActivity this$0 -> a
     40:41:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.BabyFeverEmergencyActivity -> com.aizi.yingerbao.BabyFeverEmergencyActivity:
@@ -12856,10 +12875,10 @@ com.aizi.yingerbao.BabyFeverEmergencyActivity -> com.aizi.yingerbao.BabyFeverEme
     62:64:void onDestroy() -> onDestroy
     68:70:void onPause() -> onPause
     74:76:void onResume() -> onResume
-com.aizi.yingerbao.BabyFeverEmergencyActivity$1 -> com.aizi.yingerbao.g:
+com.aizi.yingerbao.BabyFeverEmergencyActivity$1 -> com.aizi.yingerbao.l:
     com.aizi.yingerbao.BabyFeverEmergencyActivity this$0 -> a
     41:43:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.BabyFeverEmergencyActivity$2 -> com.aizi.yingerbao.h:
+com.aizi.yingerbao.BabyFeverEmergencyActivity$2 -> com.aizi.yingerbao.m:
     com.aizi.yingerbao.BabyFeverEmergencyActivity this$0 -> a
     50:53:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.BabyStatusActivity -> com.aizi.yingerbao.BabyStatusActivity:
@@ -12904,59 +12923,110 @@ com.aizi.yingerbao.BreathActivity -> com.aizi.yingerbao.BreathActivity:
     com.github.mikephil.charting.data.LineData mData -> t
     int xValCount -> u
     android.os.Handler mHandler -> v
-    100:167:void onCreate(android.os.Bundle) -> onCreate
-    189:210:void showNormalDialog() -> c
-    214:224:void onDestroy() -> onDestroy
-    257:273:void onEventMainThread(com.aizi.yingerbao.breath.BabyBreath) -> onEventMainThread
-    276:277:void onEventMainThread(com.aizi.yingerbao.synctime.DataTime) -> onEventMainThread
-    306:321:void generateNewWave(int) -> a
-    324:330:void setupLineDataSet(com.github.mikephil.charting.data.LineDataSet) -> a
-    334:355:com.github.mikephil.charting.data.LineData initData$209bb9f() -> e
-    361:367:void setupRealTimeBreathChart$50184257(com.github.mikephil.charting.data.LineData) -> a
-    434:499:void updateBreathStopBarChartData(com.aizi.yingerbao.synctime.DataTime) -> a
-    502:713:java.util.ArrayList getBarEntry(java.util.List) -> a
-    782:786:java.util.ArrayList getXAxisShowLable() -> f
-    791:792:void onBackClick() -> a
-    805:805:void onCalendarClick() -> b
-    809:811:void onResume() -> onResume
-    815:817:void onPause() -> onPause
-    240:240:void access$0(com.aizi.yingerbao.BreathActivity,int) -> a
+    100:166:void onCreate(android.os.Bundle) -> onCreate
+    188:209:void showNormalDialog() -> c
+    213:223:void onDestroy() -> onDestroy
+    256:272:void onEventMainThread(com.aizi.yingerbao.breath.BabyBreath) -> onEventMainThread
+    275:276:void onEventMainThread(com.aizi.yingerbao.synctime.DataTime) -> onEventMainThread
+    305:320:void generateNewWave(int) -> a
+    323:329:void setupLineDataSet(com.github.mikephil.charting.data.LineDataSet) -> a
+    333:354:com.github.mikephil.charting.data.LineData initData$209bb9f() -> e
+    360:366:void setupRealTimeBreathChart$50184257(com.github.mikephil.charting.data.LineData) -> a
+    433:498:void updateBreathStopBarChartData(com.aizi.yingerbao.synctime.DataTime) -> a
+    501:712:java.util.ArrayList getBarEntry(java.util.List) -> a
+    781:785:java.util.ArrayList getXAxisShowLable() -> f
+    790:791:void onBackClick() -> a
+    804:804:void onCalendarClick() -> b
+    808:810:void onResume() -> onResume
+    814:816:void onPause() -> onPause
+    239:239:void access$0(com.aizi.yingerbao.BreathActivity,int) -> a
     63:63:android.widget.TextView access$1(com.aizi.yingerbao.BreathActivity) -> a
     56:56:java.lang.String access$2() -> d
     74:74:com.aizi.yingerbao.BreathActivity$BreathTimerTask access$3(com.aizi.yingerbao.BreathActivity) -> b
     74:74:void access$4(com.aizi.yingerbao.BreathActivity,com.aizi.yingerbao.BreathActivity$BreathTimerTask) -> a
-com.aizi.yingerbao.BreathActivity$1 -> com.aizi.yingerbao.i:
+com.aizi.yingerbao.BreathActivity$1 -> com.aizi.yingerbao.n:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    229:237:void handleMessage(android.os.Message) -> handleMessage
-com.aizi.yingerbao.BreathActivity$2 -> com.aizi.yingerbao.j:
+    228:236:void handleMessage(android.os.Message) -> handleMessage
+com.aizi.yingerbao.BreathActivity$2 -> com.aizi.yingerbao.o:
     com.aizi.yingerbao.BreathActivity this$0 -> a
     112:114:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.BreathActivity$3 -> com.aizi.yingerbao.k:
+com.aizi.yingerbao.BreathActivity$3 -> com.aizi.yingerbao.p:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    128:148:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.BreathActivity$4 -> com.aizi.yingerbao.l:
+    127:147:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.BreathActivity$4 -> com.aizi.yingerbao.q:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    197:199:void onClick(android.content.DialogInterface,int) -> onClick
-com.aizi.yingerbao.BreathActivity$5 -> com.aizi.yingerbao.m:
+    196:198:void onClick(android.content.DialogInterface,int) -> onClick
+com.aizi.yingerbao.BreathActivity$5 -> com.aizi.yingerbao.s:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    206:206:void onClick(android.content.DialogInterface,int) -> onClick
-com.aizi.yingerbao.BreathActivity$6 -> com.aizi.yingerbao.n:
+    205:205:void onClick(android.content.DialogInterface,int) -> onClick
+com.aizi.yingerbao.BreathActivity$6 -> com.aizi.yingerbao.t:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    491:491:java.lang.String getFormattedValue(float) -> getFormattedValue
-com.aizi.yingerbao.BreathActivity$7 -> com.aizi.yingerbao.o:
+    490:490:java.lang.String getFormattedValue(float) -> getFormattedValue
+com.aizi.yingerbao.BreathActivity$7 -> com.aizi.yingerbao.u:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    733:733:void onValueSelected(com.github.mikephil.charting.data.Entry,int,com.github.mikephil.charting.utils.Highlight) -> onValueSelected
-    739:739:void onNothingSelected() -> onNothingSelected
-com.aizi.yingerbao.BreathActivity$8 -> com.aizi.yingerbao.p:
+    732:732:void onValueSelected(com.github.mikephil.charting.data.Entry,int,com.github.mikephil.charting.utils.Highlight) -> onValueSelected
+    738:738:void onNothingSelected() -> onNothingSelected
+com.aizi.yingerbao.BreathActivity$8 -> com.aizi.yingerbao.v:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    764:765:java.lang.String getFormattedValue(float) -> getFormattedValue
+    763:764:java.lang.String getFormattedValue(float) -> getFormattedValue
 com.aizi.yingerbao.BreathActivity$BreathTimerTask -> com.aizi.yingerbao.BreathActivity$a:
     com.aizi.yingerbao.BreathActivity this$0 -> a
-    174:182:void run() -> run
+    173:181:void run() -> run
+com.aizi.yingerbao.BrowserShowActivity -> com.aizi.yingerbao.BrowserShowActivity:
+    java.lang.String mWeidianUrl -> p
+    android.webkit.WebView mWebView -> a
+    android.widget.PopupWindow mPopupWindow -> b
+    android.widget.RelativeLayout mMainLayout -> c
+    android.widget.RelativeLayout mErrorView -> d
+    android.widget.ProgressBar mProgressBar -> e
+    java.lang.String mUrl -> f
+    org.json.JSONArray mTeljsonArray -> g
+    long mPushStartTime -> h
+    long mEndTime -> i
+    long mPushFinishTime -> j
+    long mBoolawStartTime -> k
+    long mBoolawEndTime -> l
+    long mZhiDaEndTime -> m
+    int mPageFinishTimes -> n
+    boolean mIsErrorPage -> o
+    78:101:void onCreate(android.os.Bundle) -> onCreate
+    421:436:boolean isNetworkAvailable(android.content.Context) -> a
+    440:443:void showErrorPage() -> a
+    446:449:void hideErrorPage() -> b
+    516:517:int dip2px(float) -> a
+    524:534:boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
+    263:263:java.lang.String access$0$7e051827(java.lang.String) -> a
+com.aizi.yingerbao.BrowserShowActivity$1 -> com.aizi.yingerbao.w:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    116:121:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+com.aizi.yingerbao.BrowserShowActivity$2 -> com.aizi.yingerbao.x:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    128:135:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.BrowserShowActivity$3 -> com.aizi.yingerbao.y:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    150:155:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+com.aizi.yingerbao.BrowserShowActivity$4 -> com.aizi.yingerbao.z:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    162:166:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.BrowserShowActivity$5 -> com.aizi.yingerbao.aa:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    184:197:void onProgressChanged(android.webkit.WebView,int) -> onProgressChanged
+    202:202:boolean onJsAlert(android.webkit.WebView,java.lang.String,java.lang.String,android.webkit.JsResult) -> onJsAlert
+com.aizi.yingerbao.BrowserShowActivity$6 -> com.aizi.yingerbao.ab:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    209:239:boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+    244:252:void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+    256:259:void onReceivedError(android.webkit.WebView,int,java.lang.String,java.lang.String) -> onReceivedError
+com.aizi.yingerbao.BrowserShowActivity$7 -> com.aizi.yingerbao.ac:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    469:474:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+com.aizi.yingerbao.BrowserShowActivity$8 -> com.aizi.yingerbao.ad:
+    com.aizi.yingerbao.BrowserShowActivity this$0 -> a
+    494:503:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.CalendarActivity -> com.aizi.yingerbao.CalendarActivity:
     android.widget.CalendarView calendarView -> a
     16:31:void onCreate(android.os.Bundle) -> onCreate
-com.aizi.yingerbao.CalendarActivity$1 -> com.aizi.yingerbao.q:
+com.aizi.yingerbao.CalendarActivity$1 -> com.aizi.yingerbao.ae:
     com.aizi.yingerbao.CalendarActivity this$0 -> a
     27:29:void onSelectedDayChange(android.widget.CalendarView,int,int,int) -> onSelectedDayChange
 com.aizi.yingerbao.ConnectDeviceActivity -> com.aizi.yingerbao.ConnectDeviceActivity:
@@ -12985,23 +13055,23 @@ com.aizi.yingerbao.ConnectDeviceActivity -> com.aizi.yingerbao.ConnectDeviceActi
     38:38:java.lang.String access$2() -> c
     48:48:com.aizi.yingerbao.view.HorizontalProgressBarWithNumber access$3(com.aizi.yingerbao.ConnectDeviceActivity) -> b
     136:136:android.os.Handler access$4(com.aizi.yingerbao.ConnectDeviceActivity) -> c
-com.aizi.yingerbao.ConnectDeviceActivity$1 -> com.aizi.yingerbao.s:
+com.aizi.yingerbao.ConnectDeviceActivity$1 -> com.aizi.yingerbao.af:
     com.aizi.yingerbao.ConnectDeviceActivity this$0 -> a
     112:113:void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
     117:132:void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
-com.aizi.yingerbao.ConnectDeviceActivity$2 -> com.aizi.yingerbao.t:
+com.aizi.yingerbao.ConnectDeviceActivity$2 -> com.aizi.yingerbao.ag:
     com.aizi.yingerbao.ConnectDeviceActivity this$0 -> a
     138:173:void handleMessage(android.os.Message) -> handleMessage
-com.aizi.yingerbao.ConnectDeviceActivity$3 -> com.aizi.yingerbao.u:
+com.aizi.yingerbao.ConnectDeviceActivity$3 -> com.aizi.yingerbao.ah:
     com.aizi.yingerbao.ConnectDeviceActivity this$0 -> a
     318:323:void onClick(android.content.DialogInterface,int) -> onClick
-com.aizi.yingerbao.ConnectDeviceActivity$4 -> com.aizi.yingerbao.v:
+com.aizi.yingerbao.ConnectDeviceActivity$4 -> com.aizi.yingerbao.ai:
     com.aizi.yingerbao.ConnectDeviceActivity this$0 -> a
     330:330:void onClick(android.content.DialogInterface,int) -> onClick
 com.aizi.yingerbao.CriticalActivity -> com.aizi.yingerbao.CriticalActivity:
     android.widget.Button mFever -> a
     23:47:void onCreate(android.os.Bundle) -> onCreate
-com.aizi.yingerbao.CriticalActivity$1 -> com.aizi.yingerbao.w:
+com.aizi.yingerbao.CriticalActivity$1 -> com.aizi.yingerbao.aj:
     com.aizi.yingerbao.CriticalActivity this$0 -> a
     32:34:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.DeviceListActivity -> com.aizi.yingerbao.DeviceListActivity:
@@ -13027,27 +13097,27 @@ com.aizi.yingerbao.DeviceListActivity -> com.aizi.yingerbao.DeviceListActivity:
     65:65:boolean access$3(com.aizi.yingerbao.DeviceListActivity) -> c
     128:128:void access$4$759ae28a(com.aizi.yingerbao.DeviceListActivity) -> d
     65:65:void access$5$759ae28a(com.aizi.yingerbao.DeviceListActivity) -> e
-com.aizi.yingerbao.DeviceListActivity$1 -> com.aizi.yingerbao.x:
+com.aizi.yingerbao.DeviceListActivity$1 -> com.aizi.yingerbao.ak:
     com.aizi.yingerbao.DeviceListActivity this$0 -> a
     159:172:void onLeScan(android.bluetooth.BluetoothDevice,int,byte[]) -> onLeScan
     155:155:com.aizi.yingerbao.DeviceListActivity access$0(com.aizi.yingerbao.DeviceListActivity$1) -> a
-com.aizi.yingerbao.DeviceListActivity$1$1 -> com.aizi.yingerbao.y:
+com.aizi.yingerbao.DeviceListActivity$1$1 -> com.aizi.yingerbao.al:
     com.aizi.yingerbao.DeviceListActivity$1 this$1 -> a
     android.bluetooth.BluetoothDevice val$device -> b
     int val$rssi -> c
     163:170:void run() -> run
-com.aizi.yingerbao.DeviceListActivity$1$1$1 -> com.aizi.yingerbao.z:
+com.aizi.yingerbao.DeviceListActivity$1$1$1 -> com.aizi.yingerbao.am:
     com.aizi.yingerbao.DeviceListActivity$1$1 this$2 -> a
     android.bluetooth.BluetoothDevice val$device -> b
     int val$rssi -> c
     166:167:void run() -> run
-com.aizi.yingerbao.DeviceListActivity$2 -> com.aizi.yingerbao.aa:
+com.aizi.yingerbao.DeviceListActivity$2 -> com.aizi.yingerbao.an:
     com.aizi.yingerbao.DeviceListActivity this$0 -> a
     221:233:void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-com.aizi.yingerbao.DeviceListActivity$3 -> com.aizi.yingerbao.ab:
+com.aizi.yingerbao.DeviceListActivity$3 -> com.aizi.yingerbao.ao:
     com.aizi.yingerbao.DeviceListActivity this$0 -> a
     106:108:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.DeviceListActivity$4 -> com.aizi.yingerbao.ac:
+com.aizi.yingerbao.DeviceListActivity$4 -> com.aizi.yingerbao.ap:
     com.aizi.yingerbao.DeviceListActivity this$0 -> a
     android.widget.Button val$cancelButton -> b
     135:140:void run() -> run
@@ -13070,12 +13140,14 @@ com.aizi.yingerbao.EmergencyPhoneNumberActivity -> com.aizi.yingerbao.EmergencyP
     android.view.ViewGroup mEmergencyHospital -> b
     19:54:void onCreate(android.os.Bundle) -> onCreate
     57:62:void dialPhoneNumber(java.lang.String) -> a
-com.aizi.yingerbao.EmergencyPhoneNumberActivity$1 -> com.aizi.yingerbao.ad:
+com.aizi.yingerbao.EmergencyPhoneNumberActivity$1 -> com.aizi.yingerbao.aq:
     com.aizi.yingerbao.EmergencyPhoneNumberActivity this$0 -> a
     29:30:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.EmergencyPhoneNumberActivity$2 -> com.aizi.yingerbao.ae:
+com.aizi.yingerbao.EmergencyPhoneNumberActivity$2 -> com.aizi.yingerbao.ar:
     com.aizi.yingerbao.EmergencyPhoneNumberActivity this$0 -> a
     42:52:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.ExplainActivity -> com.aizi.yingerbao.ExplainActivity:
+    12:14:void onCreate(android.os.Bundle) -> onCreate
 com.aizi.yingerbao.MainActivity -> com.aizi.yingerbao.MainActivity:
     android.support.v4.view.ViewPager mViewPager -> c
     com.aizi.yingerbao.ViewPagerAdapter mVpAdapter -> d
@@ -13092,7 +13164,7 @@ com.aizi.yingerbao.MainActivity -> com.aizi.yingerbao.MainActivity:
     176:176:void onPageScrolled(int,float,int) -> onPageScrolled
     181:188:void onPageSelected(int) -> onPageSelected
     193:197:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.MainActivity$1 -> com.aizi.yingerbao.af:
+com.aizi.yingerbao.MainActivity$1 -> com.aizi.yingerbao.as:
     com.aizi.yingerbao.MainActivity this$0 -> a
     53:56:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.ManufatureTestActivity -> com.aizi.yingerbao.ManufatureTestActivity:
@@ -13116,26 +13188,26 @@ com.aizi.yingerbao.ManufatureTestActivity -> com.aizi.yingerbao.ManufatureTestAc
     218:218:void onCalendarClick() -> b
     37:37:android.widget.ArrayAdapter access$0(com.aizi.yingerbao.ManufatureTestActivity) -> a
     36:36:android.widget.ListView access$1(com.aizi.yingerbao.ManufatureTestActivity) -> b
-com.aizi.yingerbao.ManufatureTestActivity$1 -> com.aizi.yingerbao.ag:
+com.aizi.yingerbao.ManufatureTestActivity$1 -> com.aizi.yingerbao.at:
     com.aizi.yingerbao.ManufatureTestActivity this$0 -> a
     65:72:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.ManufatureTestActivity$2 -> com.aizi.yingerbao.ah:
+com.aizi.yingerbao.ManufatureTestActivity$2 -> com.aizi.yingerbao.au:
     com.aizi.yingerbao.ManufatureTestActivity this$0 -> a
     86:87:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.ManufatureTestActivity$3 -> com.aizi.yingerbao.ai:
+com.aizi.yingerbao.ManufatureTestActivity$3 -> com.aizi.yingerbao.av:
     com.aizi.yingerbao.ManufatureTestActivity this$0 -> a
     95:97:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.ManufatureTestActivity$4 -> com.aizi.yingerbao.aj:
+com.aizi.yingerbao.ManufatureTestActivity$4 -> com.aizi.yingerbao.aw:
     com.aizi.yingerbao.ManufatureTestActivity this$0 -> a
     105:133:void onClick(android.view.View) -> onClick
     101:101:com.aizi.yingerbao.ManufatureTestActivity access$0(com.aizi.yingerbao.ManufatureTestActivity$4) -> a
-com.aizi.yingerbao.ManufatureTestActivity$4$1 -> com.aizi.yingerbao.ak:
+com.aizi.yingerbao.ManufatureTestActivity$4$1 -> com.aizi.yingerbao.ax:
     com.aizi.yingerbao.ManufatureTestActivity$4 this$1 -> a
     123:124:void run() -> run
-com.aizi.yingerbao.ManufatureTestActivity$5 -> com.aizi.yingerbao.al:
+com.aizi.yingerbao.ManufatureTestActivity$5 -> com.aizi.yingerbao.ay:
     com.aizi.yingerbao.ManufatureTestActivity this$0 -> a
     187:189:void onClick(android.content.DialogInterface,int) -> onClick
-com.aizi.yingerbao.ManufatureTestActivity$6 -> com.aizi.yingerbao.am:
+com.aizi.yingerbao.ManufatureTestActivity$6 -> com.aizi.yingerbao.az:
     com.aizi.yingerbao.ManufatureTestActivity this$0 -> a
     196:196:void onClick(android.content.DialogInterface,int) -> onClick
 com.aizi.yingerbao.R -> com.aizi.yingerbao.R:
@@ -13452,6 +13524,8 @@ com.aizi.yingerbao.R$dimen -> com.aizi.yingerbao.R$dimen:
     int download_delete_bg_height -> download_delete_bg_height
     int download_delete_bg_padding -> download_delete_bg_padding
     int download_delete_btn_height -> download_delete_btn_height
+    int explain_text_size_content -> explain_text_size_content
+    int explain_text_size_title -> explain_text_size_title
     int header_footer_left_right_padding -> header_footer_left_right_padding
     int header_footer_top_bottom_padding -> header_footer_top_bottom_padding
     int indicator_corner_radius -> indicator_corner_radius
@@ -13775,6 +13849,8 @@ com.aizi.yingerbao.R$id -> com.aizi.yingerbao.R$id:
     int connectingRelativeLayout -> connectingRelativeLayout
     int control_breath_button -> control_breath_button
     int control_temp_button -> control_temp_button
+    int copyright_content -> copyright_content
+    int copyright_notify -> copyright_notify
     int currenttemperaturevalue -> currenttemperaturevalue
     int currenttempvalue -> currenttempvalue
     int currenttempvaluetext -> currenttempvaluetext
@@ -13787,6 +13863,8 @@ com.aizi.yingerbao.R$id -> com.aizi.yingerbao.R$id:
     int descrip -> descrip
     int deviceConnectFragment -> deviceConnectFragment
     int device_charge -> device_charge
+    int device_explain -> device_explain
+    int device_explain_text -> device_explain_text
     int devicelist -> devicelist
     int email_login_form -> email_login_form
     int emergency_120 -> emergency_120
@@ -13796,6 +13874,17 @@ com.aizi.yingerbao.R$id -> com.aizi.yingerbao.R$id:
     int empty -> empty
     int environment1 -> environment1
     int environment2 -> environment2
+    int explain_breath_alarm -> explain_breath_alarm
+    int explain_breath_alarm_content -> explain_breath_alarm_content
+    int explain_breath_alarm_title -> explain_breath_alarm_title
+    int explain_breath_bpm -> explain_breath_bpm
+    int explain_breath_bpm_content -> explain_breath_bpm_content
+    int explain_breath_bpm_title -> explain_breath_bpm_title
+    int explain_breath_stop -> explain_breath_stop
+    int explain_breathstop_content -> explain_breathstop_content
+    int explain_breathstop_title -> explain_breathstop_title
+    int explain_from -> explain_from
+    int explaintopbar -> explaintopbar
     int fallsleep -> fallsleep
     int fallsleeppercent -> fallsleeppercent
     int fallsleeptext -> fallsleeptext
@@ -13880,6 +13969,7 @@ com.aizi.yingerbao.R$id -> com.aizi.yingerbao.R$id:
     int register_phonenumber_img -> register_phonenumber_img
     int register_user_account -> register_user_account
     int registertopbar -> registertopbar
+    int reset_manu_device -> reset_manu_device
     int reset_passcode_button -> reset_passcode_button
     int reset_password_form -> reset_password_form
     int resetpasscode -> resetpasscode
@@ -13902,6 +13992,8 @@ com.aizi.yingerbao.R$id -> com.aizi.yingerbao.R$id:
     int set_qos_mode -> set_qos_mode
     int set_qos_mode_percent -> set_qos_mode_percent
     int settingbtn -> settingbtn
+    int shopping_text -> shopping_text
+    int shopping_yingerbao -> shopping_yingerbao
     int showdata -> showdata
     int sleep_comment -> sleep_comment
     int sleep_comment_content -> sleep_comment_content
@@ -14031,11 +14123,13 @@ com.aizi.yingerbao.R$layout -> com.aizi.yingerbao.R$layout:
     int activity_baby_fun -> activity_baby_fun
     int activity_baby_status -> activity_baby_status
     int activity_breath -> activity_breath
+    int activity_browser_show -> activity_browser_show
     int activity_calendar -> activity_calendar
     int activity_critical -> activity_critical
     int activity_device_list -> activity_device_list
     int activity_emergency_map -> activity_emergency_map
     int activity_emergency_phone_number -> activity_emergency_phone_number
+    int activity_explain -> activity_explain
     int activity_login -> activity_login
     int activity_main -> activity_main
     int activity_main_top_tab -> activity_main_top_tab
@@ -14105,10 +14199,19 @@ com.aizi.yingerbao.R$string -> com.aizi.yingerbao.R$string:
     int connecting_device_sync_data_fail -> connecting_device_sync_data_fail
     int connecting_router_one_abnormal -> connecting_router_one_abnormal
     int connecting_router_two_abnormal -> connecting_router_two_abnormal
-    int date_no_data -> date_no_data
+    int date_initing_data -> date_initing_data
+    int date_no_breath_data -> date_no_breath_data
+    int date_no_temp_data -> date_no_temp_data
     int error_field_required -> error_field_required
     int error_incorrect_password -> error_incorrect_password
     int error_invalid_password -> error_invalid_password
+    int explain_content_breath_alarm -> explain_content_breath_alarm
+    int explain_content_breath_bpm -> explain_content_breath_bpm
+    int explain_content_breath_stop -> explain_content_breath_stop
+    int explain_from -> explain_from
+    int explain_title_breath_alarm -> explain_title_breath_alarm
+    int explain_title_breath_bpm -> explain_title_breath_bpm
+    int explain_title_breath_stop -> explain_title_breath_stop
     int hello_world -> hello_world
     int main_name -> main_name
     int next -> next
@@ -14230,11 +14333,13 @@ com.aizi.yingerbao.R$string -> com.aizi.yingerbao.R$string:
     int title_activity_baby_explain -> title_activity_baby_explain
     int title_activity_baby_status -> title_activity_baby_status
     int title_activity_breath -> title_activity_breath
+    int title_activity_browser_show -> title_activity_browser_show
     int title_activity_calendar -> title_activity_calendar
     int title_activity_critical -> title_activity_critical
     int title_activity_device_list -> title_activity_device_list
     int title_activity_emergency_map -> title_activity_emergency_map
     int title_activity_emergency_phone_number -> title_activity_emergency_phone_number
+    int title_activity_explain -> title_activity_explain
     int title_activity_manufature_test -> title_activity_manufature_test
     int title_activity_register -> title_activity_register
     int title_activity_reset_password -> title_activity_reset_password
@@ -14419,22 +14524,22 @@ com.aizi.yingerbao.SleepAnalysisActivity -> com.aizi.yingerbao.SleepAnalysisActi
     java.lang.Short SLEEPDISTRIBUTION -> k
     java.lang.Short SLEEPEFICIENCE -> l
     28:126:void onCreate(android.os.Bundle) -> onCreate
-com.aizi.yingerbao.SleepAnalysisActivity$1 -> com.aizi.yingerbao.an:
+com.aizi.yingerbao.SleepAnalysisActivity$1 -> com.aizi.yingerbao.ba:
     com.aizi.yingerbao.SleepAnalysisActivity this$0 -> a
     37:44:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.SleepAnalysisActivity$2 -> com.aizi.yingerbao.ao:
+com.aizi.yingerbao.SleepAnalysisActivity$2 -> com.aizi.yingerbao.bb:
     com.aizi.yingerbao.SleepAnalysisActivity this$0 -> a
     53:60:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.SleepAnalysisActivity$3 -> com.aizi.yingerbao.ap:
+com.aizi.yingerbao.SleepAnalysisActivity$3 -> com.aizi.yingerbao.bc:
     com.aizi.yingerbao.SleepAnalysisActivity this$0 -> a
     69:76:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.SleepAnalysisActivity$4 -> com.aizi.yingerbao.aq:
+com.aizi.yingerbao.SleepAnalysisActivity$4 -> com.aizi.yingerbao.bd:
     com.aizi.yingerbao.SleepAnalysisActivity this$0 -> a
     85:92:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.SleepAnalysisActivity$5 -> com.aizi.yingerbao.ar:
+com.aizi.yingerbao.SleepAnalysisActivity$5 -> com.aizi.yingerbao.be:
     com.aizi.yingerbao.SleepAnalysisActivity this$0 -> a
     101:108:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.SleepAnalysisActivity$6 -> com.aizi.yingerbao.as:
+com.aizi.yingerbao.SleepAnalysisActivity$6 -> com.aizi.yingerbao.bf:
     com.aizi.yingerbao.SleepAnalysisActivity this$0 -> a
     117:124:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.SleepProblemActivity -> com.aizi.yingerbao.SleepProblemActivity:
@@ -14444,14 +14549,14 @@ com.aizi.yingerbao.SleepProblemActivity -> com.aizi.yingerbao.SleepProblemActivi
     android.widget.TextView mExplainView -> d
     android.widget.TextView mCommentView -> e
     24:59:void onCreate(android.os.Bundle) -> onCreate
-com.aizi.yingerbao.SleepProblemActivity$1 -> com.aizi.yingerbao.at:
+com.aizi.yingerbao.SleepProblemActivity$1 -> com.aizi.yingerbao.bg:
     com.aizi.yingerbao.SleepProblemActivity this$0 -> a
     56:57:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.SplashActivity -> com.aizi.yingerbao.SplashActivity:
     22:47:void onCreate(android.os.Bundle) -> onCreate
     52:53:boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     61:63:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-com.aizi.yingerbao.SplashActivity$1 -> com.aizi.yingerbao.au:
+com.aizi.yingerbao.SplashActivity$1 -> com.aizi.yingerbao.bh:
     com.aizi.yingerbao.SplashActivity this$0 -> a
     42:45:void run() -> run
 com.aizi.yingerbao.TemperatureActivity -> com.aizi.yingerbao.TemperatureActivity:
@@ -14480,43 +14585,43 @@ com.aizi.yingerbao.TemperatureActivity -> com.aizi.yingerbao.TemperatureActivity
     450:451:void onEventMainThread(com.aizi.yingerbao.synctime.DataTime) -> onEventMainThread
     456:458:void onResume() -> onResume
     463:465:void onPause() -> onPause
-    533:551:void drawTempChart(java.util.ArrayList,boolean) -> a
-    531:531:void access$0(com.aizi.yingerbao.TemperatureActivity,java.util.ArrayList,boolean) -> a
+    532:550:void drawTempChart(java.util.ArrayList,boolean) -> a
+    530:530:void access$0(com.aizi.yingerbao.TemperatureActivity,java.util.ArrayList,boolean) -> a
     52:52:java.lang.String access$1() -> d
-com.aizi.yingerbao.TemperatureActivity$1 -> com.aizi.yingerbao.av:
+com.aizi.yingerbao.TemperatureActivity$1 -> com.aizi.yingerbao.bi:
     com.aizi.yingerbao.TemperatureActivity this$0 -> a
     102:104:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TemperatureActivity$2 -> com.aizi.yingerbao.aw:
+com.aizi.yingerbao.TemperatureActivity$2 -> com.aizi.yingerbao.bj:
     com.aizi.yingerbao.TemperatureActivity this$0 -> a
     115:152:void onClick(android.view.View) -> onClick
     110:110:com.aizi.yingerbao.TemperatureActivity access$0(com.aizi.yingerbao.TemperatureActivity$2) -> a
-com.aizi.yingerbao.TemperatureActivity$2$1 -> com.aizi.yingerbao.ax:
+com.aizi.yingerbao.TemperatureActivity$2$1 -> com.aizi.yingerbao.bk:
     com.aizi.yingerbao.TemperatureActivity$2 this$1 -> a
     128:133:void run() -> run
-com.aizi.yingerbao.TemperatureActivity$3 -> com.aizi.yingerbao.ay:
+com.aizi.yingerbao.TemperatureActivity$3 -> com.aizi.yingerbao.bl:
     com.aizi.yingerbao.TemperatureActivity this$0 -> a
     160:180:void onClick(android.view.View) -> onClick
     156:156:com.aizi.yingerbao.TemperatureActivity access$0(com.aizi.yingerbao.TemperatureActivity$3) -> a
-com.aizi.yingerbao.TemperatureActivity$3$1 -> com.aizi.yingerbao.az:
+com.aizi.yingerbao.TemperatureActivity$3$1 -> com.aizi.yingerbao.bm:
     com.aizi.yingerbao.TemperatureActivity$3 this$1 -> a
     170:177:void onNumberPicked(int,java.lang.Number) -> a
-com.aizi.yingerbao.TemperatureActivity$4 -> com.aizi.yingerbao.ba:
+com.aizi.yingerbao.TemperatureActivity$4 -> com.aizi.yingerbao.bn:
     com.aizi.yingerbao.TemperatureActivity this$0 -> a
     242:242:java.lang.String getFormattedValue(float) -> getFormattedValue
-com.aizi.yingerbao.TemperatureActivity$5 -> com.aizi.yingerbao.bb:
+com.aizi.yingerbao.TemperatureActivity$5 -> com.aizi.yingerbao.bo:
     com.aizi.yingerbao.TemperatureActivity this$0 -> a
     417:419:void onClick(android.content.DialogInterface,int) -> onClick
-com.aizi.yingerbao.TemperatureActivity$6 -> com.aizi.yingerbao.bc:
+com.aizi.yingerbao.TemperatureActivity$6 -> com.aizi.yingerbao.bp:
     com.aizi.yingerbao.TemperatureActivity this$0 -> a
     426:426:void onClick(android.content.DialogInterface,int) -> onClick
 com.aizi.yingerbao.TemperatureActivity$FreshChartTask -> com.aizi.yingerbao.TemperatureActivity$a:
     com.aizi.yingerbao.TemperatureActivity this$0 -> a
-    473:482:void onPreExecute() -> onPreExecute
+    473:481:void onPreExecute() -> onPreExecute
     1:1:void onPostExecute(java.lang.Object) -> onPostExecute
     1:1:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.aizi.yingerbao.TemperatureActivity$FreshChartTask$1 -> com.aizi.yingerbao.bd:
+com.aizi.yingerbao.TemperatureActivity$FreshChartTask$1 -> com.aizi.yingerbao.bq:
     com.aizi.yingerbao.TemperatureActivity$FreshChartTask this$1 -> a
-    493:495:int compare(java.lang.Object,java.lang.Object) -> compare
+    492:494:int compare(java.lang.Object,java.lang.Object) -> compare
 com.aizi.yingerbao.TestActivity -> com.aizi.yingerbao.TestActivity:
     android.widget.ListView messageListView -> r
     java.lang.String TAG -> s
@@ -14543,55 +14648,55 @@ com.aizi.yingerbao.TestActivity -> com.aizi.yingerbao.TestActivity:
     283:318:void onEventMainThread(android.content.Intent) -> onEventMainThread
     38:38:android.widget.ArrayAdapter access$0(com.aizi.yingerbao.TestActivity) -> a
     37:37:java.lang.String access$1() -> a
-com.aizi.yingerbao.TestActivity$1 -> com.aizi.yingerbao.be:
+com.aizi.yingerbao.TestActivity$1 -> com.aizi.yingerbao.br:
     com.aizi.yingerbao.TestActivity this$0 -> a
     79:88:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$10 -> com.aizi.yingerbao.bf:
+com.aizi.yingerbao.TestActivity$10 -> com.aizi.yingerbao.bs:
     com.aizi.yingerbao.TestActivity this$0 -> a
     176:178:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$11 -> com.aizi.yingerbao.bg:
+com.aizi.yingerbao.TestActivity$11 -> com.aizi.yingerbao.bt:
     com.aizi.yingerbao.TestActivity this$0 -> a
     187:196:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$12 -> com.aizi.yingerbao.bh:
+com.aizi.yingerbao.TestActivity$12 -> com.aizi.yingerbao.bu:
     com.aizi.yingerbao.TestActivity this$0 -> a
     204:206:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$13 -> com.aizi.yingerbao.bi:
+com.aizi.yingerbao.TestActivity$13 -> com.aizi.yingerbao.bv:
     com.aizi.yingerbao.TestActivity this$0 -> a
     214:216:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$14 -> com.aizi.yingerbao.bj:
+com.aizi.yingerbao.TestActivity$14 -> com.aizi.yingerbao.bw:
     com.aizi.yingerbao.TestActivity this$0 -> a
     224:227:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$15 -> com.aizi.yingerbao.bk:
+com.aizi.yingerbao.TestActivity$15 -> com.aizi.yingerbao.bx:
     com.aizi.yingerbao.TestActivity this$0 -> a
     237:240:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$16 -> com.aizi.yingerbao.bl:
+com.aizi.yingerbao.TestActivity$16 -> com.aizi.yingerbao.by:
     com.aizi.yingerbao.TestActivity this$0 -> a
     248:266:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$16$1 -> com.aizi.yingerbao.bm:
+com.aizi.yingerbao.TestActivity$16$1 -> com.aizi.yingerbao.bz:
     com.aizi.yingerbao.TestActivity$16 this$1 -> a
     262:263:void onNumberPicked(int,java.lang.Number) -> a
-com.aizi.yingerbao.TestActivity$2 -> com.aizi.yingerbao.bn:
+com.aizi.yingerbao.TestActivity$2 -> com.aizi.yingerbao.ca:
     com.aizi.yingerbao.TestActivity this$0 -> a
     96:98:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$3 -> com.aizi.yingerbao.bo:
+com.aizi.yingerbao.TestActivity$3 -> com.aizi.yingerbao.cb:
     com.aizi.yingerbao.TestActivity this$0 -> a
     106:108:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$4 -> com.aizi.yingerbao.bp:
+com.aizi.yingerbao.TestActivity$4 -> com.aizi.yingerbao.cc:
     com.aizi.yingerbao.TestActivity this$0 -> a
     116:118:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$5 -> com.aizi.yingerbao.bq:
+com.aizi.yingerbao.TestActivity$5 -> com.aizi.yingerbao.cd:
     com.aizi.yingerbao.TestActivity this$0 -> a
     126:128:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$6 -> com.aizi.yingerbao.br:
+com.aizi.yingerbao.TestActivity$6 -> com.aizi.yingerbao.ce:
     com.aizi.yingerbao.TestActivity this$0 -> a
     136:138:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$7 -> com.aizi.yingerbao.bs:
+com.aizi.yingerbao.TestActivity$7 -> com.aizi.yingerbao.cf:
     com.aizi.yingerbao.TestActivity this$0 -> a
     147:148:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$8 -> com.aizi.yingerbao.bt:
+com.aizi.yingerbao.TestActivity$8 -> com.aizi.yingerbao.cg:
     com.aizi.yingerbao.TestActivity this$0 -> a
     156:157:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.TestActivity$9 -> com.aizi.yingerbao.bu:
+com.aizi.yingerbao.TestActivity$9 -> com.aizi.yingerbao.ch:
     com.aizi.yingerbao.TestActivity this$0 -> a
     166:167:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.UserActivity -> com.aizi.yingerbao.UserActivity:
@@ -14601,25 +14706,25 @@ com.aizi.yingerbao.UserActivity -> com.aizi.yingerbao.UserActivity:
     com.aizi.yingerbao.slidingmenu.SlidingMenuHelper mSlidingMenuHelper -> a
     com.aizi.yingerbao.view.CircleButton mCircleButtonBreath -> b
     com.aizi.yingerbao.view.CircleButton mCircleButtonTemp -> c
-    50:126:void onCreate(android.os.Bundle) -> onCreate
-    130:131:void onBackClick() -> a
-    142:142:void onCalendarClick() -> b
-    146:162:void onDestroy() -> onDestroy
-    178:180:void onResume() -> onResume
-    185:187:void onPause() -> onPause
-    192:201:boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
-com.aizi.yingerbao.UserActivity$1 -> com.aizi.yingerbao.bv:
+    50:128:void onCreate(android.os.Bundle) -> onCreate
+    132:133:void onBackClick() -> a
+    144:144:void onCalendarClick() -> b
+    148:164:void onDestroy() -> onDestroy
+    180:182:void onResume() -> onResume
+    187:189:void onPause() -> onPause
+    194:203:boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
+com.aizi.yingerbao.UserActivity$1 -> com.aizi.yingerbao.ci:
     com.aizi.yingerbao.UserActivity this$0 -> a
-    90:93:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.UserActivity$2 -> com.aizi.yingerbao.bw:
+    92:95:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.UserActivity$2 -> com.aizi.yingerbao.cj:
     com.aizi.yingerbao.UserActivity this$0 -> a
-    99:102:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.UserActivity$3 -> com.aizi.yingerbao.bx:
+    101:104:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.UserActivity$3 -> com.aizi.yingerbao.ck:
     com.aizi.yingerbao.UserActivity this$0 -> a
-    221:222:void onClick(android.content.DialogInterface,int) -> onClick
-com.aizi.yingerbao.UserActivity$4 -> com.aizi.yingerbao.by:
+    223:224:void onClick(android.content.DialogInterface,int) -> onClick
+com.aizi.yingerbao.UserActivity$4 -> com.aizi.yingerbao.cl:
     com.aizi.yingerbao.UserActivity this$0 -> a
-    229:229:void onClick(android.content.DialogInterface,int) -> onClick
+    231:231:void onClick(android.content.DialogInterface,int) -> onClick
 com.aizi.yingerbao.ViewPagerAdapter -> com.aizi.yingerbao.ViewPagerAdapter:
     java.util.ArrayList views -> b
     org.json.JSONObject jsonObject -> a
@@ -14656,13 +14761,13 @@ com.aizi.yingerbao.YingerBaoActivity -> com.aizi.yingerbao.YingerBaoActivity:
     44:44:android.widget.TextView access$5(com.aizi.yingerbao.YingerBaoActivity) -> f
     44:44:android.widget.TextView access$6(com.aizi.yingerbao.YingerBaoActivity) -> g
     58:58:void access$7(com.aizi.yingerbao.YingerBaoActivity,int) -> a
-com.aizi.yingerbao.YingerBaoActivity$1 -> com.aizi.yingerbao.bz:
+com.aizi.yingerbao.YingerBaoActivity$1 -> com.aizi.yingerbao.cm:
     com.aizi.yingerbao.YingerBaoActivity this$0 -> a
     140:141:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.YingerBaoActivity$2 -> com.aizi.yingerbao.ca:
+com.aizi.yingerbao.YingerBaoActivity$2 -> com.aizi.yingerbao.cn:
     com.aizi.yingerbao.YingerBaoActivity this$0 -> a
     148:149:void onClick(android.view.View) -> onClick
-com.aizi.yingerbao.YingerBaoActivity$3 -> com.aizi.yingerbao.cb:
+com.aizi.yingerbao.YingerBaoActivity$3 -> com.aizi.yingerbao.co:
     com.aizi.yingerbao.YingerBaoActivity this$0 -> a
     162:162:void onPageScrollStateChanged(int) -> onPageScrollStateChanged
     171:205:void onPageScrolled(int,float,int) -> onPageScrolled
@@ -14715,15 +14820,15 @@ com.aizi.yingerbao.bluttooth.BluetoothApi -> com.aizi.yingerbao.a.a:
     android.content.ServiceConnection mBluetoothServiceConnection -> o
     53:56:void unregisterEventBus() -> a
     59:63:com.aizi.yingerbao.bluttooth.BluetoothApi getInstance(android.content.Context) -> a
-    149:153:void RecvEvent(com.aizi.yingerbao.eventbus.AsycEvent) -> a
-    157:161:boolean writeByte(byte[]) -> a
+    149:154:void RecvEvent(com.aizi.yingerbao.eventbus.AsycEvent) -> a
+    158:162:boolean writeByte(byte[]) -> a
     41:41:boolean access$0(com.aizi.yingerbao.bluttooth.BluetoothApi) -> a
     26:26:java.lang.String access$1() -> b
-    40:40:int access$2(com.aizi.yingerbao.bluttooth.BluetoothApi) -> b
-    291:291:void access$3(com.aizi.yingerbao.bluttooth.BluetoothApi) -> c
-    40:40:void access$4(com.aizi.yingerbao.bluttooth.BluetoothApi,int) -> a
-    39:39:java.lang.Object access$5() -> c
-    36:36:com.aizi.yingerbao.bluttooth.BluetoothApi$WriteTimerTask access$6(com.aizi.yingerbao.bluttooth.BluetoothApi) -> d
+    39:39:java.lang.Object access$2() -> c
+    36:36:com.aizi.yingerbao.bluttooth.BluetoothApi$WriteTimerTask access$3(com.aizi.yingerbao.bluttooth.BluetoothApi) -> b
+    40:40:int access$4(com.aizi.yingerbao.bluttooth.BluetoothApi) -> c
+    290:290:void access$5(com.aizi.yingerbao.bluttooth.BluetoothApi) -> d
+    40:40:void access$6(com.aizi.yingerbao.bluttooth.BluetoothApi,int) -> a
     41:41:void access$7(com.aizi.yingerbao.bluttooth.BluetoothApi,boolean) -> a
 com.aizi.yingerbao.bluttooth.BluetoothApi$1 -> com.aizi.yingerbao.a.b:
     com.aizi.yingerbao.bluttooth.BluetoothApi this$0 -> a
@@ -14737,16 +14842,16 @@ com.aizi.yingerbao.bluttooth.BluetoothApi$Consumer -> com.aizi.yingerbao.a.a$a:
     java.lang.String instance -> b
     com.aizi.yingerbao.bluttooth.BluetoothApi$SendDataQueue sendqueue -> c
     com.aizi.yingerbao.bluttooth.BluetoothApi this$0 -> a
-    212:287:void run() -> run
+    213:286:void run() -> run
 com.aizi.yingerbao.bluttooth.BluetoothApi$SendDataQueue -> com.aizi.yingerbao.a.a$b:
     java.util.concurrent.BlockingQueue asyceventqueue -> a
     com.aizi.yingerbao.bluttooth.BluetoothApi this$0 -> b
-    329:329:com.aizi.yingerbao.eventbus.AsycEvent poll() -> a
-    344:344:int queuesize() -> b
-    349:351:void offer(com.aizi.yingerbao.eventbus.AsycEvent) -> a
+    328:328:com.aizi.yingerbao.eventbus.AsycEvent poll() -> a
+    343:343:int queuesize() -> b
+    348:349:void offer(com.aizi.yingerbao.eventbus.AsycEvent) -> a
 com.aizi.yingerbao.bluttooth.BluetoothApi$WriteTimerTask -> com.aizi.yingerbao.a.a$c:
     com.aizi.yingerbao.bluttooth.BluetoothApi this$0 -> a
-    168:168:void run() -> run
+    169:169:void run() -> run
 com.aizi.yingerbao.breath.BabyBreath -> com.aizi.yingerbao.b.a:
     long mBreathTime -> a
     int mBreathValue -> b
@@ -14866,21 +14971,21 @@ com.aizi.yingerbao.command.CommandCenter -> com.aizi.yingerbao.c.a:
     int mRetryTimes -> l
     com.aizi.yingerbao.command.CommandCenter$CommandTimerTask mTimerTask -> m
     java.util.Timer mTimer -> g
-    41:45:com.aizi.yingerbao.command.CommandCenter getInstance(android.content.Context) -> a
-    62:72:void addCallbackRequest(com.aizi.yingerbao.command.CommandSendRequest) -> a
-    76:128:void handleIntent(int) -> a
-    133:140:void clearInterfaceQueue() -> a
-    143:148:void resetTimerTask() -> c
-    28:28:java.lang.Object access$0() -> b
-    142:142:void access$1(com.aizi.yingerbao.command.CommandCenter) -> a
+    39:43:com.aizi.yingerbao.command.CommandCenter getInstance(android.content.Context) -> a
+    60:72:void addCallbackRequest(com.aizi.yingerbao.command.CommandSendRequest) -> a
+    76:126:void handleIntent(int) -> a
+    131:138:void clearInterfaceQueue() -> a
+    141:146:void resetTimerTask() -> c
+    26:26:java.lang.Object access$0() -> b
+    140:140:void access$1(com.aizi.yingerbao.command.CommandCenter) -> a
 com.aizi.yingerbao.command.CommandCenter$CommandTimerTask -> com.aizi.yingerbao.c.a$a:
     com.aizi.yingerbao.command.CommandCenter this$0 -> a
-    53:53:void run() -> run
+    51:51:void run() -> run
 com.aizi.yingerbao.command.CommandCenter$Consumer -> com.aizi.yingerbao.c.a$b:
     java.lang.String instance -> b
     com.aizi.yingerbao.command.CommandCenter$SendDataQueue sendqueue -> c
     com.aizi.yingerbao.command.CommandCenter this$0 -> a
-    164:183:void run() -> run
+    161:177:void run() -> run
 com.aizi.yingerbao.command.CommandCenter$SendDataQueue -> com.aizi.yingerbao.c.a$c:
     java.util.concurrent.BlockingQueue commandqueue -> a
 com.aizi.yingerbao.command.CommandSendRequest -> com.aizi.yingerbao.c.b:
@@ -14898,7 +15003,7 @@ com.aizi.yingerbao.constant.Constant -> com.aizi.yingerbao.d.a:
     java.util.UUID BLE_UUID_NUS_RX_CHARACTERISTIC -> d
     int SCAN_RANG -> e
     int AIZI_USERACTIVTY_QUIT -> f
-    203:204:void setSearchRange(int) -> a
+    206:207:void setSearchRange(int) -> a
 com.aizi.yingerbao.crc.CRC16 -> com.aizi.yingerbao.e.a:
     byte[] crc16_tab_h -> a
     byte[] crc16_tab_l -> b
@@ -15006,14 +15111,14 @@ com.aizi.yingerbao.database.YingerbaoDatabase -> com.aizi.yingerbao.database.Yin
     com.aizi.yingerbao.database.YingerbaoDatabase$DbErrorHandler mDbErrorHandler -> b
     java.lang.Object myLock -> c
     50:61:android.database.sqlite.SQLiteDatabase getDb(android.content.Context) -> a
-    65:88:com.aizi.yingerbao.database.YingerbaoDatabase$InfoDbOpenHelper getInfoDbOpenHelper(android.content.Context) -> b
-    102:102:long insertSleepInfo(android.content.Context,com.aizi.yingerbao.database.SleepInfo) -> a
-    142:142:long insertBreathInfo(android.content.Context,com.aizi.yingerbao.database.BreathDataInfo) -> a
-    205:205:long insertTemperatureInfo(android.content.Context,com.aizi.yingerbao.database.TemperatureDataInfo) -> a
-    382:382:java.util.List getBreathInfoEnumClassList(android.content.Context,long,long) -> a
-    446:446:java.util.List getBreathInfoEnumClassList(android.content.Context,int,int,int) -> a
-    506:506:java.util.List getTemperatureInfoEnumClassList(android.content.Context,int,int,int) -> b
-    562:562:java.util.List getTemperatureInfoEnumClassList(android.content.Context,long,long) -> b
+    65:94:com.aizi.yingerbao.database.YingerbaoDatabase$InfoDbOpenHelper getInfoDbOpenHelper(android.content.Context) -> b
+    108:108:long insertSleepInfo(android.content.Context,com.aizi.yingerbao.database.SleepInfo) -> a
+    148:148:long insertBreathInfo(android.content.Context,com.aizi.yingerbao.database.BreathDataInfo) -> a
+    211:211:long insertTemperatureInfo(android.content.Context,com.aizi.yingerbao.database.TemperatureDataInfo) -> a
+    388:388:java.util.List getBreathInfoEnumClassList(android.content.Context,long,long) -> a
+    452:452:java.util.List getBreathInfoEnumClassList(android.content.Context,int,int,int) -> a
+    512:512:java.util.List getTemperatureInfoEnumClassList(android.content.Context,int,int,int) -> b
+    568:568:java.util.List getTemperatureInfoEnumClassList(android.content.Context,long,long) -> b
 com.aizi.yingerbao.database.YingerbaoDatabase$BreathInfoEnum -> com.aizi.yingerbao.database.YingerbaoDatabase$BreathInfoEnum:
     com.aizi.yingerbao.database.YingerbaoDatabase$BreathInfoEnum BreathInfoId -> a
     com.aizi.yingerbao.database.YingerbaoDatabase$BreathInfoEnum BreathTimestamp -> b
@@ -15032,11 +15137,11 @@ com.aizi.yingerbao.database.YingerbaoDatabase$BreathInfoEnum -> com.aizi.yingerb
     1:1:com.aizi.yingerbao.database.YingerbaoDatabase$BreathInfoEnum[] values() -> values
     1:1:com.aizi.yingerbao.database.YingerbaoDatabase$BreathInfoEnum valueOf(java.lang.String) -> valueOf
 com.aizi.yingerbao.database.YingerbaoDatabase$DbErrorHandler -> com.aizi.yingerbao.database.YingerbaoDatabase$a:
-    623:674:void onCorruption(android.database.sqlite.SQLiteDatabase) -> onCorruption
-    678:694:void deleteDatabaseFile(java.lang.String) -> a
+    629:680:void onCorruption(android.database.sqlite.SQLiteDatabase) -> onCorruption
+    684:700:void deleteDatabaseFile(java.lang.String) -> a
 com.aizi.yingerbao.database.YingerbaoDatabase$InfoDbOpenHelper -> com.aizi.yingerbao.database.YingerbaoDatabase$b:
-    714:764:void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
-    768:770:void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
+    720:770:void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
+    774:776:void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
 com.aizi.yingerbao.database.YingerbaoDatabase$SleepInfoEnum -> com.aizi.yingerbao.database.YingerbaoDatabase$SleepInfoEnum:
     com.aizi.yingerbao.database.YingerbaoDatabase$SleepInfoEnum SleepInfoId -> a
     com.aizi.yingerbao.database.YingerbaoDatabase$SleepInfoEnum SleepTimestamp -> b
@@ -15214,6 +15319,7 @@ com.aizi.yingerbao.deviceinterface.SyncDevice -> com.aizi.yingerbao.f.k:
     com.aizi.yingerbao.deviceinterface.DeviceResponse updateDeviceRom() -> n
     com.aizi.yingerbao.deviceinterface.DeviceResponse updateDeviceConfig() -> o
     com.aizi.yingerbao.deviceinterface.DeviceResponse setTemperatureAlarmConfig$7b5e945c(double) -> a
+    com.aizi.yingerbao.deviceinterface.DeviceResponse resetManuSettings$9684863() -> p
 com.aizi.yingerbao.deviceinterface.SyncDeviceImpl -> com.aizi.yingerbao.f.l:
     java.lang.String TAG -> b
     android.content.Context mContext -> a
@@ -15225,7 +15331,7 @@ com.aizi.yingerbao.deviceinterface.SyncDeviceImpl -> com.aizi.yingerbao.f.l:
     148:161:com.aizi.yingerbao.deviceinterface.DeviceResponse getDeviceTime() -> b
     168:183:com.aizi.yingerbao.deviceinterface.DeviceResponse getRealTimeData() -> e
     189:205:com.aizi.yingerbao.deviceinterface.DeviceResponse getAllNoSyncInfo$9684863() -> k
-    212:218:byte[] getDataType$255806f() -> p
+    212:218:byte[] getDataType(int) -> a
     224:239:com.aizi.yingerbao.deviceinterface.DeviceResponse getAllSyncInfo() -> f
     245:258:com.aizi.yingerbao.deviceinterface.DeviceResponse getBreathStopInfo() -> l
     264:278:com.aizi.yingerbao.deviceinterface.DeviceResponse getRealTimeTempData() -> g
@@ -15238,6 +15344,7 @@ com.aizi.yingerbao.deviceinterface.SyncDeviceImpl -> com.aizi.yingerbao.f.l:
     406:421:byte[] getConfigInfo$1a54714a() -> r
     426:440:com.aizi.yingerbao.deviceinterface.DeviceResponse setTemperatureAlarmConfig$7b5e945c(double) -> a
     444:457:byte[] getTempConfig$279105b6$481fa588(double) -> b
+    462:478:com.aizi.yingerbao.deviceinterface.DeviceResponse resetManuSettings$9684863() -> p
 com.aizi.yingerbao.eventbus.AsycEvent -> com.aizi.yingerbao.g.a:
     byte[] basedata -> a
     boolean mIsWait -> b
@@ -15502,6 +15609,9 @@ com.aizi.yingerbao.receiver.AlarmManagerReceiver -> com.aizi.yingerbao.receiver.
     java.lang.String TAG -> a
     19:56:void onReceive(android.content.Context,android.content.Intent) -> onReceive
     59:63:void handleTimeOut(android.content.Context,int) -> a
+com.aizi.yingerbao.receiver.BaiduPushMessageReceiver -> com.aizi.yingerbao.receiver.BaiduPushMessageReceiver:
+    18:23:void onBind(android.content.Context,int,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    41:41:void onMessage$62dc3a79() -> a
 com.aizi.yingerbao.service.BluetoothService -> com.aizi.yingerbao.service.BluetoothService:
     java.lang.String TAG -> f
     android.bluetooth.BluetoothManager mBluetoothManager -> g
@@ -15521,36 +15631,36 @@ com.aizi.yingerbao.service.BluetoothService -> com.aizi.yingerbao.service.Blueto
     android.bluetooth.BluetoothGattCallback mGattCallback -> p
     android.os.IBinder mBinder -> q
     95:96:void setCallback(com.aizi.yingerbao.service.BluetoothService$OnBluetoothServiceListener) -> a
-    240:244:void broadcastUpdate(java.lang.String) -> b
-    254:254:android.os.IBinder onBind(android.content.Intent) -> onBind
-    263:264:boolean onUnbind(android.content.Intent) -> onUnbind
-    277:291:boolean initBluetooth() -> a
-    306:332:boolean connect(java.lang.String,boolean) -> a
-    345:367:void disconnect(boolean) -> a
-    374:383:void close() -> b
-    407:441:boolean enableDataNotification() -> c
-    445:470:boolean writeBaseRXCharacteristic(byte[]) -> a
+    238:242:void broadcastUpdate(java.lang.String) -> b
+    252:252:android.os.IBinder onBind(android.content.Intent) -> onBind
+    261:262:boolean onUnbind(android.content.Intent) -> onUnbind
+    275:289:boolean initBluetooth() -> a
+    304:333:boolean connect(java.lang.String,boolean) -> a
+    346:368:void disconnect(boolean) -> a
+    375:384:void close() -> b
+    408:442:boolean enableDataNotification() -> c
+    446:471:boolean writeBaseRXCharacteristic(byte[]) -> a
     53:53:java.lang.String access$0() -> d
     58:58:android.bluetooth.BluetoothGatt access$1(com.aizi.yingerbao.service.BluetoothService) -> a
     57:57:java.lang.String access$2(com.aizi.yingerbao.service.BluetoothService) -> b
-    239:239:void access$3$3053b52a(java.lang.String) -> a
+    237:237:void access$3$3053b52a(java.lang.String) -> a
     68:68:java.util.UUID access$4() -> e
     88:88:com.aizi.yingerbao.service.BluetoothService$OnBluetoothServiceListener access$5(com.aizi.yingerbao.service.BluetoothService) -> c
 com.aizi.yingerbao.service.BluetoothService$1 -> com.aizi.yingerbao.service.a:
     com.aizi.yingerbao.service.BluetoothService this$0 -> a
-    104:127:void onConnectionStateChange(android.bluetooth.BluetoothGatt,int,int) -> onConnectionStateChange
-    131:194:void onServicesDiscovered(android.bluetooth.BluetoothGatt,int) -> onServicesDiscovered
-    202:202:void onCharacteristicRead(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattCharacteristic,int) -> onCharacteristicRead
-    207:209:void onCharacteristicChanged(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattCharacteristic) -> onCharacteristicChanged
-    212:232:void onCharacteristicWrite(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattCharacteristic,int) -> onCharacteristicWrite
-    236:236:void onDescriptorWrite(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattDescriptor,int) -> onDescriptorWrite
+    104:126:void onConnectionStateChange(android.bluetooth.BluetoothGatt,int,int) -> onConnectionStateChange
+    130:192:void onServicesDiscovered(android.bluetooth.BluetoothGatt,int) -> onServicesDiscovered
+    200:200:void onCharacteristicRead(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattCharacteristic,int) -> onCharacteristicRead
+    205:207:void onCharacteristicChanged(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattCharacteristic) -> onCharacteristicChanged
+    210:230:void onCharacteristicWrite(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattCharacteristic,int) -> onCharacteristicWrite
+    234:234:void onDescriptorWrite(android.bluetooth.BluetoothGatt,android.bluetooth.BluetoothGattDescriptor,int) -> onDescriptorWrite
     101:101:com.aizi.yingerbao.service.BluetoothService access$0(com.aizi.yingerbao.service.BluetoothService$1) -> a
 com.aizi.yingerbao.service.BluetoothService$1$1 -> com.aizi.yingerbao.service.b:
     com.aizi.yingerbao.service.BluetoothService$1 this$1 -> a
-    162:176:void run() -> run
+    161:175:void run() -> run
 com.aizi.yingerbao.service.BluetoothService$LocalBinder -> com.aizi.yingerbao.service.BluetoothService$a:
     com.aizi.yingerbao.service.BluetoothService this$0 -> a
-    248:248:com.aizi.yingerbao.service.BluetoothService getService() -> a
+    246:246:com.aizi.yingerbao.service.BluetoothService getService() -> a
 com.aizi.yingerbao.service.BluetoothService$OnBluetoothServiceListener -> com.aizi.yingerbao.service.BluetoothService$b:
     void onBluetoothWrite(android.content.Intent) -> a
 com.aizi.yingerbao.service.ScanDevicesService -> com.aizi.yingerbao.service.ScanDevicesService:
@@ -15581,31 +15691,39 @@ com.aizi.yingerbao.service.ScanDevicesService$ScanBinder -> com.aizi.yingerbao.s
     com.aizi.yingerbao.service.ScanDevicesService this$0 -> a
     69:69:com.aizi.yingerbao.service.ScanDevicesService getService() -> a
 com.aizi.yingerbao.slidingmenu.SlidingMenuHelper -> com.aizi.yingerbao.i.a:
-    java.lang.String TAG -> g
-    android.app.Activity mActivity -> h
+    java.lang.String TAG -> i
+    android.app.Activity mActivity -> j
     android.view.ViewGroup mUserAccountGroup -> a
     android.view.ViewGroup mDataTestGroup -> b
     android.view.ViewGroup mSearchGroup -> c
     android.view.ViewGroup mAboutGroup -> d
-    android.widget.TextView mUserAccountTextView -> e
-    java.lang.String mUseraccount -> f
-    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu mSlidingMenu -> i
-    52:128:void initSlidingMenu() -> a
-    138:143:android.view.View findViewById(int) -> a
-    174:175:void showMenu() -> b
-    25:25:android.app.Activity access$0(com.aizi.yingerbao.slidingmenu.SlidingMenuHelper) -> a
+    android.view.ViewGroup mExplainGroup -> e
+    android.view.ViewGroup mBuyYingerbaoGroup -> f
+    android.widget.TextView mUserAccountTextView -> g
+    java.lang.String mUseraccount -> h
+    com.jeremyfeinstein.slidingmenu.lib.SlidingMenu mSlidingMenu -> k
+    59:161:void initSlidingMenu() -> a
+    171:176:android.view.View findViewById(int) -> a
+    207:208:void showMenu() -> b
+    30:30:android.app.Activity access$0(com.aizi.yingerbao.slidingmenu.SlidingMenuHelper) -> a
 com.aizi.yingerbao.slidingmenu.SlidingMenuHelper$1 -> com.aizi.yingerbao.i.b:
     com.aizi.yingerbao.slidingmenu.SlidingMenuHelper this$0 -> a
-    83:92:void onClick(android.view.View) -> onClick
+    90:99:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.slidingmenu.SlidingMenuHelper$2 -> com.aizi.yingerbao.i.c:
     com.aizi.yingerbao.slidingmenu.SlidingMenuHelper this$0 -> a
-    100:103:void onClick(android.view.View) -> onClick
+    107:110:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.slidingmenu.SlidingMenuHelper$3 -> com.aizi.yingerbao.i.d:
     com.aizi.yingerbao.slidingmenu.SlidingMenuHelper this$0 -> a
-    111:113:void onClick(android.view.View) -> onClick
+    118:120:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.slidingmenu.SlidingMenuHelper$4 -> com.aizi.yingerbao.i.e:
     com.aizi.yingerbao.slidingmenu.SlidingMenuHelper this$0 -> a
-    123:125:void onClick(android.view.View) -> onClick
+    128:135:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.slidingmenu.SlidingMenuHelper$5 -> com.aizi.yingerbao.i.f:
+    com.aizi.yingerbao.slidingmenu.SlidingMenuHelper this$0 -> a
+    144:146:void onClick(android.view.View) -> onClick
+com.aizi.yingerbao.slidingmenu.SlidingMenuHelper$6 -> com.aizi.yingerbao.i.g:
+    com.aizi.yingerbao.slidingmenu.SlidingMenuHelper this$0 -> a
+    156:158:void onClick(android.view.View) -> onClick
 com.aizi.yingerbao.synctime.DataTime -> com.aizi.yingerbao.j.a:
     int year -> a
     int month -> b
@@ -15720,10 +15838,11 @@ com.aizi.yingerbao.userdatabase.UserAccountInfo -> com.aizi.yingerbao.userdataba
     java.lang.String mUserPosition -> mUserPosition
     java.lang.String mBabySex -> mBabySex
     int mBabyAgeMonth -> mBabyAgeMonth
-    20:21:void setUserName(java.lang.String) -> a
-    24:24:java.lang.String getUserPassWord() -> a
-    28:29:void setUserPassWord(java.lang.String) -> b
-    33:33:java.lang.String getUserPosition() -> b
+    java.lang.String mBDPushChannelID -> mBDPushChannelID
+    29:30:void setUserName(java.lang.String) -> a
+    33:33:java.lang.String getUserPassWord() -> a
+    37:38:void setUserPassWord(java.lang.String) -> b
+    42:42:java.lang.String getUserPosition() -> b
 com.aizi.yingerbao.utility.BitSetConvert -> com.aizi.yingerbao.utility.a:
     8:14:byte[] bitSet2ByteArray(java.util.BitSet) -> a
     31:39:int getTimeValue(java.util.BitSet,int,int) -> a
@@ -15743,27 +15862,27 @@ com.aizi.yingerbao.utility.MessageParse -> com.aizi.yingerbao.utility.c:
     boolean mIsDeviceTimed -> e
     boolean mIsSyncData -> f
     com.aizi.yingerbao.utility.MessageParse mInstance -> i
-    66:70:com.aizi.yingerbao.utility.MessageParse getInstance(android.content.Context) -> a
-    75:76:void onEvent(com.aizi.yingerbao.baseheader.BaseL2Message) -> onEvent
-    79:80:void RecvBaseL2Msg(com.aizi.yingerbao.baseheader.BaseL2Message) -> a
-    84:111:void handleL2Msg(com.aizi.yingerbao.baseheader.BaseL2Message) -> b
-    121:135:void handleBind(java.util.List) -> a
-    322:327:void setSyncDataAlarm() -> b
-    386:418:void handleData(java.util.List) -> b
-    483:540:void handleExceptionData(byte[]) -> a
-    578:622:void handleBreathStopData(byte[]) -> b
-    627:648:void bmobBatchData(java.util.List) -> c
-    652:667:void handleHumbitData(byte[]) -> c
-    671:739:void handleTempData(byte[]) -> d
-    753:789:java.util.List getSleepInfoList(byte[]) -> e
-    823:833:void handleNotify(java.util.List) -> d
-    854:908:void handleManufature(java.util.List) -> e
-    933:1055:void handleSettings(java.util.List) -> f
-    1059:1077:java.util.List getKeyPayloadList(byte[]) -> f
+    67:71:com.aizi.yingerbao.utility.MessageParse getInstance(android.content.Context) -> a
+    76:77:void onEvent(com.aizi.yingerbao.baseheader.BaseL2Message) -> onEvent
+    80:81:void RecvBaseL2Msg(com.aizi.yingerbao.baseheader.BaseL2Message) -> a
+    85:112:void handleL2Msg(com.aizi.yingerbao.baseheader.BaseL2Message) -> b
+    122:136:void handleBind(java.util.List) -> a
+    327:332:void setSyncDataAlarm() -> b
+    391:423:void handleData(java.util.List) -> b
+    488:545:void handleExceptionData(byte[]) -> a
+    583:627:void handleBreathStopData(byte[]) -> b
+    632:653:void bmobBatchData(java.util.List) -> c
+    657:672:void handleHumbitData(byte[]) -> c
+    676:744:void handleTempData(byte[]) -> d
+    758:794:java.util.List getSleepInfoList(byte[]) -> e
+    828:838:void handleNotify(java.util.List) -> d
+    859:913:void handleManufature(java.util.List) -> e
+    938:1060:void handleSettings(java.util.List) -> f
+    1064:1082:java.util.List getKeyPayloadList(byte[]) -> f
     42:42:java.lang.String access$0() -> a
 com.aizi.yingerbao.utility.MessageParse$1 -> com.aizi.yingerbao.utility.d:
     com.aizi.yingerbao.utility.MessageParse this$0 -> a
-    630:643:void done(java.util.List,cn.bmob.v3.exception.BmobException) -> done
+    635:648:void done(java.util.List,cn.bmob.v3.exception.BmobException) -> done
 com.aizi.yingerbao.utility.PrivateParams -> com.aizi.yingerbao.utility.e:
     30:37:void setSPInt(android.content.Context,java.lang.String,int) -> a
     48:47:int getSPInt(android.content.Context,java.lang.String,int) -> b
@@ -15806,52 +15925,53 @@ com.aizi.yingerbao.utility.SleepyInfo -> com.aizi.yingerbao.utility.h:
     float deepsleep -> d
 com.aizi.yingerbao.utility.Utiliy -> com.aizi.yingerbao.utility.Utiliy:
     java.util.ArrayList mSleepList -> a
-    int logEanbled -> b
-    105:129:void showConnectDialog(android.content.Context) -> a
-    169:176:boolean isBluetoothReady(android.content.Context) -> b
-    183:206:void logToFile(java.lang.String) -> a
-    212:233:void dataToFile(java.lang.String) -> b
-    275:301:boolean isBluetoothConnected(android.content.Context) -> c
-    311:332:byte[] hexStringToByte(java.lang.String) -> c
-    336:337:int toByte(char) -> a
-    347:356:com.aizi.yingerbao.baseheader.BaseL2Message generateBaseL2Msg$6e112aa(short,com.aizi.yingerbao.baseheader.KeyPayload) -> a
-    369:380:java.lang.String printHexString(byte[]) -> a
-    403:408:void reflectTranDataType(android.content.Context,int) -> a
-    447:454:android.app.PendingIntent getDelayPendingIntent(android.content.Context,int) -> b
-    459:470:void setDelayAlarm(android.content.Context,long,android.app.PendingIntent) -> a
-    486:493:void cancelAlarmPdIntent(android.content.Context,android.app.PendingIntent) -> a
-    497:502:java.lang.String getAppVersionName(android.content.Context) -> d
-    506:508:void saveLog(java.lang.String,java.lang.String) -> a
-    512:530:void initCurrentDataDate(android.content.Context) -> e
-    533:535:void cancelAlarmNotify(android.content.Context) -> f
-    540:547:void showEmergencyBreath$30c4c46f(android.content.Context) -> g
-    551:558:void showEmergencyFever$30c4c46f(android.content.Context,java.lang.String) -> a
-    561:570:java.lang.String getPhoneImei(android.content.Context) -> h
-    574:583:java.lang.String getPhoneNumber$1afe14f3() -> a
-    587:593:java.lang.String getDeviceId(android.content.Context) -> i
-    597:606:void sendSavedBreathData(android.content.Context) -> j
-    643:651:void sendSavedTempData(android.content.Context) -> k
-    687:692:void setLastSendStatisticTime(android.content.Context) -> n
-    695:700:long getLastSendStatisticTime(android.content.Context) -> o
-    705:726:void bmobBatchData(java.util.List) -> a
-    609:609:void access$0(android.content.Context) -> l
-    653:653:void access$1(android.content.Context) -> m
+    boolean mIsLogtoFile -> b
+    int logEanbled -> c
+    110:132:void showConnectDialog(android.content.Context) -> a
+    172:179:boolean isBluetoothReady(android.content.Context) -> b
+    187:212:void logToFile(java.lang.String) -> a
+    218:241:void dataToFile(java.lang.String) -> b
+    283:309:boolean isBluetoothConnected(android.content.Context) -> c
+    319:340:byte[] hexStringToByte(java.lang.String) -> c
+    344:345:int toByte(char) -> a
+    355:364:com.aizi.yingerbao.baseheader.BaseL2Message generateBaseL2Msg$6e112aa(short,com.aizi.yingerbao.baseheader.KeyPayload) -> a
+    377:388:java.lang.String printHexString(byte[]) -> a
+    411:416:void reflectTranDataType(android.content.Context,int) -> a
+    455:462:android.app.PendingIntent getDelayPendingIntent(android.content.Context,int) -> b
+    467:478:void setDelayAlarm(android.content.Context,long,android.app.PendingIntent) -> a
+    494:501:void cancelAlarmPdIntent(android.content.Context,android.app.PendingIntent) -> a
+    505:510:java.lang.String getAppVersionName(android.content.Context) -> d
+    514:516:void saveLog(java.lang.String,java.lang.String) -> a
+    520:538:void initCurrentDataDate(android.content.Context) -> e
+    541:543:void cancelAlarmNotify(android.content.Context) -> f
+    548:555:void showEmergencyBreath$30c4c46f(android.content.Context) -> g
+    559:566:void showEmergencyFever$30c4c46f(android.content.Context,java.lang.String) -> a
+    569:578:java.lang.String getPhoneImei(android.content.Context) -> h
+    582:591:java.lang.String getPhoneNumber$1afe14f3() -> a
+    595:601:java.lang.String getDeviceId(android.content.Context) -> i
+    605:614:void sendSavedBreathData(android.content.Context) -> j
+    651:659:void sendSavedTempData(android.content.Context) -> k
+    695:700:void setLastSendStatisticTime(android.content.Context) -> n
+    703:708:long getLastSendStatisticTime(android.content.Context) -> o
+    713:734:void bmobBatchData(java.util.List) -> a
+    617:617:void access$0(android.content.Context) -> l
+    661:661:void access$1(android.content.Context) -> m
 com.aizi.yingerbao.utility.Utiliy$1 -> com.aizi.yingerbao.utility.i:
     android.content.Context val$context -> a
-    115:118:void onClick(android.content.DialogInterface,int) -> onClick
+    118:121:void onClick(android.content.DialogInterface,int) -> onClick
 com.aizi.yingerbao.utility.Utiliy$2 -> com.aizi.yingerbao.utility.j:
-    125:125:void onClick(android.content.DialogInterface,int) -> onClick
+    128:128:void onClick(android.content.DialogInterface,int) -> onClick
 com.aizi.yingerbao.utility.Utiliy$5 -> com.aizi.yingerbao.utility.k:
     android.content.Context val$context -> a
-    516:524:void run() -> run
+    524:532:void run() -> run
 com.aizi.yingerbao.utility.Utiliy$6 -> com.aizi.yingerbao.utility.l:
     android.content.Context val$context -> a
-    602:603:void brun() -> a
+    610:611:void brun() -> a
 com.aizi.yingerbao.utility.Utiliy$7 -> com.aizi.yingerbao.utility.m:
     android.content.Context val$context -> a
-    648:649:void brun() -> a
+    656:657:void brun() -> a
 com.aizi.yingerbao.utility.Utiliy$8 -> com.aizi.yingerbao.utility.n:
-    708:721:void done(java.util.List,cn.bmob.v3.exception.BmobException) -> done
+    716:729:void done(java.util.List,cn.bmob.v3.exception.BmobException) -> done
 com.aizi.yingerbao.utility.VibratorUtil -> com.aizi.yingerbao.utility.o:
     30:32:void Vibrate$26497cee(android.content.Context,long[]) -> a
 com.aizi.yingerbao.view.BatteryView -> com.aizi.yingerbao.view.BatteryView:
@@ -15915,6 +16035,2117 @@ com.aizi.yingerbao.view.TopBarView -> com.aizi.yingerbao.view.TopBarView:
 com.aizi.yingerbao.view.TopBarView$onTitleBarClickListener -> com.aizi.yingerbao.view.TopBarView$a:
     void onBackClick() -> a
     void onCalendarClick() -> b
+com.baidu.android.pushservice.BasicPushNotificationBuilder -> com.baidu.android.pushservice.BasicPushNotificationBuilder:
+    android.app.Notification construct(android.content.Context) -> a
+    void writeObject(java.io.ObjectOutputStream) -> writeObject
+    void readObject(java.io.ObjectInputStream) -> readObject
+com.baidu.android.pushservice.CommandService -> com.baidu.android.pushservice.CommandService:
+    void onCreate() -> onCreate
+    int onStartCommand(android.content.Intent,int,int) -> onStartCommand
+    void onDestroy() -> onDestroy
+    android.os.IBinder onBind(android.content.Intent) -> onBind
+    boolean onUnbind(android.content.Intent) -> onUnbind
+    void a(android.content.Intent) -> a
+com.baidu.android.pushservice.PushConstants -> com.baidu.android.pushservice.a:
+    java.lang.String a(int) -> a
+com.baidu.android.pushservice.PushInfoProvider -> com.baidu.android.pushservice.PushInfoProvider:
+    android.database.sqlite.SQLiteDatabase a -> a
+    java.lang.Object b -> b
+    android.content.Context c -> c
+    android.content.UriMatcher d -> d
+    boolean onCreate() -> onCreate
+    android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String) -> query
+    java.lang.String getType(android.net.Uri) -> getType
+    android.net.Uri insert(android.net.Uri,android.content.ContentValues) -> insert
+    int delete(android.net.Uri,java.lang.String,java.lang.String[]) -> delete
+    int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[]) -> update
+com.baidu.android.pushservice.PushManager -> com.baidu.android.pushservice.b:
+    void startWork(android.content.Context,int,java.lang.String) -> a
+    void bind$1a54e370(android.content.Context) -> a
+    boolean hwMessageVerify(android.content.Context,java.lang.String,java.lang.String) -> a
+com.baidu.android.pushservice.PushMessageReceiver -> com.baidu.android.pushservice.PushMessageReceiver:
+    java.lang.String TAG -> a
+    java.lang.String ACTION_LAPP_RECEIVE -> b
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    void handleXiaomiMessageCallBack(android.content.Context,com.xiaomi.mipush.sdk.MiPushMessage,int) -> a
+    boolean msgFromXMConsole(java.lang.String) -> a
+    java.lang.Object getActionMsg(com.xiaomi.xmpush.thrift.h,boolean,android.content.Context) -> a
+    java.lang.Object decryptXmOrigMsg(android.content.Context,com.xiaomi.xmpush.thrift.h) -> a
+    void sendCallback(android.content.Context,android.content.Intent,int) -> b
+    void onBind(android.content.Context,int,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    void onMessage$62dc3a79() -> a
+    void access$000$4bfbba4(android.content.Context,android.content.Intent,int) -> a
+com.baidu.android.pushservice.PushMessageReceiver$1 -> com.baidu.android.pushservice.c:
+    android.content.Context a -> a
+    android.content.Intent b -> b
+    com.baidu.android.pushservice.PushMessageReceiver c -> c
+    void handleMessage(android.os.Message) -> handleMessage
+com.baidu.android.pushservice.PushMessageReceiver$2 -> com.baidu.android.pushservice.d:
+    android.content.Context a -> a
+    int b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    byte[] e -> e
+    byte[] f -> f
+    android.content.Intent g -> g
+    com.baidu.android.pushservice.PushMessageReceiver$a h -> h
+    com.baidu.android.pushservice.PushMessageReceiver i -> i
+    void run() -> run
+com.baidu.android.pushservice.PushMessageReceiver$a -> com.baidu.android.pushservice.PushMessageReceiver$a:
+    java.lang.ref.WeakReference d -> d
+com.baidu.android.pushservice.PushMessageReceiver$b -> com.baidu.android.pushservice.PushMessageReceiver$b:
+    com.baidu.android.pushservice.PushMessageReceiver$b a -> a
+    com.baidu.android.pushservice.PushMessageReceiver$b b -> b
+    com.baidu.android.pushservice.PushMessageReceiver$b c -> c
+    int d -> d
+    com.baidu.android.pushservice.PushMessageReceiver$b[] e -> e
+    com.baidu.android.pushservice.PushMessageReceiver$b[] values() -> values
+    com.baidu.android.pushservice.PushMessageReceiver$b valueOf(java.lang.String) -> valueOf
+    int a(com.baidu.android.pushservice.PushMessageReceiver$b) -> a
+com.baidu.android.pushservice.PushNotificationBuilder -> com.baidu.android.pushservice.PushNotificationBuilder:
+    int mStatusbarIcon -> mStatusbarIcon
+    int mNotificationFlags -> mNotificationFlags
+    int mNotificationDefaults -> mNotificationDefaults
+    java.lang.String mNotificationsound -> mNotificationsound
+    long[] mVibratePattern -> mVibratePattern
+    java.lang.String mNotificationTitle -> mNotificationTitle
+    java.lang.String mNotificationText -> mNotificationText
+    void setStatusbarIcon(int) -> a
+    void setNotificationTitle(java.lang.String) -> a
+    void setNotificationText(java.lang.String) -> b
+    void setNotificationFlags$13462e() -> a
+    void setNotificationDefaults$13462e() -> b
+    android.app.Notification construct(android.content.Context) -> a
+com.baidu.android.pushservice.PushService -> com.baidu.android.pushservice.PushService:
+    boolean a -> a
+    android.os.Handler b -> b
+    com.baidu.android.pushservice.SDcardRemovedReceiver c -> c
+    boolean d -> d
+    java.lang.Runnable e -> e
+    int f -> f
+    com.baidu.android.pushservice.a.a$a g -> g
+    void onCreate() -> onCreate
+    int onStartCommand(android.content.Intent,int,int) -> onStartCommand
+    void onDestroy() -> onDestroy
+    void a$25decb5() -> a
+    android.os.IBinder onBind(android.content.Intent) -> onBind
+    boolean onUnbind(android.content.Intent) -> onUnbind
+    java.lang.String a(java.lang.String,java.lang.String) -> b
+    int a(com.baidu.android.pushservice.PushService) -> a
+    java.lang.String a$2e7cc9b(java.lang.String,java.lang.String) -> a
+com.baidu.android.pushservice.PushService$1 -> com.baidu.android.pushservice.e:
+    com.baidu.android.pushservice.PushService a -> a
+    void run() -> run
+com.baidu.android.pushservice.PushService$2 -> com.baidu.android.pushservice.f:
+    com.baidu.android.pushservice.PushService a -> a
+    void a$13ff9618(java.lang.String,com.baidu.android.pushservice.a.b) -> a
+    void a$45a3cec6(java.lang.String,com.baidu.android.pushservice.a.b) -> b
+    void b$45a3cec6(java.lang.String,com.baidu.android.pushservice.a.b) -> c
+    int c() -> a
+    void a$3532fb32(java.lang.String,com.baidu.android.pushservice.a.b) -> d
+com.baidu.android.pushservice.PushServiceReceiver -> com.baidu.android.pushservice.PushServiceReceiver:
+    java.util.concurrent.locks.ReentrantLock a -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    void a$5c01af80(android.content.Context,com.baidu.android.pushservice.message.PublicMsg) -> a
+    android.content.Intent a(java.lang.String) -> a
+    android.content.Intent b$12036601(android.content.Context) -> a
+    void a(android.content.Context,java.lang.String,java.lang.String,com.baidu.android.pushservice.message.PublicMsg,java.lang.String,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String,java.lang.String,com.baidu.android.pushservice.message.PublicMsg,java.lang.String) -> a
+com.baidu.android.pushservice.PushServiceReceiver$1 -> com.baidu.android.pushservice.g:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    byte[] d -> d
+    byte[] e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    java.lang.String h -> h
+    com.baidu.android.pushservice.PushServiceReceiver i -> i
+    void a() -> a
+com.baidu.android.pushservice.PushServiceReceiver$a -> com.baidu.android.pushservice.PushServiceReceiver$a:
+    android.content.Context a -> a
+    android.widget.RemoteViews b -> b
+    int c -> c
+    int d -> d
+    int e -> e
+    int f -> f
+    android.app.NotificationManager g -> g
+    void a$227bc5d8() -> a
+    void a(com.baidu.android.pushservice.richmedia.a,com.baidu.android.pushservice.richmedia.b) -> a
+    void a$795b11(com.baidu.android.pushservice.richmedia.a) -> a
+    void a$1d5edd33(com.baidu.android.pushservice.richmedia.a) -> b
+    void b(com.baidu.android.pushservice.richmedia.a) -> c
+com.baidu.android.pushservice.PushServiceReceiver$a$1 -> com.baidu.android.pushservice.h:
+    com.baidu.android.pushservice.PushServiceReceiver$a a -> a
+    void run() -> run
+com.baidu.android.pushservice.PushServiceReceiver$a$2 -> com.baidu.android.pushservice.i:
+    java.lang.String a -> a
+    com.baidu.android.pushservice.PushServiceReceiver$a b -> b
+    void run() -> run
+com.baidu.android.pushservice.PushSettings -> com.baidu.android.pushservice.j:
+    int a -> a
+    int b -> b
+    int c -> c
+    java.lang.String a(android.content.Context) -> a
+    void a(android.content.Context,java.lang.String) -> a
+    java.lang.String b(android.content.Context) -> b
+    void b(android.content.Context,java.lang.String) -> b
+    boolean c(android.content.Context) -> c
+    void enableDebugMode(android.content.Context,boolean) -> a
+    void a(android.content.Context,long) -> a
+    long d(android.content.Context) -> d
+    void b(android.content.Context,long) -> b
+    long e(android.content.Context) -> e
+    void a(android.content.Context,int) -> a
+    boolean f(android.content.Context) -> f
+    void b(android.content.Context,int) -> b
+    int g(android.content.Context) -> g
+    boolean h(android.content.Context) -> h
+    boolean i(android.content.Context) -> i
+    void j(android.content.Context) -> j
+    void k(android.content.Context) -> k
+    void c(android.content.Context,java.lang.String) -> c
+    void l(android.content.Context) -> l
+    boolean m(android.content.Context) -> m
+    boolean n(android.content.Context) -> n
+com.baidu.android.pushservice.RegistrationReceiver -> com.baidu.android.pushservice.RegistrationReceiver:
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    void a(android.content.Context,android.content.Intent) -> a
+    void b(android.content.Context,android.content.Intent) -> b
+    void c(android.content.Context,android.content.Intent) -> c
+com.baidu.android.pushservice.RegistrationReceiver$1 -> com.baidu.android.pushservice.k:
+    android.content.Intent a -> a
+    android.content.Context b -> b
+    com.baidu.android.pushservice.RegistrationReceiver c -> c
+    void a() -> a
+com.baidu.android.pushservice.SDcardRemovedReceiver -> com.baidu.android.pushservice.SDcardRemovedReceiver:
+    java.lang.String a -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.baidu.android.pushservice.a -> com.baidu.android.pushservice.l:
+    int a -> a
+    short a() -> a
+    boolean a(android.content.Context) -> a
+    void a(android.content.Context,boolean) -> a
+    boolean b(android.content.Context) -> b
+    void b(android.content.Context,boolean) -> b
+    java.lang.String c(android.content.Context) -> c
+    int b() -> b
+com.baidu.android.pushservice.a.a -> com.baidu.android.pushservice.a.a:
+    void a$13ff9618(java.lang.String,com.baidu.android.pushservice.a.b) -> a
+    void a$45a3cec6(java.lang.String,com.baidu.android.pushservice.a.b) -> b
+    void b$45a3cec6(java.lang.String,com.baidu.android.pushservice.a.b) -> c
+    int c() -> a
+    void a$3532fb32(java.lang.String,com.baidu.android.pushservice.a.b) -> d
+com.baidu.android.pushservice.a.a$a -> com.baidu.android.pushservice.a.a$a:
+    android.os.IBinder asBinder() -> asBinder
+    boolean onTransact(int,android.os.Parcel,android.os.Parcel,int) -> onTransact
+com.baidu.android.pushservice.a.b -> com.baidu.android.pushservice.a.b:
+    void a(int,java.lang.String) -> a
+    void b(int,java.lang.String) -> b
+    void c(int,java.lang.String) -> c
+com.baidu.android.pushservice.a.b$a -> com.baidu.android.pushservice.a.b$a:
+    com.baidu.android.pushservice.a.b a(android.os.IBinder) -> a
+    boolean onTransact(int,android.os.Parcel,android.os.Parcel,int) -> onTransact
+com.baidu.android.pushservice.a.b$a$a -> com.baidu.android.pushservice.a.b$a$a:
+    android.os.IBinder a -> a
+    android.os.IBinder asBinder() -> asBinder
+    void a(int,java.lang.String) -> a
+    void b(int,java.lang.String) -> b
+    void c(int,java.lang.String) -> c
+com.baidu.android.pushservice.b -> com.baidu.android.pushservice.m:
+    java.lang.String a -> a
+    android.content.Context b -> b
+    void uncaughtException(java.lang.Thread,java.lang.Throwable) -> uncaughtException
+    java.lang.String a() -> a
+com.baidu.android.pushservice.b.a -> com.baidu.android.pushservice.b.a:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    int d -> d
+    int e -> e
+    java.lang.String a() -> a
+    void a(java.lang.String) -> a
+    java.lang.String b() -> b
+    void b(java.lang.String) -> b
+    java.lang.String c() -> c
+    void a(int) -> a
+    int d() -> d
+    void b(int) -> b
+    int e() -> e
+com.baidu.android.pushservice.b.b -> com.baidu.android.pushservice.b.b:
+    com.baidu.android.pushservice.b.b b -> b
+    android.content.Context c -> c
+    java.util.ArrayList a -> a
+    java.util.HashMap d -> d
+    com.baidu.android.pushservice.b.b a(android.content.Context) -> a
+    java.lang.String a(java.lang.String) -> a
+    java.lang.String b(java.lang.String) -> b
+    void a(java.lang.String,java.lang.String) -> a
+    void b(android.content.Context) -> b
+    com.baidu.android.pushservice.b.f c(java.lang.String) -> c
+    com.baidu.android.pushservice.b.f d(java.lang.String) -> d
+    com.baidu.android.pushservice.b.f a(int,boolean) -> a
+    void a(java.lang.String,java.util.ArrayList) -> a
+    com.baidu.android.pushservice.b.f h(java.lang.String) -> h
+    java.util.ArrayList e(java.lang.String) -> e
+    java.lang.String a(java.util.List) -> a
+    java.lang.String a(com.baidu.android.pushservice.b.f,boolean) -> a
+    java.lang.String a(com.baidu.android.pushservice.b.f,boolean,java.util.ArrayList,java.lang.String) -> a
+    java.lang.String f(java.lang.String) -> f
+    void a(java.lang.String,com.baidu.android.pushservice.c.g) -> a
+    void g(java.lang.String) -> g
+    boolean b(java.lang.String,java.lang.String) -> b
+com.baidu.android.pushservice.b.c -> com.baidu.android.pushservice.b.c:
+    com.baidu.android.pushservice.b.c a -> a
+    com.baidu.android.pushservice.b.c b -> b
+    com.baidu.android.pushservice.b.c c -> c
+    com.baidu.android.pushservice.b.c d -> d
+    com.baidu.android.pushservice.b.c[] e -> e
+    com.baidu.android.pushservice.b.c[] values() -> values
+    com.baidu.android.pushservice.b.c valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.b.d -> com.baidu.android.pushservice.b.d:
+    com.baidu.android.pushservice.b.c c -> c
+    com.baidu.android.pushservice.b.f a -> a
+    com.baidu.android.pushservice.b.g b -> b
+    com.baidu.android.pushservice.b.c a() -> a
+    com.baidu.android.pushservice.b.d a(android.content.Context,java.lang.String) -> a
+com.baidu.android.pushservice.b.e -> com.baidu.android.pushservice.b.e:
+    java.util.ArrayList a -> a
+    android.content.Context b -> b
+    com.baidu.android.pushservice.b.c c -> c
+    void a() -> a
+    void a(java.lang.String,java.util.ArrayList) -> a
+    void a(java.lang.String,java.lang.String) -> a
+    java.util.ArrayList a(java.lang.String) -> a
+    java.lang.String a(com.baidu.android.pushservice.b.a,boolean) -> a
+    java.lang.String a(java.util.List) -> a
+    com.baidu.android.pushservice.b.a b(java.lang.String) -> b
+    com.baidu.android.pushservice.b.a c(java.lang.String) -> c
+    java.lang.String d(java.lang.String) -> d
+    java.lang.String e(java.lang.String) -> e
+com.baidu.android.pushservice.b.e$1 -> com.baidu.android.pushservice.b.e$1:
+    int[] a -> a
+com.baidu.android.pushservice.b.f -> com.baidu.android.pushservice.b.f:
+    java.lang.String f -> f
+    boolean g -> g
+    java.lang.String toString() -> toString
+    void a(boolean) -> a
+com.baidu.android.pushservice.b.g -> com.baidu.android.pushservice.b.g:
+    java.lang.String toString() -> toString
+com.baidu.android.pushservice.b.h -> com.baidu.android.pushservice.b.h:
+    com.baidu.android.pushservice.b.h d -> d
+    java.lang.String e -> e
+    com.baidu.android.pushservice.b.h a(android.content.Context) -> a
+    java.util.ArrayList a(java.lang.String) -> a
+    java.lang.String a(com.baidu.android.pushservice.b.g) -> a
+    java.lang.String a(java.util.List) -> a
+    com.baidu.android.pushservice.b.g f(java.lang.String) -> d
+    com.baidu.android.pushservice.b.g a(java.lang.String,java.util.ArrayList) -> a
+    com.baidu.android.pushservice.b.a b(java.lang.String) -> b
+com.baidu.android.pushservice.b.i -> com.baidu.android.pushservice.b.i:
+    java.lang.String toString() -> toString
+com.baidu.android.pushservice.b.j -> com.baidu.android.pushservice.b.j:
+    com.baidu.android.pushservice.b.j d -> d
+    com.baidu.android.pushservice.b.j a(android.content.Context) -> a
+com.baidu.android.pushservice.c -> com.baidu.android.pushservice.n:
+    java.lang.String i -> i
+    int a -> a
+    int b -> b
+    int c -> c
+    android.net.Uri d -> d
+    long[] e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    boolean h -> h
+    void a(int) -> a
+    void a(java.lang.String) -> a
+    void b(java.lang.String) -> b
+    void a(boolean) -> a
+    void b$13462e() -> a
+    void c$13462e() -> b
+    void a(android.content.Context,android.app.PendingIntent,java.lang.String) -> a
+    java.lang.String a(com.baidu.android.pushservice.c) -> a
+com.baidu.android.pushservice.c$1 -> com.baidu.android.pushservice.o:
+    android.content.Context a -> a
+    android.app.PendingIntent b -> b
+    java.lang.String c -> c
+    com.baidu.android.pushservice.c d -> d
+    void run() -> run
+com.baidu.android.pushservice.c.a -> com.baidu.android.pushservice.c.a:
+    android.content.Context a -> a
+    com.baidu.android.pushservice.c.l b -> b
+    java.lang.String c -> c
+    com.baidu.android.pushservice.c.a$a d -> d
+    void a() -> a
+    boolean c() -> b
+    int b(int) -> b
+    void a(int) -> a
+    void a(int,byte[]) -> a
+    boolean d(java.lang.String) -> c
+    void a(java.util.HashMap) -> a
+    java.lang.String b(java.lang.String) -> a
+    void a(android.content.Intent) -> a
+    void a(java.lang.String,int) -> a
+com.baidu.android.pushservice.c.a$1 -> com.baidu.android.pushservice.c.b:
+    java.lang.String a -> a
+    int b -> b
+    com.baidu.android.pushservice.c.a c -> c
+    void a() -> a
+com.baidu.android.pushservice.c.a$a -> com.baidu.android.pushservice.c.a$a:
+    com.baidu.android.pushservice.c.a a -> a
+    void a(java.lang.Boolean) -> a
+com.baidu.android.pushservice.c.b -> com.baidu.android.pushservice.c.c:
+    java.lang.String a(java.util.HashMap) -> a
+    void b(java.util.HashMap) -> b
+    void a(android.content.Context) -> a
+com.baidu.android.pushservice.c.c -> com.baidu.android.pushservice.c.d:
+    boolean c() -> b
+com.baidu.android.pushservice.c.d -> com.baidu.android.pushservice.c.e:
+    boolean d -> d
+    java.lang.String b(java.lang.String) -> a
+com.baidu.android.pushservice.c.e -> com.baidu.android.pushservice.c.f:
+    boolean c() -> b
+com.baidu.android.pushservice.c.f -> com.baidu.android.pushservice.c.g:
+    int e -> e
+    java.lang.String f -> f
+    int g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+    java.lang.String j -> j
+    void a(java.util.HashMap) -> a
+    void a(android.content.Intent) -> a
+    java.lang.String b(java.lang.String) -> a
+com.baidu.android.pushservice.c.g -> com.baidu.android.pushservice.c.h:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String a() -> a
+    java.lang.String b() -> b
+    java.lang.String toString() -> toString
+com.baidu.android.pushservice.c.h -> com.baidu.android.pushservice.c.i:
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.i -> com.baidu.android.pushservice.c.j:
+    java.lang.String d -> d
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.j -> com.baidu.android.pushservice.c.k:
+    java.lang.String d -> d
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.k -> com.baidu.android.pushservice.c.l:
+    java.lang.String[] d -> d
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.l -> com.baidu.android.pushservice.c.m:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+    java.lang.String j -> j
+    boolean k -> k
+    java.lang.String l -> l
+    java.lang.String toString() -> toString
+com.baidu.android.pushservice.c.m -> com.baidu.android.pushservice.c.n:
+    int d -> d
+    int e -> e
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.n -> com.baidu.android.pushservice.c.o:
+    int d -> d
+    int e -> e
+    java.lang.String f -> f
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.o -> com.baidu.android.pushservice.c.p:
+    java.lang.String d -> d
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.p -> com.baidu.android.pushservice.c.q:
+    java.lang.String d -> d
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.q -> com.baidu.android.pushservice.c.r:
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.r -> com.baidu.android.pushservice.c.s:
+    java.lang.String d -> d
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.s -> com.baidu.android.pushservice.c.t:
+    java.util.ArrayList d -> d
+    void a(java.util.HashMap) -> a
+    java.lang.String b(java.lang.String) -> a
+    void a(int,byte[]) -> a
+com.baidu.android.pushservice.c.t -> com.baidu.android.pushservice.c.u:
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.u -> com.baidu.android.pushservice.c.v:
+    java.lang.String e -> e
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.v -> com.baidu.android.pushservice.c.w:
+    java.lang.String d -> d
+    java.lang.String e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.w -> com.baidu.android.pushservice.c.x:
+    java.lang.String d -> d
+    com.baidu.android.pushservice.c.w$a e -> e
+    void a(java.util.HashMap) -> a
+    java.lang.String b(java.lang.String) -> a
+    void a(android.content.Intent) -> a
+com.baidu.android.pushservice.c.w$a -> com.baidu.android.pushservice.c.x$a:
+com.baidu.android.pushservice.c.x -> com.baidu.android.pushservice.c.z:
+    android.content.Context a -> a
+    int b -> b
+    int c -> c
+    boolean d -> d
+    boolean e -> e
+    com.baidu.android.pushservice.c.a$a f -> f
+    void run() -> run
+    void a$13462e() -> a
+    boolean b() -> b
+com.baidu.android.pushservice.c.y -> com.baidu.android.pushservice.c.y:
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.c.y$a -> com.baidu.android.pushservice.c.y$a:
+    com.baidu.android.pushservice.c.y$a a -> a
+    com.baidu.android.pushservice.c.y$a b -> b
+    com.baidu.android.pushservice.c.y$a c -> c
+    com.baidu.android.pushservice.c.y$a d -> d
+    int e -> e
+    com.baidu.android.pushservice.c.y$a[] f -> f
+    com.baidu.android.pushservice.c.y$a[] values() -> values
+    com.baidu.android.pushservice.c.y$a valueOf(java.lang.String) -> valueOf
+    int a(com.baidu.android.pushservice.c.y$a) -> a
+com.baidu.android.pushservice.c.z -> com.baidu.android.pushservice.c.aa:
+    void a(java.util.HashMap) -> a
+com.baidu.android.pushservice.config.ModeConfig -> com.baidu.android.pushservice.d.a:
+    java.lang.String TAG -> m
+    int MODE_O -> a
+    int MODE_I -> b
+    int MODE_C -> c
+    int MODE_C_H -> d
+    int MODE_C_C -> e
+    int MODE_I_HW -> f
+    int MODE_I_XM -> g
+    java.lang.String updateConfigUrl -> n
+    int updateConfigTime -> o
+    boolean hasCallBack -> p
+    com.baidu.android.pushservice.config.ModeConfig mInstance -> q
+    int mConfigVersion -> r
+    com.baidu.android.pushservice.config.c mFacturer -> s
+    int mCurrentMode -> t
+    int mHighestVersion -> u
+    java.lang.String mHostPackage -> v
+    java.util.HashMap mManufacturers -> h
+    java.lang.String[] BUILD_PROP_FILES -> w
+    int getCurrentMode() -> a
+    java.lang.String getHostPackageName() -> b
+    int getHighestVersion() -> c
+    boolean refreshMode() -> d
+    java.lang.String byte2HexFormatted(byte[]) -> a
+    com.baidu.android.pushservice.config.c selectCurrentManufacturer(java.lang.String) -> b
+    boolean manufacturerMatched(com.baidu.android.pushservice.config.c,java.lang.String) -> a
+    void reload() -> e
+    com.baidu.android.pushservice.config.ModeConfig getInstance(android.content.Context) -> a
+    boolean parseConfig() -> i
+    void updateConfig(com.baidu.android.pushservice.config.ModeConfig$a) -> a
+    boolean isXiaomiProxyMode(android.content.Context) -> b
+    boolean isHuaweiProxyMode(android.content.Context) -> c
+    boolean isProxyMode(android.content.Context) -> d
+    void setReloadCache() -> j
+    int access$000(com.baidu.android.pushservice.config.ModeConfig) -> a
+    java.lang.String access$100() -> f
+    java.lang.String access$200(com.baidu.android.pushservice.config.ModeConfig,java.util.HashMap) -> a
+    boolean access$300() -> g
+com.baidu.android.pushservice.config.ModeConfig$1 -> com.baidu.android.pushservice.d.b:
+    long a -> a
+    com.baidu.android.pushservice.config.ModeConfig$a b -> b
+    com.baidu.android.pushservice.config.ModeConfig c -> c
+    void a() -> a
+com.baidu.android.pushservice.config.ModeConfig$a -> com.baidu.android.pushservice.d.a$a:
+    void a() -> a
+com.baidu.android.pushservice.config.a -> com.baidu.android.pushservice.d.c:
+    java.io.InputStream b$53c3db80(java.lang.String) -> b
+    java.lang.String a$5b1592bd(java.lang.String) -> a
+    boolean a(java.lang.String,java.lang.String) -> a
+com.baidu.android.pushservice.config.b -> com.baidu.android.pushservice.d.d:
+    android.content.Context mContext -> i
+    java.lang.String mConfigContent -> j
+    java.lang.String defaultConfigPath -> k
+    java.lang.String localConfigPath -> l
+    boolean loadConfig() -> h
+    boolean writeConfig(java.lang.String) -> a
+com.baidu.android.pushservice.config.c -> com.baidu.android.pushservice.d.e:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    int c -> c
+    java.util.ArrayList d -> d
+    java.util.ArrayList e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    com.baidu.android.pushservice.config.c$a h -> h
+    com.baidu.android.pushservice.config.c$a a() -> a
+    java.lang.String b() -> b
+    int c() -> c
+    java.util.ArrayList d() -> d
+    java.util.ArrayList e() -> e
+    java.lang.String f() -> f
+    java.lang.String g() -> g
+    java.lang.String toString() -> toString
+    void d(java.lang.String) -> a
+com.baidu.android.pushservice.config.c$a -> com.baidu.android.pushservice.d.e$a:
+    int a -> a
+    int b -> b
+    com.baidu.android.pushservice.config.c c -> c
+com.baidu.android.pushservice.config.d -> com.baidu.android.pushservice.d.f:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    int c -> c
+    java.lang.String a() -> a
+    void a(java.lang.String) -> a
+    java.lang.String b() -> b
+    void b(java.lang.String) -> b
+    int c() -> c
+    void a(int) -> a
+com.baidu.android.pushservice.config.e -> com.baidu.android.pushservice.d.g:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    int d -> d
+    java.lang.String a() -> a
+    void a(java.lang.String) -> a
+    java.lang.String b() -> b
+    void b(java.lang.String) -> b
+    java.lang.String c() -> c
+    void c(java.lang.String) -> c
+    int d() -> d
+    void a(int) -> a
+com.baidu.android.pushservice.d -> com.baidu.android.pushservice.p:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.Object c -> c
+    int d -> d
+    android.app.Notification a(android.content.Context,int,java.lang.String,java.lang.String,boolean) -> a
+    android.app.Notification a(android.content.Context,int,int,java.lang.String,java.lang.String,boolean) -> a
+    com.baidu.android.pushservice.PushNotificationBuilder b(android.content.Context) -> a
+    com.baidu.android.pushservice.PushNotificationBuilder a(android.content.Context,int) -> a
+com.baidu.android.pushservice.d.a -> com.baidu.android.pushservice.e.a:
+    java.io.InputStream a -> a
+    int b -> b
+    java.io.InputStream a() -> a
+    void a(java.io.InputStream) -> a
+    int b() -> b
+    void a(int) -> a
+com.baidu.android.pushservice.d.b -> com.baidu.android.pushservice.e.b:
+    com.baidu.android.pushservice.d.a a(java.lang.String,java.lang.String,java.util.HashMap,java.lang.String) -> a
+    com.baidu.android.pushservice.d.a a(java.lang.String,java.lang.String,java.util.HashMap) -> a
+    java.net.HttpURLConnection a(java.lang.String,java.lang.String,java.lang.String) -> a
+    void a(java.lang.String,java.util.HashMap,java.net.HttpURLConnection) -> a
+    boolean a(java.net.HttpURLConnection,java.util.HashMap) -> a
+    java.lang.String a(java.util.HashMap) -> a
+    com.baidu.android.pushservice.d.a a(java.net.HttpURLConnection) -> a
+    byte[] a(java.io.InputStream) -> a
+    void a(java.io.Closeable[]) -> a
+com.baidu.android.pushservice.e -> com.baidu.android.pushservice.q:
+    int a -> a
+    boolean d -> d
+    java.lang.Boolean e -> e
+    boolean f -> f
+    java.util.HashMap g -> g
+    com.baidu.android.pushservice.e$b h -> h
+    com.baidu.android.pushservice.e$a i -> i
+    boolean j -> j
+    int k -> k
+    android.os.Handler b -> b
+    android.content.Context l -> l
+    boolean m -> m
+    com.baidu.android.pushservice.message.e c -> c
+    com.baidu.android.pushservice.e n -> n
+    boolean o -> o
+    java.lang.String p -> p
+    int q -> q
+    java.lang.Thread r -> r
+    java.lang.Runnable s -> s
+    java.lang.Runnable t -> t
+    long u -> u
+    int[] v -> v
+    int w -> w
+    int x -> x
+    int y -> y
+    int z -> z
+    int A -> A
+    java.lang.String B -> B
+    com.baidu.android.pushservice.e a(android.content.Context) -> a
+    boolean a() -> a
+    void b() -> b
+    void h() -> e
+    void c() -> c
+    void j() -> f
+    void d() -> d
+    void a(boolean) -> a
+    int e() -> g
+    void f() -> h
+    int g() -> i
+    void l() -> j
+    java.lang.String a(com.baidu.android.pushservice.e) -> a
+    int b(com.baidu.android.pushservice.e) -> b
+    android.content.Context c(com.baidu.android.pushservice.e) -> c
+    void a(com.baidu.android.pushservice.e,java.lang.String,int) -> a
+    boolean d(com.baidu.android.pushservice.e) -> d
+    boolean a(com.baidu.android.pushservice.e,boolean) -> a
+    java.lang.String a(com.baidu.android.pushservice.e,java.lang.String) -> a
+    int a$2f48db99(com.baidu.android.pushservice.e) -> e
+    java.lang.Boolean a(java.lang.Boolean) -> a
+    void e(com.baidu.android.pushservice.e) -> f
+    boolean b$2f491b7b(com.baidu.android.pushservice.e) -> g
+    com.baidu.android.pushservice.e$a f(com.baidu.android.pushservice.e) -> h
+    com.baidu.android.pushservice.e$b g(com.baidu.android.pushservice.e) -> i
+    boolean c$2f491b7b(com.baidu.android.pushservice.e) -> j
+    com.baidu.android.pushservice.e$a a(com.baidu.android.pushservice.e,com.baidu.android.pushservice.e$a) -> a
+    com.baidu.android.pushservice.e$b a(com.baidu.android.pushservice.e,com.baidu.android.pushservice.e$b) -> a
+    void h(com.baidu.android.pushservice.e) -> k
+    boolean i(com.baidu.android.pushservice.e) -> l
+    boolean d(com.baidu.android.pushservice.e,boolean) -> b
+    long a(com.baidu.android.pushservice.e,long) -> a
+    boolean j(com.baidu.android.pushservice.e) -> m
+    java.lang.Runnable k(com.baidu.android.pushservice.e) -> n
+    int b$2f48db99(com.baidu.android.pushservice.e) -> o
+com.baidu.android.pushservice.e$1 -> com.baidu.android.pushservice.r:
+    com.baidu.android.pushservice.e a -> a
+    void run() -> run
+com.baidu.android.pushservice.e$2 -> com.baidu.android.pushservice.s:
+    com.baidu.android.pushservice.e a -> a
+    void run() -> run
+com.baidu.android.pushservice.e$3 -> com.baidu.android.pushservice.t:
+    com.baidu.android.pushservice.e a -> a
+    void run() -> run
+com.baidu.android.pushservice.e$4 -> com.baidu.android.pushservice.u:
+    com.baidu.android.pushservice.e a -> a
+    void a() -> a
+com.baidu.android.pushservice.e$5 -> com.baidu.android.pushservice.v:
+    java.lang.String a -> a
+    int b -> b
+    com.baidu.android.pushservice.e c -> c
+    void a() -> a
+com.baidu.android.pushservice.e$a -> com.baidu.android.pushservice.q$a:
+    com.baidu.android.pushservice.e a -> a
+    void run() -> run
+com.baidu.android.pushservice.e$b -> com.baidu.android.pushservice.q$b:
+    com.baidu.android.pushservice.e a -> a
+    void run() -> run
+com.baidu.android.pushservice.e.a -> com.baidu.android.pushservice.f.a:
+    boolean a -> a
+    boolean b -> b
+    java.util.logging.Logger c -> c
+    void a(java.lang.String,java.lang.String) -> a
+    void b(java.lang.String,java.lang.String) -> b
+    void c(java.lang.String,java.lang.String) -> c
+    void d(java.lang.String,java.lang.String) -> d
+    void e(java.lang.String,java.lang.String) -> e
+    void a(java.lang.String,java.lang.Throwable) -> a
+    void a(java.lang.String,java.lang.String,java.lang.Throwable) -> a
+    java.lang.String a(java.lang.Throwable) -> a
+com.baidu.android.pushservice.e.b -> com.baidu.android.pushservice.f.b:
+    void a(java.lang.String,java.lang.String,android.content.Context) -> a
+    void b(java.lang.String,java.lang.String,android.content.Context) -> b
+    void a(java.lang.String,java.lang.Throwable,android.content.Context) -> a
+    void c(java.lang.String,java.lang.String,android.content.Context) -> c
+com.baidu.android.pushservice.f -> com.baidu.android.pushservice.w:
+    int a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    java.util.concurrent.ConcurrentLinkedQueue g -> g
+    android.os.Handler f -> f
+    android.content.Intent a$7d46fba3(android.content.Context) -> a
+    boolean a(android.content.Context,int,java.lang.String) -> a
+    boolean b(android.content.Context) -> b
+    java.lang.String a(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    void c(android.content.Context) -> c
+    void d(android.content.Context) -> d
+    void b(android.content.Context,int,java.lang.String) -> b
+    void j(android.content.Context) -> j
+    void a(android.content.Context,java.lang.String) -> a
+    void e(android.content.Context) -> e
+    void k(android.content.Context) -> k
+    boolean a(android.content.Context,android.content.Intent) -> a
+    void b(android.content.Context,android.content.Intent) -> b
+    void f(android.content.Context) -> l
+    android.content.Intent g(android.content.Context) -> f
+    void b$1a54e370(android.content.Context) -> g
+    boolean h(android.content.Context) -> h
+    boolean a(android.content.Context,java.lang.String,java.lang.String) -> a
+    java.lang.String c$2367fdf0(android.content.Intent) -> a
+    java.lang.String d$2367fdf0(android.content.Intent) -> b
+    java.util.concurrent.ConcurrentLinkedQueue a() -> a
+    void i(android.content.Context) -> i
+com.baidu.android.pushservice.f$1 -> com.baidu.android.pushservice.x:
+    int a -> a
+    android.content.Context b -> b
+    java.lang.String c -> c
+    void a() -> a
+com.baidu.android.pushservice.f$a -> com.baidu.android.pushservice.w$a:
+    void handleMessage(android.os.Message) -> handleMessage
+com.baidu.android.pushservice.f$b -> com.baidu.android.pushservice.w$b:
+    android.content.Context a -> a
+    void run() -> run
+com.baidu.android.pushservice.f.a -> com.baidu.android.pushservice.i.a:
+    java.lang.String a -> a
+    long b -> b
+    long c -> c
+    long d -> d
+    int e -> e
+    int f -> f
+com.baidu.android.pushservice.f.a.b -> com.baidu.android.pushservice.i.a.a:
+    com.baidu.android.pushservice.f.a.b$a a() -> a
+    int e() -> c
+    com.baidu.android.pushservice.f.a.b$a a(java.lang.String) -> a
+    java.lang.String a(java.io.InputStream) -> a
+    long b() -> b
+    int[] a(android.content.Context) -> a
+    java.lang.String b$1afe14f3() -> d
+    org.json.JSONObject e(android.content.Context) -> b
+    org.json.JSONObject f(android.content.Context) -> c
+com.baidu.android.pushservice.f.a.b$a -> com.baidu.android.pushservice.i.a.a$a:
+    int a -> a
+    int b -> b
+    int c -> c
+    double d -> d
+    long e -> e
+com.baidu.android.pushservice.f.a.b$b -> com.baidu.android.pushservice.i.a.a$b:
+    android.content.Context a -> a
+    org.json.JSONObject b -> b
+    com.baidu.android.pushservice.f.a.b$b c -> c
+    org.json.JSONObject a() -> a
+    com.baidu.android.pushservice.f.a.b$b a(android.content.Context) -> a
+com.baidu.android.pushservice.f.b -> com.baidu.android.pushservice.i.b:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    org.json.JSONObject a() -> a
+com.baidu.android.pushservice.f.c -> com.baidu.android.pushservice.i.c:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    java.lang.String f -> f
+    int g -> g
+    java.lang.String h -> h
+    int i -> i
+    java.lang.String a() -> a
+    void a(java.lang.String) -> a
+    java.lang.String b() -> b
+    void b(java.lang.String) -> b
+    java.lang.String c() -> c
+    void c(java.lang.String) -> c
+    java.lang.String d() -> d
+    void d(java.lang.String) -> d
+    java.lang.String e() -> e
+    void e(java.lang.String) -> e
+    java.lang.String f() -> f
+    void f(java.lang.String) -> f
+    int g() -> g
+    void a(int) -> a
+    java.lang.String h() -> h
+    void g(java.lang.String) -> g
+    int i() -> i
+    void b(int) -> b
+com.baidu.android.pushservice.f.d -> com.baidu.android.pushservice.i.d:
+    java.lang.String d -> d
+    long e -> e
+    java.lang.String f -> f
+    int g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+    java.lang.String j -> j
+com.baidu.android.pushservice.f.e -> com.baidu.android.pushservice.i.e:
+    int a -> a
+    java.lang.String b -> b
+    long c -> c
+    java.lang.String d -> d
+    int e -> e
+    java.lang.String f -> f
+    int g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+    int j -> j
+    int k -> k
+    java.lang.String l -> l
+    java.lang.String m -> m
+    java.lang.String n -> n
+    void a(int) -> a
+    java.lang.String a() -> a
+    void a(java.lang.String) -> a
+    void a(long) -> a
+    void b(java.lang.String) -> b
+    void b(int) -> b
+    void c(java.lang.String) -> c
+    void c(int) -> c
+    void d(java.lang.String) -> d
+    void e(java.lang.String) -> e
+    void d(int) -> d
+    void e(int) -> e
+    java.lang.String b() -> b
+    void f(java.lang.String) -> f
+    void g(java.lang.String) -> g
+    void h(java.lang.String) -> h
+    com.baidu.android.pushservice.f.m c() -> g
+    com.baidu.android.pushservice.f.h d() -> c
+    com.baidu.android.pushservice.f.j e() -> d
+    com.baidu.android.pushservice.f.b f() -> e
+    com.baidu.android.pushservice.f.f g() -> f
+com.baidu.android.pushservice.f.f -> com.baidu.android.pushservice.i.f:
+    java.lang.String a -> a
+    org.json.JSONObject a() -> a
+com.baidu.android.pushservice.f.g -> com.baidu.android.pushservice.i.g:
+    java.lang.String c -> c
+    com.baidu.android.pushservice.h.g d -> d
+    com.baidu.android.pushservice.f.g e -> e
+    com.baidu.android.pushservice.f.g a(android.content.Context) -> a
+    java.lang.String a(boolean) -> a
+    void a(java.lang.String) -> a
+    void a(java.lang.String,java.util.HashMap) -> a
+    void a$41aa157e() -> a
+com.baidu.android.pushservice.f.h -> com.baidu.android.pushservice.i.h:
+    int a -> a
+    org.json.JSONObject a() -> a
+com.baidu.android.pushservice.f.i -> com.baidu.android.pushservice.i.i:
+    int b -> b
+    int a -> a
+    void c(int) -> c
+    int j() -> j
+    org.json.JSONObject a$16ce4761() -> k
+com.baidu.android.pushservice.f.j -> com.baidu.android.pushservice.i.j:
+    java.lang.String a -> a
+    int b -> b
+    int c -> c
+    java.lang.String k -> k
+    org.json.JSONObject a() -> a
+com.baidu.android.pushservice.f.k -> com.baidu.android.pushservice.i.k:
+    void a(android.content.Context,java.lang.String,java.lang.String,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String,java.lang.String,int,byte[],int,int) -> a
+    void b$251e703d(android.content.Context,java.lang.String,java.lang.String,int,byte[],int) -> a
+    void a(android.content.Context,com.baidu.android.pushservice.b.f,com.baidu.android.pushservice.f.j,com.baidu.android.pushservice.f.i) -> a
+com.baidu.android.pushservice.f.l -> com.baidu.android.pushservice.i.l:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    boolean c -> c
+    boolean d -> d
+    void b(boolean) -> b
+    java.lang.String a(boolean) -> a
+    void a(java.lang.String,java.util.HashMap) -> a
+    void a(java.lang.String) -> a
+    boolean c() -> b
+    void a(com.baidu.android.pushservice.f.l,boolean) -> a
+    boolean b$5d1de867(com.baidu.android.pushservice.f.l) -> a
+com.baidu.android.pushservice.f.l$1 -> com.baidu.android.pushservice.i.m:
+    boolean a -> a
+    com.baidu.android.pushservice.f.l b -> b
+    void a() -> a
+com.baidu.android.pushservice.f.m -> com.baidu.android.pushservice.i.n:
+    int l -> l
+    int m -> m
+    int n -> n
+    int o -> o
+    int p -> p
+    java.lang.String q -> q
+    java.lang.String r -> r
+    java.lang.String s -> s
+    java.lang.String t -> t
+com.baidu.android.pushservice.f.n -> com.baidu.android.pushservice.i.o:
+    android.content.Context b -> b
+    java.lang.String a -> a
+    com.baidu.android.pushservice.f.o c -> c
+    boolean d -> d
+    java.lang.String a() -> c
+    java.lang.String a(long,long,int,int) -> a
+    void b() -> a
+    void c() -> b
+    boolean b(long,long,int,int) -> b
+    boolean a(java.lang.String,java.lang.String,java.lang.String) -> a
+    boolean a(com.baidu.android.pushservice.f.n) -> a
+    android.content.Context b(com.baidu.android.pushservice.f.n) -> b
+com.baidu.android.pushservice.f.n$1 -> com.baidu.android.pushservice.i.p:
+    com.baidu.android.pushservice.f.n a -> a
+    void a() -> a
+com.baidu.android.pushservice.f.o -> com.baidu.android.pushservice.i.q:
+    java.lang.String a -> a
+    com.baidu.android.pushservice.f.o b -> b
+    android.content.Context c -> c
+    com.baidu.android.pushservice.f.o a(android.content.Context) -> a
+    java.lang.String a(long,long,int,int) -> a
+com.baidu.android.pushservice.f.p -> com.baidu.android.pushservice.i.r:
+    android.content.Context a -> a
+    com.baidu.android.pushservice.f.g b -> b
+    com.baidu.android.pushservice.f.n c -> c
+    void a() -> a
+    void a$289f23b8(boolean) -> a
+    long a(android.content.Context,java.lang.String,int,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String) -> a
+com.baidu.android.pushservice.f.p$1 -> com.baidu.android.pushservice.i.s:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    void a() -> a
+com.baidu.android.pushservice.g -> com.baidu.android.pushservice.y:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.g c -> c
+    int d -> d
+    int e -> e
+    int f -> f
+    com.baidu.android.pushservice.e a -> a
+    java.lang.Object g -> g
+    android.net.LocalServerSocket h -> h
+    com.baidu.android.pushservice.i i -> i
+    java.lang.Boolean j -> j
+    java.lang.Boolean k -> k
+    java.lang.Object l -> l
+    android.content.Context m -> m
+    android.os.Handler n -> n
+    java.lang.Runnable o -> o
+    java.lang.Runnable p -> p
+    java.lang.Runnable q -> q
+    com.baidu.android.pushservice.g a(android.content.Context) -> a
+    boolean a() -> a
+    void b() -> b
+    com.baidu.android.pushservice.i c() -> c
+    boolean a(android.content.Intent) -> a
+    void a(int) -> a
+    void k() -> h
+    void d() -> d
+    void l() -> i
+    boolean m() -> j
+    void o() -> k
+    void p() -> l
+    android.app.PendingIntent r() -> m
+    com.baidu.android.pushservice.g e() -> e
+    android.content.Context a(com.baidu.android.pushservice.g) -> a
+    java.lang.String f() -> f
+    void b(com.baidu.android.pushservice.g) -> b
+    void c(com.baidu.android.pushservice.g) -> c
+    java.lang.Object g() -> g
+com.baidu.android.pushservice.g$1 -> com.baidu.android.pushservice.z:
+    com.baidu.android.pushservice.g a -> a
+    void a() -> a
+com.baidu.android.pushservice.g$2 -> com.baidu.android.pushservice.aa:
+    com.baidu.android.pushservice.g a -> a
+    void run() -> run
+com.baidu.android.pushservice.g$3 -> com.baidu.android.pushservice.ab:
+    com.baidu.android.pushservice.g a -> a
+    void run() -> run
+com.baidu.android.pushservice.g$4 -> com.baidu.android.pushservice.ac:
+    com.baidu.android.pushservice.g a -> a
+    void run() -> run
+com.baidu.android.pushservice.g.a -> com.baidu.android.pushservice.g.a:
+    java.util.concurrent.RunnableFuture newTaskFor(java.lang.Runnable,java.lang.Object) -> newTaskFor
+    java.util.concurrent.RunnableFuture newTaskFor(java.util.concurrent.Callable) -> newTaskFor
+    void execute(java.lang.Runnable) -> execute
+com.baidu.android.pushservice.g.a$a -> com.baidu.android.pushservice.g.a$a:
+    java.lang.Object b -> b
+    com.baidu.android.pushservice.g.a a -> a
+    int compareTo(java.lang.Object) -> compareTo
+com.baidu.android.pushservice.g.b -> com.baidu.android.pushservice.g.b:
+    boolean offer(java.lang.Object) -> offer
+com.baidu.android.pushservice.g.c -> com.baidu.android.pushservice.g.c:
+    java.lang.String a -> a
+    short b -> b
+    void run() -> run
+    void a() -> a
+    short d() -> c
+    void a$136bb8() -> d
+    void c(java.lang.String) -> b
+com.baidu.android.pushservice.g.d -> com.baidu.android.pushservice.g.d:
+    com.baidu.android.pushservice.g.a a -> a
+    com.baidu.android.pushservice.g.d b -> b
+    com.baidu.android.pushservice.g.d a() -> a
+    boolean a(com.baidu.android.pushservice.g.c) -> a
+    void b() -> b
+com.baidu.android.pushservice.g.d$1 -> com.baidu.android.pushservice.g.e:
+    com.baidu.android.pushservice.g.d a -> a
+    void run() -> run
+com.baidu.android.pushservice.h -> com.baidu.android.pushservice.ad:
+    java.lang.String g -> g
+    java.lang.String[] h -> h
+    java.lang.String i -> i
+    java.lang.String[] j -> j
+    int a -> a
+    int b -> b
+    java.lang.String[] k -> k
+    java.lang.String[] c -> c
+    boolean l -> l
+    java.lang.String m -> m
+    java.lang.String d -> d
+    java.util.ArrayList n -> n
+    java.util.ArrayList o -> o
+    java.lang.String e -> e
+    java.lang.String f -> f
+    boolean p -> p
+    java.lang.String a() -> a
+    java.lang.String b() -> b
+    java.lang.String c() -> c
+    int a(android.content.Context) -> a
+    java.lang.String d() -> d
+    java.lang.String e() -> e
+    boolean f() -> f
+    void b(android.content.Context) -> b
+    java.lang.String a(android.content.Context,boolean) -> a
+    java.lang.String b(android.content.Context,boolean) -> b
+    java.util.ArrayList a(android.content.Context,java.lang.String) -> a
+    void c(android.content.Context) -> c
+    boolean b(android.content.Context,java.lang.String,java.lang.String) -> b
+    java.lang.String g() -> g
+    boolean a(android.content.Context,java.lang.String,java.lang.String) -> a
+    java.lang.String h() -> h
+com.baidu.android.pushservice.h$1 -> com.baidu.android.pushservice.ae:
+    android.content.Context a -> a
+    android.content.SharedPreferences b -> b
+    void a() -> a
+com.baidu.android.pushservice.h.a -> com.baidu.android.pushservice.h.a:
+    java.util.Properties a -> a
+    java.lang.String a(java.lang.String,java.lang.String) -> a
+    com.baidu.android.pushservice.h.a a() -> a
+com.baidu.android.pushservice.h.b -> com.baidu.android.pushservice.h.b:
+    java.lang.Object a -> a
+    java.lang.String a(android.content.Context,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String,int) -> a
+    boolean a(android.content.Context,java.lang.String,java.lang.Object) -> a
+    java.lang.Object b(android.content.Context,java.lang.String) -> b
+    org.json.JSONObject a(android.content.Context) -> a
+com.baidu.android.pushservice.h.c -> com.baidu.android.pushservice.h.c:
+com.baidu.android.pushservice.h.d -> com.baidu.android.pushservice.h.d:
+    java.util.Map a -> a
+    void a(com.baidu.android.pushservice.h.e) -> a
+    void a(long) -> a
+    void a(android.content.Context,android.content.Intent) -> a
+com.baidu.android.pushservice.h.e -> com.baidu.android.pushservice.h.e:
+    long a -> a
+    com.baidu.android.pushservice.h.c b -> b
+    int c -> c
+    android.content.Context d -> d
+    android.content.Intent e -> e
+    java.lang.Object f -> f
+    android.content.Intent g -> g
+    long a() -> a
+    com.baidu.android.pushservice.message.h b() -> b
+    void c() -> e
+    void a(android.content.Intent) -> a
+    int d() -> c
+    java.lang.Object e() -> d
+com.baidu.android.pushservice.h.e$1 -> com.baidu.android.pushservice.h.f:
+    com.baidu.android.pushservice.h.e a -> a
+    void a() -> a
+com.baidu.android.pushservice.h.f -> com.baidu.android.pushservice.h.g:
+    void a(android.content.Context,java.lang.String,int,int,java.lang.String,int) -> a
+    void a(android.content.Context,java.lang.String,int,java.lang.String,int) -> a
+    void a(android.content.Context,java.lang.String,int,java.lang.String) -> a
+    java.util.HashMap b(android.content.Context,java.lang.String,int,java.lang.String,boolean,int) -> b
+    java.util.HashMap a(android.content.Context,java.lang.String,int,java.lang.String,boolean,int) -> a
+    void a(android.content.Context,java.lang.String,java.lang.String) -> a
+com.baidu.android.pushservice.h.f$1 -> com.baidu.android.pushservice.h.h:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    int c -> c
+    java.lang.String d -> d
+    int e -> e
+    int f -> f
+    void a() -> a
+com.baidu.android.pushservice.h.f$2 -> com.baidu.android.pushservice.h.i:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    int c -> c
+    java.lang.String d -> d
+    int e -> e
+    void a() -> a
+com.baidu.android.pushservice.h.f$3 -> com.baidu.android.pushservice.h.j:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    int c -> c
+    java.lang.String d -> d
+    void a() -> a
+com.baidu.android.pushservice.h.g -> com.baidu.android.pushservice.h.k:
+com.baidu.android.pushservice.h.h -> com.baidu.android.pushservice.h.l:
+    int a -> a
+    java.lang.String a(android.content.Context,org.json.JSONObject) -> a
+    long c(android.content.Context) -> a
+    void a(android.content.Context,long) -> a
+    java.lang.String a(android.content.Context,boolean) -> a
+    java.lang.String a() -> a
+com.baidu.android.pushservice.h.i -> com.baidu.android.pushservice.h.m:
+    java.io.DataInputStream b -> b
+    byte[] a -> a
+    void a() -> a
+    int a(int) -> a
+    int b() -> b
+    short c() -> c
+    long d() -> d
+    void a(byte[]) -> a
+com.baidu.android.pushservice.h.j -> com.baidu.android.pushservice.h.n:
+    java.io.DataOutputStream b -> b
+    byte[] a -> a
+    void a(int) -> a
+    void b(int) -> b
+    void a() -> a
+    void a(byte[]) -> a
+    void a(long) -> a
+com.baidu.android.pushservice.h.k -> com.baidu.android.pushservice.h.p:
+    android.net.ConnectivityManager a -> a
+    boolean a(android.content.Context) -> a
+    boolean b(android.content.Context) -> b
+    android.net.NetworkInfo c(android.content.Context) -> c
+    java.lang.String d(android.content.Context) -> d
+    boolean e(android.content.Context) -> e
+com.baidu.android.pushservice.h.l -> com.baidu.android.pushservice.h.r:
+    boolean a(android.content.Context) -> a
+com.baidu.android.pushservice.h.m -> com.baidu.android.pushservice.h.s:
+    void a(android.content.Context,java.lang.String,int) -> a
+    int b(android.content.Context,java.lang.String,int) -> b
+    void c(android.content.Context,java.lang.String,int) -> c
+    boolean a(android.content.Context,java.lang.String,java.lang.String) -> a
+    java.lang.String a(android.content.Context,java.lang.String) -> a
+    boolean b(android.content.Context,java.lang.String,java.lang.String) -> b
+    java.lang.String b(android.content.Context,java.lang.String) -> b
+    long c(android.content.Context,java.lang.String) -> c
+    void a(android.content.Context,java.lang.String,long) -> a
+com.baidu.android.pushservice.h.n -> com.baidu.android.pushservice.h.t:
+    void a$607b2e89(android.content.Context,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String) -> b
+    java.lang.String a(android.content.Context) -> a
+    void b(android.content.Context,java.lang.String) -> c
+    java.lang.String b(android.content.Context) -> b
+com.baidu.android.pushservice.h.o -> com.baidu.android.pushservice.h.o:
+    com.baidu.android.pushservice.h.o$f a -> a
+    com.baidu.android.pushservice.h.o$e b -> b
+    java.lang.Object c -> c
+    int d -> d
+    void a() -> a
+    android.database.sqlite.SQLiteDatabase e(android.content.Context) -> e
+    com.baidu.android.pushservice.h.o$f f(android.content.Context) -> f
+    int a(android.database.sqlite.SQLiteDatabase,int,com.baidu.android.pushservice.f.i) -> a
+    com.baidu.android.pushservice.f.i a(android.database.sqlite.SQLiteDatabase,com.baidu.android.pushservice.f.i) -> a
+    boolean a(android.database.sqlite.SQLiteDatabase,com.baidu.android.pushservice.f.h) -> a
+    int b(android.database.sqlite.SQLiteDatabase,com.baidu.android.pushservice.f.h) -> b
+    int a(android.content.Context,long,long) -> a
+    boolean b(android.content.Context,long,long) -> b
+    java.util.List a(android.content.Context,long,long,int,int) -> a
+    java.util.List a(android.content.Context) -> a
+    java.util.List b(android.content.Context) -> b
+    com.baidu.android.pushservice.h.o$h a(android.content.Context,java.lang.String) -> a
+    int b(android.content.Context,java.lang.String) -> b
+    long a(android.content.Context,com.baidu.android.pushservice.f.j) -> a
+    long a(android.content.Context,com.baidu.android.pushservice.f.a) -> a
+    com.baidu.android.pushservice.f.a c(android.content.Context,java.lang.String) -> c
+    int a(android.content.Context,java.lang.String,int) -> a
+    void d(android.content.Context,java.lang.String) -> d
+    void c(android.content.Context) -> c
+    boolean e(android.content.Context,java.lang.String) -> e
+    long a(android.content.Context,com.baidu.android.pushservice.f.b) -> a
+    long a(android.content.Context,com.baidu.android.pushservice.f.h) -> a
+    long b(android.content.Context,com.baidu.android.pushservice.f.h) -> b
+    long a(android.content.Context,com.baidu.android.pushservice.f.f) -> a
+    long a(android.content.Context,com.baidu.android.pushservice.f.i) -> a
+    long a(android.content.Context,com.baidu.android.pushservice.h.o$h) -> a
+    long d(android.content.Context) -> d
+    int a(android.content.Context,java.lang.String,com.baidu.android.pushservice.h.o$h) -> a
+    int[] f(android.content.Context,java.lang.String) -> f
+com.baidu.android.pushservice.h.o$1 -> com.baidu.android.pushservice.h.u:
+    java.lang.String a -> a
+    boolean accept(java.io.File) -> accept
+com.baidu.android.pushservice.h.o$a -> com.baidu.android.pushservice.h.o$a:
+    com.baidu.android.pushservice.h.o$a a -> a
+    com.baidu.android.pushservice.h.o$a b -> b
+    com.baidu.android.pushservice.h.o$a c -> c
+    com.baidu.android.pushservice.h.o$a d -> d
+    com.baidu.android.pushservice.h.o$a e -> e
+    com.baidu.android.pushservice.h.o$a f -> f
+    com.baidu.android.pushservice.h.o$a g -> g
+    com.baidu.android.pushservice.h.o$a h -> h
+    com.baidu.android.pushservice.h.o$a i -> i
+    com.baidu.android.pushservice.h.o$a j -> j
+    com.baidu.android.pushservice.h.o$a k -> k
+    com.baidu.android.pushservice.h.o$a[] l -> l
+    com.baidu.android.pushservice.h.o$a[] values() -> values
+    com.baidu.android.pushservice.h.o$a valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.o$b -> com.baidu.android.pushservice.h.o$b:
+    com.baidu.android.pushservice.h.o$b a -> a
+    com.baidu.android.pushservice.h.o$b b -> b
+    com.baidu.android.pushservice.h.o$b c -> c
+    com.baidu.android.pushservice.h.o$b d -> d
+    com.baidu.android.pushservice.h.o$b e -> e
+    com.baidu.android.pushservice.h.o$b f -> f
+    com.baidu.android.pushservice.h.o$b g -> g
+    com.baidu.android.pushservice.h.o$b[] h -> h
+    com.baidu.android.pushservice.h.o$b[] values() -> values
+    com.baidu.android.pushservice.h.o$b valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.o$c -> com.baidu.android.pushservice.h.o$c:
+    com.baidu.android.pushservice.h.o$c a -> a
+    com.baidu.android.pushservice.h.o$c b -> b
+    com.baidu.android.pushservice.h.o$c c -> c
+    com.baidu.android.pushservice.h.o$c d -> d
+    com.baidu.android.pushservice.h.o$c e -> e
+    com.baidu.android.pushservice.h.o$c f -> f
+    com.baidu.android.pushservice.h.o$c g -> g
+    com.baidu.android.pushservice.h.o$c h -> h
+    com.baidu.android.pushservice.h.o$c i -> i
+    com.baidu.android.pushservice.h.o$c j -> j
+    com.baidu.android.pushservice.h.o$c k -> k
+    com.baidu.android.pushservice.h.o$c[] l -> l
+    com.baidu.android.pushservice.h.o$c[] values() -> values
+    com.baidu.android.pushservice.h.o$c valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.o$d -> com.baidu.android.pushservice.h.o$d:
+    com.baidu.android.pushservice.h.o$d a -> a
+    com.baidu.android.pushservice.h.o$d b -> b
+    com.baidu.android.pushservice.h.o$d c -> c
+    com.baidu.android.pushservice.h.o$d d -> d
+    com.baidu.android.pushservice.h.o$d e -> e
+    com.baidu.android.pushservice.h.o$d f -> f
+    com.baidu.android.pushservice.h.o$d g -> g
+    com.baidu.android.pushservice.h.o$d h -> h
+    com.baidu.android.pushservice.h.o$d i -> i
+    com.baidu.android.pushservice.h.o$d j -> j
+    com.baidu.android.pushservice.h.o$d k -> k
+    com.baidu.android.pushservice.h.o$d l -> l
+    com.baidu.android.pushservice.h.o$d m -> m
+    com.baidu.android.pushservice.h.o$d n -> n
+    com.baidu.android.pushservice.h.o$d[] o -> o
+    com.baidu.android.pushservice.h.o$d[] values() -> values
+    com.baidu.android.pushservice.h.o$d valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.o$e -> com.baidu.android.pushservice.h.o$e:
+    void onCorruption(android.database.sqlite.SQLiteDatabase) -> onCorruption
+    void a(java.lang.String) -> a
+com.baidu.android.pushservice.h.o$f -> com.baidu.android.pushservice.h.o$f:
+    void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
+    void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
+com.baidu.android.pushservice.h.o$g -> com.baidu.android.pushservice.h.o$g:
+    com.baidu.android.pushservice.h.o$g a -> a
+    com.baidu.android.pushservice.h.o$g b -> b
+    com.baidu.android.pushservice.h.o$g c -> c
+    com.baidu.android.pushservice.h.o$g d -> d
+    com.baidu.android.pushservice.h.o$g e -> e
+    com.baidu.android.pushservice.h.o$g f -> f
+    com.baidu.android.pushservice.h.o$g g -> g
+    com.baidu.android.pushservice.h.o$g h -> h
+    com.baidu.android.pushservice.h.o$g i -> i
+    com.baidu.android.pushservice.h.o$g j -> j
+    com.baidu.android.pushservice.h.o$g[] k -> k
+    com.baidu.android.pushservice.h.o$g[] values() -> values
+    com.baidu.android.pushservice.h.o$g valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.o$h -> com.baidu.android.pushservice.h.o$h:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    java.lang.String f -> f
+    int g -> g
+    int h -> h
+    int i -> i
+    long j -> j
+com.baidu.android.pushservice.h.o$i -> com.baidu.android.pushservice.h.o$i:
+    com.baidu.android.pushservice.h.o$i a -> a
+    com.baidu.android.pushservice.h.o$i b -> b
+    com.baidu.android.pushservice.h.o$i c -> c
+    com.baidu.android.pushservice.h.o$i[] d -> d
+    com.baidu.android.pushservice.h.o$i[] values() -> values
+    com.baidu.android.pushservice.h.o$i valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.o$j -> com.baidu.android.pushservice.h.o$j:
+    com.baidu.android.pushservice.h.o$j a -> a
+    com.baidu.android.pushservice.h.o$j b -> b
+    com.baidu.android.pushservice.h.o$j c -> c
+    com.baidu.android.pushservice.h.o$j d -> d
+    com.baidu.android.pushservice.h.o$j e -> e
+    com.baidu.android.pushservice.h.o$j[] f -> f
+    com.baidu.android.pushservice.h.o$j[] values() -> values
+    com.baidu.android.pushservice.h.o$j valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.o$k -> com.baidu.android.pushservice.h.o$k:
+    com.baidu.android.pushservice.h.o$k a -> a
+    com.baidu.android.pushservice.h.o$k b -> b
+    com.baidu.android.pushservice.h.o$k c -> c
+    com.baidu.android.pushservice.h.o$k d -> d
+    com.baidu.android.pushservice.h.o$k e -> e
+    com.baidu.android.pushservice.h.o$k f -> f
+    com.baidu.android.pushservice.h.o$k g -> g
+    com.baidu.android.pushservice.h.o$k h -> h
+    com.baidu.android.pushservice.h.o$k[] i -> i
+    com.baidu.android.pushservice.h.o$k[] values() -> values
+    com.baidu.android.pushservice.h.o$k valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.p -> com.baidu.android.pushservice.h.v:
+    long a -> a
+    long b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+com.baidu.android.pushservice.h.q -> com.baidu.android.pushservice.h.q:
+    com.baidu.android.pushservice.h.q$b a -> a
+    com.baidu.android.pushservice.h.q$a b -> b
+    java.lang.Object c -> c
+    int d -> d
+    android.database.sqlite.SQLiteDatabase a(android.content.Context) -> a
+    com.baidu.android.pushservice.h.q$b j(android.content.Context) -> k
+    void a(android.content.Context,long) -> a
+    int b(android.content.Context) -> b
+    void b$1a54e731(android.content.Context) -> c
+    int c(android.content.Context) -> d
+    void a(android.content.Context,java.lang.String) -> a
+    java.lang.String d(android.content.Context) -> e
+    void b(android.content.Context,java.lang.String) -> b
+    void c(android.content.Context,java.lang.String) -> c
+    java.lang.String e(android.content.Context) -> f
+    void d(android.content.Context,java.lang.String) -> d
+    java.lang.String f(android.content.Context) -> g
+    void e(android.content.Context,java.lang.String) -> e
+    java.lang.String g(android.content.Context) -> h
+    void f(android.content.Context,java.lang.String) -> f
+    java.lang.String h(android.content.Context) -> i
+    void g(android.content.Context,java.lang.String) -> g
+    java.lang.String i(android.content.Context) -> j
+    long a(android.content.Context,com.baidu.android.pushservice.h.p) -> a
+    boolean a(android.content.Context,com.baidu.android.pushservice.h.s) -> a
+com.baidu.android.pushservice.h.q$a -> com.baidu.android.pushservice.h.q$a:
+    void onCorruption(android.database.sqlite.SQLiteDatabase) -> onCorruption
+    void a(java.lang.String) -> a
+com.baidu.android.pushservice.h.q$b -> com.baidu.android.pushservice.h.q$b:
+    void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
+    void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
+com.baidu.android.pushservice.h.q$c -> com.baidu.android.pushservice.h.q$c:
+    com.baidu.android.pushservice.h.q$c a -> a
+    com.baidu.android.pushservice.h.q$c b -> b
+    com.baidu.android.pushservice.h.q$c c -> c
+    com.baidu.android.pushservice.h.q$c d -> d
+    com.baidu.android.pushservice.h.q$c e -> e
+    com.baidu.android.pushservice.h.q$c f -> f
+    com.baidu.android.pushservice.h.q$c g -> g
+    com.baidu.android.pushservice.h.q$c h -> h
+    com.baidu.android.pushservice.h.q$c i -> i
+    com.baidu.android.pushservice.h.q$c j -> j
+    com.baidu.android.pushservice.h.q$c[] k -> k
+    com.baidu.android.pushservice.h.q$c[] values() -> values
+    com.baidu.android.pushservice.h.q$c valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.q$d -> com.baidu.android.pushservice.h.q$d:
+    com.baidu.android.pushservice.h.q$d a -> a
+    com.baidu.android.pushservice.h.q$d b -> b
+    com.baidu.android.pushservice.h.q$d c -> c
+    com.baidu.android.pushservice.h.q$d d -> d
+    com.baidu.android.pushservice.h.q$d e -> e
+    com.baidu.android.pushservice.h.q$d[] f -> f
+    com.baidu.android.pushservice.h.q$d[] values() -> values
+    com.baidu.android.pushservice.h.q$d valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.h.r -> com.baidu.android.pushservice.h.w:
+    java.lang.String a -> a
+    java.lang.String a(android.content.Context,java.lang.String) -> a
+    java.lang.String b(android.content.Context,java.lang.String) -> b
+    int c(android.content.Context,java.lang.String) -> c
+    int d(android.content.Context,java.lang.String) -> d
+    java.lang.String e(android.content.Context,java.lang.String) -> e
+    java.lang.String f(android.content.Context,java.lang.String) -> f
+    java.lang.String g(android.content.Context,java.lang.String) -> g
+    java.lang.String h(android.content.Context,java.lang.String) -> h
+    java.lang.String i(android.content.Context,java.lang.String) -> i
+    java.lang.String a(android.content.Context,java.lang.String,java.lang.String) -> a
+    java.lang.String b(android.content.Context,java.lang.String,java.lang.String) -> b
+com.baidu.android.pushservice.h.s -> com.baidu.android.pushservice.h.x:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    long c -> c
+    java.lang.String d -> d
+com.baidu.android.pushservice.h.t -> com.baidu.android.pushservice.h.y:
+    void a(android.content.Context,android.content.Intent,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String) -> a
+    void a(android.content.Context,android.content.Intent) -> a
+    void b(android.content.Context) -> a
+    void b(android.content.Context,android.content.Intent) -> b
+    android.content.Intent c(android.content.Context) -> b
+    void d(android.content.Context) -> c
+    void e(android.content.Context) -> d
+com.baidu.android.pushservice.h.t$1 -> com.baidu.android.pushservice.h.z:
+    android.content.Context a -> a
+    java.lang.String b -> b
+    void a() -> a
+com.baidu.android.pushservice.h.u -> com.baidu.android.pushservice.h.aa:
+    java.lang.String[] a -> a
+    int b -> b
+    boolean c -> c
+    boolean a(android.content.Context) -> a
+    android.content.pm.PackageInfo a(android.content.Context,java.lang.String) -> w
+    boolean b(android.content.Context,java.lang.String) -> x
+    boolean c(android.content.Context,java.lang.String) -> a
+    int[] b(android.content.Context) -> b
+    int d(android.content.Context,java.lang.String) -> b
+    boolean e(android.content.Context,java.lang.String) -> c
+    boolean c(android.content.Context) -> c
+    android.content.Intent e$7ec49240() -> a
+    android.content.Intent g(android.content.Context) -> d
+    java.lang.String a(android.content.Context,java.lang.String,java.lang.String) -> a
+    boolean b(android.content.Context,java.lang.String,java.lang.String) -> d
+    boolean h(android.content.Context) -> w
+    boolean a(android.content.Context,android.content.pm.PackageManager,java.lang.String[]) -> a
+    boolean a(java.lang.String,java.lang.String[]) -> a
+    void i(android.content.Context) -> e
+    void f(android.content.Context,java.lang.String) -> d
+    long j(android.content.Context) -> x
+    void k(android.content.Context) -> f
+    void a(android.content.Context,boolean,boolean) -> a
+    long l(android.content.Context) -> g
+    long g(android.content.Context,java.lang.String) -> e
+    boolean h(android.content.Context,java.lang.String) -> y
+    boolean i$5ffc0101(android.content.Context) -> y
+    boolean j$5ffc0101(android.content.Context) -> z
+    boolean M(android.content.Context) -> A
+    boolean a(android.content.Context,java.lang.String,java.lang.String,boolean) -> a
+    int D(android.content.Context,java.lang.String) -> z
+    boolean k(android.content.Context,java.lang.String) -> f
+    boolean N(android.content.Context) -> B
+    java.util.List q(android.content.Context) -> h
+    java.util.List r(android.content.Context) -> i
+    java.lang.String s(android.content.Context) -> j
+    java.util.ArrayList t(android.content.Context) -> k
+    java.util.List u(android.content.Context) -> l
+    void b(java.lang.String,android.content.Context) -> a
+    void c(java.lang.String,android.content.Context) -> b
+    void a(java.lang.String,java.lang.String) -> a
+    java.lang.String a(long) -> a
+    java.lang.String a(java.lang.Throwable) -> a
+    com.baidu.android.pushservice.f.i a(com.baidu.android.pushservice.f.i,android.content.Context,java.lang.String) -> a
+    int l(android.content.Context,java.lang.String) -> g
+    int w(android.content.Context) -> m
+    java.lang.String a(java.lang.String) -> a
+    boolean n(android.content.Context,java.lang.String) -> h
+    java.lang.String x(android.content.Context) -> n
+    java.lang.String y(android.content.Context) -> o
+    java.lang.String o(android.content.Context,java.lang.String) -> A
+    boolean p(android.content.Context,java.lang.String) -> i
+    java.lang.String q(android.content.Context,java.lang.String) -> j
+    int b(java.lang.String) -> b
+    int a(android.content.Context,android.content.Intent,java.lang.String,java.lang.String) -> a
+    void b(android.content.Context,android.content.Intent,java.lang.String,java.lang.String) -> b
+    byte[] a(android.content.Context,java.lang.String,byte[],byte[],java.lang.String) -> a
+    boolean a(android.content.Context,byte[],java.lang.String,java.lang.String,byte[]) -> a
+    java.lang.String c(android.content.Context,java.lang.String,java.lang.String) -> b
+    java.lang.String z(android.content.Context) -> p
+    java.lang.String A$1afe14f3() -> b
+    int d(java.lang.String) -> d
+    java.lang.String e(java.lang.String) -> e
+    byte[] a(byte[],byte[]) -> a
+    boolean r(android.content.Context,java.lang.String) -> k
+    boolean a(android.content.Context,com.baidu.android.pushservice.message.PublicMsg) -> a
+    boolean a(android.content.Context,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    boolean b(android.content.Context,com.baidu.android.pushservice.message.PublicMsg) -> b
+    boolean a(android.content.Context,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    boolean s(android.content.Context,java.lang.String) -> l
+    android.content.Context t(android.content.Context,java.lang.String) -> m
+    java.lang.String u(android.content.Context,java.lang.String) -> n
+    boolean v(android.content.Context,java.lang.String) -> o
+    void a(android.content.Context,com.baidu.android.pushservice.message.k,byte[]) -> a
+    void w(android.content.Context,java.lang.String) -> p
+    boolean B(android.content.Context) -> q
+    boolean x(android.content.Context,java.lang.String) -> q
+    void C(android.content.Context) -> r
+    void d(android.content.Context,java.lang.String,java.lang.String) -> c
+    void D(android.content.Context) -> s
+    void E(android.content.Context) -> t
+    java.lang.String F$1afe14f3() -> c
+    boolean P$faab209() -> g
+    boolean a() -> d
+    boolean b() -> e
+    java.lang.String G$1afe14f3() -> f
+    boolean H(android.content.Context) -> u
+    boolean y(android.content.Context,java.lang.String) -> r
+    boolean I(android.content.Context) -> v
+    int z(android.content.Context,java.lang.String) -> s
+    boolean A(android.content.Context,java.lang.String) -> t
+    java.lang.String B(android.content.Context,java.lang.String) -> u
+    void a(android.content.Context,android.content.Intent) -> a
+    java.lang.String f(java.lang.String) -> f
+    int c(java.lang.String) -> c
+    int C(android.content.Context,java.lang.String) -> v
+com.baidu.android.pushservice.h.v -> com.baidu.android.pushservice.h.ab:
+    java.lang.String a(android.content.Context,java.lang.String,java.lang.String) -> a
+    void a(android.content.Context,java.lang.String,java.lang.String,java.lang.String) -> a
+com.baidu.android.pushservice.hwproxy.HwNotifyActivity -> com.baidu.android.pushservice.hwproxy.HwNotifyActivity:
+    void onCreate(android.os.Bundle) -> onCreate
+com.baidu.android.pushservice.i -> com.baidu.android.pushservice.af:
+    android.content.Context a -> a
+    com.baidu.android.pushservice.f.p b -> b
+    com.baidu.android.pushservice.i c -> c
+    com.baidu.android.pushservice.i a(android.content.Context) -> a
+    boolean a(android.content.Intent) -> a
+    boolean a(com.baidu.android.pushservice.c.a) -> a
+com.baidu.android.pushservice.i.a -> com.baidu.android.pushservice.j.a:
+    byte[] a(java.lang.String,java.lang.String,byte[]) -> a
+    byte[] b(java.lang.String,java.lang.String,byte[]) -> b
+com.baidu.android.pushservice.i.b -> com.baidu.android.pushservice.j.b:
+    byte[] a -> a
+    byte[] a(byte[]) -> a
+    java.lang.String a(byte[],java.lang.String) -> a
+com.baidu.android.pushservice.i.c -> com.baidu.android.pushservice.j.c:
+    java.util.ArrayList a$1e1601f0(java.lang.String) -> a
+com.baidu.android.pushservice.i.e -> com.baidu.android.pushservice.j.d:
+    java.lang.String a -> a
+    android.content.Context b -> b
+    int c -> c
+    java.security.PublicKey d -> d
+    com.baidu.android.pushservice.i.e$b e -> e
+    java.lang.String[] a(android.content.pm.Signature[]) -> a
+    java.util.List a(android.content.Intent,boolean) -> a
+    boolean a(java.lang.String[],java.lang.String[]) -> a
+    boolean a(java.lang.String) -> a
+    java.lang.String b(java.lang.String) -> b
+    boolean a(java.lang.String,java.lang.String) -> a
+    java.lang.String a(java.io.File) -> a
+    java.lang.String a(android.content.Context) -> a
+    com.baidu.android.pushservice.i.e$b d(android.content.Context) -> c
+    java.lang.String b(android.content.Context) -> b
+    java.lang.String c(android.content.Context) -> d
+    boolean c(java.lang.String) -> c
+    com.baidu.android.pushservice.i.e$b e() -> b
+    com.baidu.android.pushservice.i.e$b d(java.lang.String) -> d
+    java.lang.String e(java.lang.String) -> e
+    java.lang.String f(java.lang.String) -> f
+    void g(java.lang.String) -> g
+    void b(java.lang.String,java.lang.String) -> b
+    java.lang.String h(java.lang.String) -> h
+    void a$786b7c60() -> a
+com.baidu.android.pushservice.i.e$1 -> com.baidu.android.pushservice.j.e:
+    com.baidu.android.pushservice.i.e a -> a
+    int compare(java.lang.Object,java.lang.Object) -> compare
+com.baidu.android.pushservice.i.e$a -> com.baidu.android.pushservice.j.d$a:
+    android.content.pm.ApplicationInfo a -> a
+    int b -> b
+    boolean c -> c
+    boolean d -> d
+com.baidu.android.pushservice.i.e$b -> com.baidu.android.pushservice.j.d$b:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    int c -> c
+    com.baidu.android.pushservice.i.e$b a(java.lang.String) -> a
+    java.lang.String a() -> a
+    java.lang.String b() -> b
+com.baidu.android.pushservice.i.e$c -> com.baidu.android.pushservice.j.d$c:
+    boolean a$505cff18(java.lang.String) -> a
+com.baidu.android.pushservice.i.f -> com.baidu.android.pushservice.j.f:
+    java.lang.String a(byte[],boolean) -> a
+    java.lang.String a(byte[],java.lang.String,boolean) -> a
+    byte[] a(java.lang.String) -> a
+com.baidu.android.pushservice.i.g -> com.baidu.android.pushservice.j.g:
+    byte[] a(byte[],java.lang.String) -> a
+    byte[] b(byte[],java.lang.String) -> b
+    byte[] a$9e07e80(byte[],java.lang.String) -> c
+com.baidu.android.pushservice.i.h -> com.baidu.android.pushservice.j.h:
+    byte[] a(byte[]) -> a
+com.baidu.android.pushservice.j -> com.baidu.android.pushservice.ag:
+    com.baidu.android.pushservice.j a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.Thread d -> d
+    boolean e -> e
+    android.content.Context f -> f
+    com.baidu.android.pushservice.j a(android.content.Context) -> a
+    void a(android.content.Context,boolean,com.baidu.android.pushservice.c.a$a) -> a
+    java.lang.String a() -> a
+    java.lang.String b() -> b
+    void a(java.lang.String,java.lang.String) -> a
+    boolean c() -> c
+    boolean d() -> d
+com.baidu.android.pushservice.jni.BaiduAppSSOJni -> com.baidu.android.pushservice.jni.BaiduAppSSOJni:
+    java.lang.String getEncrypted(android.content.Context,java.lang.String,java.lang.String) -> a
+    java.lang.String getDecrypted(android.content.Context,java.lang.String,java.lang.String) -> b
+    byte[] getKey(java.lang.String) -> getKey
+    byte[] encryptAES(java.lang.String,int) -> encryptAES
+    byte[] decryptAES(byte[],int,int) -> decryptAES
+com.baidu.android.pushservice.jni.PushSocket -> com.baidu.android.pushservice.jni.PushSocket:
+    byte[] b -> b
+    int c -> c
+    java.lang.String d -> d
+    int e -> e
+    int f -> f
+    boolean a -> a
+    boolean a$faab209() -> a
+    void a(int) -> a
+    int createSocket(java.lang.String,int) -> createSocket
+    int sendMsg(int,byte[],int) -> sendMsg
+    byte[] rcvMsg(int) -> rcvMsg
+    int getLastSocketError() -> getLastSocketError
+    int closeSocket(int) -> closeSocket
+    byte[] a(android.content.Context,int) -> a
+    boolean b(int) -> b
+com.baidu.android.pushservice.message.PublicMsg -> com.baidu.android.pushservice.message.PublicMsg:
+    java.lang.String mMsgId -> a
+    java.lang.String mAppId -> b
+    java.lang.String mTitle -> c
+    java.lang.String mDescription -> d
+    java.lang.String mUrl -> e
+    java.lang.String mPkgName -> f
+    int mPkgVercode -> g
+    java.lang.String mPkgContent -> h
+    int mNetType -> i
+    int mNotificationBuilder -> j
+    int mOpenType -> k
+    int mNotificationBasicStyle -> l
+    java.lang.String mCustomContent -> m
+    java.lang.String mSupportAppname -> n
+    boolean mIsSupportApp -> o
+    int mUserConfirm -> p
+    int mAdvertiseStyle -> q
+    java.lang.String mAdvertiseSmallIconUrl -> r
+    java.lang.String mAdvertiseLargeIconUrl -> s
+    java.lang.String mAdvertiseClickUrl -> t
+    java.lang.String mAdvertiseBigPictureUrl -> u
+    java.lang.String mAdvertiseBigPictureClickUrl -> v
+    java.lang.String mAdvertiseDownloadClickUrl -> w
+    java.lang.String mAdvertiseDetailClickUrl -> x
+    java.lang.String mAdvertiseBigPictureTitle -> y
+    java.lang.String mAdvertiseBigPictureContent -> z
+    android.os.Parcelable$Creator CREATOR -> CREATOR
+    void handle(android.content.Context,java.lang.String,java.lang.String) -> a
+    void handleRichMediaNotification(android.content.Context,java.lang.String,java.lang.String) -> b
+    void insertBehavior(android.content.Context,com.baidu.android.pushservice.b.f,com.baidu.android.pushservice.f.j,com.baidu.android.pushservice.f.i) -> a
+    void handlePrivateNotification(android.content.Context,java.lang.String,java.lang.String,java.lang.String) -> a
+    void handleAlarmMessage(android.content.Context,java.lang.String,java.lang.String,java.lang.String) -> b
+    void insertNotiBehavior(android.content.Context,java.lang.String,java.lang.String,java.lang.String) -> c
+    java.lang.String getLauncherActivityName(android.content.Context,java.lang.String) -> a
+    void addCustomContentToIntent(android.content.Intent) -> a
+    void sendResult(android.content.Context,java.lang.String,int) -> a
+    int describeContents() -> describeContents
+    void writeToParcel(android.os.Parcel,int) -> writeToParcel
+    java.lang.String toString() -> toString
+com.baidu.android.pushservice.message.PublicMsg$1 -> com.baidu.android.pushservice.message.a:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    android.content.Context d -> d
+    com.baidu.android.pushservice.message.PublicMsg e -> e
+    void a() -> a
+com.baidu.android.pushservice.message.PublicMsg$2 -> com.baidu.android.pushservice.message.b:
+    java.lang.Object[] newArray(int) -> newArray
+    java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
+com.baidu.android.pushservice.message.a -> com.baidu.android.pushservice.message.c:
+    java.lang.String a -> a
+    android.content.Context b -> b
+    com.baidu.android.pushservice.message.d a(com.baidu.android.pushservice.message.i) -> a
+com.baidu.android.pushservice.message.a$1 -> com.baidu.android.pushservice.message.c$1:
+    int[] a -> a
+com.baidu.android.pushservice.message.a.a -> com.baidu.android.pushservice.message.a.a:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+com.baidu.android.pushservice.message.a.b -> com.baidu.android.pushservice.message.a.b:
+    java.lang.String b -> b
+    android.content.Context c -> c
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+com.baidu.android.pushservice.message.a.c -> com.baidu.android.pushservice.message.a.c:
+    java.lang.String b -> b
+    android.content.Context a -> a
+    boolean a(byte[]) -> a
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+com.baidu.android.pushservice.message.a.d -> com.baidu.android.pushservice.message.a.d:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+    java.lang.String c(android.content.Context) -> c
+    void a(android.content.Context) -> a
+    java.lang.String a() -> a
+    java.lang.String b(android.content.Context) -> b
+com.baidu.android.pushservice.message.a.d$1 -> com.baidu.android.pushservice.message.a.e:
+    long a -> a
+    android.content.Context b -> b
+    void a() -> a
+com.baidu.android.pushservice.message.a.e -> com.baidu.android.pushservice.message.a.f:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+    com.baidu.android.pushservice.message.PublicMsg a(android.content.Context,java.lang.String,java.lang.String,byte[],byte[]) -> a
+com.baidu.android.pushservice.message.a.e$1 -> com.baidu.android.pushservice.message.a.f$1:
+    int[] a -> a
+com.baidu.android.pushservice.message.a.f -> com.baidu.android.pushservice.message.a.g:
+    boolean a(android.content.Context,com.baidu.android.pushservice.message.PublicMsg) -> a
+    void a(android.content.Context,java.lang.String) -> a
+com.baidu.android.pushservice.message.a.g -> com.baidu.android.pushservice.message.a.h:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+com.baidu.android.pushservice.message.a.g$1 -> com.baidu.android.pushservice.message.a.h$1:
+    int[] a -> a
+com.baidu.android.pushservice.message.a.h -> com.baidu.android.pushservice.message.a.i:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+    java.lang.String[] a(android.content.Context,int,java.lang.String,java.lang.String,byte[],byte[]) -> a
+com.baidu.android.pushservice.message.a.h$1 -> com.baidu.android.pushservice.message.a.i$1:
+    int[] a -> a
+com.baidu.android.pushservice.message.a.i -> com.baidu.android.pushservice.message.a.j:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+com.baidu.android.pushservice.message.a.j -> com.baidu.android.pushservice.message.a.k:
+    com.baidu.android.pushservice.message.PublicMsg a(android.content.Context,java.lang.String,java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.b a$65681cd6(java.lang.String) -> a
+com.baidu.android.pushservice.message.a.k -> com.baidu.android.pushservice.message.a.m:
+    java.lang.String a -> a
+    android.content.Context b -> b
+    com.baidu.android.pushservice.message.a.c a(com.baidu.android.pushservice.message.a.l) -> a
+com.baidu.android.pushservice.message.a.k$1 -> com.baidu.android.pushservice.message.a.m$1:
+    int[] a -> a
+com.baidu.android.pushservice.message.a.l -> com.baidu.android.pushservice.message.a.l:
+    com.baidu.android.pushservice.message.a.l a -> a
+    com.baidu.android.pushservice.message.a.l b -> b
+    com.baidu.android.pushservice.message.a.l c -> c
+    com.baidu.android.pushservice.message.a.l d -> d
+    com.baidu.android.pushservice.message.a.l e -> e
+    com.baidu.android.pushservice.message.a.l f -> f
+    com.baidu.android.pushservice.message.a.l g -> g
+    com.baidu.android.pushservice.message.a.l h -> h
+    com.baidu.android.pushservice.message.a.l i -> i
+    com.baidu.android.pushservice.message.a.l j -> j
+    com.baidu.android.pushservice.message.a.l k -> k
+    com.baidu.android.pushservice.message.a.l l -> l
+    com.baidu.android.pushservice.message.a.l m -> m
+    com.baidu.android.pushservice.message.a.l n -> n
+    com.baidu.android.pushservice.message.a.l o -> o
+    com.baidu.android.pushservice.message.a.l p -> p
+    int q -> q
+    com.baidu.android.pushservice.message.a.l[] r -> r
+    com.baidu.android.pushservice.message.a.l[] values() -> values
+    com.baidu.android.pushservice.message.a.l valueOf(java.lang.String) -> valueOf
+    int a() -> a
+    com.baidu.android.pushservice.message.a.l a(int) -> a
+com.baidu.android.pushservice.message.a.m -> com.baidu.android.pushservice.message.a.n:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+com.baidu.android.pushservice.message.a.n -> com.baidu.android.pushservice.message.a.o:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(java.lang.String,java.lang.String,int,byte[],java.lang.String,byte[]) -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.k,byte[]) -> a
+com.baidu.android.pushservice.message.b -> com.baidu.android.pushservice.message.d:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    java.lang.String e -> e
+    java.lang.String f -> f
+    java.lang.String g -> g
+    java.lang.String h -> h
+    java.lang.String i -> i
+    int j -> j
+    java.lang.String k -> k
+    java.lang.String l -> l
+    java.lang.String m -> m
+    int n -> n
+    java.lang.String o -> o
+    com.baidu.android.pushservice.message.PublicMsg a(android.content.Context) -> a
+    void a(org.json.JSONArray) -> a
+    java.lang.String a(android.content.Context,java.lang.String) -> a
+    java.lang.String b$5b1592bd(java.lang.String) -> a
+com.baidu.android.pushservice.message.c -> com.baidu.android.pushservice.message.e:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.f) -> a
+com.baidu.android.pushservice.message.d -> com.baidu.android.pushservice.message.f:
+    android.content.Context a -> a
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.f) -> a
+com.baidu.android.pushservice.message.e -> com.baidu.android.pushservice.message.g:
+    android.content.Context a -> a
+    java.util.LinkedList b -> b
+    void a(com.baidu.android.pushservice.message.f) -> a
+    java.util.LinkedList a() -> a
+    com.baidu.android.pushservice.message.f a$143ba3d0(byte[]) -> a
+    void b(com.baidu.android.pushservice.message.f) -> b
+    void a$13462e() -> b
+    void c() -> c
+com.baidu.android.pushservice.message.f -> com.baidu.android.pushservice.message.h:
+    short a -> a
+    short b -> b
+    byte[] c -> c
+    boolean d -> d
+    boolean e -> e
+    boolean f -> f
+    com.baidu.android.pushservice.message.k g -> g
+    byte[] a() -> a
+    boolean b() -> b
+    boolean c() -> c
+    void a(boolean) -> a
+    com.baidu.android.pushservice.message.k d() -> d
+    void a(com.baidu.android.pushservice.message.k) -> a
+    java.lang.String toString() -> toString
+com.baidu.android.pushservice.message.g -> com.baidu.android.pushservice.message.j:
+    com.baidu.android.pushservice.h.i b -> b
+    com.baidu.android.pushservice.message.f a$143ba3d0(byte[]) -> a
+    void b(com.baidu.android.pushservice.message.f) -> b
+    void a$13462e() -> b
+    java.lang.String d() -> d
+    java.lang.String e() -> e
+    java.lang.String f() -> f
+    java.lang.String g() -> g
+    java.lang.String h() -> h
+    void c() -> c
+    byte[] a(short,byte[]) -> a
+    byte[] a(long,com.baidu.android.pushservice.message.h) -> a
+com.baidu.android.pushservice.message.h -> com.baidu.android.pushservice.message.l:
+    int a -> a
+    byte[] b -> b
+    int a() -> a
+    void a(int) -> a
+    byte[] b() -> b
+    void a(byte[]) -> a
+com.baidu.android.pushservice.message.i -> com.baidu.android.pushservice.message.i:
+    com.baidu.android.pushservice.message.i a -> a
+    com.baidu.android.pushservice.message.i b -> b
+    com.baidu.android.pushservice.message.i c -> c
+    com.baidu.android.pushservice.message.i d -> d
+    com.baidu.android.pushservice.message.i e -> e
+    com.baidu.android.pushservice.message.i f -> f
+    com.baidu.android.pushservice.message.i g -> g
+    short h -> h
+    com.baidu.android.pushservice.message.i[] i -> i
+    com.baidu.android.pushservice.message.i[] values() -> values
+    com.baidu.android.pushservice.message.i valueOf(java.lang.String) -> valueOf
+    short a() -> a
+    com.baidu.android.pushservice.message.i a(short) -> a
+com.baidu.android.pushservice.message.j -> com.baidu.android.pushservice.message.m:
+    java.lang.String b -> b
+    android.content.Context c -> c
+    long d -> d
+    long e -> e
+    long f -> f
+    int g -> g
+    java.lang.String h -> h
+    short i -> i
+    int j -> j
+    int k -> k
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.f) -> a
+    java.lang.String a(byte[]) -> a
+    java.lang.String a() -> a
+com.baidu.android.pushservice.message.j$1 -> com.baidu.android.pushservice.message.n:
+    com.baidu.android.pushservice.message.j a -> a
+    void a() -> a
+com.baidu.android.pushservice.message.k -> com.baidu.android.pushservice.message.k:
+    java.lang.String a -> a
+    java.lang.String b -> b
+    long c -> c
+    int d -> d
+    byte[] e -> e
+    long f -> f
+    long g -> g
+    long h -> h
+    boolean i -> i
+    void a(boolean) -> a
+    boolean a() -> a
+    void a(long) -> a
+    void b(long) -> b
+    void c(long) -> c
+    long b() -> b
+    long c() -> c
+    long d() -> d
+    java.lang.String e() -> e
+    void a(java.lang.String) -> a
+    java.lang.String f() -> f
+    void b(java.lang.String) -> b
+    long g() -> g
+    java.lang.String h() -> h
+    void d(long) -> d
+    int i() -> i
+    void a(int) -> a
+    void a(byte[]) -> a
+    byte[] j() -> j
+    java.lang.String toString() -> toString
+com.baidu.android.pushservice.message.l -> com.baidu.android.pushservice.message.o:
+    java.lang.String b -> b
+    com.baidu.android.pushservice.message.h a(com.baidu.android.pushservice.message.f) -> a
+com.baidu.android.pushservice.richmedia.MediaListActivity -> com.baidu.android.pushservice.richmedia.MediaListActivity:
+    android.widget.ListView c -> c
+    int d -> d
+    int e -> e
+    int f -> f
+    int g -> g
+    int h -> h
+    int i -> i
+    int j -> j
+    int k -> k
+    android.widget.LinearLayout l -> l
+    android.widget.RemoteViews m -> m
+    int n -> n
+    int o -> o
+    int p -> p
+    int q -> q
+    java.util.ArrayList a -> a
+    java.lang.String r -> r
+    android.app.NotificationManager b -> b
+    android.widget.AdapterView$OnItemClickListener s -> s
+    android.widget.AdapterView$OnItemLongClickListener t -> t
+    void onCreate(android.os.Bundle) -> onCreate
+    void onResume() -> onResume
+    java.lang.String a() -> a
+    void a(com.baidu.android.pushservice.richmedia.MediaListActivity,java.lang.String,java.lang.String,java.lang.String) -> a
+    android.widget.RemoteViews a(com.baidu.android.pushservice.richmedia.MediaListActivity) -> a
+    int b(com.baidu.android.pushservice.richmedia.MediaListActivity) -> b
+    int c(com.baidu.android.pushservice.richmedia.MediaListActivity) -> c
+    int d(com.baidu.android.pushservice.richmedia.MediaListActivity) -> d
+    int e(com.baidu.android.pushservice.richmedia.MediaListActivity) -> e
+    int f(com.baidu.android.pushservice.richmedia.MediaListActivity) -> f
+    int g(com.baidu.android.pushservice.richmedia.MediaListActivity) -> g
+    int h(com.baidu.android.pushservice.richmedia.MediaListActivity) -> h
+    int i(com.baidu.android.pushservice.richmedia.MediaListActivity) -> i
+    int j(com.baidu.android.pushservice.richmedia.MediaListActivity) -> j
+com.baidu.android.pushservice.richmedia.MediaListActivity$1 -> com.baidu.android.pushservice.richmedia.a:
+    com.baidu.android.pushservice.richmedia.MediaListActivity a -> a
+    void onClick(android.view.View) -> onClick
+com.baidu.android.pushservice.richmedia.MediaListActivity$2 -> com.baidu.android.pushservice.richmedia.b:
+    com.baidu.android.pushservice.richmedia.MediaListActivity a -> a
+    void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
+com.baidu.android.pushservice.richmedia.MediaListActivity$3 -> com.baidu.android.pushservice.richmedia.d:
+    com.baidu.android.pushservice.richmedia.MediaListActivity a -> a
+    boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long) -> onItemLongClick
+com.baidu.android.pushservice.richmedia.MediaListActivity$3$1 -> com.baidu.android.pushservice.richmedia.e:
+    com.baidu.android.pushservice.richmedia.MediaListActivity$3 a -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.baidu.android.pushservice.richmedia.MediaListActivity$3$2 -> com.baidu.android.pushservice.richmedia.f:
+    long a -> a
+    com.baidu.android.pushservice.richmedia.MediaListActivity$3 b -> b
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.baidu.android.pushservice.richmedia.MediaListActivity$4 -> com.baidu.android.pushservice.richmedia.g:
+    com.baidu.android.pushservice.richmedia.MediaListActivity a -> a
+    void a$227bc5d8() -> a
+    void a(com.baidu.android.pushservice.richmedia.a,com.baidu.android.pushservice.richmedia.b) -> a
+    void a$795b11(com.baidu.android.pushservice.richmedia.a) -> a
+    void a$1d5edd33(com.baidu.android.pushservice.richmedia.a) -> b
+    void b(com.baidu.android.pushservice.richmedia.a) -> c
+com.baidu.android.pushservice.richmedia.MediaListActivity$4$1 -> com.baidu.android.pushservice.richmedia.h:
+    com.baidu.android.pushservice.richmedia.MediaListActivity$4 a -> a
+    void run() -> run
+com.baidu.android.pushservice.richmedia.MediaListActivity$a -> com.baidu.android.pushservice.richmedia.MediaListActivity$a:
+    android.content.Context b -> b
+    java.util.ArrayList c -> c
+    com.baidu.android.pushservice.richmedia.MediaListActivity a -> a
+    int getCount() -> getCount
+    java.lang.Object getItem(int) -> getItem
+    long getItemId(int) -> getItemId
+    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
+com.baidu.android.pushservice.richmedia.MediaViewActivity -> com.baidu.android.pushservice.richmedia.MediaViewActivity:
+    android.widget.RelativeLayout b -> b
+    android.webkit.WebView a -> a
+    android.webkit.WebChromeClient c -> c
+    android.webkit.WebViewClient d -> d
+    void onCreate(android.os.Bundle) -> onCreate
+    void onNewIntent(android.content.Intent) -> onNewIntent
+    void onPause() -> onPause
+    void onResume() -> onResume
+    void onConfigurationChanged(android.content.res.Configuration) -> onConfigurationChanged
+com.baidu.android.pushservice.richmedia.MediaViewActivity$1 -> com.baidu.android.pushservice.richmedia.i:
+    com.baidu.android.pushservice.richmedia.MediaViewActivity a -> a
+    void onProgressChanged(android.webkit.WebView,int) -> onProgressChanged
+    void onShowCustomView(android.view.View,android.webkit.WebChromeClient$CustomViewCallback) -> onShowCustomView
+    void onHideCustomView() -> onHideCustomView
+com.baidu.android.pushservice.richmedia.MediaViewActivity$2 -> com.baidu.android.pushservice.richmedia.j:
+    com.baidu.android.pushservice.richmedia.MediaViewActivity a -> a
+    boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+    void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+    void onPageStarted(android.webkit.WebView,java.lang.String,android.graphics.Bitmap) -> onPageStarted
+com.baidu.android.pushservice.richmedia.a -> com.baidu.android.pushservice.richmedia.k:
+    com.baidu.android.pushservice.richmedia.f a -> a
+    java.lang.ref.WeakReference b -> b
+    java.util.HashSet g -> g
+    long c -> c
+    com.baidu.android.pushservice.richmedia.c d -> d
+    boolean h -> h
+    int e -> e
+    int f -> f
+    void run() -> run
+    com.baidu.android.pushservice.richmedia.e b() -> a
+    void a(com.baidu.android.pushservice.richmedia.b) -> a
+    boolean a(com.baidu.android.pushservice.richmedia.c) -> a
+    boolean b(com.baidu.android.pushservice.richmedia.c) -> b
+    com.baidu.android.pushservice.h.o$h a(android.content.Context,java.lang.String) -> a
+    int a(java.lang.String) -> a
+    void a(java.io.File,java.lang.String) -> a
+    int compareTo(java.lang.Object) -> compareTo
+com.baidu.android.pushservice.richmedia.b -> com.baidu.android.pushservice.richmedia.l:
+    long a -> a
+    long b -> b
+com.baidu.android.pushservice.richmedia.c -> com.baidu.android.pushservice.richmedia.c:
+    java.lang.String a -> a
+    java.lang.String i -> i
+    java.lang.String b -> b
+    java.lang.String c -> c
+    java.lang.String d -> d
+    com.baidu.android.pushservice.richmedia.c$a e -> e
+    java.util.Map j -> j
+    java.lang.String k -> k
+    java.lang.String l -> l
+    java.lang.String m -> m
+    java.util.HashMap f -> f
+    boolean g -> g
+    boolean h -> h
+    com.baidu.android.pushservice.richmedia.c$a a() -> a
+    void a(com.baidu.android.pushservice.richmedia.c$a) -> a
+    java.lang.String b() -> b
+    void a(java.lang.String) -> a
+    void b(java.lang.String) -> b
+    java.lang.String c() -> c
+    boolean equals(java.lang.Object) -> equals
+    int hashCode() -> hashCode
+com.baidu.android.pushservice.richmedia.c$a -> com.baidu.android.pushservice.richmedia.c$a:
+    com.baidu.android.pushservice.richmedia.c$a a -> a
+    com.baidu.android.pushservice.richmedia.c$a[] b -> b
+    com.baidu.android.pushservice.richmedia.c$a[] values() -> values
+    com.baidu.android.pushservice.richmedia.c$a valueOf(java.lang.String) -> valueOf
+com.baidu.android.pushservice.richmedia.d -> com.baidu.android.pushservice.richmedia.m:
+    com.baidu.android.pushservice.richmedia.c a(com.baidu.android.pushservice.richmedia.c$a,java.lang.String) -> a
+com.baidu.android.pushservice.richmedia.d$1 -> com.baidu.android.pushservice.richmedia.m$1:
+    int[] a -> a
+com.baidu.android.pushservice.richmedia.e -> com.baidu.android.pushservice.richmedia.n:
+    com.baidu.android.pushservice.richmedia.c$a a -> a
+    int b -> b
+    int c -> c
+    com.baidu.android.pushservice.richmedia.c d -> d
+    java.lang.String e -> e
+com.baidu.android.pushservice.richmedia.f -> com.baidu.android.pushservice.richmedia.o:
+    void a$227bc5d8() -> a
+    void a(com.baidu.android.pushservice.richmedia.a,com.baidu.android.pushservice.richmedia.b) -> a
+    void a$795b11(com.baidu.android.pushservice.richmedia.a) -> a
+    void a$1d5edd33(com.baidu.android.pushservice.richmedia.a) -> b
+    void b(com.baidu.android.pushservice.richmedia.a) -> c
+com.baidu.loctp.str.BDLocManager -> com.baidu.a.a.a:
+    long a -> a
+    android.content.Context b -> b
+    android.telephony.TelephonyManager c -> c
+    com.baidu.loctp.str.BDLocManager$a d -> d
+    java.lang.reflect.Method e -> e
+    java.lang.reflect.Method f -> f
+    java.lang.reflect.Method g -> g
+    java.lang.Class h -> h
+    android.net.wifi.WifiManager i -> i
+    com.baidu.loctp.str.BDLocManager$WifiList j -> j
+    java.lang.Object k -> k
+    java.lang.reflect.Method l -> l
+    boolean m -> m
+    long n -> n
+    java.lang.String o -> o
+    int p -> p
+    java.lang.String q -> q
+    char[] r -> r
+    java.lang.String getLocString(int) -> a
+    java.lang.String a(int) -> b
+    boolean a() -> a
+    java.lang.String a(java.lang.String) -> a
+    java.lang.String a(byte[]) -> a
+com.baidu.loctp.str.BDLocManager$WifiList -> com.baidu.a.a.a$a:
+    java.util.List _WifiList -> a
+    long b -> c
+    com.baidu.loctp.str.BDLocManager a -> b
+    int size() -> a
+    void a() -> b
+    boolean a(com.baidu.loctp.str.BDLocManager$WifiList) -> a
+com.baidu.loctp.str.BDLocManager$a -> com.baidu.a.a.a$b:
+    int a -> a
+    int b -> b
+    int c -> c
+    int d -> d
+    char e -> e
+    com.baidu.loctp.str.BDLocManager f -> f
+    boolean a() -> a
+    java.lang.String toString() -> toString
+    boolean a(com.baidu.loctp.str.BDLocManager$a) -> a
 com.github.mikephil.charting.animation.ChartAnimator -> com.github.mikephil.charting.animation.ChartAnimator:
     android.animation.ValueAnimator$AnimatorUpdateListener mListener -> mListener
     float mPhaseY -> mPhaseY
